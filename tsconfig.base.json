@@ -21,12 +21,6 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@cartop/shared": ["./packages/shared/src"],
-      "@cartop/shared/*": ["./packages/shared/src/*"],
-      "@cartop/formatting": ["./packages/formatting/src"],
-      "@cartop/formatting/*": ["./packages/formatting/src/*"],
-      "@cartop/types": ["./packages/types/src"],
-      "@cartop/types/*": ["./packages/types/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build", ".next"]
