@@ -23,7 +23,6 @@ export default function Benefits() {
         </div>
 
         <div className="mt-14 grid gap-5 grid-cols-2 lg:grid-cols-3 lg:auto-rows-fr">
-          {/* Levý sloupec - Sekce 1 */}
           <article className="rounded-[32px] border border-slate-200 p-6 bg-white order-1 lg:order-none lg:row-span-1">
             <div className="h-10 w-10 rounded-xl bg-red-600/10 text-red-600 grid place-items-center">
               <svg
@@ -44,23 +43,20 @@ export default function Benefits() {
             </p>
           </article>
 
-          {/* Střední sloupec - Obrázek */}
           <div className="relative rounded-3xl overflow-hidden col-span-2 order-3 lg:col-span-1 lg:order-none lg:row-span-2 h-[300px] lg:h-[560px]">
-            {/* Mobil */}
             <Image
               src="/mock/tile.mobile@2x.png"
               alt="Klient s poradcem u auta"
               fill
               sizes="100vw"
-              className="w-full object-contain lg:hidden rounded-[32px]"
+              className="w-full object-contain rounded-[32px] lg:hidden"
             />
-            {/* Desktop */}
             <Image
               src="/mock/tile@2x.png"
               alt="Klient s poradcem u auta"
               fill
               sizes="33vw"
-              className="w-full object-cover hidden lg:block rounded-[32px]"
+              className="w-full object-cover rounded-[32px] hidden lg:block"
             />
             <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5"></div>
 
@@ -82,7 +78,6 @@ export default function Benefits() {
             </div>
           </div>
 
-          {/* Pravý sloupec - Sekce 2 */}
           <article className="rounded-[32px] p-6 bg-slate-900 text-white order-2 lg:order-none lg:row-span-1">
             <div className="h-10 w-10 rounded-xl bg-white/10 text-white grid place-items-center">
               <svg
@@ -102,7 +97,6 @@ export default function Benefits() {
             </p>
           </article>
 
-          {/* Levý sloupec - Sekce 3 */}
           <article className="rounded-[32px] border border-slate-200 p-6 bg-white col-span-1 order-4 lg:order-none lg:row-span-1">
             <div className="h-10 w-10 rounded-xl bg-red-600/10 text-red-600 grid place-items-center">
               <svg
@@ -123,7 +117,6 @@ export default function Benefits() {
             </p>
           </article>
 
-          {/* Pravý sloupec - Sekce 4 */}
           <article className="rounded-[32px] border border-slate-200 p-6 bg-white col-span-1 order-5 lg:order-none lg:row-span-1">
             <div className="h-10 w-10 rounded-xl bg-red-600/10 text-red-600 grid place-items-center">
               <svg
