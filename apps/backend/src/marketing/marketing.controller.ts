@@ -24,6 +24,14 @@ import {
 /**
  * Marketing Controller
  * REST endpoints for Ecomail integration
+ *
+ * SECURITY WARNING: These endpoints are currently public (no authentication required)
+ * TODO: Before production deployment:
+ *   1. Remove @Public() decorators from endpoints
+ *   2. Add proper JWT authentication or API key authentication
+ *   3. Consider rate limiting per user/API key
+ *   4. Update Swagger documentation to reflect authentication requirements
+ * See TODO.md #5 for detailed implementation guide
  */
 @ApiTags('Marketing')
 @Controller('api/marketing')
@@ -36,6 +44,7 @@ export class MarketingController {
    * Create email template in Ecomail
    * POST /api/marketing/ecomail/templates
    */
+  // TODO: Remove @Public() decorator and add authentication before production
   @Public()
   @Post('ecomail/templates')
   @HttpCode(HttpStatus.CREATED)
@@ -127,6 +136,7 @@ export class MarketingController {
    * Health check endpoint
    * GET /api/marketing/health
    */
+  // TODO: Consider if health check should be public or authenticated
   @Public()
   @Get('health')
   @HttpCode(HttpStatus.OK)

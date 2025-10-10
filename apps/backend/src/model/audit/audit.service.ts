@@ -21,8 +21,53 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(AuditService.name);
   private auditBuffer: AuditLogData[] = [];
   private flushInterval: NodeJS.Timeout;
-  private readonly BATCH_SIZE = parseInt(process.env.AUDIT_BATCH_SIZE) || 100;
-  private readonly BATCH_INTERVAL_MS = parseInt(process.env.AUDIT_BATCH_INTERVAL_MS) || 5000;
+  private readonly BATCH_SIZE = parseInt(process.env.AUDIT_BATCH_SIZE || '100', 10);
+  private readonly BATCH_INTERVAL_MS = parseInt(process.env.AUDIT_BATCH_INTERVAL_MS || '5000', 10);
+
+  /**
+   * Sensitive field patterns to filter from audit logs
+   * These fields will be masked with '[REDACTED]' to prevent exposure of sensitive data
+   */
+  private readonly SENSITIVE_FIELD_PATTERNS = [
+    // Authentication & Security
+    /password/i,
+    /passwd/i,
+    /pwd/i,
+    /secret/i,
+    /token/i,
+    /jwt/i,
+    /apikey/i,
+    /api[_-]?key/i,
+    /accesskey/i,
+    /access[_-]?key/i,
+    /privatekey/i,
+    /private[_-]?key/i,
+
+    // Payment & Financial
+    /creditcard/i,
+    /credit[_-]?card/i,
+    /cardnumber/i,
+    /card[_-]?number/i,
+    /cvv/i,
+    /cvc/i,
+    /ssn/i,
+    /social[_-]?security/i,
+    /account[_-]?number/i,
+    /routing[_-]?number/i,
+    /iban/i,
+
+    // Personal Identifiable Information
+    /taxid/i,
+    /tax[_-]?id/i,
+    /drivers[_-]?license/i,
+    /passport/i,
+
+    // Other Sensitive
+    /pin/i,
+    /signature/i,
+    /authorization/i,
+    /bearer/i,
+  ];
 
   constructor(
     @InjectRepository(AuditLog, 'audit')
@@ -54,13 +99,17 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
   /**
    * Log an audit event (async, non-blocking)
    * Adds to in-memory buffer and queues for batch processing
+   * Automatically sanitizes sensitive data before logging
    */
   async log(data: AuditLogData): Promise<void> {
     try {
+      // Sanitize sensitive data before logging
+      const sanitizedData = this.sanitizeSensitiveData(data);
+
       // Add to buffer
       this.auditBuffer.push({
-        ...data,
-        timestamp: data.timestamp || new Date(),
+        ...sanitizedData,
+        timestamp: sanitizedData.timestamp || new Date(),
       });
 
       // If buffer is full, flush immediately
@@ -87,14 +136,18 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
 
   /**
    * Log multiple audit events in bulk
+   * Automatically sanitizes sensitive data before logging
    */
   async logBulk(dataArray: AuditLogData[]): Promise<void> {
     try {
       const now = new Date();
-      const enrichedData = dataArray.map(data => ({
-        ...data,
-        timestamp: data.timestamp || now,
-      }));
+      const enrichedData = dataArray.map(data => {
+        const sanitized = this.sanitizeSensitiveData(data);
+        return {
+          ...sanitized,
+          timestamp: sanitized.timestamp || now,
+        };
+      });
 
       this.auditBuffer.push(...enrichedData);
 
@@ -211,7 +264,70 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
+   * Sanitize sensitive data from audit log entry
+   * Replaces sensitive field values with '[REDACTED]'
+   *
+   * @param data - Audit log data to sanitize
+   * @returns Sanitized audit log data
+   */
+  private sanitizeSensitiveData(data: AuditLogData): AuditLogData {
+    return {
+      ...data,
+      oldValue: data.oldValue ? this.sanitizeObject(data.oldValue) : data.oldValue,
+      newValue: data.newValue ? this.sanitizeObject(data.newValue) : data.newValue,
+      changes: data.changes ? this.sanitizeObject(data.changes) : data.changes,
+      metadata: data.metadata ? this.sanitizeObject(data.metadata) : data.metadata,
+    };
+  }
+
+  /**
+   * Recursively sanitize sensitive fields in an object
+   *
+   * @param obj - Object to sanitize
+   * @returns Sanitized object with sensitive fields redacted
+   */
+  private sanitizeObject(obj: any): any {
+    if (obj === null || obj === undefined) {
+      return obj;
+    }
+
+    // Handle arrays
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.sanitizeObject(item));
+    }
+
+    // Handle objects
+    if (typeof obj === 'object') {
+      const sanitized: any = {};
+
+      for (const [key, value] of Object.entries(obj)) {
+        // Check if key matches any sensitive field pattern
+        const isSensitive = this.SENSITIVE_FIELD_PATTERNS.some(pattern =>
+          pattern.test(key)
+        );
+
+        if (isSensitive) {
+          // Redact the value
+          sanitized[key] = '[REDACTED]';
+        } else if (typeof value === 'object' && value !== null) {
+          // Recursively sanitize nested objects
+          sanitized[key] = this.sanitizeObject(value);
+        } else {
+          // Keep non-sensitive values as-is
+          sanitized[key] = value;
+        }
+      }
+
+      return sanitized;
+    }
+
+    // Return primitive values as-is
+    return obj;
+  }
+
+  /**
    * Calculate field-level changes between old and new values
+   * Note: Changes are automatically sanitized when logged
    */
   calculateChanges(oldValue: any, newValue: any): Record<string, { old: any; new: any }> {
     const changes: Record<string, { old: any; new: any }> = {};

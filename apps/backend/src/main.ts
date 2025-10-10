@@ -2,11 +2,73 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+import { validateConfig } from './config/config.validation';
+import helmet from '@fastify/helmet';
+import * as Sentry from '@sentry/node';
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
+import { SentryExceptionFilter } from './common/filters/sentry-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new FastifyAdapter());
+  // Validate configuration before starting application
+  // This will fail fast if critical config is missing in production
+  const appConfig = validateConfig();
+
+  // Initialize Sentry error tracking (if configured)
+  if (process.env.SENTRY_DSN) {
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      environment: process.env.SENTRY_ENVIRONMENT || appConfig.nodeEnv,
+      // Performance Monitoring
+      tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE || '0.1'),
+      // Profiling
+      profilesSampleRate: parseFloat(process.env.SENTRY_PROFILES_SAMPLE_RATE || '0.1'),
+      integrations: [
+        nodeProfilingIntegration(),
+      ],
+      // Don't send errors in development unless explicitly enabled
+      enabled: appConfig.nodeEnv === 'production' || process.env.SENTRY_ENABLED === 'true',
+    });
+  }
+
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
   const logger = new Logger('Bootstrap');
+
+  // Security: Configure Helmet for secure HTTP headers
+  const isDevelopment = appConfig.nodeEnv !== 'production';
+  await app.register(helmet, {
+    // Content Security Policy - relaxed for GraphQL Playground and Swagger in dev
+    contentSecurityPolicy: isDevelopment
+      ? {
+          directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+            imgSrc: ["'self'", 'data:', 'https:'],
+          },
+        }
+      : {
+          directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
+            imgSrc: ["'self'", 'data:', 'https:'],
+          },
+        },
+    // Other security headers (applied in both dev and production)
+    crossOriginEmbedderPolicy: !isDevelopment, // Disabled in dev for easier debugging
+    crossOriginOpenerPolicy: { policy: isDevelopment ? 'unsafe-none' : 'same-origin' },
+    crossOriginResourcePolicy: { policy: 'cross-origin' }, // Allow cross-origin requests for API
+  });
+
+  // Enable global exception filter for Sentry error tracking
+  app.useGlobalFilters(new SentryExceptionFilter());
 
   // Enable validation globally
   app.useGlobalPipes(
@@ -18,10 +80,11 @@ async function bootstrap() {
   );
 
   // Enable CORS
+  // TODO: Configure CORS with proper origin restrictions for production
+  // See TODO.md #3 for implementation details
   app.enableCors();
 
   // Setup Swagger (only in development/local)
-  const isDevelopment = process.env.NODE_ENV !== 'production';
   if (isDevelopment) {
     const config = new DocumentBuilder()
       .setTitle('Cartop API')
@@ -52,13 +115,12 @@ async function bootstrap() {
       `,
     });
 
-    logger.log(`Swagger documentation available at: http://localhost:${process.env.PORT || 3000}/api/docs`);
+    logger.log(`Swagger documentation available at: http://localhost:${appConfig.port}/api/docs`);
   }
 
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
+  await app.listen(appConfig.port);
 
-  logger.log(`Application is running on: http://localhost:${port}/graphql`);
+  logger.log(`Application is running on: http://localhost:${appConfig.port}/graphql`);
 }
 
 bootstrap();

@@ -26,8 +26,9 @@ import { RolesGuard } from './common/guards/roles.guard';
         ? true // In-memory schema for production (Docker-friendly)
         : join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      playground: true,
-      introspection: true,
+      // Security: Disable playground and introspection in production
+      playground: process.env.NODE_ENV !== 'production',
+      introspection: process.env.NODE_ENV !== 'production',
       context: ({ req, res }) => ({ req, res }),
     }),
 
@@ -35,39 +36,49 @@ import { RolesGuard } from './common/guards/roles.guard';
     AuthModule,
 
     // TypeORM Configuration - Main Database
+    // TODO: Set up TypeORM migrations for production deployment
+    // - Generate initial migration from current schema
+    // - Add migration scripts to package.json
+    // - Configure migrations and migrationsRun options
+    // See TODO.md #6 for detailed migration setup guide
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT) || 5432,
+      port: parseInt(process.env.DB_PORT || '5432', 10),
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_DATABASE || 'cartop_v3',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: process.env.NODE_ENV === 'development',
+      synchronize: process.env.NODE_ENV === 'development', // Auto-sync in dev only
       logging: process.env.NODE_ENV === 'development',
+      // Connection pool configuration (configurable via environment variables)
       extra: {
-        max: 20, // Maximum pool size
-        min: 5,  // Minimum pool size
-        idleTimeoutMillis: 30000,
+        max: parseInt(process.env.DB_POOL_MAX || '20', 10), // Maximum pool size
+        min: parseInt(process.env.DB_POOL_MIN || '5', 10),  // Minimum pool size
+        idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE_TIMEOUT_MS || '30000', 10),
+        statement_timeout: parseInt(process.env.DB_QUERY_TIMEOUT_MS || '10000', 10), // Query timeout in ms
       },
     }),
 
     // TypeORM Configuration - Audit Database (Separate Connection Pool)
+    // TODO: Include audit tables in migration setup
     TypeOrmModule.forRoot({
       name: 'audit',
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT) || 5432,
+      port: parseInt(process.env.DB_PORT || '5432', 10),
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_DATABASE || 'cartop_v3',
       entities: [__dirname + '/model/audit/**/*.entity{.ts,.js}'],
-      synchronize: process.env.NODE_ENV === 'development',
+      synchronize: process.env.NODE_ENV === 'development', // Auto-sync in dev only
       logging: false, // Disable logging for audit writes to improve performance
+      // Dedicated connection pool for audit writes (configurable via environment variables)
       extra: {
-        max: 10, // Dedicated pool for audit writes
-        min: 2,
-        idleTimeoutMillis: 30000,
+        max: parseInt(process.env.DB_AUDIT_POOL_MAX || '10', 10), // Maximum pool size for audit
+        min: parseInt(process.env.DB_AUDIT_POOL_MIN || '2', 10),  // Minimum pool size for audit
+        idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE_TIMEOUT_MS || '30000', 10),
+        statement_timeout: parseInt(process.env.DB_QUERY_TIMEOUT_MS || '10000', 10), // Query timeout in ms
       },
     }),
 
@@ -75,7 +86,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT) || 6379,
+        port: parseInt(process.env.REDIS_PORT || '6379', 10),
       },
     }),
 
