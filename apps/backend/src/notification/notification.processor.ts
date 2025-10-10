@@ -36,9 +36,11 @@ export class NotificationProcessor {
         `Email job ${job.id} completed: ${template} to ${to}`,
       );
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Email job ${job.id} failed: ${error.message}`,
-        error.stack,
+        `Email job ${job.id} failed: ${errorMessage}`,
+        errorStack,
       );
       throw error; // Re-throw to trigger retry
     }

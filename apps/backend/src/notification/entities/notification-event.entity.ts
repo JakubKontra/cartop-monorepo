@@ -8,6 +8,7 @@ import {
   Index,
 } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import GraphQLJSON from 'graphql-type-json';
 import { NotificationLog } from './notification-log.entity';
 
 export enum NotificationEventType {
@@ -62,7 +63,7 @@ export class NotificationEvent {
   @Column({ type: 'varchar', length: 45, nullable: true })
   ipAddress?: string; // IP address of the event
 
-  @Field({ nullable: true })
+  @Field(() => GraphQLJSON, { nullable: true })
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>; // Additional event data from provider
 

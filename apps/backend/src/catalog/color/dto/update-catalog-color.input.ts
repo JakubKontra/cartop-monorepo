@@ -1,4 +1,4 @@
-import { InputType, Field, PartialType } from '@nestjs/graphql';
+import { InputType, PartialType } from '@nestjs/graphql';
 import { CreateCatalogColorInput } from './create-catalog-color.input';
 
 @InputType()

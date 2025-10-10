@@ -6,6 +6,7 @@ import {
   Index,
 } from 'typeorm';
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
+import GraphQLJSON from 'graphql-type-json';
 
 /**
  * Notification Log
@@ -67,7 +68,7 @@ export class NotificationLog {
   @Column({ type: 'timestamp with time zone', nullable: true })
   firstClickedAt?: Date;
 
-  @Field({ nullable: true })
+  @Field(() => GraphQLJSON, { nullable: true })
   @Column({ type: 'jsonb', nullable: true })
   metadata?: Record<string, any>; // Additional tracking data
 

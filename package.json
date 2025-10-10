@@ -7,6 +7,10 @@
     "packages/*"
   ],
   "scripts": {
+    "prepare": "husky",
+    "typecheck": "tsc -b -v || true",
+    "env:pull": "node scripts/setup-env-vars.js",
+    "knip": "knip --cache",
     "dev": "yarn workspaces foreach -pi run dev",
     "dev:backend": "yarn workspace @cartop/backend dev",
     "dev:frontend": "yarn workspace @cartop/client dev",
@@ -20,15 +24,43 @@
     "type-check": "yarn workspaces foreach -p run type-check",
     "clean": "yarn workspaces foreach -p run clean && rm -rf node_modules"
   },
+  "resolutions": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.1",
+    "next-i18next": "^15.2.0"
+  },
+  "dependencies": {
+    "nuqs": "^2.7.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
   "devDependencies": {
-    "@types/node": "^20.11.5",
-    "eslint": "^8.56.0",
+    "@types/node": "^24.6.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
+    "depcheck": "^1.4.7",
+    "eslint": "^9.20.1",
+    "globals": "^15.8.0",
+    "knip": "^5.63.0",
+    "lint-staged": "^16.1.2",
+    "orval": "^7.8.0",
     "prettier": "^3.2.4",
-    "typescript": "^5.3.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.4",
+    "typescript-eslint": "^8.9.0",
+    "vercel": "^46.1.1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,css,md,json}": [
+      "prettier --write"
+    ]
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=22.0.0",
     "yarn": ">=3.0.0"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.6.0"
 }

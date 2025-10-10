@@ -13,6 +13,10 @@ import { Watch } from '../../common/decorators/watch/watch.decorator';
 @ObjectType()
 @Entity('catalog_brands')
 @Auditable()
+/**
+ * Watch decorator triggers webhook to client app for cache invalidation
+ * When brand data changes, sends notification to CACHE_INVALIDATION_URL (client's revalidation endpoint)
+ */
 @Watch({
   name: 'cache_catalog_brand_watch',
   watch: [
@@ -23,11 +27,11 @@ import { Watch } from '../../common/decorators/watch/watch.decorator';
     'isRecommended',
     'description',
   ],
-  webhook: process.env.CACHE_INVALIDATION_URL,
-  selection: ['id', 'slug'],
+  webhook: process.env.CACHE_INVALIDATION_URL, // Points to client app (e.g., Next.js /api/revalidate)
+  selection: ['id', 'slug'], // Only send these fields to client
   debounce: {
-    delay: 1000, 
-    maxWait: 5000, 
+    delay: 1000, // Wait 1s before sending
+    maxWait: 5000, // Send after 5s max
   },
   retry: {
     attempts: 3,

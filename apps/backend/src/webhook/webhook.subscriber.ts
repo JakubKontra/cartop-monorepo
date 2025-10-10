@@ -55,9 +55,11 @@ export class WebhookSubscriber implements EntitySubscriberInterface {
         `Triggered ${configs.length} webhook(s) for INSERT ${event.metadata.tableName}`,
       );
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Webhook trigger failed for INSERT: ${error.message}`,
-        error.stack,
+        `Webhook trigger failed for INSERT: ${errorMessage}`,
+        errorStack,
       );
     }
   }
@@ -104,9 +106,11 @@ export class WebhookSubscriber implements EntitySubscriberInterface {
         `Triggered ${configs.length} webhook(s) for UPDATE ${event.metadata.tableName} (changed: ${changedProperties.join(', ')})`,
       );
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Webhook trigger failed for UPDATE: ${error.message}`,
-        error.stack,
+        `Webhook trigger failed for UPDATE: ${errorMessage}`,
+        errorStack,
       );
     }
   }
@@ -141,9 +145,11 @@ export class WebhookSubscriber implements EntitySubscriberInterface {
         `Triggered ${configs.length} webhook(s) for DELETE ${event.metadata.tableName}`,
       );
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Webhook trigger failed for DELETE: ${error.message}`,
-        error.stack,
+        `Webhook trigger failed for DELETE: ${errorMessage}`,
+        errorStack,
       );
     }
   }

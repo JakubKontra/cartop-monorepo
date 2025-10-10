@@ -54,7 +54,7 @@ describe('JwtAuthGuard', () => {
         'canActivate',
       ).mockReturnValue(true);
 
-      const result = await guard.canActivate(mockExecutionContext);
+      await guard.canActivate(mockExecutionContext);
 
       expect(reflector.getAllAndOverride).toHaveBeenCalled();
       expect(parentCanActivate).toHaveBeenCalled();

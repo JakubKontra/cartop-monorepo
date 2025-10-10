@@ -43,7 +43,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         oldValue: undefined,
       });
     } catch (error) {
-      this.logger.error(`Audit logging failed for INSERT: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Audit logging failed for INSERT: ${errorMessage}`);
     }
   }
 
@@ -74,7 +75,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         });
       }
     } catch (error) {
-      this.logger.error(`Audit logging failed for UPDATE: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Audit logging failed for UPDATE: ${errorMessage}`);
     }
   }
 
@@ -98,7 +100,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         changes: undefined,
       });
     } catch (error) {
-      this.logger.error(`Audit logging failed for REMOVE: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Audit logging failed for REMOVE: ${errorMessage}`);
     }
   }
 

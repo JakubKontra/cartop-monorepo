@@ -51,9 +51,11 @@ export class WebhookService {
           await this.queueWebhook(config, payload);
         }
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorStack = error instanceof Error ? error.stack : undefined;
         this.logger.error(
-          `Failed to trigger webhook ${config.name}: ${error.message}`,
-          error.stack,
+          `Failed to trigger webhook ${config.name}: ${errorMessage}`,
+          errorStack,
         );
       }
     }
@@ -215,9 +217,11 @@ export class WebhookService {
         `Webhook ${config.name} sent successfully (${response.status})`,
       );
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Webhook ${config.name} failed: ${error.message}`,
-        error.stack,
+        `Webhook ${config.name} failed: ${errorMessage}`,
+        errorStack,
       );
       throw error; // Re-throw to trigger retry
     }

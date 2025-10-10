@@ -28,8 +28,12 @@ export function Watch(config: WatchConfig) {
     if (!config.watch || config.watch.length === 0) {
       throw new Error('@Watch decorator requires at least one property to watch');
     }
+
+    // If webhook URL is not provided (e.g., env var not set), skip registration
+    // This allows decorators to be applied in code without requiring all env vars in dev/test
     if (!config.webhook) {
-      throw new Error('@Watch decorator requires a webhook URL');
+      console.warn(`@Watch decorator '${config.name}' skipped: webhook URL not configured`);
+      return;
     }
 
     // Get existing watch configs or initialize

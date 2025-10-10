@@ -1,0 +1,2 @@
+ *.sh text eol=lf
+**/.storybook/__snapshots__/*.png filter=lfs diff=lfs merge=lfs -text

@@ -41,9 +41,11 @@ export class EmailService {
       const html = render(TemplateComponent(data));
       return html;
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Failed to render template ${templateName}: ${error.message}`,
-        error.stack,
+        `Failed to render template ${templateName}: ${errorMessage}`,
+        errorStack,
       );
       throw new Error(`Template rendering failed: ${templateName}`);
     }
@@ -60,7 +62,6 @@ export class EmailService {
     userId?: string;
     replyTo?: string;
   }): Promise<void> {
-    const startTime = Date.now();
     let success = false;
     let messageId: string | undefined;
     let errorMessage: string | undefined;
@@ -89,10 +90,11 @@ export class EmailService {
         `Email sent: ${params.template} to ${params.to} (${result.messageId})`,
       );
     } catch (error) {
-      errorMessage = error.message;
+      errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
         `Failed to send email: ${params.template} to ${params.to}`,
-        error.stack,
+        errorStack,
       );
       throw error;
     } finally {
@@ -137,9 +139,11 @@ export class EmailService {
         clickCount: 0,
       });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Failed to log email notification: ${error.message}`,
-        error.stack,
+        `Failed to log email notification: ${errorMessage}`,
+        errorStack,
       );
       // Don't throw - logging failure shouldn't fail the email send
     }

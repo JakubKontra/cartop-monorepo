@@ -34,9 +34,11 @@ export class WebhookProcessor {
         `Webhook job ${job.id} completed: ${config.name}`,
       );
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Webhook job ${job.id} failed: ${error.message}`,
-        error.stack,
+        `Webhook job ${job.id} failed: ${errorMessage}`,
+        errorStack,
       );
       throw error; // Re-throw to trigger retry
     }

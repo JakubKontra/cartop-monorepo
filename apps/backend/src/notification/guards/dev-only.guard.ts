@@ -6,7 +6,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
  */
 @Injectable()
 export class DevOnlyGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(_context: ExecutionContext): boolean {
     const env = process.env.NODE_ENV || 'development';
 
     // Allow access only in development or local environments

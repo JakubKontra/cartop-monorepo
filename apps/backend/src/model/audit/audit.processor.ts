@@ -33,9 +33,11 @@ export class AuditProcessor {
 
       this.logger.debug(`Processed audit log for ${data.entityName}:${data.entityId}`);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Failed to process audit log: ${error.message}`,
-        error.stack,
+        `Failed to process audit log: ${errorMessage}`,
+        errorStack,
       );
       throw error; // Re-throw to trigger retry mechanism
     }
@@ -57,9 +59,11 @@ export class AuditProcessor {
 
       this.logger.debug(`Processed batch of ${data.length} audit logs`);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Failed to process batch audit logs: ${error.message}`,
-        error.stack,
+        `Failed to process batch audit logs: ${errorMessage}`,
+        errorStack,
       );
       throw error;
     }

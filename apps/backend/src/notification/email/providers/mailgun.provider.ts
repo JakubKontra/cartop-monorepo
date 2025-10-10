@@ -69,9 +69,11 @@ export class MailgunProvider implements IEmailProvider {
         provider: 'mailgun',
       };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
       this.logger.error(
-        `Failed to send email via Mailgun: ${error.message}`,
-        error.stack,
+        `Failed to send email via Mailgun: ${errorMessage}`,
+        errorStack,
       );
       throw error;
     }

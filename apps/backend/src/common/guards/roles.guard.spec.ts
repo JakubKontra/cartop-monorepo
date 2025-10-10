@@ -4,8 +4,6 @@ import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { RolesGuard } from './roles.guard';
 import { UserRole } from '../enums/role.enum';
-import { ROLES_KEY } from '../decorators/auth/roles.decorator';
-import { IS_PUBLIC_KEY } from '../decorators/auth/public.decorator';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;

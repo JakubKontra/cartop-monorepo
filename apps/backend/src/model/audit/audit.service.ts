@@ -4,7 +4,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { Repository } from 'typeorm';
 import { Queue } from 'bull';
 import { AuditLog } from './audit-log.entity';
-import { AuditLogData, AuditAction } from '../../common/interfaces/audit.interface';
+import { AuditLogData } from '../../common/interfaces/audit.interface';
 import { AuditQueryInput } from './dto/audit-query.input';
 
 /**
@@ -79,7 +79,9 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
         removeOnFail: false,
       });
     } catch (error) {
-      this.logger.error(`Failed to queue audit log: ${error.message}`, error.stack);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Failed to queue audit log: ${errorMessage}`, errorStack);
     }
   }
 
@@ -101,7 +103,9 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
         await this.flushBuffer();
       }
     } catch (error) {
-      this.logger.error(`Failed to log bulk audits: ${error.message}`, error.stack);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Failed to log bulk audits: ${errorMessage}`, errorStack);
     }
   }
 
@@ -123,7 +127,9 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
 
       this.logger.debug(`Flushed ${itemsToFlush.length} audit logs to database`);
     } catch (error) {
-      this.logger.error(`Failed to flush audit buffer: ${error.message}`, error.stack);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Failed to flush audit buffer: ${errorMessage}`, errorStack);
       // Re-add failed items to buffer for retry
       this.auditBuffer.push(...itemsToFlush);
     }

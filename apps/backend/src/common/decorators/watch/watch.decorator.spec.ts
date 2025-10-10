@@ -55,6 +55,7 @@ describe('@Watch Decorator', () => {
           watch: ['name'],
           webhook: 'http://localhost:3000',
         } as any)
+        // @ts-expect-error - Class is used by decorator
         class TestEntity {}
       }).toThrow('@Watch decorator requires a name');
     });
@@ -66,6 +67,7 @@ describe('@Watch Decorator', () => {
           watch: [],
           webhook: 'http://localhost:3000',
         })
+        // @ts-expect-error - Class is used by decorator
         class TestEntity {}
       }).toThrow('@Watch decorator requires at least one property to watch');
     });
@@ -76,18 +78,29 @@ describe('@Watch Decorator', () => {
           name: 'test',
           webhook: 'http://localhost:3000',
         } as any)
+        // @ts-expect-error - Class is used by decorator
         class TestEntity {}
       }).toThrow('@Watch decorator requires at least one property to watch');
     });
 
-    it('should throw error when webhook URL is missing', () => {
-      expect(() => {
-        @Watch({
-          name: 'test',
-          watch: ['name'],
-        } as any)
-        class TestEntity {}
-      }).toThrow('@Watch decorator requires a webhook URL');
+    it('should skip registration when webhook URL is missing', () => {
+      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+      @Watch({
+        name: 'test',
+        watch: ['name'],
+      } as any)
+      class TestEntity {}
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        "@Watch decorator 'test' skipped: webhook URL not configured"
+      );
+
+      // Should not have stored any metadata
+      const configs = Reflect.getMetadata('watch:config', TestEntity);
+      expect(configs).toBeUndefined();
+
+      consoleWarnSpy.mockRestore();
     });
 
     it('should store optional configuration fields', () => {

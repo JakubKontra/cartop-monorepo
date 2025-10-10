@@ -8,18 +8,16 @@ This is a Yarn workspaces monorepo containing the Cartop backend API, frontend a
 cartop-monorepo/
 ├── apps/
 │   ├── backend/          # NestJS API (port 3001)
-│   ├── frontend/         # Next.js user-facing app (port 3000)
+│   ├── client/           # Next.js user-facing app (port 3000)
 │   └── admin/            # Next.js admin panel (port 3002)
 ├── packages/
-│   ├── shared/           # Shared utilities
-│   ├── formatting/       # Formatting utilities (currency, dates, numbers)
-│   └── types/            # Shared TypeScript types
+│   └── eslint-config-cartop/  # Shared ESLint configuration
 └── package.json          # Root package.json with workspace configuration
 ```
 
 ## Prerequisites
 
-- Node.js >= 18.0.0
+- Node.js >= 22.0.0
 - Yarn >= 3.0.0
 
 ## Getting Started
@@ -84,30 +82,19 @@ yarn lint
 yarn type-check
 ```
 
-## Using Shared Packages
+## Shared Configuration
 
-All apps can import from shared packages using the `@cartop/*` namespace:
+The monorepo includes shared ESLint configuration that can be used across all apps:
 
-### In Backend (NestJS)
+- **eslint-config-cartop**: Shared ESLint rules and configuration for consistent code style
 
-```typescript
-import { formatCurrency } from '@cartop/formatting';
-import { User, UserRole } from '@cartop/types';
-import { capitalize, HTTP_STATUS } from '@cartop/shared';
+Apps can use the shared ESLint config by adding it to their dependencies:
 
-const price = formatCurrency(1999.99); // "$1,999.99"
-```
-
-### In Frontend/Admin (Next.js)
-
-```typescript
-import { formatDate, formatCurrency } from '@cartop/formatting';
-import { ApiResponse, User } from '@cartop/types';
-import { APP_NAME } from '@cartop/shared';
-
-export default function ProductPage() {
-  const price = formatCurrency(49.99);
-  return <div>{price}</div>;
+```json
+{
+  "dependencies": {
+    "eslint-config-cartop": "workspace:*"
+  }
 }
 ```
 
@@ -123,17 +110,23 @@ All workspace packages are referenced using the `workspace:*` protocol in `packa
 
 ## Environment Variables
 
-Each app has an `.env.example` file. Copy these to `.env.local` and configure:
+Each app has an `.env.example` file. You can use the provided script to set them up automatically:
+
+```bash
+yarn env:pull
+```
+
+Or copy them manually:
 
 ```bash
 # Backend
 cp apps/backend/.env.example apps/backend/.env
 
-# Frontend
-cp apps/frontend/.env.example apps/client/.env.local
+# Client
+cp apps/client/.env.example apps/client/.env
 
 # Admin
-cp apps/admin/.env.example apps/admin/.env.local
+cp apps/admin/.env.example apps/admin/.env
 ```
 
 ## Adding New Packages

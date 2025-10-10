@@ -81,56 +81,11 @@ export class NotificationService {
 
       return preference.emailEnabled && preference.transactionalEmails;
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.logger.error(
-        `Failed to check user preferences for ${userId}: ${error.message}`,
+        `Failed to check user preferences for ${userId}: ${errorMessage}`,
       );
       // On error, allow sending (fail-safe for critical emails)
-      return true;
-    }
-  }
-
-  /**
-   * Check if user can receive marketing emails
-   */
-  private async canSendMarketingEmail(userId: string): Promise<boolean> {
-    try {
-      const preference = await this.preferenceRepo.findOne({
-        where: { userId },
-      });
-
-      if (!preference) {
-        return true;
-      }
-
-      return preference.emailEnabled && preference.marketingEmails;
-    } catch (error) {
-      this.logger.error(
-        `Failed to check user preferences for ${userId}: ${error.message}`,
-      );
-      // On error, don't send marketing emails (fail-safe)
-      return false;
-    }
-  }
-
-  /**
-   * Check if user can receive system alerts
-   */
-  private async canSendSystemAlert(userId: string): Promise<boolean> {
-    try {
-      const preference = await this.preferenceRepo.findOne({
-        where: { userId },
-      });
-
-      if (!preference) {
-        return true;
-      }
-
-      return preference.emailEnabled && preference.systemAlerts;
-    } catch (error) {
-      this.logger.error(
-        `Failed to check user preferences for ${userId}: ${error.message}`,
-      );
-      // On error, allow sending (fail-safe for important alerts)
       return true;
     }
   }

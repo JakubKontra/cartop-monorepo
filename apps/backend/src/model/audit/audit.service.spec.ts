@@ -197,11 +197,6 @@ describe('AuditService', () => {
     });
 
     it('should batch insert buffered items', async () => {
-      const mockEntities = [
-        { id: '1', entityName: 'test1' },
-        { id: '2', entityName: 'test2' },
-      ];
-
       mockRepository.create.mockImplementation((data) => data as any);
       mockRepository.insert.mockResolvedValue({} as any);
 
