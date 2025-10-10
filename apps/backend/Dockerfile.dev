@@ -1,0 +1,25 @@
+# Development Dockerfile with hot-reload
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies for development
+RUN apk add --no-cache git
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Expose application port
+EXPOSE 3000
+
+# Build and start
+# Note: File watching disabled in Docker due to performance issues on Mac/Windows
+# To reload: docker-compose restart app
+CMD ["sh", "-c", "npm run build && npm run start:prod"]

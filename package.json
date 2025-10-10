@@ -1,0 +1,36 @@
+{
+  "name": "@cartop/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspaces foreach -pi run dev",
+    "dev:backend": "yarn workspace @cartop/backend dev",
+    "dev:frontend": "yarn workspace @cartop/client dev",
+    "dev:admin": "yarn workspace @cartop/admin dev",
+    "build": "yarn workspaces foreach -pt run build",
+    "build:backend": "yarn workspace @cartop/backend build",
+    "build:frontend": "yarn workspace @cartop/client build",
+    "build:admin": "yarn workspace @cartop/admin build",
+    "test": "yarn workspaces foreach -p run test",
+    "lint": "yarn workspaces foreach -p run lint",
+    "type-check": "yarn workspaces foreach -p run type-check",
+    "clean": "yarn workspaces foreach -p run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=3.0.0"
+  },
+  "packageManager": "yarn@4.0.2"
+}
