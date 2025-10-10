@@ -200,6 +200,9 @@ export class WebhookService {
       `Sending ${method} webhook to ${config.webhook} for ${payload.watchName}`,
     );
 
+    // Debug: Log the actual payload being sent
+    this.logger.debug(`Webhook payload: ${JSON.stringify(payload, null, 2)}`);
+
     try {
       const response = await fetch(config.webhook, {
         method,

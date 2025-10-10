@@ -9,10 +9,7 @@ import { AuditSubscriber } from './audit.subscriber';
 
 @Module({
   imports: [
-    // Use the 'audit' connection for this entity
     TypeOrmModule.forFeature([AuditLog], 'audit'),
-
-    // Register Bull queue for async processing
     BullModule.registerQueue({
       name: 'audit',
     }),
@@ -23,6 +20,6 @@ import { AuditSubscriber } from './audit.subscriber';
     AuditProcessor,
     AuditSubscriber,
   ],
-  exports: [AuditService], // Export for use in other modules
+  exports: [AuditService, AuditSubscriber],
 })
 export class AuditModule {}

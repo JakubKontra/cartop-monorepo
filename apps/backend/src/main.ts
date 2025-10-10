@@ -1,3 +1,8 @@
+// Load environment variables FIRST before any other imports
+// This ensures env vars are available when decorators are evaluated
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig();
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -90,17 +95,7 @@ async function bootstrap() {
       .setTitle('Cartop API')
       .setDescription('REST API documentation for Cartop backend services')
       .setVersion('1.0')
-      .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          name: 'JWT',
-          description: 'Enter JWT token',
-          in: 'header',
-        },
-        'JWT-auth',
-      )
+      .addBearerAuth()  // Simplified - uses standard JWT bearer format
       .addTag('Marketing', 'Ecomail marketing integration endpoints')
       .addTag('Health', 'Health check endpoints')
       .build();

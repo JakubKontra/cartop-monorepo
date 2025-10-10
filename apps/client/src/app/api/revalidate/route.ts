@@ -1,0 +1,92 @@
+/**
+ * Cache Revalidation API Route
+ *
+ * Called by backend's Watch decorator when catalog data changes
+ * Triggers Next.js ISR revalidation for affected pages
+ */
+
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
+
+// Secret token for webhook security (should match backend CACHE_INVALIDATION_SECRET)
+const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET || 'dev-secret-change-in-production';
+
+export async function POST(request: NextRequest) {
+  try {
+    // Verify secret token
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+
+    if (token !== REVALIDATION_SECRET) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Parse webhook payload
+    const body = await request.json();
+    const { entityName, action, data } = body;
+
+    console.log(`[Revalidation] Received webhook: ${entityName} - ${action}`, data);
+
+    // Revalidate based on entity type
+    switch (entityName) {
+      case 'CatalogBrand':
+        // Revalidate all brand-related pages
+        revalidatePath('/brands');
+        revalidateTag('brands');
+
+        // Revalidate specific brand page if slug is provided
+        if (data?.slug) {
+          revalidatePath(`/brands/${data.slug}`);
+          revalidateTag(`brand-${data.slug}`);
+        }
+
+        console.log(`[Revalidation] Revalidated brand pages`);
+        break;
+
+      case 'CatalogColor':
+        revalidatePath('/colors');
+        revalidateTag('colors');
+        console.log(`[Revalidation] Revalidated color pages`);
+        break;
+
+      default:
+        console.log(`[Revalidation] Unknown entity type: ${entityName}`);
+        return NextResponse.json(
+          { error: `Unknown entity type: ${entityName}` },
+          { status: 400 }
+        );
+    }
+
+    return NextResponse.json({
+      success: true,
+      revalidated: true,
+      entityName,
+      action,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('[Revalidation] Error:', error);
+
+    return NextResponse.json(
+      {
+        error: 'Revalidation failed',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// Handle GET requests with status info
+export async function GET() {
+  return NextResponse.json({
+    status: 'ok',
+    endpoint: '/api/revalidate',
+    method: 'POST',
+    description: 'Cache revalidation webhook endpoint',
+    usage: 'Send POST with Authorization header and entity/action payload',
+  });
+}

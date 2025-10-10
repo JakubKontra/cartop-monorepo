@@ -14,6 +14,7 @@ import { NotificationModule } from './notification/notification.module';
 import { MarketingModule } from './marketing/marketing.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
+import { SubscriberRegistryProvider } from './common/providers/subscriber-registry.provider';
 
 @Module({
   imports: [
@@ -49,6 +50,9 @@ import { RolesGuard } from './common/guards/roles.guard';
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_DATABASE || 'cartop_v3',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      // Subscribers are registered as NestJS providers in their modules
+      // TypeORM will discover them via @EventSubscriber() decorator
+      autoLoadEntities: true,
       synchronize: process.env.NODE_ENV === 'development', // Auto-sync in dev only
       logging: process.env.NODE_ENV === 'development',
       // Connection pool configuration (configurable via environment variables)
@@ -109,6 +113,8 @@ import { RolesGuard } from './common/guards/roles.guard';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    // Register TypeORM subscribers with proper DI
+    SubscriberRegistryProvider,
   ],
 })
 export class AppModule {}

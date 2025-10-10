@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: enableProdSourceMaps,
   experimental: {
     optimizePackageImports: ["lucide-react"],
-    reactCompiler: true,
+    // reactCompiler: true, // Disabled - requires babel-plugin-react-compiler
   },
   compiler: {
     removeConsole: isProd ? { exclude: ["error", "warn"] } : false,

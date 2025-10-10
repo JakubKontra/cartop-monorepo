@@ -1,19 +1,32 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+/* Tailwind v4 */
+@import "tailwindcss"; /* includes preflight + utilities */
+
+@theme {
+  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+
+  --color-primary: #c90932;
+  --color-red: #c90932;
+  --color-french-grey: #c9ccd3;
+  --color-black: #131313;
+  --color-gunmetal: #262d37;
+  --color-white: #fefefe;
+  --color-cadet-grey: #8ca1b2;
+
+  /* define this since you use it on body */
+  --color-text: var(--color-black);
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+@layer base {
+  h1 {
+    @apply text-3xl font-semibold text-primary;
+  }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  h2 {
+    @apply text-2xl font-semibold text-primary;
+  }
+
+  h3 {
+    @apply text-xl font-semibold text-primary;
+  }
 }

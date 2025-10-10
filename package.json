@@ -22,7 +22,13 @@
     "test": "yarn workspaces foreach -p run test",
     "lint": "yarn workspaces foreach -p run lint",
     "type-check": "yarn workspaces foreach -p run type-check",
-    "clean": "yarn workspaces foreach -p run clean && rm -rf node_modules"
+    "clean": "yarn workspaces foreach -p run clean && rm -rf node_modules",
+    "generate": "yarn generate:all",
+    "generate:all": "yarn generate:rest && yarn generate:gql",
+    "generate:rest": "orval --config orval.config.ts",
+    "generate:gql": "yarn workspace @cartop/client codegen && yarn workspace @cartop/admin codegen",
+    "generate:gql:client": "yarn workspace @cartop/client codegen",
+    "generate:gql:admin": "yarn workspace @cartop/admin codegen"
   },
   "resolutions": {
     "react": "^19.2.0",

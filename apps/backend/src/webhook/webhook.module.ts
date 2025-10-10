@@ -16,6 +16,6 @@ import { WebhookSubscriber } from './webhook.subscriber';
     WebhookProcessor,
     WebhookSubscriber,
   ],
-  exports: [WebhookService],
+  exports: [WebhookService, WebhookSubscriber],
 })
 export class WebhookModule {}

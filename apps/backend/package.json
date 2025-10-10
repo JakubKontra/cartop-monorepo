@@ -15,7 +15,9 @@
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "type-check": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "seed:brands": "ts-node src/database/seeds/catalog-brands.seed.ts",
+    "test:update-brand": "ts-node src/database/seeds/test-update-brand.ts"
   },
   "keywords": [],
   "author": "",

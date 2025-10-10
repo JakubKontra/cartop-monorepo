@@ -1,0 +1,10 @@
+# Note: Generated files are committed to version control for consistency
+# Uncomment the line below if you prefer to generate them locally
+# src/generated/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
