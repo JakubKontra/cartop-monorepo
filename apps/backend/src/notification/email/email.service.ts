@@ -38,7 +38,7 @@ export class EmailService {
       const TemplateComponent = templateModule.default;
 
       // Render React component to HTML
-      const html = render(TemplateComponent(data));
+      const html = await render(TemplateComponent(data));
       return html;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';

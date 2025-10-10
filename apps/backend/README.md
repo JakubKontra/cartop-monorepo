@@ -5,6 +5,7 @@ A scalable NestJS GraphQL API with comprehensive audit logging system designed f
 ## Features
 
 - **GraphQL API** with code-first approach using Apollo Server
+- **REST API** with Swagger/OpenAPI documentation (dev only)
 - **Modular Architecture** with `/model/` pattern for easy scalability
 - **Comprehensive Audit System** tracking all database changes
 - **High Performance** with async queue processing and batch writes
@@ -14,6 +15,25 @@ A scalable NestJS GraphQL API with comprehensive audit logging system designed f
 - **Field-Level Change Tracking** for detailed audit trails
 - **Time-Based Partitioning** support for audit logs
 - **Database Triggers** for zero-overhead audit logging
+
+## API Documentation
+
+### GraphQL Playground
+Access GraphQL Playground at: http://localhost:3000/graphql
+
+### Swagger/OpenAPI (REST API)
+**Development Only** - Interactive API documentation with try-it-out functionality:
+
+📚 **Swagger UI**: http://localhost:3000/api/docs
+
+Features:
+- Test endpoints directly from browser
+- Full request/response schemas
+- JWT authentication support
+- Multiple request examples
+- Automatically disabled in production
+
+See [SWAGGER.md](./SWAGGER.md) for complete Swagger documentation.
 
 ## Architecture
 
@@ -134,7 +154,9 @@ npm run build
 npm run start:prod
 ```
 
-Access GraphQL Playground at: `http://localhost:3000/graphql`
+**Access Points:**
+- GraphQL Playground: http://localhost:3000/graphql
+- Swagger UI (dev only): http://localhost:3000/api/docs
 
 ## Usage Examples
 

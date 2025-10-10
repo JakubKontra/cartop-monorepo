@@ -11,6 +11,7 @@ import { CatalogModule } from './catalog/catalog.module';
 import { AuthModule } from './auth/auth.module';
 import { WebhookModule } from './webhook/webhook.module';
 import { NotificationModule } from './notification/notification.module';
+import { MarketingModule } from './marketing/marketing.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 
@@ -84,6 +85,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     CatalogModule,
     WebhookModule,
     NotificationModule,
+    MarketingModule,
   ],
   providers: [
     // Apply JWT Auth Guard globally

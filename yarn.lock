@@ -1111,6 +1111,7 @@ __metadata:
     "@apollo/server": "npm:^5.0.0"
     "@as-integrations/express5": "npm:^1.1.2"
     "@as-integrations/fastify": "npm:^3.0.0"
+    "@fastify/static": "npm:^8.2.0"
     "@nestjs/apollo": "npm:^13.2.1"
     "@nestjs/bull": "npm:^11.0.3"
     "@nestjs/cli": "npm:^11.0.10"
@@ -1122,6 +1123,7 @@ __metadata:
     "@nestjs/platform-express": "npm:^11.1.6"
     "@nestjs/platform-fastify": "npm:^11.1.6"
     "@nestjs/schematics": "npm:^11.0.8"
+    "@nestjs/swagger": "npm:^11.2.0"
     "@nestjs/testing": "npm:^11.1.6"
     "@nestjs/typeorm": "npm:^11.0.0"
     "@react-email/components": "npm:^0.5.6"
@@ -1679,6 +1681,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/accept-negotiator@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "@fastify/accept-negotiator@npm:2.0.1"
+  checksum: 10c0/b68386f8b3b69c73f79a54983bd86afc752c4373897ec1ad798356a325a69224ebd003c1aa47e11fc40b46f23bf2384ebb3907fe44214af806cc8ff6af913f18
+  languageName: node
+  linkType: hard
+
 "@fastify/ajv-compiler@npm:^4.0.0":
   version: 4.0.2
   resolution: "@fastify/ajv-compiler@npm:4.0.2"
@@ -1775,6 +1784,33 @@ __metadata:
     "@fastify/forwarded": "npm:^3.0.0"
     ipaddr.js: "npm:^2.1.0"
   checksum: 10c0/d9167e848086cb66a0ae8b008eb6a79e9ae0e17c3e8697a3a22b23152376e22843bea6642a2c07eba5460faa786ebda6157dfa6537ac7b733f758428cd51988b
+  languageName: node
+  linkType: hard
+
+"@fastify/send@npm:^4.0.0":
+  version: 4.1.0
+  resolution: "@fastify/send@npm:4.1.0"
+  dependencies:
+    "@lukeed/ms": "npm:^2.0.2"
+    escape-html: "npm:~1.0.3"
+    fast-decode-uri-component: "npm:^1.0.1"
+    http-errors: "npm:^2.0.0"
+    mime: "npm:^3"
+  checksum: 10c0/991d7a21c9876eff0a2b37d2979113ac0718af730584481bd328ee28b2c3981f3624f85112c6d6b3e6db0e8ef84949684db49a3932f31ad6f8c7d23cf15c1c8a
+  languageName: node
+  linkType: hard
+
+"@fastify/static@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "@fastify/static@npm:8.2.0"
+  dependencies:
+    "@fastify/accept-negotiator": "npm:^2.0.0"
+    "@fastify/send": "npm:^4.0.0"
+    content-disposition: "npm:^0.5.4"
+    fastify-plugin: "npm:^5.0.0"
+    fastq: "npm:^1.17.1"
+    glob: "npm:^11.0.0"
+  checksum: 10c0/8d0ccdc62d99b11c75212b6452a66ea4c2579645cc78fa320ae357ad91a6034eb8d2c47edd711053ce1885df184daa4f65ee8312ac916ca45ccd97f400baed38
   languageName: node
   linkType: hard
 
@@ -3533,6 +3569,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lukeed/ms@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@lukeed/ms@npm:2.0.2"
+  checksum: 10c0/843b922717313bcde4943f478145d8bc13115b9b91d83bbaed53739b5644122984412310aed574792f4e6b492f2cbda178175f601856d310f67e14834c3f17a0
+  languageName: node
+  linkType: hard
+
 "@mapbox/node-pre-gyp@npm:^2.0.0":
   version: 2.0.0
   resolution: "@mapbox/node-pre-gyp@npm:2.0.0"
@@ -3547,6 +3590,13 @@ __metadata:
   bin:
     node-pre-gyp: bin/node-pre-gyp
   checksum: 10c0/7d874c7f6f5560a87be7207f28d9a4e53b750085a82167608fd573aab8073645e95b3608f69e244df0e1d24e90a66525aeae708aba82ca73ff668ed0ab6abda6
+  languageName: node
+  linkType: hard
+
+"@microsoft/tsdoc@npm:0.15.1":
+  version: 0.15.1
+  resolution: "@microsoft/tsdoc@npm:0.15.1"
+  checksum: 10c0/09948691fac56c45a0d1920de478d66a30371a325bd81addc92eea5654d95106ce173c440fea1a1bd5bb95b3a544b6d4def7bb0b5a846c05d043575d8369a20c
   languageName: node
   linkType: hard
 
@@ -3890,6 +3940,34 @@ __metadata:
   peerDependencies:
     typescript: ">=4.8.2"
   checksum: 10c0/c7ee6e9f6048bb1a9c003fca9c237bf71895e25c98e4903f76037a7d5468cc6865ccbb22b4210dabec1eeb08695e336515721f4aeb801f0c5b91ac29ac5f2509
+  languageName: node
+  linkType: hard
+
+"@nestjs/swagger@npm:^11.2.0":
+  version: 11.2.0
+  resolution: "@nestjs/swagger@npm:11.2.0"
+  dependencies:
+    "@microsoft/tsdoc": "npm:0.15.1"
+    "@nestjs/mapped-types": "npm:2.1.0"
+    js-yaml: "npm:4.1.0"
+    lodash: "npm:4.17.21"
+    path-to-regexp: "npm:8.2.0"
+    swagger-ui-dist: "npm:5.21.0"
+  peerDependencies:
+    "@fastify/static": ^8.0.0
+    "@nestjs/common": ^11.0.1
+    "@nestjs/core": ^11.0.1
+    class-transformer: "*"
+    class-validator: "*"
+    reflect-metadata: ^0.1.12 || ^0.2.0
+  peerDependenciesMeta:
+    "@fastify/static":
+      optional: true
+    class-transformer:
+      optional: true
+    class-validator:
+      optional: true
+  checksum: 10c0/3072597bb3e1374341a7d06f3dc9e5ed05bac9feae6d68c9228688cf82420da464211255c41861daa7bec540e580d4dd61568121048087f5ceb2f491504edad4
   languageName: node
   linkType: hard
 
@@ -5797,6 +5875,13 @@ __metadata:
   version: 1.13.0
   resolution: "@rushstack/eslint-patch@npm:1.13.0"
   checksum: 10c0/bf46bed6fa30cd94a923285ef9d9a68f1ff1e8258ed40a5c1c9411bde5d1ff93d771d9996001e89cd31c90994e08c195978080835910dac408dd81e16d17a5a8
+  languageName: node
+  linkType: hard
+
+"@scarf/scarf@npm:=1.4.0":
+  version: 1.4.0
+  resolution: "@scarf/scarf@npm:1.4.0"
+  checksum: 10c0/332118bb488e7a70eaad068fb1a33f016d30442fb0498b37a80cb425c1e741853a5de1a04dce03526ed6265481ecf744aa6e13f072178d19e6b94b19f623ae1c
   languageName: node
   linkType: hard
 
@@ -9861,6 +9946,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"content-disposition@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "content-disposition@npm:0.5.4"
+  dependencies:
+    safe-buffer: "npm:5.2.1"
+  checksum: 10c0/bac0316ebfeacb8f381b38285dc691c9939bf0a78b0b7c2d5758acadad242d04783cee5337ba7d12a565a19075af1b3c11c728e1e4946de73c6ff7ce45f3f1bb
+  languageName: node
+  linkType: hard
+
 "content-disposition@npm:^1.0.0":
   version: 1.0.0
   resolution: "content-disposition@npm:1.0.0"
@@ -11234,7 +11328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"escape-html@npm:^1.0.3":
+"escape-html@npm:^1.0.3, escape-html@npm:~1.0.3":
   version: 1.0.3
   resolution: "escape-html@npm:1.0.3"
   checksum: 10c0/524c739d776b36c3d29fa08a22e03e8824e3b2fd57500e5e44ecf3cc4707c34c60f9ca0781c0e33d191f2991161504c295e98f68c78fe7baa6e57081ec6ac0a3
@@ -12526,7 +12620,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:11.0.3":
+"glob@npm:11.0.3, glob@npm:^11.0.0":
   version: 11.0.3
   resolution: "glob@npm:11.0.3"
   dependencies:
@@ -15212,6 +15306,15 @@ __metadata:
   dependencies:
     mime-db: "npm:^1.54.0"
   checksum: 10c0/bd8c20d3694548089cf229016124f8f40e6a60bbb600161ae13e45f793a2d5bb40f96bbc61f275836696179c77c1d6bf4967b2a75e0a8ad40fe31f4ed5be4da5
+  languageName: node
+  linkType: hard
+
+"mime@npm:^3":
+  version: 3.0.0
+  resolution: "mime@npm:3.0.0"
+  bin:
+    mime: cli.js
+  checksum: 10c0/402e792a8df1b2cc41cb77f0dcc46472b7944b7ec29cb5bbcd398624b6b97096728f1239766d3fdeb20551dd8d94738344c195a6ea10c4f906eb0356323b0531
   languageName: node
   linkType: hard
 
@@ -18886,6 +18989,15 @@ __metadata:
   version: 1.0.0
   resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
   checksum: 10c0/6c4032340701a9950865f7ae8ef38578d8d7053f5e10518076e6554a9381fa91bd9c6850193695c141f32b21f979c985db07265a758867bac95de05f7d8aeb39
+  languageName: node
+  linkType: hard
+
+"swagger-ui-dist@npm:5.21.0":
+  version: 5.21.0
+  resolution: "swagger-ui-dist@npm:5.21.0"
+  dependencies:
+    "@scarf/scarf": "npm:=1.4.0"
+  checksum: 10c0/fed58b709cc956f5965cc3e2c522898365ecd43f5bb942252d7352e52039ef7b2106b915165295114009ce7e1b64c2b2cb97edf93e3f2a44adfed70bb8a4fac8
   languageName: node
   linkType: hard
 
