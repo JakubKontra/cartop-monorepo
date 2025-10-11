@@ -1229,6 +1229,8 @@ __metadata:
     postcss: "npm:^8.5.6"
     react: "npm:19.2.0"
     react-dom: "npm:19.2.0"
+    tailwind-merge: "npm:^3.3.1"
+    tailwind-variants: "npm:^3.1.1"
     tailwindcss: "npm:^4"
     typescript: "npm:^5.8.4"
   languageName: unknown
@@ -19980,6 +19982,19 @@ __metadata:
   version: 3.3.1
   resolution: "tailwind-merge@npm:3.3.1"
   checksum: 10c0/b84c6a78d4669fa12bf5ab8f0cdc4400a3ce0a7c006511af4af4be70bb664a27466dbe13ee9e3b31f50ddf6c51d380e8192ce0ec9effce23ca729d71a9f63818
+  languageName: node
+  linkType: hard
+
+"tailwind-variants@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "tailwind-variants@npm:3.1.1"
+  peerDependencies:
+    tailwind-merge: ">=3.0.0"
+    tailwindcss: "*"
+  peerDependenciesMeta:
+    tailwind-merge:
+      optional: true
+  checksum: 10c0/58b4d50ac3d4abd67a8cb26cbae9ec83f3e4a48234aeedc0c9a0a23f7111495caad55c1641d4314dea242cd9aa71db2f0e6ceb2f914c393d570075d7f12a01ac
   languageName: node
   linkType: hard
 

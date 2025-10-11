@@ -1,32 +1,45 @@
+import { cn } from '@/utils/cv';
 import Image from 'next/image';
+import { tv } from 'tailwind-variants';
+
+const buttonVariants = tv({
+  base: 'w-full rounded-2xl lg:rounded-3xl text-sm lg:text-base flex items-center justify-center whitespace-nowrap transition-colors duration-300',
+  variants: {
+    variant: {
+      primary: 'bg-white text-gunmetal',
+      secondary: 'border border-white text-white bg-gunmetal hover:bg-[#FEFEFE4D]',
+    },
+    size: {
+      base: 'px-10 lg:px-12 py-5 lg:py-6',
+      icon: 'pl-1.5 lg:pl-2 pr-10 lg:pr-12 py-1.5 lg:py-2',
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+    size: 'base',
+  },
+});
 
 export default function FilterBar() {
   return (
     <div
-      className="flex flex-wrap items-center gap-2 p-4 rounded-[32px]"
+      className="grid grid-cols-2 lg:grid-cols-7 items-center gap-2 p-3 lg:p-4 rounded-3xl lg:rounded-4xl"
       style={{ backgroundColor: '#262D37' }}
     >
-      <button className="h-[64px] flex-1 min-w-[calc(50%-4px)] lg:min-w-0 px-6 rounded-[24px] border border-white text-white flex items-center justify-center">
-        Do 10 tisíc
-      </button>
-      <button className="h-[64px] flex-1 min-w-[calc(50%-4px)] lg:min-w-0 px-6 rounded-[24px] border border-white text-white flex items-center justify-center">
-        Užitkové
-      </button>
-      <button className="h-[64px] flex-1 min-w-[calc(50%-4px)] lg:min-w-0 px-6 rounded-[24px] border border-white text-white flex items-center justify-center">
-        Kategorie
-      </button>
-      <button className="h-[64px] flex-1 min-w-[calc(50%-4px)] lg:min-w-0 px-6 rounded-[24px] border border-white text-white flex items-center justify-center">
-        Skladové
-      </button>
-      <button className="h-[64px] flex-1 min-w-[calc(50%-4px)] lg:min-w-0 px-6 rounded-[24px] border border-white text-white flex items-center justify-center">
-        Náš výběr
-      </button>
-      <button className="h-[64px] flex-1 min-w-[calc(50%-4px)] lg:min-w-0 px-6 rounded-[24px] border border-white text-white flex items-center justify-center">
-        Značky
-      </button>
+      <button className={buttonVariants({ variant: 'secondary' })}>Do 10 tisíc</button>
+      <button className={buttonVariants({ variant: 'secondary' })}>Užitkové</button>
+      <button className={buttonVariants({ variant: 'secondary' })}>Kategorie</button>
+      <button className={buttonVariants({ variant: 'secondary' })}>Skladové</button>
+      <button className={buttonVariants({ variant: 'secondary' })}>Náš výběr</button>
+      <button className={buttonVariants({ variant: 'secondary' })}>Značky</button>
 
-      <button className="h-[64px] w-full lg:w-auto lg:flex-shrink-0 flex items-center justify-center gap-5 pl-2 pr-9 rounded-[24px] bg-white text-gunmetal">
-        <span className="flex items-center justify-center w-[48px] h-[48px] rounded-[16px] bg-primary">
+      <button
+        className={cn(
+          buttonVariants({ variant: 'primary', size: 'icon' }),
+          'justify-start gap-4 col-span-2 lg:col-span-1',
+        )}
+      >
+        <span className="flex items-center justify-center w-[48px] h-[48px] rounded-[10px] lg:rounded-2xl bg-primary shrink-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -50,9 +63,9 @@ export default function FilterBar() {
 
 export const Hero = () => {
   return (
-    <section className="w-full">
+    <section className="w-full mb-40">
       <div className="w-full max-w-[1420px] mx-auto px-4 lg:px-6">
-        <div className="relative h-[400px] lg:h-[645px] rounded-[32px] lg:rounded-[48px] overflow-visible">
+        <div className="relative h-[600px] lg:h-[645px] rounded-[32px] lg:rounded-[48px] overflow-visible">
           <Image
             src="/mock/mock-1-bg.jpg"
             alt="Hero"
