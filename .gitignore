@@ -6,6 +6,10 @@ desktop.ini
 # modules
 node_modules/
 .yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/patches
 
 # build results
 **/.next/
