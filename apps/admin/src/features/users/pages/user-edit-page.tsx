@@ -21,18 +21,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { RoleSelect } from '../components/role-select'
 import { userEditFormSchema, type UserEditFormValues } from '../data/schema'
 import { GET_USER, UPDATE_USER } from '../users.graphql'
-import { useAuthStore } from '@/stores/auth-store'
+import { useIsAdmin } from '@/hooks/use-permission'
+import { normalizeRolesFromApi, normalizeRolesForApi } from '@/lib/role-utils'
 
 export function UserEditPage() {
   const { userId } = useParams({ from: '/_authenticated/users/$userId/edit' })
   const navigate = useNavigate()
-  const { auth } = useAuthStore()
-
-  // Check if current user is ADMIN
-  const currentUserRoles = auth.user?.roles || []
-  const isAdmin = currentUserRoles.some(role =>
-    role.toLowerCase() === 'admin'
-  )
+  const isAdmin = useIsAdmin()
 
   // Fetch user data
   const { data, loading, error } = useQuery(GET_USER, {
@@ -57,18 +52,11 @@ export function UserEditPage() {
   // Update form values when user data is loaded
   useEffect(() => {
     if (data?.user) {
-      // Normalize roles from UPPER_SNAKE_CASE to camelCase to match the role options
-      const normalizedRoles = data.user.roles.map((role: string) =>
-        role.includes('_')
-          ? role.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase())
-          : role
-      )
-
       form.reset({
         email: data.user.email,
         firstName: data.user.firstName,
         lastName: data.user.lastName,
-        roles: normalizedRoles,
+        roles: normalizeRolesFromApi(data.user.roles),
         phone: data.user.phone || '',
         bio: data.user.bio || '',
       })
@@ -77,17 +65,12 @@ export function UserEditPage() {
 
   const onSubmit = async (values: UserEditFormValues) => {
     try {
-      // Convert roles back to UPPER_SNAKE_CASE for the API
-      const apiRoles = values.roles.map((role: string) =>
-        role.replace(/([A-Z])/g, '_$1').toUpperCase()
-      )
-
       await updateUser({
         variables: {
           id: userId,
           input: {
             ...values,
-            roles: apiRoles,
+            roles: normalizeRolesForApi(values.roles),
           },
         },
       })

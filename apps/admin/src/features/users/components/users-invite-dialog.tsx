@@ -26,7 +26,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { RoleSelect } from './role-select'
 import { userRoleSchema } from '../data/schema'
-import { useAuthStore } from '@/stores/auth-store'
+import { useIsAdmin } from '@/hooks/use-permission'
 
 const formSchema = z.object({
   email: z.email({
@@ -48,13 +48,7 @@ export function UsersInviteDialog({
   open,
   onOpenChange,
 }: UserInviteDialogProps) {
-  const { auth } = useAuthStore()
-
-  // Check if current user is ADMIN (check both 'admin' and 'ADMIN')
-  const currentUserRoles = auth.user?.roles || []
-  const isAdmin = currentUserRoles.some(role =>
-    role.toLowerCase() === 'admin'
-  )
+  const isAdmin = useIsAdmin()
 
   const form = useForm<UserInviteForm>({
     resolver: zodResolver(formSchema),

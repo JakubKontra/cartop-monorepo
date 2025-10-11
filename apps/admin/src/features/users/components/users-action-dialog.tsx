@@ -27,7 +27,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { RoleSelect } from './role-select'
 import { type User, userRoleSchema } from '../data/schema'
-import { useAuthStore } from '@/stores/auth-store'
+import { useIsAdmin } from '@/hooks/use-permission'
 
 const formSchema = z
   .object({
@@ -107,13 +107,7 @@ export function UsersActionDialog({
   onOpenChange,
 }: UserActionDialogProps) {
   const isEdit = !!currentRow
-  const { auth } = useAuthStore()
-
-  // Check if current user is ADMIN (check both 'admin' and 'ADMIN')
-  const currentUserRoles = auth.user?.roles || []
-  const isAdmin = currentUserRoles.some(role =>
-    role.toLowerCase() === 'admin'
-  )
+  const isAdmin = useIsAdmin()
 
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),

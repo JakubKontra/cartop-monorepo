@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { type User } from '../data/schema'
 import { useUsers } from './users-provider'
-import { useAuthStore } from '@/stores/auth-store'
+import { useIsAdmin } from '@/hooks/use-permission'
 
 type DataTableRowActionsProps = {
   row: Row<User>
@@ -21,14 +21,8 @@ type DataTableRowActionsProps = {
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const { setOpen, setCurrentRow } = useUsers()
-  const { auth } = useAuthStore()
   const navigate = useNavigate()
-
-  // Check if current user is ADMIN (check both 'admin' and 'ADMIN')
-  const currentUserRoles = auth.user?.roles || []
-  const isAdmin = currentUserRoles.some(role =>
-    role.toLowerCase() === 'admin'
-  )
+  const isAdmin = useIsAdmin()
 
   // Check if target user is admin
   const targetUserRoles = row.original.roles || []

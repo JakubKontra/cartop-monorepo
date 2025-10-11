@@ -21,7 +21,8 @@ import { PasswordInput } from '@/components/password-input'
 import { RoleSelect } from '../components/role-select'
 import { userRoleSchema } from '../data/schema'
 import { CREATE_USER } from '../users.graphql'
-import { useAuthStore } from '@/stores/auth-store'
+import { useIsAdmin } from '@/hooks/use-permission'
+import { normalizeRolesForApi } from '@/lib/role-utils'
 
 const formSchema = z
   .object({
@@ -55,13 +56,7 @@ type UserAddFormValues = z.infer<typeof formSchema>
 
 export function UserAddPage() {
   const navigate = useNavigate()
-  const { auth } = useAuthStore()
-
-  // Check if current user is ADMIN
-  const currentUserRoles = auth.user?.roles || []
-  const isAdmin = currentUserRoles.some(role =>
-    role.toLowerCase() === 'admin'
-  )
+  const isAdmin = useIsAdmin()
 
   // Create user mutation
   const [createUser, { loading: creating }] = useMutation(CREATE_USER)
@@ -82,11 +77,6 @@ export function UserAddPage() {
 
   const onSubmit = async (values: UserAddFormValues) => {
     try {
-      // Convert roles to UPPER_SNAKE_CASE for the API
-      const apiRoles = values.roles.map((role: string) =>
-        role.replace(/([A-Z])/g, '_$1').toUpperCase()
-      )
-
       // Remove confirmPassword as it's not needed for the API
       const { confirmPassword, ...userData } = values
 
@@ -94,7 +84,7 @@ export function UserAddPage() {
         variables: {
           input: {
             ...userData,
-            roles: apiRoles,
+            roles: normalizeRolesForApi(values.roles),
           },
         },
       })

@@ -137,3 +137,66 @@ export function getRoleConfig(role: UserRole | string) {
 export function isValidRole(role: string): role is UserRole {
   return role in ROLE_CONFIG
 }
+
+/**
+ * Normalize a single role from API format (UPPER_SNAKE_CASE) to frontend format (camelCase)
+ * @param role - Role in UPPER_SNAKE_CASE format (e.g., 'ADMIN', 'CATALOG_MANAGER')
+ * @returns Role in camelCase format (e.g., 'admin', 'catalogManager')
+ *
+ * @example
+ * ```ts
+ * normalizeRoleFromApi('CATALOG_MANAGER') // returns 'catalogManager'
+ * normalizeRoleFromApi('ADMIN') // returns 'admin'
+ * ```
+ */
+export function normalizeRoleFromApi(role: string): UserRole {
+  if (!role.includes('_')) {
+    return role.toLowerCase() as UserRole
+  }
+  return role.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase()) as UserRole
+}
+
+/**
+ * Normalize a single role from frontend format (camelCase) to API format (UPPER_SNAKE_CASE)
+ * @param role - Role in camelCase format (e.g., 'admin', 'catalogManager')
+ * @returns Role in UPPER_SNAKE_CASE format (e.g., 'ADMIN', 'CATALOG_MANAGER')
+ *
+ * @example
+ * ```ts
+ * normalizeRoleForApi('catalogManager') // returns 'CATALOG_MANAGER'
+ * normalizeRoleForApi('admin') // returns 'ADMIN'
+ * ```
+ */
+export function normalizeRoleForApi(role: UserRole | string): string {
+  return role.replace(/([A-Z])/g, '_$1').toUpperCase()
+}
+
+/**
+ * Normalize multiple roles from API format to frontend format
+ * @param roles - Array of roles in UPPER_SNAKE_CASE format
+ * @returns Array of roles in camelCase format
+ *
+ * @example
+ * ```ts
+ * normalizeRolesFromApi(['ADMIN', 'CATALOG_MANAGER'])
+ * // returns ['admin', 'catalogManager']
+ * ```
+ */
+export function normalizeRolesFromApi(roles: string[]): UserRole[] {
+  return roles.map(normalizeRoleFromApi)
+}
+
+/**
+ * Normalize multiple roles from frontend format to API format
+ * @param roles - Array of roles in camelCase format
+ * @returns Array of roles in UPPER_SNAKE_CASE format
+ *
+ * @example
+ * ```ts
+ * normalizeRolesForApi(['admin', 'catalogManager'])
+ * // returns ['ADMIN', 'CATALOG_MANAGER']
+ * ```
+ */
+export function normalizeRolesForApi(roles: (UserRole | string)[]): string[] {
+  return roles.map(normalizeRoleForApi)
+}
