@@ -55,6 +55,13 @@ export type AuditQueryInput = {
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type AuthResponse = {
+  __typename?: 'AuthResponse';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+  user: User;
+};
+
 export type CatalogBrand = {
   __typename?: 'CatalogBrand';
   createdAt: Scalars['DateTime']['output'];
@@ -88,6 +95,23 @@ export enum CatalogColorType {
   Interior = 'INTERIOR'
 }
 
+export type CatalogModel = {
+  __typename?: 'CatalogModel';
+  brand: CatalogBrand;
+  brandId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  isHighlighted: Scalars['Boolean']['output'];
+  isRecommended: Scalars['Boolean']['output'];
+  legacySlug?: Maybe<Scalars['String']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
 export type CreateCatalogBrandInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
@@ -107,6 +131,18 @@ export type CreateCatalogColorInput = {
   type: CatalogColorType;
 };
 
+export type CreateCatalogModelInput = {
+  brandId: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  isHighlighted?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
+  legacySlug?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
+};
+
 export type CreateUserInput = {
   bio?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
@@ -114,19 +150,44 @@ export type CreateUserInput = {
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone?: InputMaybe<Scalars['String']['input']>;
+  roles?: InputMaybe<Array<UserRole>>;
+};
+
+export type ImpersonateInput = {
+  targetUserId: Scalars['String']['input'];
+};
+
+export type ImpersonateResponse = {
+  __typename?: 'ImpersonateResponse';
+  accessToken: Scalars['String']['output'];
+  impersonatedUser: User;
+  originalUser: User;
+  refreshToken: Scalars['String']['output'];
+};
+
+export type LoginInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createCatalogBrand: CatalogBrand;
   createCatalogColor: CatalogColor;
+  createCatalogModel: CatalogModel;
   createUser: User;
   deleteCatalogBrand: Scalars['Boolean']['output'];
   deleteCatalogColor: Scalars['Boolean']['output'];
+  deleteCatalogModel: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
+  impersonateUser: ImpersonateResponse;
+  login: AuthResponse;
+  refreshToken: AuthResponse;
   softDeleteUser: User;
+  stopImpersonation: AuthResponse;
   updateCatalogBrand: CatalogBrand;
   updateCatalogColor: CatalogColor;
+  updateCatalogModel: CatalogModel;
   updateUser: User;
 };
 
@@ -138,6 +199,11 @@ export type MutationCreateCatalogBrandArgs = {
 
 export type MutationCreateCatalogColorArgs = {
   input: CreateCatalogColorInput;
+};
+
+
+export type MutationCreateCatalogModelArgs = {
+  input: CreateCatalogModelInput;
 };
 
 
@@ -156,8 +222,28 @@ export type MutationDeleteCatalogColorArgs = {
 };
 
 
+export type MutationDeleteCatalogModelArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationDeleteUserArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationImpersonateUserArgs = {
+  input: ImpersonateInput;
+};
+
+
+export type MutationLoginArgs = {
+  input: LoginInput;
+};
+
+
+export type MutationRefreshTokenArgs = {
+  input: RefreshTokenInput;
 };
 
 
@@ -178,6 +264,12 @@ export type MutationUpdateCatalogColorArgs = {
 };
 
 
+export type MutationUpdateCatalogModelArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogModelInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   id: Scalars['String']['input'];
   input: UpdateUserInput;
@@ -186,6 +278,7 @@ export type MutationUpdateUserArgs = {
 export type Query = {
   __typename?: 'Query';
   allCatalogBrands: Array<CatalogBrand>;
+  allCatalogModels: Array<CatalogModel>;
   auditLogs: Array<AuditLog>;
   catalogBrand: CatalogBrand;
   catalogBrandBySlug: CatalogBrand;
@@ -194,11 +287,18 @@ export type Query = {
   catalogColorBySlug: CatalogColor;
   catalogColors: Array<CatalogColor>;
   catalogColorsByType: Array<CatalogColor>;
+  catalogModel: CatalogModel;
+  catalogModelBySlug: CatalogModel;
+  catalogModels: Array<CatalogModel>;
+  catalogModelsByBrand: Array<CatalogModel>;
   entityHistory: Array<AuditLog>;
   highlightedCatalogBrands: Array<CatalogBrand>;
+  highlightedCatalogModels: Array<CatalogModel>;
   recommendedCatalogBrands: Array<CatalogBrand>;
+  recommendedCatalogModels: Array<CatalogModel>;
   searchCatalogBrands: Array<CatalogBrand>;
   searchCatalogColors: Array<CatalogColor>;
+  searchCatalogModels: Array<CatalogModel>;
   searchUsers: Array<User>;
   user: User;
   userActivity: Array<AuditLog>;
@@ -207,6 +307,12 @@ export type Query = {
 
 
 export type QueryAllCatalogBrandsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryAllCatalogModelsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
@@ -256,6 +362,29 @@ export type QueryCatalogColorsByTypeArgs = {
 };
 
 
+export type QueryCatalogModelArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelBySlugArgs = {
+  slug: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelsArgs = {
+  activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryCatalogModelsByBrandArgs = {
+  brandId: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
 export type QueryEntityHistoryArgs = {
   entityId: Scalars['String']['input'];
   entityName: Scalars['String']['input'];
@@ -269,6 +398,12 @@ export type QuerySearchCatalogBrandsArgs = {
 
 
 export type QuerySearchCatalogColorsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchCatalogModelsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
@@ -296,6 +431,10 @@ export type QueryUsersArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
+export type RefreshTokenInput = {
+  refreshToken: Scalars['String']['input'];
+};
+
 export type UpdateCatalogBrandInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
@@ -311,6 +450,16 @@ export type UpdateCatalogColorInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<CatalogColorType>;
+};
+
+export type UpdateCatalogModelInput = {
+  brandId?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  isHighlighted?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommended?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -331,8 +480,21 @@ export type User = {
   isActive: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
   phone?: Maybe<Scalars['String']['output']>;
+  roles: Array<UserRole>;
   updatedAt: Scalars['DateTime']['output'];
 };
+
+/** User roles for access control */
+export enum UserRole {
+  Admin = 'ADMIN',
+  CatalogManager = 'CATALOG_MANAGER',
+  Customer = 'CUSTOMER',
+  CustomerService = 'CUSTOMER_SERVICE',
+  JuniorSalesRepresentative = 'JUNIOR_SALES_REPRESENTATIVE',
+  Marketing = 'MARKETING',
+  Public = 'PUBLIC',
+  SalesRepresentative = 'SALES_REPRESENTATIVE'
+}
 
 export type GetCatalogBrandsQueryVariables = Exact<{
   activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
