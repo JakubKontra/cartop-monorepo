@@ -22,7 +22,7 @@ import { RoleSelect } from '../components/role-select'
 import { userEditFormSchema, type UserEditFormValues } from '../data/schema'
 import { GET_USER, UPDATE_USER } from '../users.graphql'
 import { useIsAdmin } from '@/hooks/use-permission'
-import { normalizeRolesFromApi, normalizeRolesForApi } from '@/lib/role-utils'
+import { normalizeRolesFromApi } from '@/lib/role-utils'
 
 export function UserEditPage() {
   const { userId } = useParams({ from: '/_authenticated/users/$userId/edit' })
@@ -65,13 +65,13 @@ export function UserEditPage() {
 
   const onSubmit = async (values: UserEditFormValues) => {
     try {
+      // Remove roles from update input as UpdateUserInput doesn't support it
+      const { roles, ...updateData } = values
+
       await updateUser({
         variables: {
           id: userId,
-          input: {
-            ...values,
-            roles: normalizeRolesForApi(values.roles),
-          },
+          input: updateData,
         },
       })
       toast.success('User updated successfully')

@@ -6,7 +6,11 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { DataTableColumnHeader } from '@/components/data-table'
 import { LongText } from '@/components/long-text'
-import { type User, type UserRole } from '../data/schema'
+import { type UserRole } from '../data/schema'
+import { type GetAllUsersQuery } from '@/gql/graphql'
+
+// Extract User type from the GraphQL query result
+type User = GetAllUsersQuery['users'][number]
 import { DataTableRowActions } from './data-table-row-actions'
 import { CheckCircle2, Circle } from 'lucide-react'
 

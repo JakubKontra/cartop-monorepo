@@ -11,7 +11,10 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type User } from '../data/schema'
+import { type GetAllUsersQuery } from '@/gql/graphql'
+
+// Use GraphQL User type to match the columns
+type User = GetAllUsersQuery['users'][number]
 import { useUsers } from './users-provider'
 import { useIsAdmin } from '@/hooks/use-permission'
 

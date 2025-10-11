@@ -34,7 +34,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
   }, [font])
 
   const setFont = (font: Font) => {
-    setCookie(FONT_COOKIE_NAME, font, FONT_COOKIE_MAX_AGE)
+    setCookie(FONT_COOKIE_NAME, font, { maxAge: FONT_COOKIE_MAX_AGE })
     _setFont(font)
   }
 

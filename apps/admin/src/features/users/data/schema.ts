@@ -14,6 +14,9 @@ export const userRoleSchema = z.enum([
 
 export type UserRole = z.infer<typeof userRoleSchema>
 
+// User status type for UI display
+export type UserStatus = 'active' | 'inactive' | 'invited' | 'suspended'
+
 // User schema matching backend User entity
 export const userSchema = z.object({
   id: z.string().uuid(),

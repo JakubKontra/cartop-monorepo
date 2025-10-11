@@ -106,7 +106,8 @@ const refreshToken = async (): Promise<{ accessToken: string; refreshToken: stri
 /**
  * Error link: Handles token refresh on 401 errors
  */
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+const errorLink = onError((errorResponse: any) => {
+  const { graphQLErrors, networkError, operation, forward } = errorResponse;
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       // Check for authentication errors

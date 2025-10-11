@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { RoleSelect } from '../components/role-select'
 import { userRoleSchema } from '../data/schema'
+import { UserRole } from '@/gql/graphql'
 import { CREATE_USER } from '../users.graphql'
 import { useIsAdmin } from '@/hooks/use-permission'
 import { normalizeRolesForApi } from '@/lib/role-utils'
@@ -84,7 +85,7 @@ export function UserAddPage() {
         variables: {
           input: {
             ...userData,
-            roles: normalizeRolesForApi(values.roles),
+            roles: normalizeRolesForApi(values.roles) as UserRole[],
           },
         },
       })

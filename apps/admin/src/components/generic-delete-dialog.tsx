@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { type DocumentNode } from 'graphql'
 import { AlertTriangle, Loader2 } from 'lucide-react'
-import { useMutation, type ApolloCache, type DefaultContext, type MutationHookOptions } from '@apollo/client/react'
+import { useMutation, type MutationHookOptions } from '@apollo/client/react'
 import { toast } from 'sonner'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'

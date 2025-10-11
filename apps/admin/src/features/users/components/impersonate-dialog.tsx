@@ -15,7 +15,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { type User } from '../data/schema'
+import { type GetAllUsersQuery } from '@/gql/graphql'
+
+// Use GraphQL User type to match table data
+type User = GetAllUsersQuery['users'][number]
 
 type ImpersonateDialogProps = {
   user: User | null

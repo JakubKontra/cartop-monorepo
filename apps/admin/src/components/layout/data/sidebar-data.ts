@@ -24,9 +24,8 @@ import {
   Tags,
   Car,
 } from 'lucide-react'
-import { ClerkLogo } from '@/assets/clerk-logo'
 import { type SidebarData } from '../types'
-import { Permission, UserRole } from '@/lib/permissions'
+import { Permission } from '@/lib/permissions'
 
 export const sidebarData: SidebarData = {
   user: {

@@ -76,7 +76,7 @@ export function ThemeProvider({
   }, [theme, resolvedTheme])
 
   const setTheme = (theme: Theme) => {
-    setCookie(storageKey, theme, THEME_COOKIE_MAX_AGE)
+    setCookie(storageKey, theme, { maxAge: THEME_COOKIE_MAX_AGE })
     _setTheme(theme)
   }
 

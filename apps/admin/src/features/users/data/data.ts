@@ -19,4 +19,4 @@ export const roles = (Object.entries(ROLE_CONFIG) as [UserRole, typeof ROLE_CONF
     value,
     icon: config.icon,
   })
-) as const
+)
