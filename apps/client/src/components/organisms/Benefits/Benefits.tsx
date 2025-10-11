@@ -30,7 +30,7 @@ export default function Benefits() {
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               >
                 <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 1 0-7.07-7.07L10 5" />
                 <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 1 0 7.07 7.07L14 19" />
@@ -68,7 +68,7 @@ export default function Benefits() {
                     className="h-5 w-5"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    strokeWidth="2"
                   >
                     <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" />
                   </svg>
@@ -85,7 +85,7 @@ export default function Benefits() {
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               >
                 <path d="M3 6h7M3 12h12M3 18h7M14 6h7M18 18h3" />
               </svg>
@@ -104,7 +104,7 @@ export default function Benefits() {
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               >
                 <path d="M12 3l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4z" />
                 <path d="M19 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z" />
@@ -124,7 +124,7 @@ export default function Benefits() {
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               >
                 <path d="M20 6L9 17l-5-5" />
               </svg>
