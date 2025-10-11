@@ -14,23 +14,23 @@ export default function Navbar() {
 
         <ul className="hidden lg:flex items-center gap-10 text-gunmetal font-sora font-normal text-base leading-[160%] tracking-[0.01em] flex-grow justify-center">
           <li>
-            <a
+            <Link
               href="#offers"
               className="inline-flex items-center gap-1 hover:text-slate-900 transition"
             >
               <span>Všechny nabídky</span>
               <span className="text-slate-400">▾</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#how" className="hover:text-slate-900 transition">
+            <Link href="#how" className="hover:text-slate-900 transition">
               Jak to funguje?
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#contact" className="hover:text-slate-900 transition">
+            <Link href="#contact" className="hover:text-slate-900 transition">
               Kontakt
-            </a>
+            </Link>
           </li>
         </ul>
 

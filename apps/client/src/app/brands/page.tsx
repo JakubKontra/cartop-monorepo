@@ -8,6 +8,7 @@
 import { graphqlRequest } from '@/lib/graphql-client';
 import { GET_BRANDS_QUERY } from '@/queries/brands';
 import type { GetCatalogBrandsQuery } from '@/gql/graphql';
+import Link from 'next/link';
 
 // Revalidate every 60 seconds (ISR)
 export const revalidate = 60;
@@ -98,7 +99,7 @@ function BrandCard({
   featured?: boolean;
 }) {
   return (
-    <a
+    <Link
       href={`/brands/${brand.slug}`}
       className={`
         block p-6 rounded-lg border transition-all hover:shadow-lg
@@ -127,7 +128,7 @@ function BrandCard({
         <span>{brand.slug}</span>
         {featured && <span className="text-blue-600 font-medium">⭐ Featured</span>}
       </div>
-    </a>
+    </Link>
   );
 }
 
