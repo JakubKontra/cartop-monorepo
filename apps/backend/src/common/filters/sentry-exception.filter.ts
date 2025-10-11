@@ -18,6 +18,54 @@ export class SentryExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(SentryExceptionFilter.name);
 
   catch(exception: unknown, host: ArgumentsHost) {
+    // Check if this is a GraphQL context (GraphQL errors are handled differently)
+    const contextType = host.getType<string>();
+
+    // For GraphQL contexts, just log and let GraphQL handle the error
+    if (contextType === 'graphql') {
+      // Determine status code
+      const status =
+        exception instanceof HttpException
+          ? exception.getStatus()
+          : HttpStatus.INTERNAL_SERVER_ERROR;
+
+      // Extract error message
+      let message = 'Internal server error';
+      if (exception instanceof HttpException) {
+        const exceptionResponse = exception.getResponse();
+        if (typeof exceptionResponse === 'string') {
+          message = exceptionResponse;
+        } else if (typeof exceptionResponse === 'object') {
+          message = (exceptionResponse as any).message || message;
+        }
+      } else if (exception instanceof Error) {
+        message = exception.message;
+      }
+
+      // Log the error
+      if (status >= 500) {
+        this.logger.error(
+          `GraphQL Error: ${message}`,
+          exception instanceof Error ? exception.stack : undefined,
+        );
+      } else {
+        this.logger.warn(`GraphQL Error: ${message}`);
+      }
+
+      // Send to Sentry for server errors
+      if (status >= 500 || !(exception instanceof HttpException)) {
+        if (exception instanceof Error) {
+          Sentry.captureException(exception);
+        } else {
+          Sentry.captureMessage(`GraphQL Non-Error exception: ${message}`, 'error');
+        }
+      }
+
+      // Re-throw for GraphQL to handle
+      throw exception;
+    }
+
+    // HTTP context handling
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
     const request = ctx.getRequest();
@@ -60,25 +108,27 @@ export class SentryExceptionFilter implements ExceptionFilter {
     // Send to Sentry (only for server errors and unexpected exceptions)
     if (status >= 500 || !(exception instanceof HttpException)) {
       Sentry.withScope((scope) => {
-        // Add request context
-        scope.setContext('http', {
-          method: request.method,
-          url: request.url,
-          headers: this.sanitizeHeaders(request.headers),
-          query: request.query,
-        });
-
-        // Add user context if available
-        if (request.user) {
-          scope.setUser({
-            id: request.user.id,
-            email: request.user.email,
+        // Add request context (with null checks)
+        if (request) {
+          scope.setContext('http', {
+            method: request.method || 'UNKNOWN',
+            url: request.url || 'UNKNOWN',
+            headers: request.headers ? this.sanitizeHeaders(request.headers) : {},
+            query: request.query || {},
           });
-        }
 
-        // Set additional tags
-        scope.setTag('http.status_code', status);
-        scope.setTag('http.method', request.method);
+          // Add user context if available
+          if (request.user) {
+            scope.setUser({
+              id: request.user.id,
+              email: request.user.email,
+            });
+          }
+
+          // Set additional tags
+          scope.setTag('http.status_code', status);
+          scope.setTag('http.method', request.method || 'UNKNOWN');
+        }
 
         // Capture the exception
         if (exception instanceof Error) {
@@ -93,8 +143,8 @@ export class SentryExceptionFilter implements ExceptionFilter {
     const errorResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
-      path: request.url,
-      method: request.method,
+      path: request?.url || 'UNKNOWN',
+      method: request?.method || 'UNKNOWN',
       message,
       error,
       ...(details && { details }),

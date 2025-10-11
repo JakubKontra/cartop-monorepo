@@ -13,31 +13,26 @@ import {
 } from '@nestjs/platform-fastify';
 import { validateConfig } from './config/config.validation';
 import helmet from '@fastify/helmet';
-import * as Sentry from '@sentry/node';
-import { nodeProfilingIntegration } from '@sentry/profiling-node';
-import { SentryExceptionFilter } from './common/filters/sentry-exception.filter';
+// import * as Sentry from '@sentry/node';
+// import { nodeProfilingIntegration } from '@sentry/profiling-node';
+// import { SentryExceptionFilter } from './common/filters/sentry-exception.filter';
 
 async function bootstrap() {
   // Validate configuration before starting application
   // This will fail fast if critical config is missing in production
   const appConfig = validateConfig();
 
-  // Initialize Sentry error tracking (if configured)
-  if (process.env.SENTRY_DSN) {
-    Sentry.init({
-      dsn: process.env.SENTRY_DSN,
-      environment: process.env.SENTRY_ENVIRONMENT || appConfig.nodeEnv,
-      // Performance Monitoring
-      tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE || '0.1'),
-      // Profiling
-      profilesSampleRate: parseFloat(process.env.SENTRY_PROFILES_SAMPLE_RATE || '0.1'),
-      integrations: [
-        nodeProfilingIntegration(),
-      ],
-      // Don't send errors in development unless explicitly enabled
-      enabled: appConfig.nodeEnv === 'production' || process.env.SENTRY_ENABLED === 'true',
-    });
-  }
+  // Sentry disabled
+  // if (process.env.SENTRY_DSN) {
+  //   Sentry.init({
+  //     dsn: process.env.SENTRY_DSN,
+  //     environment: process.env.SENTRY_ENVIRONMENT || appConfig.nodeEnv,
+  //     tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE || '0.1'),
+  //     profilesSampleRate: parseFloat(process.env.SENTRY_PROFILES_SAMPLE_RATE || '0.1'),
+  //     integrations: [nodeProfilingIntegration()],
+  //     enabled: appConfig.nodeEnv === 'production' || process.env.SENTRY_ENABLED === 'true',
+  //   });
+  // }
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -72,8 +67,8 @@ async function bootstrap() {
     crossOriginResourcePolicy: { policy: 'cross-origin' }, // Allow cross-origin requests for API
   });
 
-  // Enable global exception filter for Sentry error tracking
-  app.useGlobalFilters(new SentryExceptionFilter());
+  // Sentry exception filter disabled
+  // app.useGlobalFilters(new SentryExceptionFilter());
 
   // Enable validation globally
   app.useGlobalPipes(

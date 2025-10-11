@@ -6,8 +6,15 @@ import {
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { Auditable } from '../../common/decorators/auditable.decorator';
+import { UserRole } from '../../common/enums/role.enum';
+
+// Register UserRole enum for GraphQL
+registerEnumType(UserRole, {
+  name: 'UserRole',
+  description: 'User roles for access control',
+});
 
 /**
  * User Entity - Example model with audit tracking
@@ -36,6 +43,15 @@ export class User {
 
   @Column({ type: 'varchar', length: 255 })
   password: string; // Not exposed in GraphQL
+
+  @Field(() => [UserRole])
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    array: true,
+    default: [UserRole.CUSTOMER],
+  })
+  roles: UserRole[];
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 20, nullable: true })

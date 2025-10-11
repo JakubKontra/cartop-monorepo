@@ -43,12 +43,16 @@ export class RolesGuard implements CanActivate {
     }
 
     // Check if user has any of the required roles
-    const userRole = user.role as UserRole;
-    const hasRole = requiredRoles.some(role => this.hasPermission(userRole, role));
+    const userRoles = (user.roles || []) as UserRole[];
+
+    // User must have at least one role that meets or exceeds the required permission level
+    const hasRole = requiredRoles.some(requiredRole =>
+      userRoles.some(userRole => this.hasPermission(userRole, requiredRole))
+    );
 
     if (!hasRole) {
       throw new ForbiddenException(
-        `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}`,
+        `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}. User has: ${userRoles.join(', ')}`,
       );
     }
 

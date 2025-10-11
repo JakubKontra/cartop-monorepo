@@ -7,7 +7,7 @@ import { getJwtSecret } from '../../config/config.validation';
 export interface JwtPayload {
   sub: string; // user ID
   email: string;
-  role: UserRole;
+  roles: UserRole[];
   iat?: number;
   exp?: number;
 }
@@ -35,7 +35,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       id: payload.sub,
       email: payload.email,
-      role: payload.role || UserRole.PUBLIC,
+      roles: payload.roles || [UserRole.PUBLIC],
     };
   }
 }

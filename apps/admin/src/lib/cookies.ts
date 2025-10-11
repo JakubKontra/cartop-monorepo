@@ -21,15 +21,16 @@ export function getCookie(name: string): string | undefined {
 }
 
 /**
- * Set a cookie with name, value, and optional max age
+ * Set a cookie with name, value, and optional options
  */
 export function setCookie(
   name: string,
   value: string,
-  maxAge: number = DEFAULT_MAX_AGE
+  options?: { maxAge?: number }
 ): void {
   if (typeof document === 'undefined') return
 
+  const maxAge = options?.maxAge ?? DEFAULT_MAX_AGE
   document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`
 }
 
