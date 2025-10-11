@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Backend: Start",
+      "type": "shell",
+      "command": "yarn workspace @cartop/backend dev",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Backend: Stop",
+      "type": "shell",
+      "command": "./scripts/backend.sh stop",
+      "problemMatcher": []
+    },
+    {
+      "label": "Backend: Status",
+      "type": "shell",
+      "command": "./scripts/backend.sh status",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate: All Types",
+      "type": "shell",
+      "command": "yarn generate",
+      "problemMatcher": [],
+      "dependsOn": ["Backend: Status"]
+    },
+    {
+      "label": "Generate: REST Only",
+      "type": "shell",
+      "command": "yarn generate:rest",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate: GraphQL Only",
+      "type": "shell",
+      "command": "yarn generate:gql",
+      "problemMatcher": []
+    }
+  ]
+}
