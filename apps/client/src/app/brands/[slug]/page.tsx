@@ -25,7 +25,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
 
   try {
     // Fetch brand data
-    const data = await graphqlRequest<GetBrandBySlugQuery>(
+    const data = await graphqlRequest<GetBrandBySlugQuery, { slug: string }>(
       {
         query: GET_BRAND_BY_SLUG_QUERY,
         variables: { slug },
@@ -171,10 +171,10 @@ export default async function BrandPage({ params }: BrandPageProps) {
  * Generate metadata for SEO
  */
 export async function generateMetadata({ params }: BrandPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
 
   try {
-    const data = await graphqlRequest<GetBrandBySlugQuery>({
+    const data = await graphqlRequest<GetBrandBySlugQuery, { slug: string }>({
       query: GET_BRAND_BY_SLUG_QUERY,
       variables: { slug },
     });

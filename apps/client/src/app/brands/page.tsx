@@ -18,7 +18,7 @@ export const dynamic = 'force-static';
 
 export default async function BrandsPage() {
   // Fetch brands at build time / on revalidation
-  const data = await graphqlRequest<GetCatalogBrandsQuery>(
+  const data = await graphqlRequest<GetCatalogBrandsQuery, { activeOnly: boolean; limit: number }>(
     {
       query: GET_BRANDS_QUERY,
       variables: {

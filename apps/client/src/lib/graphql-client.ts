@@ -7,8 +7,8 @@ import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
 const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3000/graphql';
 
-export interface GraphQLRequest<TVariables = Record<string, unknown>> {
-  query: string | TypedDocumentNode<unknown, TVariables>;
+export interface GraphQLRequest<TData = unknown, TVariables = Record<string, unknown>> {
+  query: string | TypedDocumentNode<TData, TVariables>;
   variables?: TVariables;
 }
 
@@ -24,10 +24,10 @@ export interface GraphQLResponse<T> {
 /**
  * Execute a GraphQL query
  */
-export async function graphqlRequest<T, TVariables = Record<string, unknown>>(
-  request: GraphQLRequest<TVariables>,
+export async function graphqlRequest<TData, TVariables = Record<string, unknown>>(
+  request: GraphQLRequest<TData, TVariables>,
   options?: RequestInit
-): Promise<T> {
+): Promise<TData> {
   // Convert DocumentNode to string if needed
   const query = typeof request.query === 'string'
     ? request.query
@@ -51,7 +51,7 @@ export async function graphqlRequest<T, TVariables = Record<string, unknown>>(
     throw new Error(`GraphQL HTTP error: ${response.status} - ${text}`);
   }
 
-  const json: GraphQLResponse<T> = await response.json();
+  const json: GraphQLResponse<TData> = await response.json();
 
   if (json.errors && json.errors.length > 0) {
     const errorMessage = json.errors.map(e => e.message).join(', ');
