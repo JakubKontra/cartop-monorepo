@@ -6,12 +6,14 @@ import {
   UpdateDateColumn,
   Index,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Auditable } from '../../common/decorators/auditable.decorator';
 import { Watch } from '../../common/decorators/watch/watch.decorator';
 import { CatalogBrand } from '../brand/catalog-brand.entity';
+import { CatalogModelGeneration } from '../generation/catalog-model-generation.entity';
 
 @ObjectType()
 @Entity('catalog_models')
@@ -98,4 +100,8 @@ export class CatalogModel {
   @Column({ type: 'uuid' })
   @Index()
   brandId: string;
+
+  @Field(() => [CatalogModelGeneration], { nullable: true })
+  @OneToMany(() => CatalogModelGeneration, generation => generation.model)
+  generations?: CatalogModelGeneration[];
 }

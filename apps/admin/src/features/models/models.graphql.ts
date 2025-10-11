@@ -119,3 +119,16 @@ export const DELETE_CATALOG_MODEL = graphql(`
     deleteCatalogModel(id: $id)
   }
 `);
+
+/**
+ * Check Model Slug Uniqueness Query
+ * Checks if a model slug is already in use
+ */
+export const CHECK_MODEL_SLUG = graphql(`
+  query CheckModelSlug($slug: String!) {
+    catalogModelBySlug(slug: $slug) {
+      id
+      slug
+    }
+  }
+`);

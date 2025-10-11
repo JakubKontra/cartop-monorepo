@@ -1152,6 +1152,7 @@ __metadata:
     react-is: "npm:^19.0.0"
     react-top-loading-bar: "npm:^3.0.2"
     recharts: "npm:^3.2.1"
+    slugify: "npm:^1.6.6"
     solid-js: "npm:^1.9.9"
     sonner: "npm:^2.0.7"
     tailwind-merge: "npm:^3.3.1"
@@ -19421,6 +19422,13 @@ __metadata:
   version: 0.3.1
   resolution: "slow-redact@npm:0.3.1"
   checksum: 10c0/7f495a85108f554ea492b7fa1c8892b690a8172cb6d8cd77c56fef00a15d15f46b497a8eb61355a61cc06cbb34246088dc3372ed2ffb22e645c8c5dabc334563
+  languageName: node
+  linkType: hard
+
+"slugify@npm:^1.6.6":
+  version: 1.6.6
+  resolution: "slugify@npm:1.6.6"
+  checksum: 10c0/e7e63f08f389a371d6228bc19d64ec84360bf0a538333446cc49dbbf3971751a6d180d2f31551188dd007a65ca771e69f574e0283290a7825a818e90b75ef44d
   languageName: node
   linkType: hard
 

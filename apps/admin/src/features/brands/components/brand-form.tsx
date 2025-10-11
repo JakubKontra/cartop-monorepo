@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useLazyQuery } from '@apollo/client/react'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -16,7 +17,9 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { SlugInput } from '@/components/slug-input'
 import { brandSchema, type BrandFormValues } from '../data/schema'
+import { CHECK_BRAND_SLUG } from '../brands.graphql'
 import { Loader2 } from 'lucide-react'
 
 interface BrandFormProps {
@@ -39,6 +42,8 @@ export function BrandForm({
   onSubmit,
   onCancel,
 }: BrandFormProps) {
+  const [checkSlug] = useLazyQuery(CHECK_BRAND_SLUG)
+
   const form = useForm<BrandFormValues>({
     resolver: zodResolver(brandSchema),
     defaultValues: defaultValues || {
@@ -52,6 +57,26 @@ export function BrandForm({
       legacySlug: '',
     },
   })
+
+  const validateSlugUniqueness = async (slug: string): Promise<boolean> => {
+    if (!slug) return true
+
+    try {
+      const { data } = await checkSlug({
+        variables: { slug },
+      })
+
+      // If we got data back, the slug exists
+      if (data?.catalogBrandBySlug) {
+        return false // Slug is already taken
+      }
+
+      return true // Slug is available
+    } catch (error) {
+      // If the query errors (e.g., brand not found), the slug is available
+      return true
+    }
+  }
 
   return (
     <Form {...form}>
@@ -97,14 +122,16 @@ export function BrandForm({
                     Slug <span className='text-destructive'>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <SlugInput
+                      deriveFrom='name'
                       placeholder='bmw'
-                      autoComplete='off'
+                      onValidateUnique={validateSlugUniqueness}
+                      initialSlug={defaultValues?.slug}
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    URL-friendly identifier (lowercase, no spaces)
+                    URL-friendly identifier (auto-generated from name)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

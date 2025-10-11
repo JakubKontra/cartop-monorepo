@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CatalogBrandModule } from './brand/catalog-brand.module';
 import { CatalogColorModule } from './color/catalog-color.module';
 import { CatalogModelModule } from './model/catalog-model.module';
+import { CatalogModelGenerationModule } from './generation/catalog-model-generation.module';
 
 /**
  * Catalog Module - Aggregates all catalog-related entities
@@ -24,11 +25,13 @@ import { CatalogModelModule } from './model/catalog-model.module';
   imports: [
     CatalogBrandModule,
     CatalogModelModule,
+    CatalogModelGenerationModule,
     CatalogColorModule,
   ],
   exports: [
     CatalogBrandModule,
     CatalogModelModule,
+    CatalogModelGenerationModule,
     CatalogColorModule,
   ],
 })

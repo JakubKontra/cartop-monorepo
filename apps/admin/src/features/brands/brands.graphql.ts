@@ -95,3 +95,16 @@ export const DELETE_CATALOG_BRAND = graphql(`
     deleteCatalogBrand(id: $id)
   }
 `);
+
+/**
+ * Check Brand Slug Uniqueness Query
+ * Checks if a brand slug is already in use
+ */
+export const CHECK_BRAND_SLUG = graphql(`
+  query CheckBrandSlug($slug: String!) {
+    catalogBrandBySlug(slug: $slug) {
+      id
+      slug
+    }
+  }
+`);

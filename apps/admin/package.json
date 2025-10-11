@@ -52,6 +52,7 @@
     "react-is": "^19.0.0",
     "react-top-loading-bar": "^3.0.2",
     "recharts": "^3.2.1",
+    "slugify": "^1.6.6",
     "solid-js": "^1.9.9",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
