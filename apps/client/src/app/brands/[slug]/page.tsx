@@ -9,6 +9,7 @@ import { graphqlRequest } from '@/lib/graphql-client';
 import { GET_BRAND_BY_SLUG_QUERY } from '@/queries/brands';
 import type { GetBrandBySlugQuery } from '@/gql/graphql';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 
 // Revalidate every 60 seconds
 export const revalidate = 60;
@@ -50,12 +51,12 @@ export default async function BrandPage({ params }: BrandPageProps) {
     return (
       <main className="container mx-auto px-4 py-8">
         {/* Back Navigation */}
-        <a
+        <Link
           href="/brands"
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
         >
           ← Back to all brands
-        </a>
+        </Link>
 
         {/* Render Timestamp (ISR Cache Verification) */}
         <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r">
