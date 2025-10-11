@@ -17,6 +17,9 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",
     "seed:brands": "ts-node src/database/seeds/catalog-brands.seed.ts",
+    "seed:admin": "ts-node src/database/seeds/create-admin-user.seed.ts",
+    "seed:catalog-manager": "ts-node src/database/seeds/create-catalog-manager-user.seed.ts",
+    "seed:multi-role-sales": "ts-node src/database/seeds/create-multi-role-sales-user.seed.ts",
     "test:update-brand": "ts-node src/database/seeds/test-update-brand.ts"
   },
   "keywords": [],

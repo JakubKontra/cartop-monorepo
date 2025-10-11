@@ -7,7 +7,10 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { type User } from '../data/schema'
+import { type GetAllUsersQuery } from '@/gql/graphql'
+
+// Use GraphQL User type to match table data
+type User = GetAllUsersQuery['users'][number]
 
 type UserDeleteDialogProps = {
   open: boolean
@@ -23,7 +26,7 @@ export function UsersDeleteDialog({
   const [value, setValue] = useState('')
 
   const handleDelete = () => {
-    if (value.trim() !== currentRow.username) return
+    if (value.trim() !== currentRow.email) return
 
     onOpenChange(false)
     showSubmittedData(currentRow, 'The following user has been deleted:')
@@ -34,7 +37,7 @@ export function UsersDeleteDialog({
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.username}
+      disabled={value.trim() !== currentRow.email}
       title={
         <span className='text-destructive'>
           <AlertTriangle
@@ -48,21 +51,25 @@ export function UsersDeleteDialog({
         <div className='space-y-4'>
           <p className='mb-2'>
             Are you sure you want to delete{' '}
-            <span className='font-bold'>{currentRow.username}</span>?
-            <br />
-            This action will permanently remove the user with the role of{' '}
             <span className='font-bold'>
-              {currentRow.role.toUpperCase()}
+              {currentRow.firstName} {currentRow.lastName}
+            </span>{' '}
+            ({currentRow.email})?
+            <br />
+            This action will permanently remove the user with the role
+            {currentRow.roles.length > 1 ? 's' : ''} of{' '}
+            <span className='font-bold'>
+              {currentRow.roles.map(r => r.toUpperCase()).join(', ')}
             </span>{' '}
             from the system. This cannot be undone.
           </p>
 
           <Label className='my-2'>
-            Username:
+            Email:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder='Enter username to confirm deletion.'
+              placeholder='Enter email to confirm deletion.'
             />
           </Label>
 

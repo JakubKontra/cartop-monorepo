@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import useDialogState from '@/hooks/use-dialog-state'
-import { type User } from '../data/schema'
+import { type GetAllUsersQuery } from '@/gql/graphql'
 
-type UsersDialogType = 'invite' | 'add' | 'edit' | 'delete'
+// Use GraphQL User type to match table data
+type User = GetAllUsersQuery['users'][number]
+
+type UsersDialogType = 'invite' | 'add' | 'edit' | 'delete' | 'impersonate'
 
 type UsersContextType = {
   open: UsersDialogType | null

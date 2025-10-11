@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { CatalogBrandModule } from './brand/catalog-brand.module';
 import { CatalogColorModule } from './color/catalog-color.module';
+import { CatalogModelModule } from './model/catalog-model.module';
 
 /**
  * Catalog Module - Aggregates all catalog-related entities
  *
  * Structure:
  * - brand/         - Car brands (BMW, Audi, etc.)
+ * - model/         - Car models within brands
  * - color/         - Available colors with hex codes
  * - body-type/     - Body types (Sedan, SUV, etc.)
  * - equipment/     - Equipment and features
@@ -21,10 +23,12 @@ import { CatalogColorModule } from './color/catalog-color.module';
 @Module({
   imports: [
     CatalogBrandModule,
+    CatalogModelModule,
     CatalogColorModule,
   ],
   exports: [
     CatalogBrandModule,
+    CatalogModelModule,
     CatalogColorModule,
   ],
 })

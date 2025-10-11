@@ -13,6 +13,7 @@
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
+    "@apollo/client": "^4.0.7",
     "@cartop/api-client": "workspace:*",
     "@clerk/clerk-react": "^5.51.0",
     "@hookform/resolvers": "^5.2.2",

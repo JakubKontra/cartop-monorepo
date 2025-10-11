@@ -1,18 +1,12 @@
-import { UsersActionDialog } from './users-action-dialog'
 import { UsersDeleteDialog } from './users-delete-dialog'
 import { UsersInviteDialog } from './users-invite-dialog'
+import { ImpersonateDialog } from './impersonate-dialog'
 import { useUsers } from './users-provider'
 
 export function UsersDialogs() {
   const { open, setOpen, currentRow, setCurrentRow } = useUsers()
   return (
     <>
-      <UsersActionDialog
-        key='user-add'
-        open={open === 'add'}
-        onOpenChange={() => setOpen('add')}
-      />
-
       <UsersInviteDialog
         key='user-invite'
         open={open === 'invite'}
@@ -21,18 +15,6 @@ export function UsersDialogs() {
 
       {currentRow && (
         <>
-          <UsersActionDialog
-            key={`user-edit-${currentRow.id}`}
-            open={open === 'edit'}
-            onOpenChange={() => {
-              setOpen('edit')
-              setTimeout(() => {
-                setCurrentRow(null)
-              }, 500)
-            }}
-            currentRow={currentRow}
-          />
-
           <UsersDeleteDialog
             key={`user-delete-${currentRow.id}`}
             open={open === 'delete'}
@@ -43,6 +25,18 @@ export function UsersDialogs() {
               }, 500)
             }}
             currentRow={currentRow}
+          />
+
+          <ImpersonateDialog
+            key={`user-impersonate-${currentRow.id}`}
+            user={currentRow}
+            open={open === 'impersonate'}
+            onOpenChange={() => {
+              setOpen('impersonate')
+              setTimeout(() => {
+                setCurrentRow(null)
+              }, 500)
+            }}
           />
         </>
       )}

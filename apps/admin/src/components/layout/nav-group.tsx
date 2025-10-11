@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { type ReactNode, useMemo } from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 import {
@@ -32,15 +32,71 @@ import {
   type NavLink,
   type NavGroup as NavGroupProps,
 } from './types'
+import { useAuthStore } from '@/stores/auth-store'
+import { hasAnyPermission, hasAnyRole } from '@/lib/permissions'
+
+/**
+ * Check if user has permission to see a navigation item
+ */
+function hasItemPermission(userRoles: string[], item: NavItem): boolean {
+  // If item has required permissions, check them
+  if (item.requiredPermissions && item.requiredPermissions.length > 0) {
+    return hasAnyPermission(userRoles, item.requiredPermissions)
+  }
+
+  // If item has required roles, check them
+  if (item.requiredRoles && item.requiredRoles.length > 0) {
+    return hasAnyRole(userRoles, item.requiredRoles)
+  }
+
+  // No restrictions - show item
+  return true
+}
 
 export function NavGroup({ title, items }: NavGroupProps) {
   const { state, isMobile } = useSidebar()
   const href = useLocation({ select: (location) => location.href })
+  const { auth } = useAuthStore()
+  const userRoles = auth.user?.roles || []
+
+  // Filter items based on user permissions
+  const visibleItems = useMemo(() => {
+    return items
+      .map((item) => {
+        // Check if user has permission for this item
+        if (!hasItemPermission(userRoles, item)) {
+          return null
+        }
+
+        // If it's a collapsible item, filter its sub-items too
+        if (item.items) {
+          const visibleSubItems = item.items.filter((subItem) =>
+            hasItemPermission(userRoles, subItem)
+          )
+
+          // Only show collapsible if it has visible sub-items
+          if (visibleSubItems.length === 0) {
+            return null
+          }
+
+          return { ...item, items: visibleSubItems }
+        }
+
+        return item
+      })
+      .filter((item): item is NavItem => item !== null)
+  }, [items, userRoles])
+
+  // Don't render group if no visible items
+  if (visibleItems.length === 0) {
+    return null
+  }
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => {
+        {visibleItems.map((item) => {
           const key = `${item.title}-${item.url}`
 
           if (!item.items)
