@@ -8,7 +8,7 @@ import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3000/graphql';
 
 export interface GraphQLRequest<TVariables = Record<string, unknown>> {
-  query: string | TypedDocumentNode<any, TVariables>;
+  query: string | TypedDocumentNode<unknown, TVariables>;
   variables?: TVariables;
 }
 

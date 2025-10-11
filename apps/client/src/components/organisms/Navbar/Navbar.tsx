@@ -1,5 +1,5 @@
 import { Logo } from "@/components/branding/Logo";
-import { ScaleIcon, SearchIcon, User, UserIcon } from "lucide-react";
+import { ScaleIcon, SearchIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
