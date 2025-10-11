@@ -43,13 +43,13 @@ export default function Benefits() {
             </p>
           </article>
 
-          <div className="relative rounded-3xl overflow-hidden col-span-2 order-3 lg:col-span-1 lg:order-none lg:row-span-2 h-[300px] lg:h-[560px]">
+          <div className="relative rounded-3xl overflow-hidden col-span-2 order-3 lg:col-span-1 lg:order-none lg:row-span-2 h-[300px] sm:h-[400px] lg:h-[560px]">
             <Image
               src="/mock/tile.mobile@2x.png"
               alt="Klient s poradcem u auta"
               fill
               sizes="100vw"
-              className="w-full object-contain rounded-[32px] lg:hidden"
+              className="w-full object-cover rounded-[32px] lg:hidden"
             />
             <Image
               src="/mock/tile@2x.png"
