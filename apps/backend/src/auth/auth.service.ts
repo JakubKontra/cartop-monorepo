@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,7 +6,9 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../model/user/user.entity';
 import { LoginInput } from './dto/login.input';
 import { AuthResponse } from './dto/auth-response.type';
+import { ImpersonateResponse } from './dto/impersonate-response.type';
 import { JwtPayload } from './strategies/jwt.strategy';
+import { UserRole } from '../common/enums/role.enum';
 
 /**
  * Authentication Service
@@ -102,11 +104,13 @@ export class AuthService {
   /**
    * Generate JWT access token (short-lived: 15 minutes)
    */
-  private generateAccessToken(user: User): string {
+  private generateAccessToken(user: User, impersonatedBy?: string): string {
     const payload: JwtPayload = {
+      id: user.id,
       sub: user.id,
       email: user.email,
       roles: user.roles,
+      impersonatedBy,
     };
 
     return this.jwtService.sign(payload, {
@@ -139,5 +143,92 @@ export class AuthService {
    */
   async revokeRefreshToken(refreshToken: string): Promise<boolean> {
     return this.refreshTokens.delete(refreshToken);
+  }
+
+  /**
+   * Impersonate another user (ADMIN only)
+   */
+  async impersonate(adminUserId: string, targetUserId: string): Promise<ImpersonateResponse> {
+    // Get admin user
+    const adminUser = await this.userRepository.findOne({
+      where: { id: adminUserId },
+    });
+
+    if (!adminUser || !adminUser.roles.includes(UserRole.ADMIN)) {
+      throw new ForbiddenException('Only admins can impersonate users');
+    }
+
+    // Get target user
+    const targetUser = await this.userRepository.findOne({
+      where: { id: targetUserId },
+    });
+
+    if (!targetUser) {
+      throw new UnauthorizedException('Target user not found');
+    }
+
+    if (!targetUser.isActive) {
+      throw new UnauthorizedException('Cannot impersonate inactive user');
+    }
+
+    // Cannot impersonate another admin
+    if (targetUser.roles.includes(UserRole.ADMIN)) {
+      throw new ForbiddenException('Cannot impersonate another admin');
+    }
+
+    // Generate tokens with impersonation context
+    const accessToken = this.generateAccessToken(targetUser, adminUser.id);
+    const refreshToken = this.generateRefreshTokenWithImpersonation(targetUser, adminUser.id);
+
+    return {
+      accessToken,
+      refreshToken,
+      impersonatedUser: targetUser,
+      originalUser: adminUser,
+    };
+  }
+
+  /**
+   * Stop impersonation and return to admin session
+   */
+  async stopImpersonation(impersonatedBy: string): Promise<AuthResponse> {
+    // Get the original admin user
+    const adminUser = await this.userRepository.findOne({
+      where: { id: impersonatedBy },
+    });
+
+    if (!adminUser || !adminUser.isActive) {
+      throw new UnauthorizedException('Original admin user not found or inactive');
+    }
+
+    // Generate new tokens for the admin (without impersonation)
+    const accessToken = this.generateAccessToken(adminUser);
+    const refreshToken = this.generateRefreshToken(adminUser);
+
+    return {
+      accessToken,
+      refreshToken,
+      user: adminUser,
+    };
+  }
+
+  /**
+   * Generate refresh token with impersonation context
+   */
+  private generateRefreshTokenWithImpersonation(user: User, impersonatedBy: string): string {
+    // Generate token with impersonation flag
+    const token = this.jwtService.sign(
+      { sub: user.id, type: 'refresh', impersonatedBy },
+      { expiresIn: '7d' },
+    );
+
+    // Store token with expiration (7 days)
+    const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000;
+    this.refreshTokens.set(token, {
+      userId: user.id,
+      expiresAt,
+    });
+
+    return token;
   }
 }

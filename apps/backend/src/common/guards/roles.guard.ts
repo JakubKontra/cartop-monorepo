@@ -2,12 +2,16 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { ROLES_KEY } from '../decorators/auth/roles.decorator';
+import { PERMISSIONS_KEY } from '../decorators/auth/require-permission.decorator';
 import { IS_PUBLIC_KEY } from '../decorators/auth/public.decorator';
 import { UserRole, ROLE_HIERARCHY } from '../enums/role.enum';
+import { Permission, hasPermission } from '../config/permissions.config';
 
 /**
  * Role-Based Access Control Guard
- * Checks if user has required role to access resolver
+ * Checks if user has required role or permission to access resolver
+ *
+ * Supports both @Roles() and @RequirePermission() decorators
  */
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -24,16 +28,6 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    // Get required roles
-    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
-    if (!requiredRoles || requiredRoles.length === 0) {
-      return true; // No specific roles required
-    }
-
     // Get user from request
     const ctx = GqlExecutionContext.create(context);
     const { user } = ctx.getContext().req;
@@ -42,12 +36,42 @@ export class RolesGuard implements CanActivate {
       throw new ForbiddenException('User not authenticated');
     }
 
-    // Check if user has any of the required roles
     const userRoles = (user.roles || []) as UserRole[];
+
+    // Check permissions first (preferred method)
+    const requiredPermissions = this.reflector.getAllAndOverride<Permission[]>(PERMISSIONS_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (requiredPermissions && requiredPermissions.length > 0) {
+      // User must have at least ONE of the required permissions
+      const hasRequiredPermission = requiredPermissions.some(permission =>
+        hasPermission(userRoles, permission)
+      );
+
+      if (!hasRequiredPermission) {
+        throw new ForbiddenException(
+          `Insufficient permissions. Required: ${requiredPermissions.join(' or ')}`,
+        );
+      }
+
+      return true;
+    }
+
+    // Fallback to role-based checking (for backward compatibility)
+    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (!requiredRoles || requiredRoles.length === 0) {
+      return true; // No specific roles or permissions required
+    }
 
     // User must have at least one role that meets or exceeds the required permission level
     const hasRole = requiredRoles.some(requiredRole =>
-      userRoles.some(userRole => this.hasPermission(userRole, requiredRole))
+      userRoles.some(userRole => this.hasRolePermission(userRole, requiredRole))
     );
 
     if (!hasRole) {
@@ -63,7 +87,7 @@ export class RolesGuard implements CanActivate {
    * Check if user role has permission for required role
    * Uses role hierarchy (admin can do everything, etc.)
    */
-  private hasPermission(userRole: UserRole, requiredRole: UserRole): boolean {
+  private hasRolePermission(userRole: UserRole, requiredRole: UserRole): boolean {
     const userLevel = ROLE_HIERARCHY[userRole] || 0;
     const requiredLevel = ROLE_HIERARCHY[requiredRole] || 0;
 

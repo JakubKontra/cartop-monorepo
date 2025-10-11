@@ -21,9 +21,12 @@ import {
   AudioWaveform,
   Command,
   GalleryVerticalEnd,
+  Tags,
+  Car,
 } from 'lucide-react'
 import { ClerkLogo } from '@/assets/clerk-logo'
 import { type SidebarData } from '../types'
+import { Permission, UserRole } from '@/lib/permissions'
 
 export const sidebarData: SidebarData = {
   user: {
@@ -77,6 +80,24 @@ export const sidebarData: SidebarData = {
           title: 'Users',
           url: '/users',
           icon: Users,
+          requiredPermissions: [Permission.USERS_VIEW],
+        },
+      ],
+    },
+    {
+      title: 'Catalog',
+      items: [
+        {
+          title: 'Brands',
+          url: '/brands',
+          icon: Tags,
+          requiredPermissions: [Permission.CATALOG_BRANDS_VIEW],
+        },
+        {
+          title: 'Models',
+          url: '/models',
+          icon: Car,
+          requiredPermissions: [Permission.CATALOG_MODELS_VIEW],
         },
       ],
     },

@@ -1,6 +1,7 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type Row } from '@tanstack/react-table'
-import { Trash2, UserPen } from 'lucide-react'
+import { Trash2, UserPen, UserCog } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { type User } from '../data/schema'
 import { useUsers } from './users-provider'
+import { useAuthStore } from '@/stores/auth-store'
 
 type DataTableRowActionsProps = {
   row: Row<User>
@@ -19,6 +21,24 @@ type DataTableRowActionsProps = {
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const { setOpen, setCurrentRow } = useUsers()
+  const { auth } = useAuthStore()
+  const navigate = useNavigate()
+
+  // Check if current user is ADMIN (check both 'admin' and 'ADMIN')
+  const currentUserRoles = auth.user?.roles || []
+  const isAdmin = currentUserRoles.some(role =>
+    role.toLowerCase() === 'admin'
+  )
+
+  // Check if target user is admin
+  const targetUserRoles = row.original.roles || []
+  const isTargetAdmin = targetUserRoles.some(role =>
+    role.toLowerCase() === 'admin'
+  )
+
+  // Show impersonate if: current user is admin AND target is not admin
+  const showImpersonate = isAdmin && !isTargetAdmin
+
   return (
     <>
       <DropdownMenu modal={false}>
@@ -31,11 +51,10 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
             <span className='sr-only'>Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='w-[160px]'>
+        <DropdownMenuContent align='end' className='w-[180px]'>
           <DropdownMenuItem
             onClick={() => {
-              setCurrentRow(row.original)
-              setOpen('edit')
+              navigate({ to: '/users/$userId/edit', params: { userId: row.original.id } })
             }}
           >
             Edit
@@ -43,6 +62,24 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
               <UserPen size={16} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
+
+          {showImpersonate && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  setCurrentRow(row.original)
+                  setOpen('impersonate')
+                }}
+              >
+                Impersonate
+                <DropdownMenuShortcut>
+                  <UserCog size={16} />
+                </DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </>
+          )}
+
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {

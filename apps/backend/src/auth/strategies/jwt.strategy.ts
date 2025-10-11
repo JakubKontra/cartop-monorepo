@@ -5,9 +5,11 @@ import { UserRole } from '../../common/enums/role.enum';
 import { getJwtSecret } from '../../config/config.validation';
 
 export interface JwtPayload {
+  id: string; // user ID (from sub)
   sub: string; // user ID
   email: string;
   roles: UserRole[];
+  impersonatedBy?: string; // admin user ID if this is an impersonation session
   iat?: number;
   exp?: number;
 }
@@ -36,6 +38,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       id: payload.sub,
       email: payload.email,
       roles: payload.roles || [UserRole.PUBLIC],
+      impersonatedBy: payload.impersonatedBy, // Include impersonation context if present
     };
   }
 }

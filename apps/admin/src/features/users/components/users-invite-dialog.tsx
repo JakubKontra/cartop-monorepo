@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -23,15 +24,16 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { SelectDropdown } from '@/components/select-dropdown'
-import { roles } from '../data/data'
+import { RoleSelect } from './role-select'
+import { userRoleSchema } from '../data/schema'
+import { useAuthStore } from '@/stores/auth-store'
 
 const formSchema = z.object({
   email: z.email({
     error: (iss) =>
       iss.input === '' ? 'Please enter an email to invite.' : undefined,
   }),
-  role: z.string().min(1, 'Role is required.'),
+  roles: z.array(userRoleSchema).min(1, 'At least one role is required.'),
   desc: z.string().optional(),
 })
 
@@ -46,9 +48,17 @@ export function UsersInviteDialog({
   open,
   onOpenChange,
 }: UserInviteDialogProps) {
+  const { auth } = useAuthStore()
+
+  // Check if current user is ADMIN (check both 'admin' and 'ADMIN')
+  const currentUserRoles = auth.user?.roles || []
+  const isAdmin = currentUserRoles.some(role =>
+    role.toLowerCase() === 'admin'
+  )
+
   const form = useForm<UserInviteForm>({
     resolver: zodResolver(formSchema),
-    defaultValues: { email: '', role: '', desc: '' },
+    defaultValues: { email: '', roles: [], desc: '' },
   })
 
   const onSubmit = (values: UserInviteForm) => {
@@ -56,6 +66,13 @@ export function UsersInviteDialog({
     showSubmittedData(values)
     onOpenChange(false)
   }
+
+  // Reset form values when dialog opens
+  useEffect(() => {
+    if (open) {
+      form.reset({ email: '', roles: [], desc: '' })
+    }
+  }, [open, form])
 
   return (
     <Dialog
@@ -100,19 +117,17 @@ export function UsersInviteDialog({
             />
             <FormField
               control={form.control}
-              name='role'
+              name='roles'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <SelectDropdown
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                    placeholder='Select a role'
-                    items={roles.map(({ label, value }) => ({
-                      label,
-                      value,
-                    }))}
-                  />
+                  <FormLabel>Roles</FormLabel>
+                  <FormControl>
+                    <RoleSelect
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={!isAdmin}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

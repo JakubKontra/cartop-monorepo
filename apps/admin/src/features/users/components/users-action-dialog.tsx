@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,24 +21,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
-import { SelectDropdown } from '@/components/select-dropdown'
-import { roles } from '../data/data'
-import { type User } from '../data/schema'
+import { RoleSelect } from './role-select'
+import { type User, userRoleSchema } from '../data/schema'
+import { useAuthStore } from '@/stores/auth-store'
 
 const formSchema = z
   .object({
     firstName: z.string().min(1, 'First Name is required.'),
     lastName: z.string().min(1, 'Last Name is required.'),
     username: z.string().min(1, 'Username is required.'),
-    phoneNumber: z.string().min(1, 'Phone number is required.'),
+    phone: z.string().min(1, 'Phone number is required.'),
     email: z.email({
       error: (iss) => (iss.input === '' ? 'Email is required.' : undefined),
     }),
     password: z.string().transform((pwd) => pwd.trim()),
-    role: z.string().min(1, 'Role is required.'),
+    roles: z.array(userRoleSchema).min(1, 'At least one role is required.'),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
   })
@@ -105,6 +107,14 @@ export function UsersActionDialog({
   onOpenChange,
 }: UserActionDialogProps) {
   const isEdit = !!currentRow
+  const { auth } = useAuthStore()
+
+  // Check if current user is ADMIN (check both 'admin' and 'ADMIN')
+  const currentUserRoles = auth.user?.roles || []
+  const isAdmin = currentUserRoles.some(role =>
+    role.toLowerCase() === 'admin'
+  )
+
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
@@ -119,8 +129,8 @@ export function UsersActionDialog({
           lastName: '',
           username: '',
           email: '',
-          role: '',
-          phoneNumber: '',
+          roles: [],
+          phone: '',
           password: '',
           confirmPassword: '',
           isEdit,
@@ -134,6 +144,31 @@ export function UsersActionDialog({
   }
 
   const isPasswordTouched = !!form.formState.dirtyFields.password
+
+  // Reset form values when dialog opens or currentRow changes
+  useEffect(() => {
+    if (open) {
+      const values = isEdit
+        ? {
+            ...currentRow,
+            password: '',
+            confirmPassword: '',
+            isEdit,
+          }
+        : {
+            firstName: '',
+            lastName: '',
+            username: '',
+            email: '',
+            roles: [],
+            phone: '',
+            password: '',
+            confirmPassword: '',
+            isEdit,
+          }
+      form.reset(values)
+    }
+  }, [open, currentRow, isEdit, form])
 
   return (
     <Dialog
@@ -236,7 +271,7 @@ export function UsersActionDialog({
               />
               <FormField
                 control={form.control}
-                name='phoneNumber'
+                name='phone'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
@@ -255,21 +290,20 @@ export function UsersActionDialog({
               />
               <FormField
                 control={form.control}
-                name='role'
+                name='roles'
                 render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>Role</FormLabel>
-                    <SelectDropdown
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                      placeholder='Select a role'
-                      className='col-span-4'
-                      items={roles.map(({ label, value }) => ({
-                        label,
-                        value,
-                      }))}
-                    />
-                    <FormMessage className='col-span-4 col-start-3' />
+                  <FormItem className='grid grid-cols-6 items-start space-y-0 gap-x-4 gap-y-1'>
+                    <FormLabel className='col-span-2 pt-3 text-end'>Roles</FormLabel>
+                    <div className='col-span-4'>
+                      <FormControl>
+                        <RoleSelect
+                          value={field.value}
+                          onChange={field.onChange}
+                          disabled={!isAdmin}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />

@@ -1,5 +1,5 @@
-import { Shield, UserCheck, Users, CreditCard } from 'lucide-react'
-import { type UserStatus } from './schema'
+import { ROLE_CONFIG, getRoleLabel } from '@/lib/role-utils'
+import { type UserStatus, type UserRole } from './schema'
 
 export const callTypes = new Map<UserStatus, string>([
   ['active', 'bg-teal-100/30 text-teal-900 dark:text-teal-200 border-teal-200'],
@@ -11,25 +11,12 @@ export const callTypes = new Map<UserStatus, string>([
   ],
 ])
 
-export const roles = [
-  {
-    label: 'Superadmin',
-    value: 'superadmin',
-    icon: Shield,
-  },
-  {
-    label: 'Admin',
-    value: 'admin',
-    icon: UserCheck,
-  },
-  {
-    label: 'Manager',
-    value: 'manager',
-    icon: Users,
-  },
-  {
-    label: 'Cashier',
-    value: 'cashier',
-    icon: CreditCard,
-  },
-] as const
+// Roles matching backend UserRole enum
+// Uses getRoleLabel for consistent label display
+export const roles = (Object.entries(ROLE_CONFIG) as [UserRole, typeof ROLE_CONFIG[UserRole]][]).map(
+  ([value, config]) => ({
+    label: getRoleLabel(value),
+    value,
+    icon: config.icon,
+  })
+) as const
