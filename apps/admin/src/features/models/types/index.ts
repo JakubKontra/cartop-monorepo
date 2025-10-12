@@ -1,22 +1,7 @@
-export interface Model {
-  id: string
-  name: string
-  slug: string
-  description?: string | null
-  isActive: boolean
-  isHighlighted: boolean
-  isRecommended: boolean
-  legacySystemId?: string | null
-  legacySlug?: string | null
-  brandId: string
-  brand?: {
-    id: string
-    name: string
-    slug: string
-  } | null
-  createdAt: string
-  updatedAt?: string | null
-}
+import { GetAllCatalogModelsQuery } from '@/gql/graphql'
+
+// Use generated type from GraphQL Codegen
+export type Model = GetAllCatalogModelsQuery['allCatalogModels'][0]
 
 export interface ModelsContextValue {
   open: boolean

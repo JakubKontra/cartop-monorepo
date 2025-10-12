@@ -265,10 +265,11 @@ export function GenerationForm({
                       <Input
                         type='date'
                         {...field}
+                        value={field.value || ''}
                       />
                     </FormControl>
                     <FormDescription>
-                      Production start date
+                      Production start date (optional)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -285,10 +286,11 @@ export function GenerationForm({
                       <Input
                         type='date'
                         {...field}
+                        value={field.value || ''}
                       />
                     </FormControl>
                     <FormDescription>
-                      Production end date
+                      Production end date (optional, leave empty if still in production)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLazyQuery } from '@apollo/client/react'
@@ -18,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { SlugInput } from '@/components/slug-input'
+import { ImageUpload } from '@/components/image-upload'
 import { brandSchema, type BrandFormValues } from '../data/schema'
 import { CHECK_BRAND_SLUG } from '../brands.graphql'
 import { Loader2 } from 'lucide-react'
@@ -25,6 +27,8 @@ import { Loader2 } from 'lucide-react'
 interface BrandFormProps {
   /** Initial values for the form (for editing) */
   defaultValues?: Partial<BrandFormValues>
+  /** Current logo URL (for preview in edit mode) */
+  logoUrl?: string
   /** Whether this is an edit form (shows/hides legacy fields) */
   isEdit?: boolean
   /** Loading state */
@@ -37,12 +41,19 @@ interface BrandFormProps {
 
 export function BrandForm({
   defaultValues,
+  logoUrl,
   isEdit = false,
   loading = false,
   onSubmit,
   onCancel,
 }: BrandFormProps) {
   const [checkSlug] = useLazyQuery(CHECK_BRAND_SLUG)
+  const [uploadedLogoUrl, setUploadedLogoUrl] = useState<string | undefined>(logoUrl)
+
+  // Sync local state with prop changes (e.g., after mutation refetch)
+  useEffect(() => {
+    setUploadedLogoUrl(logoUrl)
+  }, [logoUrl])
 
   const form = useForm<BrandFormValues>({
     resolver: zodResolver(brandSchema),
@@ -50,6 +61,7 @@ export function BrandForm({
       name: '',
       slug: '',
       description: '',
+      logoId: '',
       isActive: false,
       isHighlighted: false,
       isRecommended: false,
@@ -58,25 +70,29 @@ export function BrandForm({
     },
   })
 
-  const validateSlugUniqueness = async (slug: string): Promise<boolean> => {
-    if (!slug) return true
+  const validateSlugUniqueness = useCallback(
+    async (slug: string): Promise<boolean> => {
+      if (!slug) return true
 
-    try {
-      const { data } = await checkSlug({
-        variables: { slug },
-      })
+      try {
+        const { data } = await checkSlug({
+          variables: { slug },
+        })
 
-      // If we got data back, the slug exists
-      if (data?.catalogBrandBySlug) {
-        return false // Slug is already taken
+        // checkBrandSlugAvailability returns null if available, brand object if taken
+        if (data?.checkBrandSlugAvailability) {
+          return false // Slug is already taken
+        }
+
+        return true // Slug is available (null response)
+      } catch (error) {
+        // If the query errors, assume slug is available
+        console.error('Error validating slug:', error)
+        return true
       }
-
-      return true // Slug is available
-    } catch (error) {
-      // If the query errors (e.g., brand not found), the slug is available
-      return true
-    }
-  }
+    },
+    [checkSlug]
+  )
 
   return (
     <Form {...form}>
@@ -154,6 +170,35 @@ export function BrandForm({
                   </FormControl>
                   <FormDescription>
                     Optional description of the brand
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='logoId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Logo</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={uploadedLogoUrl}
+                      fileId={field.value}
+                      onUploadComplete={(result) => {
+                        field.onChange(result.fileId)
+                        setUploadedLogoUrl(result.url)
+                      }}
+                      onRemove={() => {
+                        field.onChange('')
+                        setUploadedLogoUrl(undefined)
+                      }}
+                      disabled={loading}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Upload a logo image for the brand (JPG, PNG, WebP, SVG, max 5MB)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

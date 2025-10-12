@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table'
 import { LongText } from '@/components/long-text'
+import { LogoTableCell } from '@/components/logo-table-cell'
 import { type Brand } from '../types'
 import { DataTableRowActions } from './data-table-row-actions'
 import { CheckCircle2, Circle } from 'lucide-react'
@@ -35,6 +36,24 @@ export const brandsColumns: ColumnDef<Brand>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: 'logo',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Logo' />
+    ),
+    cell: ({ row }) => {
+      const logo = row.original.logo
+      return (
+        <LogoTableCell
+          url={logo?.url}
+          alt={logo?.alt || row.original.name}
+          maxSize={40}
+          aspectRatio='1:1'
+        />
+      )
+    },
+    enableSorting: false,
   },
   {
     accessorKey: 'name',

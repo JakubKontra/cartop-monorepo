@@ -57,6 +57,121 @@ export interface HealthCheckResponseDto {
   ecomail: boolean;
 }
 
+export interface PriceRangeDto {
+  /** Minimum price */
+  min?: number;
+  /** Maximum price */
+  max?: number;
+}
+
+export type SubscriptionPreferencesDtoBodyTypesItem =
+  (typeof SubscriptionPreferencesDtoBodyTypesItem)[keyof typeof SubscriptionPreferencesDtoBodyTypesItem];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SubscriptionPreferencesDtoBodyTypesItem = {
+  suv: 'suv',
+  sedan_liftback: 'sedan_liftback',
+  wagon_mpv: 'wagon_mpv',
+  small_car_hatchback: 'small_car_hatchback',
+  sports_car_coupe: 'sports_car_coupe',
+  convertible: 'convertible',
+  van: 'van',
+  off_road_convertible: 'off_road_convertible',
+  wagon_crossover: 'wagon_crossover',
+  sav: 'sav',
+  sac: 'sac',
+  cuv: 'cuv',
+  crossover_liftback: 'crossover_liftback',
+  off_road_coupe: 'off_road_coupe',
+  crossover_fastback: 'crossover_fastback',
+  coupe_crossover: 'coupe_crossover',
+  coupe_suv_crossover: 'coupe_suv_crossover',
+  commercial_van: 'commercial_van',
+  motorhome: 'motorhome',
+} as const;
+
+/**
+ * Notification frequency preference
+ */
+export type SubscriptionPreferencesDtoFrequency =
+  (typeof SubscriptionPreferencesDtoFrequency)[keyof typeof SubscriptionPreferencesDtoFrequency];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SubscriptionPreferencesDtoFrequency = {
+  daily: 'daily',
+  weekly: 'weekly',
+  monthly: 'monthly',
+} as const;
+
+export interface SubscriptionPreferencesDto {
+  /** Array of brand UUIDs to filter by */
+  brandIds?: string[];
+  /** Array of model UUIDs to filter by */
+  modelIds?: string[];
+  /** Array of body types to filter by */
+  bodyTypes?: SubscriptionPreferencesDtoBodyTypesItem[];
+  /** Price range filter */
+  priceRange?: PriceRangeDto;
+  /** Notification frequency preference */
+  frequency?: SubscriptionPreferencesDtoFrequency;
+}
+
+/**
+ * Source of subscription (auto-set to WEB if not provided)
+ */
+export type SubscribeNewsletterDtoSource =
+  (typeof SubscribeNewsletterDtoSource)[keyof typeof SubscribeNewsletterDtoSource];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SubscribeNewsletterDtoSource = {
+  web: 'web',
+  ecomail: 'ecomail',
+  admin: 'admin',
+  api: 'api',
+  import: 'import',
+  mobile: 'mobile',
+} as const;
+
+export interface SubscribeNewsletterDto {
+  /** Email address for newsletter subscription */
+  email: string;
+  /** Optional filter preferences for personalized newsletters */
+  preferences?: SubscriptionPreferencesDto;
+  /** User consent to privacy policy (GDPR compliance) */
+  consent: boolean;
+  /** Source of subscription (auto-set to WEB if not provided) */
+  source?: SubscribeNewsletterDtoSource;
+}
+
+export interface SubscriptionResponseDto {
+  /** Subscription ID */
+  id: number;
+  /** Email address */
+  email: string;
+  /** Subscription status */
+  status: string;
+  /** Subscription source */
+  source: string;
+  /** Preferences */
+  preferences?: SubscriptionPreferencesDto;
+  /** Created at timestamp */
+  createdAt: string;
+  /** Success message */
+  message: string;
+}
+
+export interface UnsubscribeNewsletterDto {
+  /** Email address to unsubscribe from newsletter */
+  email: string;
+}
+
+export interface UnsubscribeResponseDto {
+  /** Success message */
+  message: string;
+  /** Email that was unsubscribed */
+  email: string;
+}
+
 export type MarketingControllerCreateTemplate400 = {
   statusCode?: number;
   message?: string[];
@@ -66,4 +181,14 @@ export type MarketingControllerCreateTemplate400 = {
 export type MarketingControllerCreateTemplate500 = {
   statusCode?: number;
   message?: string;
+};
+
+export type NewsletterControllerVerifyEmail200 = {
+  message?: string;
+  email?: string;
+};
+
+export type NewsletterControllerGetStats200Item = {
+  source?: string;
+  count?: string;
 };

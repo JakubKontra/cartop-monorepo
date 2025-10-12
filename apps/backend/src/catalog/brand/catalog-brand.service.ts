@@ -23,7 +23,8 @@ export class CatalogBrandService {
     }
 
     const brand = this.brandRepository.create(input);
-    return this.brandRepository.save(brand);
+    const saved = await this.brandRepository.save(brand);
+    return this.findOne(saved.id);
   }
 
   async findAll(
@@ -35,6 +36,7 @@ export class CatalogBrandService {
 
     return this.brandRepository.find({
       where,
+      relations: ['logo'],
       take: limit,
       skip: offset,
       order: { name: 'ASC' },
@@ -42,7 +44,10 @@ export class CatalogBrandService {
   }
 
   async findOne(id: string): Promise<CatalogBrand> {
-    const brand = await this.brandRepository.findOne({ where: { id } });
+    const brand = await this.brandRepository.findOne({
+      where: { id },
+      relations: ['logo'],
+    });
 
     if (!brand) {
       throw new NotFoundException(`Brand with ID ${id} not found`);
@@ -52,7 +57,10 @@ export class CatalogBrandService {
   }
 
   async findBySlug(slug: string): Promise<CatalogBrand> {
-    const brand = await this.brandRepository.findOne({ where: { slug } });
+    const brand = await this.brandRepository.findOne({
+      where: { slug },
+      relations: ['logo'],
+    });
 
     if (!brand) {
       throw new NotFoundException(`Brand with slug ${slug} not found`);
@@ -67,6 +75,7 @@ export class CatalogBrandService {
         { name: ILike(`%${query}%`) },
         { slug: ILike(`%${query}%`) },
       ],
+      relations: ['logo'],
       take: limit,
       order: { name: 'ASC' },
     });
@@ -86,8 +95,15 @@ export class CatalogBrandService {
       }
     }
 
+    // If logoId is being updated, clear the logo relation
+    // Otherwise TypeORM won't detect the change
+    if (input.logoId !== undefined && input.logoId !== brand.logoId) {
+      brand.logo = undefined;
+    }
+
     Object.assign(brand, input);
-    return this.brandRepository.save(brand);
+    const saved = await this.brandRepository.save(brand);
+    return this.findOne(saved.id);
   }
 
   async remove(id: string): Promise<boolean> {
@@ -99,6 +115,7 @@ export class CatalogBrandService {
   async getHighlighted(): Promise<CatalogBrand[]> {
     return this.brandRepository.find({
       where: { isHighlighted: true, isActive: true },
+      relations: ['logo'],
       order: { name: 'ASC' },
     });
   }
@@ -106,7 +123,20 @@ export class CatalogBrandService {
   async getRecommended(): Promise<CatalogBrand[]> {
     return this.brandRepository.find({
       where: { isRecommended: true, isActive: true },
+      relations: ['logo'],
       order: { name: 'ASC' },
+    });
+  }
+
+  /**
+   * Check if a slug is available (not used by any brand)
+   * Returns the existing brand if slug is taken, null if available
+   * Used for form validation without throwing errors
+   */
+  async checkSlugAvailability(slug: string): Promise<CatalogBrand | null> {
+    return this.brandRepository.findOne({
+      where: { slug },
+      relations: ['logo'],
     });
   }
 }

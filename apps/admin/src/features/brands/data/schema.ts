@@ -4,6 +4,7 @@ export const brandSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   slug: z.string().min(2, 'Slug must be at least 2 characters'),
   description: z.string().optional(),
+  logoId: z.string().optional(),
   isActive: z.boolean(),
   isHighlighted: z.boolean(),
   isRecommended: z.boolean(),

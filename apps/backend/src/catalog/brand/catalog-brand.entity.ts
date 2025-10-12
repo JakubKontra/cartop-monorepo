@@ -5,10 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Auditable } from '../../common/decorators/auditable.decorator';
 import { Watch } from '../../common/decorators/watch/watch.decorator';
+import { File } from '../../file/file.entity';
 
 @ObjectType()
 @Entity('catalog_brands')
@@ -86,4 +89,15 @@ export class CatalogBrand {
   @Field()
   @Column({ type: 'boolean', default: false })
   isRecommended: boolean;
+
+  // === Logo ===
+
+  @Field(() => File, { nullable: true })
+  @ManyToOne(() => File, { nullable: true })
+  @JoinColumn({ name: 'logoId' })
+  logo?: File;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  logoId?: string;
 }

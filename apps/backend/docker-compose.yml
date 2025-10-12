@@ -54,6 +54,58 @@ services:
     networks:
       - cartop-network
 
+  minio:
+    container_name: minio
+    image: bitnami/minio
+    environment:
+      MINIO_ROOT_USER: 'cartop'
+      MINIO_ROOT_PASSWORD: 'cartop1337'
+      MINIO_SERVER_URL: 'http://localhost:1483'
+      MINIO_BROWSER_REDIRECT_URL: 'http://localhost:1484'
+    ports:
+      - '1483:9000'
+      - '1484:9001'
+    volumes:
+      - minio-data:/bitnami/minio/data
+    entrypoint: >
+      bash -c "
+        /opt/bitnami/scripts/minio/entrypoint.sh /opt/bitnami/scripts/minio/run.sh &
+        sleep 10 &&
+        /opt/bitnami/minio-client/bin/mc alias set local http://localhost:9000 cartop cartop1337 &&
+        /opt/bitnami/minio-client/bin/mc mb local/pangea || true &&
+        /opt/bitnami/minio-client/bin/mc anonymous set download local/pangea &&
+        tail -f /dev/null
+      "
+    networks:
+      - cartop-network
+
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:latest
+    ports:
+      - 4566:4566
+    volumes:
+      - ./localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
+    networks:
+      - cartop-network
+
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - adminer
+      - minio
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/html:/var/www/html
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - cartop-network
+
 volumes:
   postgres_data:
     driver: local
@@ -61,6 +113,7 @@ volumes:
     driver: local
   pgadmin_data:
     driver: local
+  minio-data:
 
 networks:
   cartop-network:

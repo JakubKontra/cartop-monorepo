@@ -12,6 +12,7 @@ export * from './generated/rest-api.schemas';
 // Export all generated hooks by module
 export * from './generated/marketing/marketing';
 export * from './generated/notification/notification';
+export * from './generated/newsletter/newsletter';
 
 // Export Fetch-based HTTP client and utilities
 export {

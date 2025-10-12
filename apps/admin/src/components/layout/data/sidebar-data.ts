@@ -24,6 +24,7 @@ import {
   Tags,
   Car,
   History,
+  Building2,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 import { Permission } from '@/lib/permissions'
@@ -104,6 +105,11 @@ export const sidebarData: SidebarData = {
           url: '/generations',
           icon: History,
           requiredPermissions: [Permission.CATALOG_MODELS_VIEW],
+        },
+        {
+          title: 'Leasing Companies',
+          url: '/leasing-companies',
+          icon: Building2,
         },
       ],
     },

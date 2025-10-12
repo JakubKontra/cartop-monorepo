@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsString, IsBoolean, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsBoolean, IsOptional, MinLength, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreateCatalogBrandInput {
@@ -42,4 +42,9 @@ export class CreateCatalogBrandInput {
   @IsOptional()
   @IsBoolean()
   isRecommended?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsUUID()
+  logoId?: string;
 }

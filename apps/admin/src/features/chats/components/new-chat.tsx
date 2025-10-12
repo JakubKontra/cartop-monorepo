@@ -17,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { StorageImage } from '@/components/storage-image'
 import { type ChatUser } from '../data/chat-types'
 
 type User = Omit<ChatUser, 'messages'>
@@ -88,7 +89,7 @@ export function NewChat({ users, onOpenChange, open }: NewChatProps) {
                     className='hover:bg-accent hover:text-accent-foreground flex items-center justify-between gap-2'
                   >
                     <div className='flex items-center gap-2'>
-                      <img
+                      <StorageImage
                         src={user.profile || '/placeholder.svg'}
                         alt={user.fullName}
                         className='h-8 w-8 rounded-full'

@@ -5,10 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { Auditable } from '../../common/decorators/auditable.decorator';
 import { UserRole } from '../../common/enums/role.enum';
+import { File } from '../../file/file.entity';
 
 // Register UserRole enum for GraphQL
 registerEnumType(UserRole, {
@@ -66,10 +69,29 @@ export class User {
   isActive: boolean;
 
   @Field()
+  @Column({ type: 'boolean', default: false })
+  isImpersonating: boolean;
+
+  @Field(() => ID, { nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  impersonatedBy?: string;
+
+  @Field()
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;
 
   @Field()
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updatedAt: Date;
+
+  // === Avatar ===
+
+  @Field(() => File, { nullable: true })
+  @ManyToOne(() => File, { nullable: true })
+  @JoinColumn({ name: 'avatarId' })
+  avatar?: File;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  avatarId?: string;
 }

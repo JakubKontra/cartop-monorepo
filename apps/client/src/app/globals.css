@@ -13,6 +13,9 @@
   --color-white: #fefefe;
   --color-cadet-grey: #8ca1b2;
 
+
+  --color-gunmetal-200: #BFCBD4;
+
   /* define this since you use it on body */
   --color-text: var(--color-black);
 }

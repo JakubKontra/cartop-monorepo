@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../../model/user/user.entity';
+import { File } from '../../file/file.entity';
 import { UserRole } from '../../common/enums/role.enum';
 
 /**
@@ -17,7 +18,7 @@ async function createCatalogManagerUser() {
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
     database: process.env.DB_DATABASE || 'cartop_v3',
-    entities: [User],
+    entities: [User, File], // Include File entity for avatar relation
     synchronize: false,
   });
 

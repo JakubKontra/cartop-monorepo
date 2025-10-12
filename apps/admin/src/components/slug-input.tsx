@@ -104,7 +104,8 @@ export function SlugInput({
         clearTimeout(validationTimeoutRef.current)
       }
     }
-  }, [currentSlug, onValidateUnique, debounceMs, name, setError, clearErrors, initialSlug])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSlug, debounceMs, name, initialSlug])
 
   return (
     <div className="relative">
