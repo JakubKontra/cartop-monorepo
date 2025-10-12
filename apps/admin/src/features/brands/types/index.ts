@@ -1,16 +1,7 @@
-export interface Brand {
-  id: string
-  name: string
-  slug: string
-  description?: string | null
-  isActive: boolean
-  isHighlighted: boolean
-  isRecommended: boolean
-  legacySystemId?: string | null
-  legacySlug?: string | null
-  createdAt: string
-  updatedAt?: string | null
-}
+import { GetAllCatalogBrandsQuery } from '@/gql/graphql'
+
+// Use generated type from GraphQL Codegen
+export type Brand = GetAllCatalogBrandsQuery['allCatalogBrands'][0]
 
 export interface BrandsContextValue {
   open: boolean

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react"
+import { Logo } from "../branding/Logo"
 
 // Custom X/Twitter icon since lucide-react's Twitter icon might be outdated
 const XIcon = () => (
@@ -10,7 +11,7 @@ const XIcon = () => (
 
 export default function Footer() {
   return (
-    <footer className="bg-[#2d3748] text-white rounded-t-[32px] ">
+    <footer className="bg-[#262D37] text-white rounded-t-[32px] ">
       {/* Newsletter Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         <div className="bg-gray-100 rounded-3xl p-6 lg:p-8 mb-12">
@@ -44,25 +45,19 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Logo and Contact Info */}
-          <div className="lg:col-span-3">
-            <div className="mb-6">
-              <svg viewBox="0 0 120 30" className="h-8 w-auto text-white" fill="currentColor">
-                <text x="0" y="20" className="font-bold text-xl">
-                  cartop
-                </text>
-              </svg>
+        <div className="mb-6">
+             <Logo width={170} height={34} />
             </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          <div className="lg:col-span-3">
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold mb-2">Kontaktujte nás</h3>
+                <h3 className="font-semibold mb-2 text-gunmetal-200">Kontaktujte nás</h3>
                 <p className="text-gray-300">604 544 776</p>
                 <p className="text-gray-300">info@cartop.cz</p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Jsme k dispozici</h3>
+                <h3 className="font-semibold mb-2 text-gunmetal-200">Jsme k dispozici</h3>
                 <p className="text-gray-300">Po-Pá 9.00-18.00 h</p>
               </div>
             </div>
@@ -70,25 +65,25 @@ export default function Footer() {
 
           {/* Menu */}
           <div className="lg:col-span-2">
-            <h3 className="font-semibold mb-4">Menu</h3>
+            <h3 className="font-semibold mb-4 text-gunmetal-200">Menu</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/nas-vyber" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/nas-vyber" className="text-white hover:underline transition-colors text-sm">
                   Náš výběr
                 </Link>
               </li>
               <li>
-                <Link href="/produkty" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/produkty" className="text-white hover:underline transition-colors text-sm">
                   Produkty
                 </Link>
               </li>
               <li>
-                <Link href="/jak-to-funguje" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/jak-to-funguje" className="text-white hover:underline transition-colors text-sm">
                   Jak to funguje
                 </Link>
               </li>
               <li>
-                <Link href="/kontakt" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kontakt" className="text-white hover:underline transition-colors text-sm">
                   Kontakt
                 </Link>
               </li>
@@ -97,30 +92,30 @@ export default function Footer() {
 
           {/* Doporučené */}
           <div className="lg:col-span-2">
-            <h3 className="font-semibold mb-4">Doporučené</h3>
+            <h3 className="font-semibold mb-4 text-gunmetal-200">Doporučené</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/koupit" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/koupit" className="text-white hover:underline transition-colors text-sm">
                   Koupit
                 </Link>
               </li>
               <li>
-                <Link href="/pronajmout" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/pronajmout" className="text-white hover:underline transition-colors text-sm">
                   Pronajmout
                 </Link>
               </li>
               <li>
-                <Link href="/akcni-vozy" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/akcni-vozy" className="text-white hover:underline transition-colors text-sm">
                   Akční vozy
                 </Link>
               </li>
               <li>
-                <Link href="/nas-vyber" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/nas-vyber" className="text-white hover:underline transition-colors text-sm">
                   Náš výběr
                 </Link>
               </li>
               <li>
-                <Link href="/nejnovejsi-nabidky" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/nejnovejsi-nabidky" className="text-white hover:underline transition-colors text-sm">
                   Nejnovější nabídky
                 </Link>
               </li>
@@ -129,45 +124,45 @@ export default function Footer() {
 
           {/* Náš výběr */}
           <div className="lg:col-span-2">
-            <h3 className="font-semibold mb-4">Náš výběr</h3>
+            <h3 className="font-semibold mb-4 text-gunmetal-200">Náš výběr</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/premiove" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/premiove" className="text-white hover:underline transition-colors text-sm">
                   Prémiové
                 </Link>
               </li>
               <li>
-                <Link href="/mainstream" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/mainstream" className="text-white hover:underline transition-colors text-sm">
                   Mainstream
                 </Link>
               </li>
               <li>
-                <Link href="/sportovni" className="text-gray-300 hover:text-white transition-colors">
+                    <Link href="/sportovni" className="text-white hover:underline transition-colors text-sm">
                   Sportovní
                 </Link>
               </li>
               <li>
-                <Link href="/elektromobily" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/elektromobily" className="text-white hover:underline transition-colors text-sm   ">
                   Elektromobily
                 </Link>
               </li>
               <li>
-                <Link href="/uzitkove" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/uzitkove" className="text-white hover:underline transition-colors text-sm">
                   Užitkové
                 </Link>
               </li>
               <li>
-                <Link href="/hybridni" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/hybridni" className="text-white hover:underline transition-colors text-sm">
                   Hybridní
                 </Link>
               </li>
               <li>
-                <Link href="/skladove" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/skladove" className="text-white hover:underline transition-colors text-sm">
                   Skladové
                 </Link>
               </li>
               <li>
-                <Link href="/nas-vyber" className="text-gray-300 hover:text-white underline transition-colors">
+                <Link href="/nas-vyber" className="text-white hover:underline transition-colors text-sm">
                   Zobrazit vše
                 </Link>
               </li>
@@ -176,45 +171,45 @@ export default function Footer() {
 
           {/* Značky */}
           <div className="lg:col-span-2">
-            <h3 className="font-semibold mb-4">Značky (32)</h3>
+            <h3 className="font-semibold mb-4 text-gunmetal-200">Značky (32)</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/znacky/audi" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/znacky/audi" className="text-white hover:underline transition-colors text-sm">
                   Audi
                 </Link>
               </li>
               <li>
-                <Link href="/znacky/bmw" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/znacky/bmw" className="text-white hover:underline transition-colors text-sm">
                   BMW
                 </Link>
               </li>
               <li>
-                <Link href="/znacky/skoda" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/znacky/skoda" className="text-white hover:underline transition-colors text-sm">
                   Škoda
                 </Link>
               </li>
               <li>
-                <Link href="/znacky/hyundai" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/znacky/hyundai" className="text-white hover:underline transition-colors text-sm">
                   Hyundai
                 </Link>
               </li>
               <li>
-                <Link href="/znacky/mazda" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/znacky/mazda" className="text-white hover:underline transition-colors text-sm">
                   Mazda
                 </Link>
               </li>
               <li>
-                <Link href="/znacky/mercedes" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/znacky/mercedes" className="text-white hover:underline transition-colors text-sm">
                   Mercedes
                 </Link>
               </li>
               <li>
-                <Link href="/znacky/lexus" className="text-gray-300 hover:text-white transition-colors">
+                      <Link href="/znacky/lexus" className="text-white hover:underline transition-colors text-sm">
                   Lexus
                 </Link>
               </li>
               <li>
-                <Link href="/znacky" className="text-gray-300 hover:text-white underline transition-colors">
+                <Link href="/znacky" className="text-white hover:underline transition-colors text-sm  ">
                   Zobrazit vše
                 </Link>
               </li>
@@ -223,40 +218,40 @@ export default function Footer() {
 
           {/* Kategorie */}
           <div className="lg:col-span-1">
-            <h3 className="font-semibold mb-4">Kategorie</h3>
+            <h3 className="font-semibold mb-4 text-gunmetal-200">Kategorie</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/kategorie/suv" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kategorie/suv" className="text-white hover:underline transition-colors text-sm">
                   SUV
                 </Link>
               </li>
               <li>
-                <Link href="/kategorie/kombi-mpv" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kategorie/kombi-mpv" className="text-white hover:underline transition-colors text-sm">
                   Kombi / MPV
                 </Link>
               </li>
               <li>
-                <Link href="/kategorie/hatchback" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kategorie/hatchback" className="text-white hover:underline transition-colors text-sm">
                   Hatchback
                 </Link>
               </li>
               <li>
-                <Link href="/kategorie/sedan" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kategorie/sedan" className="text-white hover:underline transition-colors text-sm">
                   Sedan
                 </Link>
               </li>
               <li>
-                <Link href="/kategorie/kupe" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kategorie/kupe" className="text-white hover:underline transition-colors text-sm">
                   Kupé
                 </Link>
               </li>
               <li>
-                <Link href="/kategorie/kabriolet" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/kategorie/kabriolet" className="text-white hover:underline transition-colors text-sm">
                   Kabriolet
                 </Link>
               </li>
               <li>
-                <Link href="/kategorie" className="text-gray-300 hover:text-white underline transition-colors">
+                <Link href="/kategorie" className="text-white hover:underline transition-colors text-sm">
                   Zobrazit vše
                 </Link>
               </li>
@@ -267,12 +262,12 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-600 mt-12 pt-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-white">
               <p>© 2025 Cartop. All rights reserved.</p>
-              <Link href="/privacy-policy" className="hover:text-white underline transition-colors">
+              <Link href="/privacy-policy" className="hover:underline transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms-of-service" className="hover:text-white underline transition-colors">
+              <Link href="/terms-of-service" className="hover:underline transition-colors">
                 Terms of Service
               </Link>
             </div>
@@ -281,7 +276,7 @@ export default function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-white transition-colors"
+                  className="text-white hover:underline transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5" />

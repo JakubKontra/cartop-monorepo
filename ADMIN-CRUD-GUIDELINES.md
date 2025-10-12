@@ -61,13 +61,16 @@ apps/admin/src/
 
 **NEVER** create custom TypeScript interfaces for entities that come from GraphQL. Always use the generated types from `@/gql/graphql`.
 
-### Correct Pattern ✅ (Leasing Companies Example)
+### Correct Pattern ✅
 
+There are two ways to extract types from GraphQL queries:
+
+#### Option 1: Array Index Access (for arrays)
 ```typescript
 // types/index.ts
 import { GetAllLeasingCompaniesQuery } from '@/gql/graphql'
 
-// Extract type from generated query
+// Extract type from array in query result using [0]
 export type LeasingCompany = GetAllLeasingCompaniesQuery['leasingCompanies'][0]
 
 export interface LeasingCompaniesContextValue {
@@ -78,6 +81,44 @@ export interface LeasingCompaniesContextValue {
 }
 ```
 
+#### Option 2: Array Number Access (alternative syntax)
+```typescript
+// types/index.ts
+import { GetAllUsersQuery } from '@/gql/graphql'
+
+// Extract type from array using [number]
+export type User = GetAllUsersQuery['users'][number]
+
+export interface UsersContextValue {
+  open: boolean
+  setOpen: (open: boolean) => void
+  currentRow: User | null
+  setCurrentRow: (row: User | null) => void
+}
+```
+
+**Both patterns work identically** - use whichever you prefer. The key is to extract the type from the GraphQL query result.
+
+### Real Examples from Codebase ✅
+
+```typescript
+// Brands
+import { GetAllCatalogBrandsQuery } from '@/gql/graphql'
+export type Brand = GetAllCatalogBrandsQuery['allCatalogBrands'][0]
+
+// Models
+import { GetAllCatalogModelsQuery } from '@/gql/graphql'
+export type Model = GetAllCatalogModelsQuery['allCatalogModels'][0]
+
+// Generations
+import { GetAllCatalogModelGenerationsQuery } from '@/gql/graphql'
+export type Generation = GetAllCatalogModelGenerationsQuery['catalogModelGenerations'][0]
+
+// Leasing Companies
+import { GetAllLeasingCompaniesQuery } from '@/gql/graphql'
+export type LeasingCompany = GetAllLeasingCompaniesQuery['leasingCompanies'][0]
+```
+
 ### Wrong Pattern ❌ (Don't Do This!)
 
 ```typescript
@@ -86,9 +127,17 @@ export interface Brand {
   id: string
   name: string
   slug: string
-  // ... this duplicates GraphQL types!
+  description?: string | null
+  isActive: boolean
+  // ... this duplicates GraphQL types and will get out of sync!
 }
 ```
+
+**Why this is wrong:**
+- Duplicates types that already exist in generated code
+- Will get out of sync when GraphQL schema changes
+- Requires manual updates when fields are added/removed
+- No type safety between frontend and backend
 
 ### GraphQL Queries Definition
 
@@ -875,12 +924,17 @@ Ensure proper error handling and toast notifications.
 ## Reference Examples
 
 **Best Examples to Follow:**
-- Leasing Companies: Correct use of GraphQL types
-- Brands: Good form structure and CrudPageLayout usage
-- Models: Complete CRUD with proper patterns
+- **Leasing Companies**: Perfect use of GraphQL Codegen types
+- **Brands**: Good form structure and CrudPageLayout usage, now uses GraphQL types ✅
+- **Models**: Complete CRUD with proper patterns, now uses GraphQL types ✅
+- **Generations**: Complex forms with nested data, now uses GraphQL types ✅
+- **Users**: Inline type extraction pattern in columns file
 
-**Key Files:**
-- `apps/admin/src/features/leasing-companies/types/index.ts` - Correct type usage
+**Key Files to Reference:**
+- `apps/admin/src/features/brands/types/index.ts` - ✅ Correct GraphQL type extraction
+- `apps/admin/src/features/models/types/index.ts` - ✅ Correct GraphQL type extraction
+- `apps/admin/src/features/generations/types/index.ts` - ✅ Correct GraphQL type extraction
+- `apps/admin/src/features/leasing-companies/types/index.ts` - ✅ Perfect example
 - `apps/admin/src/features/brands/components/brand-form.tsx` - Form patterns
 - `apps/admin/src/features/brands/pages/brand-edit-page.tsx` - Edit page pattern
 - `apps/admin/src/components/crud-page-layout.tsx` - Layout component
@@ -903,5 +957,44 @@ Ensure proper error handling and toast notifications.
 
 ---
 
+---
+
+## Summary: Type System Rules
+
+### ✅ ALWAYS DO:
+1. Import query types from `@/gql/graphql`
+2. Extract entity types using: `QueryName['fieldName'][0]` or `QueryName['fieldName'][number]`
+3. Run `yarn codegen` after GraphQL schema changes
+4. Use extracted types in all components, tables, and providers
+
+### ❌ NEVER DO:
+1. Create custom `interface` or `type` for GraphQL entities
+2. Duplicate field definitions that exist in GraphQL schema
+3. Manually define entity types with `id`, `name`, etc.
+
+### 📝 Quick Type Extraction Pattern:
+```typescript
+// 1. Define the query in {entity}.graphql.ts
+export const GET_ALL_ENTITIES = graphql(`
+  query GetAllEntities {
+    entities {
+      id
+      name
+      # ... fields
+    }
+  }
+`)
+
+// 2. Extract type in types/index.ts
+import { GetAllEntitiesQuery } from '@/gql/graphql'
+export type Entity = GetAllEntitiesQuery['entities'][0]
+
+// 3. Use everywhere
+import { type Entity } from '../types'
+const entities: Entity[] = data?.entities || []
+```
+
+---
+
 **Last Updated**: 2025-01-12
-**Version**: 1.0
+**Version**: 1.1 (Updated with type extraction examples and refactored all features)
