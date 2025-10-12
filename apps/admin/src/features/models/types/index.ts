@@ -9,11 +9,11 @@ export interface Model {
   legacySystemId?: string | null
   legacySlug?: string | null
   brandId: string
-  brand: {
+  brand?: {
     id: string
     name: string
     slug: string
-  }
+  } | null
   createdAt: string
   updatedAt?: string | null
 }

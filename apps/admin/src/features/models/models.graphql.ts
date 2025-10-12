@@ -121,6 +121,26 @@ export const DELETE_CATALOG_MODEL = graphql(`
 `);
 
 /**
+ * Get Catalog Models By Brand Query
+ * Fetches all models for a specific brand
+ */
+export const GET_CATALOG_MODELS_BY_BRAND = graphql(`
+  query GetCatalogModelsByBrand($brandId: String!, $limit: Float, $offset: Float) {
+    allCatalogModels(limit: $limit, offset: $offset) {
+      id
+      name
+      slug
+      brandId
+      brand {
+        id
+        name
+        slug
+      }
+    }
+  }
+`);
+
+/**
  * Check Model Slug Uniqueness Query
  * Checks if a model slug is already in use
  */

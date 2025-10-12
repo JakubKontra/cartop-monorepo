@@ -13,13 +13,15 @@ export class CatalogModelGenerationService {
   ) {}
 
   async create(input: CreateCatalogModelGenerationInput): Promise<CatalogModelGeneration> {
-    // Check if legacySlug already exists
-    const existingByLegacySlug = await this.generationRepository.findOne({
-      where: { legacySlug: input.legacySlug },
-    });
+    // Check if legacySlug already exists (if provided)
+    if (input.legacySlug) {
+      const existingByLegacySlug = await this.generationRepository.findOne({
+        where: { legacySlug: input.legacySlug },
+      });
 
-    if (existingByLegacySlug) {
-      throw new ConflictException('Generation with this legacySlug already exists');
+      if (existingByLegacySlug) {
+        throw new ConflictException('Generation with this legacySlug already exists');
+      }
     }
 
     // Check if slug already exists (if provided)
@@ -34,7 +36,10 @@ export class CatalogModelGenerationService {
     }
 
     const generation = this.generationRepository.create(input);
-    return this.generationRepository.save(generation);
+    const saved = await this.generationRepository.save(generation);
+
+    // Reload with relations to ensure all fields are populated
+    return this.findOne(saved.id);
   }
 
   async findAll(

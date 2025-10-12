@@ -23,6 +23,7 @@ import {
   GalleryVerticalEnd,
   Tags,
   Car,
+  History,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 import { Permission } from '@/lib/permissions'
@@ -96,6 +97,12 @@ export const sidebarData: SidebarData = {
           title: 'Models',
           url: '/models',
           icon: Car,
+          requiredPermissions: [Permission.CATALOG_MODELS_VIEW],
+        },
+        {
+          title: 'Generations',
+          url: '/generations',
+          icon: History,
           requiredPermissions: [Permission.CATALOG_MODELS_VIEW],
         },
       ],

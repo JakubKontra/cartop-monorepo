@@ -1140,6 +1140,7 @@ __metadata:
     eslint-plugin-react-refresh: "npm:^0.4.23"
     globals: "npm:^16.4.0"
     graphql: "npm:^16.11.0"
+    graphql-codegen-typescript-validation-schema: "npm:^0.18.1"
     input-otp: "npm:^1.4.2"
     knip: "npm:^5.64.2"
     lucide-react: "npm:^0.545.0"
@@ -2097,7 +2098,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/schema-ast@npm:^5.0.0":
+"@graphql-codegen/schema-ast@npm:5.0.0, @graphql-codegen/schema-ast@npm:^5.0.0":
   version: 5.0.0
   resolution: "@graphql-codegen/schema-ast@npm:5.0.0"
   dependencies:
@@ -2159,7 +2160,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-codegen/visitor-plugin-common@npm:6.1.0, @graphql-codegen/visitor-plugin-common@npm:^6.1.0":
+"@graphql-codegen/visitor-plugin-common@npm:6.1.0, @graphql-codegen/visitor-plugin-common@npm:^6.0.0, @graphql-codegen/visitor-plugin-common@npm:^6.1.0":
   version: 6.1.0
   resolution: "@graphql-codegen/visitor-plugin-common@npm:6.1.0"
   dependencies:
@@ -13660,6 +13661,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphlib@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "graphlib@npm:2.1.8"
+  dependencies:
+    lodash: "npm:^4.17.15"
+  checksum: 10c0/41c525e4d91a6d8b4e8da1883bf4e85689a547e908557ccc53f64db9141bdfb351b9162a79f13cae81c5b3a410027f59e4fc1edc1ea442234ec08e629859b188
+  languageName: node
+  linkType: hard
+
+"graphql-codegen-typescript-validation-schema@npm:^0.18.1":
+  version: 0.18.1
+  resolution: "graphql-codegen-typescript-validation-schema@npm:0.18.1"
+  dependencies:
+    "@graphql-codegen/plugin-helpers": "npm:^6.0.0"
+    "@graphql-codegen/schema-ast": "npm:5.0.0"
+    "@graphql-codegen/visitor-plugin-common": "npm:^6.0.0"
+    "@graphql-tools/utils": "npm:^10.0.0"
+    graphlib: "npm:^2.1.8"
+    graphql: "npm:^16.6.0"
+  peerDependencies:
+    graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    zod: ^3.25.0 || ^4.0.0
+  checksum: 10c0/c110a58c46428944cc71b81a450e4ff6a4858bd292c9aec94844651e2c32bd1c99e938c8a7339a9e8dec29caf8ccf0093d06126d4a538f9d131f23464ff38575
+  languageName: node
+  linkType: hard
+
 "graphql-config@npm:^5.1.1":
   version: 5.1.5
   resolution: "graphql-config@npm:5.1.5"
@@ -13727,7 +13754,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.11.0":
+"graphql@npm:^16.11.0, graphql@npm:^16.6.0":
   version: 16.11.0
   resolution: "graphql@npm:16.11.0"
   checksum: 10c0/124da7860a2292e9acf2fed0c71fc0f6a9b9ca865d390d112bdd563c1f474357141501c12891f4164fe984315764736ad67f705219c62f7580681d431a85db88
@@ -15840,7 +15867,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.21, lodash@npm:~4.17.0, lodash@npm:~4.17.21":
+"lodash@npm:4.17.21, lodash@npm:^4.17.15, lodash@npm:^4.17.21, lodash@npm:~4.17.0, lodash@npm:~4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c

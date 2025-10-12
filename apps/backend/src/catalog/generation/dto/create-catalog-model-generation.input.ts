@@ -24,10 +24,11 @@ export class CreateCatalogModelGenerationInput {
   @IsString()
   slug?: string;
 
-  @Field()
+  @Field({ nullable: true })
+  @IsOptional()
   @IsString()
   @MinLength(2)
-  legacySlug: string;
+  legacySlug?: string;
 
   @Field()
   @IsUUID()

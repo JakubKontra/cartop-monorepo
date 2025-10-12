@@ -23,7 +23,10 @@ export class CatalogModelService {
     }
 
     const model = this.modelRepository.create(input);
-    return this.modelRepository.save(model);
+    const saved = await this.modelRepository.save(model);
+
+    // Reload with relations to ensure all fields are populated
+    return this.findOne(saved.id);
   }
 
   async findAll(

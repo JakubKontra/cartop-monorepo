@@ -27,6 +27,7 @@ import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedModelsIndexRouteImport } from './routes/_authenticated/models/index'
 import { Route as AuthenticatedHelpCenterIndexRouteImport } from './routes/_authenticated/help-center/index'
+import { Route as AuthenticatedGenerationsIndexRouteImport } from './routes/_authenticated/generations/index'
 import { Route as AuthenticatedChatsIndexRouteImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedBrandsIndexRouteImport } from './routes/_authenticated/brands/index'
 import { Route as AuthenticatedAppsIndexRouteImport } from './routes/_authenticated/apps/index'
@@ -36,8 +37,10 @@ import { Route as AuthenticatedSettingsDisplayRouteImport } from './routes/_auth
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
 import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedModelsNewRouteImport } from './routes/_authenticated/models/new'
+import { Route as AuthenticatedGenerationsNewRouteImport } from './routes/_authenticated/generations/new'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedBrandsNewRouteImport } from './routes/_authenticated/brands/new'
+import { Route as AuthenticatedGenerationsGenerationIdIndexRouteImport } from './routes/_authenticated/generations/$generationId/index'
 import { Route as AuthenticatedUsersUserIdEditRouteImport } from './routes/_authenticated/users/$userId/edit'
 import { Route as AuthenticatedModelsModelIdEditRouteImport } from './routes/_authenticated/models/$modelId/edit'
 import { Route as AuthenticatedBrandsBrandIdEditRouteImport } from './routes/_authenticated/brands/$brandId/edit'
@@ -135,6 +138,12 @@ const AuthenticatedHelpCenterIndexRoute =
     path: '/help-center/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedGenerationsIndexRoute =
+  AuthenticatedGenerationsIndexRouteImport.update({
+    id: '/generations/',
+    path: '/generations/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedChatsIndexRoute = AuthenticatedChatsIndexRouteImport.update({
   id: '/chats/',
   path: '/chats/',
@@ -185,6 +194,12 @@ const AuthenticatedModelsNewRoute = AuthenticatedModelsNewRouteImport.update({
   path: '/models/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedGenerationsNewRoute =
+  AuthenticatedGenerationsNewRouteImport.update({
+    id: '/generations/new',
+    path: '/generations/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedErrorsErrorRoute =
   AuthenticatedErrorsErrorRouteImport.update({
     id: '/errors/$error',
@@ -196,6 +211,12 @@ const AuthenticatedBrandsNewRoute = AuthenticatedBrandsNewRouteImport.update({
   path: '/brands/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedGenerationsGenerationIdIndexRoute =
+  AuthenticatedGenerationsGenerationIdIndexRouteImport.update({
+    id: '/generations/$generationId/',
+    path: '/generations/$generationId/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedUsersUserIdEditRoute =
   AuthenticatedUsersUserIdEditRouteImport.update({
     id: '/users/$userId/edit',
@@ -230,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/brands/new': typeof AuthenticatedBrandsNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/generations/new': typeof AuthenticatedGenerationsNewRoute
   '/models/new': typeof AuthenticatedModelsNewRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -239,6 +261,7 @@ export interface FileRoutesByFullPath {
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/brands': typeof AuthenticatedBrandsIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
+  '/generations': typeof AuthenticatedGenerationsIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/models': typeof AuthenticatedModelsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -247,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/brands/$brandId/edit': typeof AuthenticatedBrandsBrandIdEditRoute
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
+  '/generations/$generationId': typeof AuthenticatedGenerationsGenerationIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof authForgotPasswordRoute
@@ -262,6 +286,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/brands/new': typeof AuthenticatedBrandsNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/generations/new': typeof AuthenticatedGenerationsNewRoute
   '/models/new': typeof AuthenticatedModelsNewRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -271,6 +296,7 @@ export interface FileRoutesByTo {
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/brands': typeof AuthenticatedBrandsIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
+  '/generations': typeof AuthenticatedGenerationsIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/models': typeof AuthenticatedModelsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
@@ -279,6 +305,7 @@ export interface FileRoutesByTo {
   '/brands/$brandId/edit': typeof AuthenticatedBrandsBrandIdEditRoute
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
+  '/generations/$generationId': typeof AuthenticatedGenerationsGenerationIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -297,6 +324,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/brands/new': typeof AuthenticatedBrandsNewRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/_authenticated/generations/new': typeof AuthenticatedGenerationsNewRoute
   '/_authenticated/models/new': typeof AuthenticatedModelsNewRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -306,6 +334,7 @@ export interface FileRoutesById {
   '/_authenticated/apps/': typeof AuthenticatedAppsIndexRoute
   '/_authenticated/brands/': typeof AuthenticatedBrandsIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
+  '/_authenticated/generations/': typeof AuthenticatedGenerationsIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/_authenticated/models/': typeof AuthenticatedModelsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -314,6 +343,7 @@ export interface FileRoutesById {
   '/_authenticated/brands/$brandId/edit': typeof AuthenticatedBrandsBrandIdEditRoute
   '/_authenticated/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/_authenticated/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
+  '/_authenticated/generations/$generationId/': typeof AuthenticatedGenerationsGenerationIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -332,6 +362,7 @@ export interface FileRouteTypes {
     | '/'
     | '/brands/new'
     | '/errors/$error'
+    | '/generations/new'
     | '/models/new'
     | '/settings/account'
     | '/settings/appearance'
@@ -341,6 +372,7 @@ export interface FileRouteTypes {
     | '/apps'
     | '/brands'
     | '/chats'
+    | '/generations'
     | '/help-center'
     | '/models'
     | '/settings/'
@@ -349,6 +381,7 @@ export interface FileRouteTypes {
     | '/brands/$brandId/edit'
     | '/models/$modelId/edit'
     | '/users/$userId/edit'
+    | '/generations/$generationId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -364,6 +397,7 @@ export interface FileRouteTypes {
     | '/'
     | '/brands/new'
     | '/errors/$error'
+    | '/generations/new'
     | '/models/new'
     | '/settings/account'
     | '/settings/appearance'
@@ -373,6 +407,7 @@ export interface FileRouteTypes {
     | '/apps'
     | '/brands'
     | '/chats'
+    | '/generations'
     | '/help-center'
     | '/models'
     | '/settings'
@@ -381,6 +416,7 @@ export interface FileRouteTypes {
     | '/brands/$brandId/edit'
     | '/models/$modelId/edit'
     | '/users/$userId/edit'
+    | '/generations/$generationId'
   id:
     | '__root__'
     | '/_authenticated'
@@ -398,6 +434,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/brands/new'
     | '/_authenticated/errors/$error'
+    | '/_authenticated/generations/new'
     | '/_authenticated/models/new'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
@@ -407,6 +444,7 @@ export interface FileRouteTypes {
     | '/_authenticated/apps/'
     | '/_authenticated/brands/'
     | '/_authenticated/chats/'
+    | '/_authenticated/generations/'
     | '/_authenticated/help-center/'
     | '/_authenticated/models/'
     | '/_authenticated/settings/'
@@ -415,6 +453,7 @@ export interface FileRouteTypes {
     | '/_authenticated/brands/$brandId/edit'
     | '/_authenticated/models/$modelId/edit'
     | '/_authenticated/users/$userId/edit'
+    | '/_authenticated/generations/$generationId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -559,6 +598,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHelpCenterIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/generations/': {
+      id: '/_authenticated/generations/'
+      path: '/generations'
+      fullPath: '/generations'
+      preLoaderRoute: typeof AuthenticatedGenerationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/chats/': {
       id: '/_authenticated/chats/'
       path: '/chats'
@@ -622,6 +668,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedModelsNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/generations/new': {
+      id: '/_authenticated/generations/new'
+      path: '/generations/new'
+      fullPath: '/generations/new'
+      preLoaderRoute: typeof AuthenticatedGenerationsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/errors/$error': {
       id: '/_authenticated/errors/$error'
       path: '/errors/$error'
@@ -634,6 +687,13 @@ declare module '@tanstack/react-router' {
       path: '/brands/new'
       fullPath: '/brands/new'
       preLoaderRoute: typeof AuthenticatedBrandsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/generations/$generationId/': {
+      id: '/_authenticated/generations/$generationId/'
+      path: '/generations/$generationId'
+      fullPath: '/generations/$generationId'
+      preLoaderRoute: typeof AuthenticatedGenerationsGenerationIdIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/users/$userId/edit': {
@@ -688,11 +748,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBrandsNewRoute: typeof AuthenticatedBrandsNewRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
+  AuthenticatedGenerationsNewRoute: typeof AuthenticatedGenerationsNewRoute
   AuthenticatedModelsNewRoute: typeof AuthenticatedModelsNewRoute
   AuthenticatedUsersAddRoute: typeof AuthenticatedUsersAddRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedBrandsIndexRoute: typeof AuthenticatedBrandsIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
+  AuthenticatedGenerationsIndexRoute: typeof AuthenticatedGenerationsIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedModelsIndexRoute: typeof AuthenticatedModelsIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
@@ -700,6 +762,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBrandsBrandIdEditRoute: typeof AuthenticatedBrandsBrandIdEditRoute
   AuthenticatedModelsModelIdEditRoute: typeof AuthenticatedModelsModelIdEditRoute
   AuthenticatedUsersUserIdEditRoute: typeof AuthenticatedUsersUserIdEditRoute
+  AuthenticatedGenerationsGenerationIdIndexRoute: typeof AuthenticatedGenerationsGenerationIdIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -707,11 +770,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBrandsNewRoute: AuthenticatedBrandsNewRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
+  AuthenticatedGenerationsNewRoute: AuthenticatedGenerationsNewRoute,
   AuthenticatedModelsNewRoute: AuthenticatedModelsNewRoute,
   AuthenticatedUsersAddRoute: AuthenticatedUsersAddRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedBrandsIndexRoute: AuthenticatedBrandsIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
+  AuthenticatedGenerationsIndexRoute: AuthenticatedGenerationsIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedModelsIndexRoute: AuthenticatedModelsIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
@@ -719,6 +784,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBrandsBrandIdEditRoute: AuthenticatedBrandsBrandIdEditRoute,
   AuthenticatedModelsModelIdEditRoute: AuthenticatedModelsModelIdEditRoute,
   AuthenticatedUsersUserIdEditRoute: AuthenticatedUsersUserIdEditRoute,
+  AuthenticatedGenerationsGenerationIdIndexRoute:
+    AuthenticatedGenerationsGenerationIdIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

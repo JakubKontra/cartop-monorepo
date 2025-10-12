@@ -91,10 +91,10 @@ export class CatalogModel {
   @Column({ type: 'boolean', default: false })
   isRecommended: boolean;
 
-  @Field(() => CatalogBrand)
+  @Field(() => CatalogBrand, { nullable: true })
   @ManyToOne(() => CatalogBrand, { onDelete: 'CASCADE', nullable: false })
   @JoinColumn({ name: 'brandId' })
-  brand: CatalogBrand;
+  brand?: CatalogBrand;
 
   @Field()
   @Column({ type: 'uuid' })

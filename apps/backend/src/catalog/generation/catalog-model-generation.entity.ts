@@ -41,12 +41,12 @@ export class CatalogModelGeneration {
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 255, nullable: true })
   @Index()
-  slug?: string;
+  slug?: string | null;
 
-  @Field()
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Field({ nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   @Index()
-  legacySlug: string;
+  legacySlug?: string | null;
 
   @Field(() => CatalogModel)
   @ManyToOne(() => CatalogModel, model => model.generations, {

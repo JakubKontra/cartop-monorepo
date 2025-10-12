@@ -16,7 +16,7 @@ export class CatalogModelGenerationLegacyFieldResolver extends CatalogLegacyFiel
     return this.checkLegacyFieldAccess(entity.legacySystemId, context);
   }
 
-  @ResolveField('legacySlug', () => String)
+  @ResolveField('legacySlug', () => String, { nullable: true })
   resolveLegacySlug(
     @Parent() entity: CatalogModelGeneration,
     @Context() context: any,

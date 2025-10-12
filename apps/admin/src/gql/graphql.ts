@@ -62,6 +62,29 @@ export type AuthResponse = {
   user: User;
 };
 
+/** Type of vehicle body style */
+export enum CatalogBodyType {
+  CommercialVan = 'COMMERCIAL_VAN',
+  Convertible = 'CONVERTIBLE',
+  CoupeCrossover = 'COUPE_CROSSOVER',
+  CoupeSuvCrossover = 'COUPE_SUV_CROSSOVER',
+  CrossoverFastback = 'CROSSOVER_FASTBACK',
+  CrossoverLiftback = 'CROSSOVER_LIFTBACK',
+  Cuv = 'CUV',
+  Motorhome = 'MOTORHOME',
+  OffRoadConvertible = 'OFF_ROAD_CONVERTIBLE',
+  OffRoadCoupe = 'OFF_ROAD_COUPE',
+  Sac = 'SAC',
+  Sav = 'SAV',
+  SedanLiftback = 'SEDAN_LIFTBACK',
+  SmallCarHatchback = 'SMALL_CAR_HATCHBACK',
+  SportsCarCoupe = 'SPORTS_CAR_COUPE',
+  Suv = 'SUV',
+  Van = 'VAN',
+  WagonCrossover = 'WAGON_CROSSOVER',
+  WagonMpv = 'WAGON_MPV'
+}
+
 export type CatalogBrand = {
   __typename?: 'CatalogBrand';
   createdAt: Scalars['DateTime']['output'];
@@ -95,12 +118,20 @@ export enum CatalogColorType {
   Interior = 'INTERIOR'
 }
 
+/** Type of braking system used in vehicles */
+export enum CatalogEquipmentBrakeType {
+  Disc = 'DISC',
+  Drum = 'DRUM',
+  VentilatedDisc = 'VENTILATED_DISC'
+}
+
 export type CatalogModel = {
   __typename?: 'CatalogModel';
-  brand: CatalogBrand;
+  brand?: Maybe<CatalogBrand>;
   brandId: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  generations?: Maybe<Array<CatalogModelGeneration>>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   isHighlighted: Scalars['Boolean']['output'];
@@ -110,6 +141,43 @@ export type CatalogModel = {
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type CatalogModelGeneration = {
+  __typename?: 'CatalogModelGeneration';
+  bodyType?: Maybe<CatalogBodyType>;
+  brand?: Maybe<CatalogBrand>;
+  brandId?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  frontBrakesType?: Maybe<CatalogEquipmentBrakeType>;
+  /** Front track in mm */
+  frontTrack?: Maybe<Scalars['Int']['output']>;
+  /** Height in mm */
+  height?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
+  legacySlug: Scalars['String']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  /** Length in mm */
+  length?: Maybe<Scalars['Int']['output']>;
+  model: CatalogModel;
+  modelId: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  productionStart?: Maybe<Scalars['DateTime']['output']>;
+  productionStop?: Maybe<Scalars['DateTime']['output']>;
+  rearBrakesType?: Maybe<CatalogEquipmentBrakeType>;
+  /** Rear track in mm */
+  rearTrack?: Maybe<Scalars['Int']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  /** Maximum trunk space in liters */
+  trunkSpaceMax?: Maybe<Scalars['Int']['output']>;
+  /** Minimum trunk space in liters */
+  trunkSpaceMin?: Maybe<Scalars['Int']['output']>;
+  /** Wheelbase in mm */
+  wheelbase?: Maybe<Scalars['Int']['output']>;
+  /** Width in mm */
+  width?: Maybe<Scalars['Int']['output']>;
 };
 
 export type CreateCatalogBrandInput = {
@@ -129,6 +197,30 @@ export type CreateCatalogColorInput = {
   name: Scalars['String']['input'];
   slug: Scalars['String']['input'];
   type: CatalogColorType;
+};
+
+export type CreateCatalogModelGenerationInput = {
+  bodyType?: InputMaybe<CatalogBodyType>;
+  brandId?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  frontBrakesType?: InputMaybe<CatalogEquipmentBrakeType>;
+  frontTrack?: InputMaybe<Scalars['Int']['input']>;
+  height?: InputMaybe<Scalars['Int']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  legacySlug: Scalars['String']['input'];
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  length?: InputMaybe<Scalars['Int']['input']>;
+  modelId: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  productionStart?: InputMaybe<Scalars['String']['input']>;
+  productionStop?: InputMaybe<Scalars['String']['input']>;
+  rearBrakesType?: InputMaybe<CatalogEquipmentBrakeType>;
+  rearTrack?: InputMaybe<Scalars['Int']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  trunkSpaceMax?: InputMaybe<Scalars['Int']['input']>;
+  trunkSpaceMin?: InputMaybe<Scalars['Int']['input']>;
+  wheelbase?: InputMaybe<Scalars['Int']['input']>;
+  width?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreateCatalogModelInput = {
@@ -175,10 +267,12 @@ export type Mutation = {
   createCatalogBrand: CatalogBrand;
   createCatalogColor: CatalogColor;
   createCatalogModel: CatalogModel;
+  createCatalogModelGeneration: CatalogModelGeneration;
   createUser: User;
   deleteCatalogBrand: Scalars['Boolean']['output'];
   deleteCatalogColor: Scalars['Boolean']['output'];
   deleteCatalogModel: Scalars['Boolean']['output'];
+  deleteCatalogModelGeneration: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
   impersonateUser: ImpersonateResponse;
   login: AuthResponse;
@@ -188,6 +282,7 @@ export type Mutation = {
   updateCatalogBrand: CatalogBrand;
   updateCatalogColor: CatalogColor;
   updateCatalogModel: CatalogModel;
+  updateCatalogModelGeneration: CatalogModelGeneration;
   updateUser: User;
 };
 
@@ -207,6 +302,11 @@ export type MutationCreateCatalogModelArgs = {
 };
 
 
+export type MutationCreateCatalogModelGenerationArgs = {
+  input: CreateCatalogModelGenerationInput;
+};
+
+
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
@@ -223,6 +323,11 @@ export type MutationDeleteCatalogColorArgs = {
 
 
 export type MutationDeleteCatalogModelArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogModelGenerationArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -270,6 +375,12 @@ export type MutationUpdateCatalogModelArgs = {
 };
 
 
+export type MutationUpdateCatalogModelGenerationArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogModelGenerationInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   id: Scalars['String']['input'];
   input: UpdateUserInput;
@@ -289,6 +400,11 @@ export type Query = {
   catalogColorsByType: Array<CatalogColor>;
   catalogModel: CatalogModel;
   catalogModelBySlug: CatalogModel;
+  catalogModelGeneration: CatalogModelGeneration;
+  catalogModelGenerationByLegacySlug: CatalogModelGeneration;
+  catalogModelGenerationBySlug: CatalogModelGeneration;
+  catalogModelGenerations: Array<CatalogModelGeneration>;
+  catalogModelGenerationsByModelId: Array<CatalogModelGeneration>;
   catalogModels: Array<CatalogModel>;
   catalogModelsByBrand: Array<CatalogModel>;
   entityHistory: Array<AuditLog>;
@@ -298,6 +414,7 @@ export type Query = {
   recommendedCatalogModels: Array<CatalogModel>;
   searchCatalogBrands: Array<CatalogBrand>;
   searchCatalogColors: Array<CatalogColor>;
+  searchCatalogModelGenerations: Array<CatalogModelGeneration>;
   searchCatalogModels: Array<CatalogModel>;
   searchUsers: Array<User>;
   user: User;
@@ -372,6 +489,34 @@ export type QueryCatalogModelBySlugArgs = {
 };
 
 
+export type QueryCatalogModelGenerationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationByLegacySlugArgs = {
+  legacySlug: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationBySlugArgs = {
+  slug: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationsArgs = {
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  modelId?: InputMaybe<Scalars['String']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryCatalogModelGenerationsByModelIdArgs = {
+  modelId: Scalars['String']['input'];
+};
+
+
 export type QueryCatalogModelsArgs = {
   activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -398,6 +543,12 @@ export type QuerySearchCatalogBrandsArgs = {
 
 
 export type QuerySearchCatalogColorsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchCatalogModelGenerationsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
@@ -450,6 +601,31 @@ export type UpdateCatalogColorInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<CatalogColorType>;
+};
+
+export type UpdateCatalogModelGenerationInput = {
+  bodyType?: InputMaybe<CatalogBodyType>;
+  brandId?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  frontBrakesType?: InputMaybe<CatalogEquipmentBrakeType>;
+  frontTrack?: InputMaybe<Scalars['Int']['input']>;
+  height?: InputMaybe<Scalars['Int']['input']>;
+  id: Scalars['String']['input'];
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  legacySlug?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  length?: InputMaybe<Scalars['Int']['input']>;
+  modelId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  productionStart?: InputMaybe<Scalars['String']['input']>;
+  productionStop?: InputMaybe<Scalars['String']['input']>;
+  rearBrakesType?: InputMaybe<CatalogEquipmentBrakeType>;
+  rearTrack?: InputMaybe<Scalars['Int']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  trunkSpaceMax?: InputMaybe<Scalars['Int']['input']>;
+  trunkSpaceMin?: InputMaybe<Scalars['Int']['input']>;
+  wheelbase?: InputMaybe<Scalars['Int']['input']>;
+  width?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateCatalogModelInput = {
@@ -566,27 +742,73 @@ export type CheckBrandSlugQueryVariables = Exact<{
 
 export type CheckBrandSlugQuery = { __typename?: 'Query', catalogBrandBySlug: { __typename?: 'CatalogBrand', id: string, slug: string } };
 
+export type GetAllCatalogModelGenerationsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  modelId?: InputMaybe<Scalars['String']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type GetAllCatalogModelGenerationsQuery = { __typename?: 'Query', catalogModelGenerations: Array<{ __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, legacySlug: string, description?: string | null, productionStart?: any | null, productionStop?: any | null, wheelbase?: number | null, frontTrack?: number | null, rearTrack?: number | null, length?: number | null, width?: number | null, height?: number | null, trunkSpaceMin?: number | null, trunkSpaceMax?: number | null, bodyType?: CatalogBodyType | null, frontBrakesType?: CatalogEquipmentBrakeType | null, rearBrakesType?: CatalogEquipmentBrakeType | null, isActive: boolean, legacySystemId?: string | null, modelId: string, brandId?: string | null, createdAt: any, model: { __typename?: 'CatalogModel', id: string, name: string, slug: string, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null }, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null }> };
+
+export type GetCatalogModelGenerationQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetCatalogModelGenerationQuery = { __typename?: 'Query', catalogModelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, legacySlug: string, description?: string | null, productionStart?: any | null, productionStop?: any | null, wheelbase?: number | null, frontTrack?: number | null, rearTrack?: number | null, length?: number | null, width?: number | null, height?: number | null, trunkSpaceMin?: number | null, trunkSpaceMax?: number | null, bodyType?: CatalogBodyType | null, frontBrakesType?: CatalogEquipmentBrakeType | null, rearBrakesType?: CatalogEquipmentBrakeType | null, isActive: boolean, legacySystemId?: string | null, modelId: string, brandId?: string | null, createdAt: any, model: { __typename?: 'CatalogModel', id: string, name: string, slug: string, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null }, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } };
+
+export type CreateCatalogModelGenerationMutationVariables = Exact<{
+  input: CreateCatalogModelGenerationInput;
+}>;
+
+
+export type CreateCatalogModelGenerationMutation = { __typename?: 'Mutation', createCatalogModelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, legacySlug: string, description?: string | null, productionStart?: any | null, productionStop?: any | null, wheelbase?: number | null, frontTrack?: number | null, rearTrack?: number | null, length?: number | null, width?: number | null, height?: number | null, trunkSpaceMin?: number | null, trunkSpaceMax?: number | null, bodyType?: CatalogBodyType | null, frontBrakesType?: CatalogEquipmentBrakeType | null, rearBrakesType?: CatalogEquipmentBrakeType | null, isActive: boolean, modelId: string, brandId?: string | null, createdAt: any, model: { __typename?: 'CatalogModel', id: string, name: string, slug: string }, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } };
+
+export type UpdateCatalogModelGenerationMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateCatalogModelGenerationInput;
+}>;
+
+
+export type UpdateCatalogModelGenerationMutation = { __typename?: 'Mutation', updateCatalogModelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, legacySlug: string, description?: string | null, productionStart?: any | null, productionStop?: any | null, wheelbase?: number | null, frontTrack?: number | null, rearTrack?: number | null, length?: number | null, width?: number | null, height?: number | null, trunkSpaceMin?: number | null, trunkSpaceMax?: number | null, bodyType?: CatalogBodyType | null, frontBrakesType?: CatalogEquipmentBrakeType | null, rearBrakesType?: CatalogEquipmentBrakeType | null, isActive: boolean, modelId: string, brandId?: string | null, createdAt: any, model: { __typename?: 'CatalogModel', id: string, name: string, slug: string }, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } };
+
+export type DeleteCatalogModelGenerationMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteCatalogModelGenerationMutation = { __typename?: 'Mutation', deleteCatalogModelGeneration: boolean };
+
+export type CheckGenerationSlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type CheckGenerationSlugQuery = { __typename?: 'Query', catalogModelGenerationBySlug: { __typename?: 'CatalogModelGeneration', id: string, slug?: string | null } };
+
 export type GetAllCatalogModelsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
 
-export type GetAllCatalogModelsQuery = { __typename?: 'Query', allCatalogModels: Array<{ __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, legacySystemId?: string | null, legacySlug?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } }> };
+export type GetAllCatalogModelsQuery = { __typename?: 'Query', allCatalogModels: Array<{ __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, legacySystemId?: string | null, legacySlug?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null }> };
 
 export type GetCatalogModelQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type GetCatalogModelQuery = { __typename?: 'Query', catalogModel: { __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, legacySystemId?: string | null, legacySlug?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } } };
+export type GetCatalogModelQuery = { __typename?: 'Query', catalogModel: { __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, legacySystemId?: string | null, legacySlug?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } };
 
 export type CreateCatalogModelMutationVariables = Exact<{
   input: CreateCatalogModelInput;
 }>;
 
 
-export type CreateCatalogModelMutation = { __typename?: 'Mutation', createCatalogModel: { __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, legacySystemId?: string | null, legacySlug?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } } };
+export type CreateCatalogModelMutation = { __typename?: 'Mutation', createCatalogModel: { __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, legacySystemId?: string | null, legacySlug?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } };
 
 export type UpdateCatalogModelMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -594,7 +816,7 @@ export type UpdateCatalogModelMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCatalogModelMutation = { __typename?: 'Mutation', updateCatalogModel: { __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } } };
+export type UpdateCatalogModelMutation = { __typename?: 'Mutation', updateCatalogModel: { __typename?: 'CatalogModel', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, brandId: string, createdAt: any, updatedAt?: any | null, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } };
 
 export type DeleteCatalogModelMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -680,6 +902,12 @@ export const CreateCatalogBrandDocument = {"kind":"Document","definitions":[{"ki
 export const UpdateCatalogBrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCatalogBrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogBrandInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogBrand"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateCatalogBrandMutation, UpdateCatalogBrandMutationVariables>;
 export const DeleteCatalogBrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCatalogBrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCatalogBrand"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteCatalogBrandMutation, DeleteCatalogBrandMutationVariables>;
 export const CheckBrandSlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CheckBrandSlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrandBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<CheckBrandSlugQuery, CheckBrandSlugQueryVariables>;
+export const GetAllCatalogModelGenerationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCatalogModelGenerations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"modelId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isActive"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelGenerations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"modelId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"modelId"}}},{"kind":"Argument","name":{"kind":"Name","value":"isActive"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isActive"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetAllCatalogModelGenerationsQuery, GetAllCatalogModelGenerationsQueryVariables>;
+export const GetCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogModelGenerationQuery, GetCatalogModelGenerationQueryVariables>;
+export const CreateCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogModelGenerationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<CreateCatalogModelGenerationMutation, CreateCatalogModelGenerationMutationVariables>;
+export const UpdateCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogModelGenerationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<UpdateCatalogModelGenerationMutation, UpdateCatalogModelGenerationMutationVariables>;
+export const DeleteCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCatalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteCatalogModelGenerationMutation, DeleteCatalogModelGenerationMutationVariables>;
+export const CheckGenerationSlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CheckGenerationSlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelGenerationBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<CheckGenerationSlugQuery, CheckGenerationSlugQueryVariables>;
 export const GetAllCatalogModelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCatalogModels"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allCatalogModels"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetAllCatalogModelsQuery, GetAllCatalogModelsQueryVariables>;
 export const GetCatalogModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogModelQuery, GetCatalogModelQueryVariables>;
 export const CreateCatalogModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogModelInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CreateCatalogModelMutation, CreateCatalogModelMutationVariables>;
