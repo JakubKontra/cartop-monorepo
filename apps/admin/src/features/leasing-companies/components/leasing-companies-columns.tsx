@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table'
 import { LongText } from '@/components/long-text'
+import { LogoTableCell } from '@/components/logo-table-cell'
 import { type LeasingCompany } from '../types'
 import { DataTableRowActions } from './data-table-row-actions'
 import { ExternalLink } from 'lucide-react'
@@ -58,17 +59,13 @@ export const leasingCompaniesColumns: ColumnDef<LeasingCompany>[] = [
     ),
     cell: ({ row }) => {
       const logo = row.original.logo
-      if (!logo?.url) {
-        return <span className='text-sm text-muted-foreground'>No logo</span>
-      }
       return (
-        <div className='flex items-center gap-2'>
-          <img
-            src={logo.url}
-            alt={logo.alt || row.original.name}
-            className='h-8 w-auto object-contain'
-          />
-        </div>
+        <LogoTableCell
+          url={logo?.url}
+          alt={logo?.alt || row.original.name}
+          maxSize={40}
+          aspectRatio='1:1'
+        />
       )
     },
     enableSorting: false,

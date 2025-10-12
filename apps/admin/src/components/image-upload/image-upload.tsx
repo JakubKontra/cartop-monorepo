@@ -6,6 +6,7 @@ import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
+import { StorageImage } from '@/components/storage-image'
 import { type UploadResult } from '@/lib/upload/upload-service'
 import { useFileUpload } from '@/lib/upload/use-file-upload'
 
@@ -97,7 +98,7 @@ export function ImageUpload({
     return (
       <div className={cn('relative', className)}>
         <div className='relative overflow-hidden rounded-lg border border-input bg-background'>
-          <img
+          <StorageImage
             src={value}
             alt='Uploaded'
             className='h-48 w-full object-contain'

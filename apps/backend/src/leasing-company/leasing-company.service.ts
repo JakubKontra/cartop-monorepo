@@ -78,8 +78,15 @@ export class LeasingCompanyService {
       }
     }
 
+    // If logoId is being updated, we need to clear the logo relation
+    // Otherwise TypeORM won't detect the change
+    if (input.logoId !== undefined && input.logoId !== leasingCompany.logoId) {
+      leasingCompany.logo = undefined;
+    }
+
     Object.assign(leasingCompany, input);
-    return this.leasingCompanyRepository.save(leasingCompany);
+    const saved = await this.leasingCompanyRepository.save(leasingCompany);
+    return this.findOne(saved.id);
   }
 
   // === DELETE ===

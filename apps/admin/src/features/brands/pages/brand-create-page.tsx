@@ -23,6 +23,7 @@ export function BrandCreatePage() {
             name: values.name,
             slug: values.slug,
             description: values.description || null,
+            logoId: values.logoId || null,
             isActive: values.isActive,
             isHighlighted: values.isHighlighted,
             isRecommended: values.isRecommended,

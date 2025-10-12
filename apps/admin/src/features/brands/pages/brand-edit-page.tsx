@@ -17,7 +17,10 @@ export function BrandEditPage() {
   })
 
   const [updateBrand, { loading: updating }] = useMutation(UPDATE_CATALOG_BRAND, {
-    refetchQueries: [{ query: GET_ALL_CATALOG_BRANDS, variables: { limit: 1000, offset: 0 } }],
+    refetchQueries: [
+      { query: GET_ALL_CATALOG_BRANDS, variables: { limit: 1000, offset: 0 } },
+      { query: GET_CATALOG_BRAND, variables: { id: brandId } }
+    ],
   })
 
   const handleSubmit = async (values: BrandFormValues) => {
@@ -29,6 +32,7 @@ export function BrandEditPage() {
             name: values.name,
             slug: values.slug,
             description: values.description || null,
+            logoId: values.logoId || null,
             isActive: values.isActive,
             isHighlighted: values.isHighlighted,
             isRecommended: values.isRecommended,
@@ -64,10 +68,12 @@ export function BrandEditPage() {
         <BrandForm
           isEdit={true}
           loading={updating}
+          logoUrl={brand.logo?.url}
           defaultValues={{
             name: brand.name,
             slug: brand.slug,
             description: brand.description || '',
+            logoId: brand.logoId || '',
             isActive: brand.isActive,
             isHighlighted: brand.isHighlighted,
             isRecommended: brand.isRecommended,

@@ -14,6 +14,12 @@ export const GET_ALL_CATALOG_BRANDS = graphql(`
       isActive
       isHighlighted
       isRecommended
+      logoId
+      logo {
+        id
+        url
+        alt
+      }
       legacySystemId
       legacySlug
       createdAt
@@ -36,6 +42,12 @@ export const GET_CATALOG_BRAND = graphql(`
       isActive
       isHighlighted
       isRecommended
+      logoId
+      logo {
+        id
+        url
+        alt
+      }
       legacySystemId
       legacySlug
       createdAt
@@ -58,6 +70,12 @@ export const CREATE_CATALOG_BRAND = graphql(`
       isActive
       isHighlighted
       isRecommended
+      logoId
+      logo {
+        id
+        url
+        alt
+      }
       legacySystemId
       legacySlug
       createdAt
@@ -80,6 +98,12 @@ export const UPDATE_CATALOG_BRAND = graphql(`
       isActive
       isHighlighted
       isRecommended
+      logoId
+      logo {
+        id
+        url
+        alt
+      }
       createdAt
       updatedAt
     }

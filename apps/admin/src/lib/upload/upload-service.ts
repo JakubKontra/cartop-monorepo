@@ -68,11 +68,13 @@ export class UploadService {
       const checksum = await this.calculateChecksum(file);
 
       // Step 2: Check for duplicate - return existing file if found
-      const duplicate = await this.checkDuplicate(client, checksum);
-      if (duplicate) {
-        console.log('Duplicate file detected, returning existing file:', duplicate.fileId);
-        return duplicate;
-      }
+      // Note: Duplicate check is disabled for now due to auth issues
+      // TODO: Fix authentication in queries or handle conflicts differently
+      // const duplicate = await this.checkDuplicate(client, checksum);
+      // if (duplicate) {
+      //   console.log('Duplicate file detected, returning existing file:', duplicate.fileId);
+      //   return duplicate;
+      // }
 
       // Step 3: Get pre-signed upload URL from backend
       const { data: urlData } = await client.mutate({
@@ -213,10 +215,17 @@ export class UploadService {
     checksum: string
   ): Promise<UploadResult | null> {
     try {
-      const { data } = await client.query({
+      const { data, errors } = await client.query({
         query: GET_FILE_BY_CHECKSUM,
         variables: { checksum },
+        errorPolicy: 'all', // Get both data and errors
       });
+
+      // If there are errors, log them but don't fail
+      if (errors && errors.length > 0) {
+        console.warn('Errors during duplicate check:', errors);
+        // Continue anyway - we'll try to upload
+      }
 
       const existing = data?.fileByChecksum;
       if (existing) {

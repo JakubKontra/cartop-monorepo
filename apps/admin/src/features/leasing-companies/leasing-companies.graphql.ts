@@ -72,6 +72,11 @@ export const UPDATE_LEASING_COMPANY = graphql(`
       name
       link
       logoId
+      logo {
+        id
+        url
+        alt
+      }
       createdAt
       updatedAt
     }

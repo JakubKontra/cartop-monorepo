@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
@@ -43,6 +43,11 @@ export function LeasingCompanyForm({
   onCancel,
 }: LeasingCompanyFormProps) {
   const [uploadedLogoUrl, setUploadedLogoUrl] = useState<string | undefined>(logoUrl)
+
+  // Sync local state with prop changes (e.g., after mutation refetch)
+  useEffect(() => {
+    setUploadedLogoUrl(logoUrl)
+  }, [logoUrl])
 
   const form = useForm<LeasingCompanyFormValues>({
     resolver: zodResolver(leasingCompanySchema),

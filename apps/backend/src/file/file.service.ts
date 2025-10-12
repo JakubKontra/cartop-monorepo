@@ -23,9 +23,11 @@ export class FileService {
     // Check if file with same checksum already exists
     const existing = await this.findByChecksum(input.checksum);
     if (existing) {
-      throw new ConflictException(
-        `File with checksum "${input.checksum}" already exists (ID: ${existing.id})`,
+      // Return existing file instead of throwing error (deduplication)
+      console.log(
+        `File with checksum "${input.checksum}" already exists, returning existing file (ID: ${existing.id})`,
       );
+      return existing;
     }
 
     // Check if legacySystemId already exists (if provided)

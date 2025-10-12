@@ -17,7 +17,10 @@ export function LeasingCompanyEditPage() {
   })
 
   const [updateLeasingCompany, { loading: updating }] = useMutation(UPDATE_LEASING_COMPANY, {
-    refetchQueries: [{ query: GET_ALL_LEASING_COMPANIES }],
+    refetchQueries: [
+      { query: GET_ALL_LEASING_COMPANIES },
+      { query: GET_LEASING_COMPANY, variables: { id: companyId } }
+    ],
   })
 
   const handleSubmit = async (values: LeasingCompanyFormValues) => {
