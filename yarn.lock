@@ -1939,6 +1939,7 @@ __metadata:
     "@eslint/eslintrc": "npm:^3"
     "@graphql-codegen/cli": "npm:^6.0.0"
     "@graphql-codegen/client-preset": "npm:^5.1.0"
+    "@hookform/resolvers": "npm:^3.9.1"
     "@tailwindcss/cli": "npm:^4.1.14"
     "@tailwindcss/postcss": "npm:^4"
     "@tanstack/react-query": "npm:^5.90.2"
@@ -1954,10 +1955,12 @@ __metadata:
     postcss: "npm:^8.5.6"
     react: "npm:19.2.0"
     react-dom: "npm:19.2.0"
+    react-hook-form: "npm:^7.54.2"
     tailwind-merge: "npm:^3.3.1"
     tailwind-variants: "npm:^3.1.1"
     tailwindcss: "npm:^4"
     typescript: "npm:^5.8.4"
+    zod: "npm:^3.24.1"
   languageName: unknown
   linkType: soft
 
@@ -3353,6 +3356,15 @@ __metadata:
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 10c0/94e9d75c1f178bbae8d874f5a9361708a3350c8def7eaeb6920f2c820e82403b7d4f55b3735856d68e145e86c85cbfe2adc444fdc25519cd51f108697e99346c
+  languageName: node
+  linkType: hard
+
+"@hookform/resolvers@npm:^3.9.1":
+  version: 3.10.0
+  resolution: "@hookform/resolvers@npm:3.10.0"
+  peerDependencies:
+    react-hook-form: ^7.0.0
+  checksum: 10c0/7ee44533b4cdc28c4fa2a94894c735411e5a1f830f4a617c580533321a9b901df0cc8c1e2fad81ad8d55154ebc5cb844cf9c116a3148ffae2bc48758c33cbb8e
   languageName: node
   linkType: hard
 
@@ -19875,6 +19887,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.54.2":
+  version: 7.65.0
+  resolution: "react-hook-form@npm:7.65.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/119afeaf33510d1ed6c12109f03d22d9e88f9eb01b8e4fb3cd8f40d5fc113cbcfc6154789d1d143151de8119bd08ffc7214d504e0e550ea28a9051ed6a30ae28
+  languageName: node
+  linkType: hard
+
 "react-hook-form@npm:^7.64.0":
   version: 7.64.0
   resolution: "react-hook-form@npm:7.64.0"
@@ -23666,7 +23687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.24.2":
+"zod@npm:^3.24.1, zod@npm:^3.24.2":
   version: 3.25.76
   resolution: "zod@npm:3.25.76"
   checksum: 10c0/5718ec35e3c40b600316c5b4c5e4976f7fee68151bc8f8d90ec18a469be9571f072e1bbaace10f1e85cf8892ea12d90821b200e980ab46916a6166a4260a983c

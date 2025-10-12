@@ -69,7 +69,7 @@ export default function Footer() {
           <FooterLinkColumn title="Menu" links={menuLinks} className="lg:col-span-2" />
           <FooterLinkColumn title="Doporučené" links={recommendedLinks} className="lg:col-span-2" />
           <FooterLinkColumn title="Náš výběr" links={selectionLinks} className="lg:col-span-2" />
-          <FooterLinkColumn title="Značky (32)" links={brandLinks} className="lg:col-span-2" />
+          <FooterLinkColumn title="Značky" links={brandLinks} className="lg:col-span-2" />
           <FooterLinkColumn title="Kategorie" links={categoryLinks} className="lg:col-span-1" />
         </div>
 
