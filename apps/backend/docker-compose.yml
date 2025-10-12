@@ -58,21 +58,22 @@ services:
     container_name: minio
     image: bitnami/minio
     environment:
-      MINIO_ROOT_USER: 'pangea'
-      MINIO_ROOT_PASSWORD: 'pangea1337'
-    expose:
-      - '9000'
+      MINIO_ROOT_USER: 'cartop'
+      MINIO_ROOT_PASSWORD: 'cartop1337'
+      MINIO_SERVER_URL: 'http://localhost:1483'
+      MINIO_BROWSER_REDIRECT_URL: 'http://localhost:1484'
+    ports:
+      - '1483:9000'
+      - '1484:9001'
     volumes:
       - minio-data:/bitnami/minio/data
     entrypoint: >
       bash -c "
         /opt/bitnami/scripts/minio/entrypoint.sh /opt/bitnami/scripts/minio/run.sh &
         sleep 10 &&
-        apk add --no-cache curl bash &&
-        curl -sLO https://dl.min.io/client/mc/release/linux-amd64/mc &&
-        chmod +x mc &&
-        ./mc alias set local http://localhost:9000 pangea pangea1337 &&
-        ./mc mb local/pangea || true &&
+        /opt/bitnami/minio-client/bin/mc alias set local http://localhost:9000 cartop cartop1337 &&
+        /opt/bitnami/minio-client/bin/mc mb local/pangea || true &&
+        /opt/bitnami/minio-client/bin/mc anonymous set download local/pangea &&
         tail -f /dev/null
       "
     networks:

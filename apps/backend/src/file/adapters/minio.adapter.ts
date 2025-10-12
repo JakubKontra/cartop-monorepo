@@ -17,6 +17,9 @@ export class MinioStorageAdapter implements StorageAdapter {
     bucket: string,
     key: string,
   ): Promise<PresignedUrl> {
+    // MinIO presignedPutObject doesn't support setting Content-Type in the presigned URL
+    // The client must set Content-Type header when using the presigned URL
+    // Note: contentType parameter is accepted for interface compatibility but not used
     return this.client.presignedPutObject(bucket, key, 60 * 60);
   }
 

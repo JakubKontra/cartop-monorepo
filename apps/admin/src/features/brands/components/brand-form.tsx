@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLazyQuery } from '@apollo/client/react'
@@ -58,25 +59,29 @@ export function BrandForm({
     },
   })
 
-  const validateSlugUniqueness = async (slug: string): Promise<boolean> => {
-    if (!slug) return true
+  const validateSlugUniqueness = useCallback(
+    async (slug: string): Promise<boolean> => {
+      if (!slug) return true
 
-    try {
-      const { data } = await checkSlug({
-        variables: { slug },
-      })
+      try {
+        const { data } = await checkSlug({
+          variables: { slug },
+        })
 
-      // If we got data back, the slug exists
-      if (data?.catalogBrandBySlug) {
-        return false // Slug is already taken
+        // checkBrandSlugAvailability returns null if available, brand object if taken
+        if (data?.checkBrandSlugAvailability) {
+          return false // Slug is already taken
+        }
+
+        return true // Slug is available (null response)
+      } catch (error) {
+        // If the query errors, assume slug is available
+        console.error('Error validating slug:', error)
+        return true
       }
-
-      return true // Slug is available
-    } catch (error) {
-      // If the query errors (e.g., brand not found), the slug is available
-      return true
-    }
-  }
+    },
+    [checkSlug]
+  )
 
   return (
     <Form {...form}>

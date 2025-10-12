@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Sora } from "next/font/google";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
 const sora = Sora({
@@ -21,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={sora.variable}>
-      <body className={sora.className}>{children}</body>
+      <body className={sora.className}>
+        <QueryProvider>{children}</QueryProvider>
+      </body>
     </html>
   );
 }

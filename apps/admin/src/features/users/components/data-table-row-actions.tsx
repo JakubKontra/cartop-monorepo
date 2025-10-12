@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type GetAllUsersQuery } from '@/gql/graphql'
+import { type GetAllUsersQuery, UserRole } from '@/gql/graphql'
 
 // Use GraphQL User type to match the columns
 type User = GetAllUsersQuery['users'][number]
@@ -29,9 +29,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
 
   // Check if target user is admin
   const targetUserRoles = row.original.roles || []
-  const isTargetAdmin = targetUserRoles.some(role =>
-    role.toLowerCase() === 'admin'
-  )
+  const isTargetAdmin = targetUserRoles.includes(UserRole.Admin)
 
   // Show impersonate if: current user is admin AND target is not admin
   const showImpersonate = isAdmin && !isTargetAdmin

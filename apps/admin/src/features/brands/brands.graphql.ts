@@ -99,10 +99,11 @@ export const DELETE_CATALOG_BRAND = graphql(`
 /**
  * Check Brand Slug Uniqueness Query
  * Checks if a brand slug is already in use
+ * Returns null if slug is available, brand object if taken
  */
 export const CHECK_BRAND_SLUG = graphql(`
   query CheckBrandSlug($slug: String!) {
-    catalogBrandBySlug(slug: $slug) {
+    checkBrandSlugAvailability(slug: $slug) {
       id
       slug
     }

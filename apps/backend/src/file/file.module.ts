@@ -59,8 +59,8 @@ export class FileModule {
                 endPoint: cfg.get('MINIO_ENDPOINT', 'localhost'),
                 port: cfg.get<number>('MINIO_PORT', 1483),
                 useSSL: false,
-                accessKey: cfg.get('MINIO_ROOT_USER', 'pangea'),
-                secretKey: cfg.get('MINIO_ROOT_PASSWORD', 'pangea1337'),
+                accessKey: cfg.get('MINIO_ROOT_USER', 'cartop'),
+                secretKey: cfg.get('MINIO_ROOT_PASSWORD', 'cartop1337'),
               }),
             );
           },

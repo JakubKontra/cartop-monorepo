@@ -109,4 +109,13 @@ export class CatalogBrandService {
       order: { name: 'ASC' },
     });
   }
+
+  /**
+   * Check if a slug is available (not used by any brand)
+   * Returns the existing brand if slug is taken, null if available
+   * Used for form validation without throwing errors
+   */
+  async checkSlugAvailability(slug: string): Promise<CatalogBrand | null> {
+    return this.brandRepository.findOne({ where: { slug } });
+  }
 }

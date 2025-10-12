@@ -69,6 +69,14 @@ export class User {
   isActive: boolean;
 
   @Field()
+  @Column({ type: 'boolean', default: false })
+  isImpersonating: boolean;
+
+  @Field(() => ID, { nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  impersonatedBy?: string;
+
+  @Field()
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt: Date;
 

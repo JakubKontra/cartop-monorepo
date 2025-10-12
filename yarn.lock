@@ -1774,6 +1774,8 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:^4.0.7"
     "@cartop/api-client": "workspace:*"
+    "@cartop/ui-utils": "workspace:*"
+    "@cartop/validation": "workspace:*"
     "@clerk/clerk-react": "npm:^5.51.0"
     "@eslint/js": "npm:^9.37.0"
     "@faker-js/faker": "npm:^10.0.0"
@@ -1813,7 +1815,6 @@ __metadata:
     "@types/react-dom": "npm:^19.2.1"
     "@vitejs/plugin-react-swc": "npm:^4.1.0"
     class-variance-authority: "npm:^0.7.1"
-    clsx: "npm:^2.1.1"
     cmdk: "npm:1.1.1"
     date-fns: "npm:^4.1.0"
     eslint: "npm:^9.37.0"
@@ -1838,7 +1839,6 @@ __metadata:
     slugify: "npm:^1.6.6"
     solid-js: "npm:^1.9.9"
     sonner: "npm:^2.0.7"
-    tailwind-merge: "npm:^3.3.1"
     tailwindcss: "npm:^4.1.14"
     tw-animate-css: "npm:^1.4.0"
     typescript: "npm:~5.9.3"
@@ -1936,6 +1936,8 @@ __metadata:
   resolution: "@cartop/client@workspace:apps/client"
   dependencies:
     "@cartop/api-client": "workspace:*"
+    "@cartop/ui-utils": "workspace:*"
+    "@cartop/validation": "workspace:*"
     "@eslint/eslintrc": "npm:^3"
     "@graphql-codegen/cli": "npm:^6.0.0"
     "@graphql-codegen/client-preset": "npm:^5.1.0"
@@ -1947,7 +1949,7 @@ __metadata:
     "@types/react": "npm:19.2.2"
     "@types/react-dom": "npm:19.2.1"
     eslint: "npm:^9"
-    eslint-config-cartop: "workspace:*"
+    eslint-config-cartop: "link:../../packages/eslint-config-cartop"
     eslint-config-next: "npm:15.5.4"
     graphql: "npm:^16.11.0"
     lucide-react: "npm:^0.545.0"
@@ -1956,7 +1958,6 @@ __metadata:
     react: "npm:19.2.0"
     react-dom: "npm:19.2.0"
     react-hook-form: "npm:^7.54.2"
-    tailwind-merge: "npm:^3.3.1"
     tailwind-variants: "npm:^3.1.1"
     tailwindcss: "npm:^4"
     typescript: "npm:^5.8.4"
@@ -1986,6 +1987,27 @@ __metadata:
     typescript: "npm:^5.8.4"
     typescript-eslint: "npm:^8.9.0"
     vercel: "npm:^46.1.1"
+  languageName: unknown
+  linkType: soft
+
+"@cartop/ui-utils@workspace:*, @cartop/ui-utils@workspace:packages/ui-utils":
+  version: 0.0.0-use.local
+  resolution: "@cartop/ui-utils@workspace:packages/ui-utils"
+  dependencies:
+    "@types/node": "npm:^24.6.2"
+    clsx: "npm:^2.1.1"
+    tailwind-merge: "npm:^2.5.4"
+    typescript: "npm:^5.8.4"
+  languageName: unknown
+  linkType: soft
+
+"@cartop/validation@workspace:*, @cartop/validation@workspace:packages/validation":
+  version: 0.0.0-use.local
+  resolution: "@cartop/validation@workspace:packages/validation"
+  dependencies:
+    "@types/node": "npm:^24.6.2"
+    typescript: "npm:^5.8.4"
+    zod: "npm:^3.24.1"
   languageName: unknown
   linkType: soft
 
@@ -13788,7 +13810,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-cartop@workspace:*, eslint-config-cartop@workspace:packages/eslint-config-cartop":
+"eslint-config-cartop@link:../../packages/eslint-config-cartop::locator=%40cartop%2Fclient%40workspace%3Aapps%2Fclient":
+  version: 0.0.0-use.local
+  resolution: "eslint-config-cartop@link:../../packages/eslint-config-cartop::locator=%40cartop%2Fclient%40workspace%3Aapps%2Fclient"
+  languageName: node
+  linkType: soft
+
+"eslint-config-cartop@workspace:packages/eslint-config-cartop":
   version: 0.0.0-use.local
   resolution: "eslint-config-cartop@workspace:packages/eslint-config-cartop"
   dependencies:
@@ -21798,10 +21826,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tailwind-merge@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "tailwind-merge@npm:3.3.1"
-  checksum: 10c0/b84c6a78d4669fa12bf5ab8f0cdc4400a3ce0a7c006511af4af4be70bb664a27466dbe13ee9e3b31f50ddf6c51d380e8192ce0ec9effce23ca729d71a9f63818
+"tailwind-merge@npm:^2.5.4":
+  version: 2.6.0
+  resolution: "tailwind-merge@npm:2.6.0"
+  checksum: 10c0/fc8a5535524de9f4dacf1c16ab298581c7bb757d68a95faaf28942b1c555a619bba9d4c6726fe83986e44973b315410c1a5226e5354c30ba82353bd6d2288fa5
   languageName: node
   linkType: hard
 

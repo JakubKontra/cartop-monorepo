@@ -34,8 +34,8 @@ S3_BUCKET=your-bucket
 # For MinIO
 MINIO_ENDPOINT=localhost
 MINIO_PORT=1483
-MINIO_ROOT_USER=pangea
-MINIO_ROOT_PASSWORD=pangea1337
+MINIO_ROOT_USER=cartop
+MINIO_ROOT_PASSWORD=cartop1337
 ```
 
 ### 3. Enhanced FileService (`src/file/file.service.ts`)

@@ -4,7 +4,7 @@ import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import {
@@ -13,6 +13,8 @@ import {
 } from '@nestjs/platform-fastify';
 import { validateConfig } from './config/config.validation';
 import helmet from '@fastify/helmet';
+import { CustomValidationPipe } from './common/pipes/validation.pipe';
+import { GraphQLExceptionFilter } from './common/filters/graphql-exception.filter';
 // import * as Sentry from '@sentry/node';
 // import { nodeProfilingIntegration } from '@sentry/profiling-node';
 // import { SentryExceptionFilter } from './common/filters/sentry-exception.filter';
@@ -67,17 +69,14 @@ async function bootstrap() {
     crossOriginResourcePolicy: { policy: 'cross-origin' }, // Allow cross-origin requests for API
   });
 
+  // Register GraphQL exception filter for type-safe error handling
+  app.useGlobalFilters(new GraphQLExceptionFilter());
+
   // Sentry exception filter disabled
   // app.useGlobalFilters(new SentryExceptionFilter());
 
-  // Enable validation globally
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+  // Enable custom validation pipe globally
+  app.useGlobalPipes(new CustomValidationPipe());
 
   // Enable CORS
   // TODO: Configure CORS with proper origin restrictions for production

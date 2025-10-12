@@ -74,4 +74,20 @@ export class CatalogBrandPublicResolver {
   async getRecommendedCatalogBrands(): Promise<CatalogBrand[]> {
     return this.brandService.getRecommended();
   }
+
+  /**
+   * Check if a slug is available for use
+   * Returns the existing brand if slug is taken, null if available
+   * Used for form validation - does NOT throw errors
+   */
+  @Query(() => CatalogBrand, {
+    name: 'checkBrandSlugAvailability',
+    nullable: true,
+    description: 'Returns the brand if slug exists, null if available'
+  })
+  async checkBrandSlugAvailability(
+    @Args('slug') slug: string
+  ): Promise<CatalogBrand | null> {
+    return this.brandService.checkSlugAvailability(slug);
+  }
 }

@@ -6,15 +6,11 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useNewsletterControllerSubscribe } from "@cartop/api-client"
+import { emailSchema, newsletterConsentSchema } from "@cartop/validation"
 
 const newsletterSchema = z.object({
-  email: z
-    .string()
-    .min(1, "E-mail je povinný")
-    .email("Zadejte prosím platnou e-mailovou adresu"),
-  consent: z
-    .boolean()
-    .refine((val) => val === true, "Musíte souhlasit s podmínkami"),
+  email: emailSchema,
+  consent: newsletterConsentSchema,
 })
 
 type NewsletterFormData = z.infer<typeof newsletterSchema>

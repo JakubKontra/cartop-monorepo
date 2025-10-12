@@ -23,7 +23,7 @@ type Documents = {
     "\n  mutation CreateCatalogBrand($input: CreateCatalogBrandInput!) {\n    createCatalogBrand(input: $input) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      legacySystemId\n      legacySlug\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.CreateCatalogBrandDocument,
     "\n  mutation UpdateCatalogBrand($id: String!, $input: UpdateCatalogBrandInput!) {\n    updateCatalogBrand(id: $id, input: $input) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.UpdateCatalogBrandDocument,
     "\n  mutation DeleteCatalogBrand($id: String!) {\n    deleteCatalogBrand(id: $id)\n  }\n": typeof types.DeleteCatalogBrandDocument,
-    "\n  query CheckBrandSlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      slug\n    }\n  }\n": typeof types.CheckBrandSlugDocument,
+    "\n  query CheckBrandSlug($slug: String!) {\n    checkBrandSlugAvailability(slug: $slug) {\n      id\n      slug\n    }\n  }\n": typeof types.CheckBrandSlugDocument,
     "\n  query GetAllCatalogModelGenerations($limit: Float, $offset: Float, $modelId: String, $isActive: Boolean) {\n    catalogModelGenerations(limit: $limit, offset: $offset, modelId: $modelId, isActive: $isActive) {\n      id\n      name\n      slug\n      legacySlug\n      description\n      productionStart\n      productionStop\n      wheelbase\n      frontTrack\n      rearTrack\n      length\n      width\n      height\n      trunkSpaceMin\n      trunkSpaceMax\n      bodyType\n      frontBrakesType\n      rearBrakesType\n      isActive\n      legacySystemId\n      modelId\n      model {\n        id\n        name\n        slug\n        brand {\n          id\n          name\n          slug\n        }\n      }\n      brandId\n      brand {\n        id\n        name\n        slug\n      }\n      createdAt\n    }\n  }\n": typeof types.GetAllCatalogModelGenerationsDocument,
     "\n  query GetCatalogModelGeneration($id: String!) {\n    catalogModelGeneration(id: $id) {\n      id\n      name\n      slug\n      legacySlug\n      description\n      productionStart\n      productionStop\n      wheelbase\n      frontTrack\n      rearTrack\n      length\n      width\n      height\n      trunkSpaceMin\n      trunkSpaceMax\n      bodyType\n      frontBrakesType\n      rearBrakesType\n      isActive\n      legacySystemId\n      modelId\n      model {\n        id\n        name\n        slug\n        brand {\n          id\n          name\n          slug\n        }\n      }\n      brandId\n      brand {\n        id\n        name\n        slug\n      }\n      createdAt\n    }\n  }\n": typeof types.GetCatalogModelGenerationDocument,
     "\n  mutation CreateCatalogModelGeneration($input: CreateCatalogModelGenerationInput!) {\n    createCatalogModelGeneration(input: $input) {\n      id\n      name\n      slug\n      legacySlug\n      description\n      productionStart\n      productionStop\n      wheelbase\n      frontTrack\n      rearTrack\n      length\n      width\n      height\n      trunkSpaceMin\n      trunkSpaceMax\n      bodyType\n      frontBrakesType\n      rearBrakesType\n      isActive\n      modelId\n      model {\n        id\n        name\n        slug\n      }\n      brandId\n      brand {\n        id\n        name\n        slug\n      }\n      createdAt\n    }\n  }\n": typeof types.CreateCatalogModelGenerationDocument,
@@ -51,6 +51,11 @@ type Documents = {
     "\n  mutation SoftDeleteUser($id: String!) {\n    softDeleteUser(id: $id) {\n      id\n      email\n      firstName\n      lastName\n      isActive\n    }\n  }\n": typeof types.SoftDeleteUserDocument,
     "\n  mutation DeleteUser($id: String!) {\n    deleteUser(id: $id)\n  }\n": typeof types.DeleteUserDocument,
     "\n  mutation RefreshTokenInternal($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        firstName\n        lastName\n        roles\n      }\n    }\n  }\n": typeof types.RefreshTokenInternalDocument,
+    "\n  mutation GenerateUploadUrl($filename: String!, $contentType: String!) {\n    generateUploadUrl(filename: $filename, contentType: $contentType)\n  }\n": typeof types.GenerateUploadUrlDocument,
+    "\n  mutation CreateFile($input: CreateFileInput!) {\n    createFile(input: $input) {\n      id\n      relativePath\n      url\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      alt\n      title\n      thumbnailPath\n      isImage\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.CreateFileDocument,
+    "\n  mutation DeleteFile($id: String!) {\n    deleteFile(id: $id)\n  }\n": typeof types.DeleteFileDocument,
+    "\n  mutation DeleteFileCompletely($id: String!) {\n    deleteFileCompletely(id: $id)\n  }\n": typeof types.DeleteFileCompletelyDocument,
+    "\n  query GetFileByChecksum($checksum: String!) {\n    fileByChecksum(checksum: $checksum) {\n      id\n      url\n      relativePath\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      isImage\n    }\n  }\n": typeof types.GetFileByChecksumDocument,
 };
 const documents: Documents = {
     "\n  mutation Login($input: LoginInput!) {\n    login(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        firstName\n        lastName\n        roles\n        isActive\n      }\n    }\n  }\n": types.LoginDocument,
@@ -62,7 +67,7 @@ const documents: Documents = {
     "\n  mutation CreateCatalogBrand($input: CreateCatalogBrandInput!) {\n    createCatalogBrand(input: $input) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      legacySystemId\n      legacySlug\n      createdAt\n      updatedAt\n    }\n  }\n": types.CreateCatalogBrandDocument,
     "\n  mutation UpdateCatalogBrand($id: String!, $input: UpdateCatalogBrandInput!) {\n    updateCatalogBrand(id: $id, input: $input) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n": types.UpdateCatalogBrandDocument,
     "\n  mutation DeleteCatalogBrand($id: String!) {\n    deleteCatalogBrand(id: $id)\n  }\n": types.DeleteCatalogBrandDocument,
-    "\n  query CheckBrandSlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      slug\n    }\n  }\n": types.CheckBrandSlugDocument,
+    "\n  query CheckBrandSlug($slug: String!) {\n    checkBrandSlugAvailability(slug: $slug) {\n      id\n      slug\n    }\n  }\n": types.CheckBrandSlugDocument,
     "\n  query GetAllCatalogModelGenerations($limit: Float, $offset: Float, $modelId: String, $isActive: Boolean) {\n    catalogModelGenerations(limit: $limit, offset: $offset, modelId: $modelId, isActive: $isActive) {\n      id\n      name\n      slug\n      legacySlug\n      description\n      productionStart\n      productionStop\n      wheelbase\n      frontTrack\n      rearTrack\n      length\n      width\n      height\n      trunkSpaceMin\n      trunkSpaceMax\n      bodyType\n      frontBrakesType\n      rearBrakesType\n      isActive\n      legacySystemId\n      modelId\n      model {\n        id\n        name\n        slug\n        brand {\n          id\n          name\n          slug\n        }\n      }\n      brandId\n      brand {\n        id\n        name\n        slug\n      }\n      createdAt\n    }\n  }\n": types.GetAllCatalogModelGenerationsDocument,
     "\n  query GetCatalogModelGeneration($id: String!) {\n    catalogModelGeneration(id: $id) {\n      id\n      name\n      slug\n      legacySlug\n      description\n      productionStart\n      productionStop\n      wheelbase\n      frontTrack\n      rearTrack\n      length\n      width\n      height\n      trunkSpaceMin\n      trunkSpaceMax\n      bodyType\n      frontBrakesType\n      rearBrakesType\n      isActive\n      legacySystemId\n      modelId\n      model {\n        id\n        name\n        slug\n        brand {\n          id\n          name\n          slug\n        }\n      }\n      brandId\n      brand {\n        id\n        name\n        slug\n      }\n      createdAt\n    }\n  }\n": types.GetCatalogModelGenerationDocument,
     "\n  mutation CreateCatalogModelGeneration($input: CreateCatalogModelGenerationInput!) {\n    createCatalogModelGeneration(input: $input) {\n      id\n      name\n      slug\n      legacySlug\n      description\n      productionStart\n      productionStop\n      wheelbase\n      frontTrack\n      rearTrack\n      length\n      width\n      height\n      trunkSpaceMin\n      trunkSpaceMax\n      bodyType\n      frontBrakesType\n      rearBrakesType\n      isActive\n      modelId\n      model {\n        id\n        name\n        slug\n      }\n      brandId\n      brand {\n        id\n        name\n        slug\n      }\n      createdAt\n    }\n  }\n": types.CreateCatalogModelGenerationDocument,
@@ -90,6 +95,11 @@ const documents: Documents = {
     "\n  mutation SoftDeleteUser($id: String!) {\n    softDeleteUser(id: $id) {\n      id\n      email\n      firstName\n      lastName\n      isActive\n    }\n  }\n": types.SoftDeleteUserDocument,
     "\n  mutation DeleteUser($id: String!) {\n    deleteUser(id: $id)\n  }\n": types.DeleteUserDocument,
     "\n  mutation RefreshTokenInternal($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        firstName\n        lastName\n        roles\n      }\n    }\n  }\n": types.RefreshTokenInternalDocument,
+    "\n  mutation GenerateUploadUrl($filename: String!, $contentType: String!) {\n    generateUploadUrl(filename: $filename, contentType: $contentType)\n  }\n": types.GenerateUploadUrlDocument,
+    "\n  mutation CreateFile($input: CreateFileInput!) {\n    createFile(input: $input) {\n      id\n      relativePath\n      url\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      alt\n      title\n      thumbnailPath\n      isImage\n      createdAt\n      updatedAt\n    }\n  }\n": types.CreateFileDocument,
+    "\n  mutation DeleteFile($id: String!) {\n    deleteFile(id: $id)\n  }\n": types.DeleteFileDocument,
+    "\n  mutation DeleteFileCompletely($id: String!) {\n    deleteFileCompletely(id: $id)\n  }\n": types.DeleteFileCompletelyDocument,
+    "\n  query GetFileByChecksum($checksum: String!) {\n    fileByChecksum(checksum: $checksum) {\n      id\n      url\n      relativePath\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      isImage\n    }\n  }\n": types.GetFileByChecksumDocument,
 };
 
 /**
@@ -145,7 +155,7 @@ export function graphql(source: "\n  mutation DeleteCatalogBrand($id: String!) {
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query CheckBrandSlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      slug\n    }\n  }\n"): (typeof documents)["\n  query CheckBrandSlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      slug\n    }\n  }\n"];
+export function graphql(source: "\n  query CheckBrandSlug($slug: String!) {\n    checkBrandSlugAvailability(slug: $slug) {\n      id\n      slug\n    }\n  }\n"): (typeof documents)["\n  query CheckBrandSlug($slug: String!) {\n    checkBrandSlugAvailability(slug: $slug) {\n      id\n      slug\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -254,6 +264,26 @@ export function graphql(source: "\n  mutation DeleteUser($id: String!) {\n    de
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation RefreshTokenInternal($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        firstName\n        lastName\n        roles\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RefreshTokenInternal($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        firstName\n        lastName\n        roles\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation GenerateUploadUrl($filename: String!, $contentType: String!) {\n    generateUploadUrl(filename: $filename, contentType: $contentType)\n  }\n"): (typeof documents)["\n  mutation GenerateUploadUrl($filename: String!, $contentType: String!) {\n    generateUploadUrl(filename: $filename, contentType: $contentType)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateFile($input: CreateFileInput!) {\n    createFile(input: $input) {\n      id\n      relativePath\n      url\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      alt\n      title\n      thumbnailPath\n      isImage\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation CreateFile($input: CreateFileInput!) {\n    createFile(input: $input) {\n      id\n      relativePath\n      url\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      alt\n      title\n      thumbnailPath\n      isImage\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteFile($id: String!) {\n    deleteFile(id: $id)\n  }\n"): (typeof documents)["\n  mutation DeleteFile($id: String!) {\n    deleteFile(id: $id)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteFileCompletely($id: String!) {\n    deleteFileCompletely(id: $id)\n  }\n"): (typeof documents)["\n  mutation DeleteFileCompletely($id: String!) {\n    deleteFileCompletely(id: $id)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetFileByChecksum($checksum: String!) {\n    fileByChecksum(checksum: $checksum) {\n      id\n      url\n      relativePath\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      isImage\n    }\n  }\n"): (typeof documents)["\n  query GetFileByChecksum($checksum: String!) {\n    fileByChecksum(checksum: $checksum) {\n      id\n      url\n      relativePath\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      isImage\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

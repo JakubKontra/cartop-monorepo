@@ -6,7 +6,8 @@ import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { UploadService, type UploadResult } from '@/lib/upload/upload-service'
+import { type UploadResult } from '@/lib/upload/upload-service'
+import { useFileUpload } from '@/lib/upload/use-file-upload'
 
 interface ImageUploadProps {
   /** Current image URL (for preview) */
@@ -42,34 +43,27 @@ export function ImageUpload({
   disabled = false,
   className,
 }: ImageUploadProps) {
-  const [uploading, setUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState(0)
-  const [error, setError] = useState<string | null>(null)
+  // All hooks must be called at the top level in the same order
+  const { upload, uploading, progress, error, resetError } = useFileUpload()
+  const [localError, setLocalError] = useState<string | null>(null)
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return
 
       const file = acceptedFiles[0]
-      setError(null)
-      setUploading(true)
-      setUploadProgress(0)
+      resetError()
+      setLocalError(null) // Clear local errors too
 
       try {
-        const result = await UploadService.uploadFile(file, (progress) => {
-          setUploadProgress(progress.percentage)
-        })
-
+        const result = await upload(file)
         onUploadComplete?.(result)
       } catch (err) {
         console.error('Upload error:', err)
-        setError(err instanceof Error ? err.message : 'Upload failed')
-      } finally {
-        setUploading(false)
-        setUploadProgress(0)
+        // Error is already tracked in the hook
       }
     },
-    [onUploadComplete]
+    [upload, onUploadComplete, resetError]
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -81,14 +75,17 @@ export function ImageUpload({
     onDropRejected: (fileRejections) => {
       const rejection = fileRejections[0]
       if (rejection?.errors[0]?.code === 'file-too-large') {
-        setError(`File is too large. Maximum size is ${maxSize / 1024 / 1024}MB`)
+        setLocalError(`File is too large. Maximum size is ${maxSize / 1024 / 1024}MB`)
       } else if (rejection?.errors[0]?.code === 'file-invalid-type') {
-        setError('Invalid file type. Please upload an image file.')
+        setLocalError('Invalid file type. Please upload an image file.')
       } else {
-        setError('Failed to upload file')
+        setLocalError('Failed to upload file')
       }
     },
   })
+
+  // Combined error (local validation or upload error)
+  const displayError = localError || error
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -130,7 +127,7 @@ export function ImageUpload({
           isDragActive && 'border-primary bg-primary/5',
           !isDragActive && 'border-input hover:border-primary/50',
           (disabled || uploading) && 'cursor-not-allowed opacity-50',
-          error && 'border-destructive'
+          displayError && 'border-destructive'
         )}
       >
         <input {...getInputProps()} />
@@ -139,10 +136,10 @@ export function ImageUpload({
           <div className='flex w-full flex-col items-center gap-4'>
             <Loader2 className='h-10 w-10 animate-spin text-primary' />
             <div className='w-full max-w-xs'>
-              <Progress value={uploadProgress} className='h-2' />
+              <Progress value={progress} className='h-2' />
             </div>
             <p className='text-sm text-muted-foreground'>
-              Uploading... {uploadProgress}%
+              Uploading... {progress}%
             </p>
           </div>
         ) : (
@@ -171,8 +168,8 @@ export function ImageUpload({
         )}
       </div>
 
-      {error && (
-        <p className='mt-2 text-sm text-destructive'>{error}</p>
+      {displayError && (
+        <p className='mt-2 text-sm text-destructive'>{displayError}</p>
       )}
     </div>
   )
