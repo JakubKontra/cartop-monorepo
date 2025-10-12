@@ -6,7 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useQuery, useMutation } from '@apollo/client/react'
 import { toast } from 'sonner'
-import { ArrowLeft, Loader2, Save } from 'lucide-react'
+import { Loader2, Save } from 'lucide-react'
+import { CrudPageLayout } from '@/components/crud-page-layout'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -82,54 +83,21 @@ export function UserEditPage() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className='flex h-96 items-center justify-center'>
-        <Loader2 className='h-8 w-8 animate-spin text-muted-foreground' />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className='flex h-96 items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-lg font-semibold text-destructive'>Error loading user</p>
-          <p className='text-sm text-muted-foreground'>{error.message}</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!data?.user) {
-    return (
-      <div className='flex h-96 items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-lg font-semibold text-destructive'>User not found</p>
-        </div>
-      </div>
-    )
-  }
+  const user = data?.user
 
   return (
-    <div className='flex h-full flex-1 flex-col gap-4 p-4'>
-      <div className='flex items-center gap-4'>
-        <Button
-          variant='ghost'
-          size='icon'
-          onClick={() => navigate({ to: '/users' })}
-        >
-          <ArrowLeft className='h-4 w-4' />
-        </Button>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>Edit User</h1>
-          <p className='text-muted-foreground'>
-            Update user information and permissions
-          </p>
-        </div>
-      </div>
-
-      <div className='max-w-2xl'>
+    <CrudPageLayout
+      title="Edit User"
+      description={user ? `Update ${user.firstName} ${user.lastName} information and permissions` : undefined}
+      backUrl="/users"
+      loading={loading}
+      loadingMessage="Loading user..."
+      error={error || (!user ? new Error('User not found') : null)}
+      errorMessage={error?.message || 'User not found'}
+      backButtonLabel="Back to Users"
+      maxWidth="max-w-2xl"
+    >
+      {user && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
             <div className='grid grid-cols-2 gap-4'>
@@ -258,7 +226,7 @@ export function UserEditPage() {
             </div>
           </form>
         </Form>
-      </div>
-    </div>
+      )}
+    </CrudPageLayout>
   )
 }

@@ -12,6 +12,9 @@ import { AuthModule } from './auth/auth.module';
 import { WebhookModule } from './webhook/webhook.module';
 import { NotificationModule } from './notification/notification.module';
 import { MarketingModule } from './marketing/marketing.module';
+import { OfferModule } from './offer/offer.module';
+import { FileModule } from './file/file.module';
+import { LeasingCompanyModule } from './leasing-company/leasing-company.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { SubscriberRegistryProvider } from './common/providers/subscriber-registry.provider';
@@ -98,6 +101,9 @@ import { SubscriberRegistryProvider } from './common/providers/subscriber-regist
     AuditModule,
     UserModule,
     CatalogModule,
+    OfferModule,
+    FileModule.forRoot(), // Configure with storage adapters
+    LeasingCompanyModule,
     WebhookModule,
     NotificationModule,
     MarketingModule,

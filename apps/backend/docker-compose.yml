@@ -54,6 +54,57 @@ services:
     networks:
       - cartop-network
 
+  minio:
+    container_name: minio
+    image: bitnami/minio
+    environment:
+      MINIO_ROOT_USER: 'pangea'
+      MINIO_ROOT_PASSWORD: 'pangea1337'
+    expose:
+      - '9000'
+    volumes:
+      - minio-data:/bitnami/minio/data
+    entrypoint: >
+      bash -c "
+        /opt/bitnami/scripts/minio/entrypoint.sh /opt/bitnami/scripts/minio/run.sh &
+        sleep 10 &&
+        apk add --no-cache curl bash &&
+        curl -sLO https://dl.min.io/client/mc/release/linux-amd64/mc &&
+        chmod +x mc &&
+        ./mc alias set local http://localhost:9000 pangea pangea1337 &&
+        ./mc mb local/pangea || true &&
+        tail -f /dev/null
+      "
+    networks:
+      - cartop-network
+
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:latest
+    ports:
+      - 4566:4566
+    volumes:
+      - ./localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
+    networks:
+      - cartop-network
+
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - adminer
+      - minio
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/html:/var/www/html
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - cartop-network
+
 volumes:
   postgres_data:
     driver: local
@@ -61,6 +112,7 @@ volumes:
     driver: local
   pgadmin_data:
     driver: local
+  minio-data:
 
 networks:
   cartop-network:

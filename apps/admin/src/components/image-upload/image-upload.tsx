@@ -1,0 +1,179 @@
+'use client'
+
+import { useCallback, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import { UploadService, type UploadResult } from '@/lib/upload/upload-service'
+
+interface ImageUploadProps {
+  /** Current image URL (for preview) */
+  value?: string
+  /** Current file ID */
+  fileId?: string
+  /** Callback when upload completes */
+  onUploadComplete?: (result: UploadResult) => void
+  /** Callback when image is removed */
+  onRemove?: () => void
+  /** Maximum file size in bytes (default: 5MB) */
+  maxSize?: number
+  /** Accepted file types */
+  accept?: Record<string, string[]>
+  /** Whether the upload is disabled */
+  disabled?: boolean
+  /** Custom className */
+  className?: string
+}
+
+export function ImageUpload({
+  value,
+  fileId,
+  onUploadComplete,
+  onRemove,
+  maxSize = 5 * 1024 * 1024, // 5MB
+  accept = {
+    'image/jpeg': ['.jpg', '.jpeg'],
+    'image/png': ['.png'],
+    'image/webp': ['.webp'],
+    'image/svg+xml': ['.svg'],
+  },
+  disabled = false,
+  className,
+}: ImageUploadProps) {
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [error, setError] = useState<string | null>(null)
+
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 0) return
+
+      const file = acceptedFiles[0]
+      setError(null)
+      setUploading(true)
+      setUploadProgress(0)
+
+      try {
+        const result = await UploadService.uploadFile(file, (progress) => {
+          setUploadProgress(progress.percentage)
+        })
+
+        onUploadComplete?.(result)
+      } catch (err) {
+        console.error('Upload error:', err)
+        setError(err instanceof Error ? err.message : 'Upload failed')
+      } finally {
+        setUploading(false)
+        setUploadProgress(0)
+      }
+    },
+    [onUploadComplete]
+  )
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept,
+    maxSize,
+    multiple: false,
+    disabled: disabled || uploading,
+    onDropRejected: (fileRejections) => {
+      const rejection = fileRejections[0]
+      if (rejection?.errors[0]?.code === 'file-too-large') {
+        setError(`File is too large. Maximum size is ${maxSize / 1024 / 1024}MB`)
+      } else if (rejection?.errors[0]?.code === 'file-invalid-type') {
+        setError('Invalid file type. Please upload an image file.')
+      } else {
+        setError('Failed to upload file')
+      }
+    },
+  })
+
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onRemove?.()
+  }
+
+  // If we have an uploaded image, show preview
+  if (value) {
+    return (
+      <div className={cn('relative', className)}>
+        <div className='relative overflow-hidden rounded-lg border border-input bg-background'>
+          <img
+            src={value}
+            alt='Uploaded'
+            className='h-48 w-full object-contain'
+          />
+          {!disabled && (
+            <Button
+              type='button'
+              variant='destructive'
+              size='icon'
+              className='absolute right-2 top-2'
+              onClick={handleRemove}
+            >
+              <X className='h-4 w-4' />
+            </Button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={cn('w-full', className)}>
+      <div
+        {...getRootProps()}
+        className={cn(
+          'relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors',
+          isDragActive && 'border-primary bg-primary/5',
+          !isDragActive && 'border-input hover:border-primary/50',
+          (disabled || uploading) && 'cursor-not-allowed opacity-50',
+          error && 'border-destructive'
+        )}
+      >
+        <input {...getInputProps()} />
+
+        {uploading ? (
+          <div className='flex w-full flex-col items-center gap-4'>
+            <Loader2 className='h-10 w-10 animate-spin text-primary' />
+            <div className='w-full max-w-xs'>
+              <Progress value={uploadProgress} className='h-2' />
+            </div>
+            <p className='text-sm text-muted-foreground'>
+              Uploading... {uploadProgress}%
+            </p>
+          </div>
+        ) : (
+          <div className='flex flex-col items-center gap-2 text-center'>
+            {isDragActive ? (
+              <>
+                <Upload className='h-10 w-10 text-primary' />
+                <p className='text-sm font-medium text-primary'>
+                  Drop the image here
+                </p>
+              </>
+            ) : (
+              <>
+                <ImageIcon className='h-10 w-10 text-muted-foreground' />
+                <div className='flex flex-col gap-1'>
+                  <p className='text-sm font-medium'>
+                    Drag & drop an image, or click to browse
+                  </p>
+                  <p className='text-xs text-muted-foreground'>
+                    Supports: JPG, PNG, WebP, SVG (max {maxSize / 1024 / 1024}MB)
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      {error && (
+        <p className='mt-2 text-sm text-destructive'>{error}</p>
+      )}
+    </div>
+  )
+}

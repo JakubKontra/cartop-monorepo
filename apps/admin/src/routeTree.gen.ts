@@ -26,6 +26,7 @@ import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authenticated/tasks/index'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedModelsIndexRouteImport } from './routes/_authenticated/models/index'
+import { Route as AuthenticatedLeasingCompaniesIndexRouteImport } from './routes/_authenticated/leasing-companies/index'
 import { Route as AuthenticatedHelpCenterIndexRouteImport } from './routes/_authenticated/help-center/index'
 import { Route as AuthenticatedGenerationsIndexRouteImport } from './routes/_authenticated/generations/index'
 import { Route as AuthenticatedChatsIndexRouteImport } from './routes/_authenticated/chats/index'
@@ -37,12 +38,14 @@ import { Route as AuthenticatedSettingsDisplayRouteImport } from './routes/_auth
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
 import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedModelsNewRouteImport } from './routes/_authenticated/models/new'
+import { Route as AuthenticatedLeasingCompaniesNewRouteImport } from './routes/_authenticated/leasing-companies/new'
 import { Route as AuthenticatedGenerationsNewRouteImport } from './routes/_authenticated/generations/new'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedBrandsNewRouteImport } from './routes/_authenticated/brands/new'
 import { Route as AuthenticatedGenerationsGenerationIdIndexRouteImport } from './routes/_authenticated/generations/$generationId/index'
 import { Route as AuthenticatedUsersUserIdEditRouteImport } from './routes/_authenticated/users/$userId/edit'
 import { Route as AuthenticatedModelsModelIdEditRouteImport } from './routes/_authenticated/models/$modelId/edit'
+import { Route as AuthenticatedLeasingCompaniesCompanyIdEditRouteImport } from './routes/_authenticated/leasing-companies/$companyId.edit'
 import { Route as AuthenticatedBrandsBrandIdEditRouteImport } from './routes/_authenticated/brands/$brandId/edit'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -132,6 +135,12 @@ const AuthenticatedModelsIndexRoute =
     path: '/models/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedLeasingCompaniesIndexRoute =
+  AuthenticatedLeasingCompaniesIndexRouteImport.update({
+    id: '/leasing-companies/',
+    path: '/leasing-companies/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedHelpCenterIndexRoute =
   AuthenticatedHelpCenterIndexRouteImport.update({
     id: '/help-center/',
@@ -194,6 +203,12 @@ const AuthenticatedModelsNewRoute = AuthenticatedModelsNewRouteImport.update({
   path: '/models/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedLeasingCompaniesNewRoute =
+  AuthenticatedLeasingCompaniesNewRouteImport.update({
+    id: '/leasing-companies/new',
+    path: '/leasing-companies/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedGenerationsNewRoute =
   AuthenticatedGenerationsNewRouteImport.update({
     id: '/generations/new',
@@ -229,6 +244,12 @@ const AuthenticatedModelsModelIdEditRoute =
     path: '/models/$modelId/edit',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedLeasingCompaniesCompanyIdEditRoute =
+  AuthenticatedLeasingCompaniesCompanyIdEditRouteImport.update({
+    id: '/leasing-companies/$companyId/edit',
+    path: '/leasing-companies/$companyId/edit',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBrandsBrandIdEditRoute =
   AuthenticatedBrandsBrandIdEditRouteImport.update({
     id: '/brands/$brandId/edit',
@@ -252,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/brands/new': typeof AuthenticatedBrandsNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/generations/new': typeof AuthenticatedGenerationsNewRoute
+  '/leasing-companies/new': typeof AuthenticatedLeasingCompaniesNewRoute
   '/models/new': typeof AuthenticatedModelsNewRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -263,11 +285,13 @@ export interface FileRoutesByFullPath {
   '/chats': typeof AuthenticatedChatsIndexRoute
   '/generations': typeof AuthenticatedGenerationsIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
+  '/leasing-companies': typeof AuthenticatedLeasingCompaniesIndexRoute
   '/models': typeof AuthenticatedModelsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
   '/brands/$brandId/edit': typeof AuthenticatedBrandsBrandIdEditRoute
+  '/leasing-companies/$companyId/edit': typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
   '/generations/$generationId': typeof AuthenticatedGenerationsGenerationIdIndexRoute
@@ -287,6 +311,7 @@ export interface FileRoutesByTo {
   '/brands/new': typeof AuthenticatedBrandsNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/generations/new': typeof AuthenticatedGenerationsNewRoute
+  '/leasing-companies/new': typeof AuthenticatedLeasingCompaniesNewRoute
   '/models/new': typeof AuthenticatedModelsNewRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -298,11 +323,13 @@ export interface FileRoutesByTo {
   '/chats': typeof AuthenticatedChatsIndexRoute
   '/generations': typeof AuthenticatedGenerationsIndexRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexRoute
+  '/leasing-companies': typeof AuthenticatedLeasingCompaniesIndexRoute
   '/models': typeof AuthenticatedModelsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
   '/brands/$brandId/edit': typeof AuthenticatedBrandsBrandIdEditRoute
+  '/leasing-companies/$companyId/edit': typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
   '/generations/$generationId': typeof AuthenticatedGenerationsGenerationIdIndexRoute
@@ -325,6 +352,7 @@ export interface FileRoutesById {
   '/_authenticated/brands/new': typeof AuthenticatedBrandsNewRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/_authenticated/generations/new': typeof AuthenticatedGenerationsNewRoute
+  '/_authenticated/leasing-companies/new': typeof AuthenticatedLeasingCompaniesNewRoute
   '/_authenticated/models/new': typeof AuthenticatedModelsNewRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
@@ -336,11 +364,13 @@ export interface FileRoutesById {
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
   '/_authenticated/generations/': typeof AuthenticatedGenerationsIndexRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
+  '/_authenticated/leasing-companies/': typeof AuthenticatedLeasingCompaniesIndexRoute
   '/_authenticated/models/': typeof AuthenticatedModelsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
   '/_authenticated/brands/$brandId/edit': typeof AuthenticatedBrandsBrandIdEditRoute
+  '/_authenticated/leasing-companies/$companyId/edit': typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   '/_authenticated/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/_authenticated/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
   '/_authenticated/generations/$generationId/': typeof AuthenticatedGenerationsGenerationIdIndexRoute
@@ -363,6 +393,7 @@ export interface FileRouteTypes {
     | '/brands/new'
     | '/errors/$error'
     | '/generations/new'
+    | '/leasing-companies/new'
     | '/models/new'
     | '/settings/account'
     | '/settings/appearance'
@@ -374,11 +405,13 @@ export interface FileRouteTypes {
     | '/chats'
     | '/generations'
     | '/help-center'
+    | '/leasing-companies'
     | '/models'
     | '/settings/'
     | '/tasks'
     | '/users'
     | '/brands/$brandId/edit'
+    | '/leasing-companies/$companyId/edit'
     | '/models/$modelId/edit'
     | '/users/$userId/edit'
     | '/generations/$generationId'
@@ -398,6 +431,7 @@ export interface FileRouteTypes {
     | '/brands/new'
     | '/errors/$error'
     | '/generations/new'
+    | '/leasing-companies/new'
     | '/models/new'
     | '/settings/account'
     | '/settings/appearance'
@@ -409,11 +443,13 @@ export interface FileRouteTypes {
     | '/chats'
     | '/generations'
     | '/help-center'
+    | '/leasing-companies'
     | '/models'
     | '/settings'
     | '/tasks'
     | '/users'
     | '/brands/$brandId/edit'
+    | '/leasing-companies/$companyId/edit'
     | '/models/$modelId/edit'
     | '/users/$userId/edit'
     | '/generations/$generationId'
@@ -435,6 +471,7 @@ export interface FileRouteTypes {
     | '/_authenticated/brands/new'
     | '/_authenticated/errors/$error'
     | '/_authenticated/generations/new'
+    | '/_authenticated/leasing-companies/new'
     | '/_authenticated/models/new'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
@@ -446,11 +483,13 @@ export interface FileRouteTypes {
     | '/_authenticated/chats/'
     | '/_authenticated/generations/'
     | '/_authenticated/help-center/'
+    | '/_authenticated/leasing-companies/'
     | '/_authenticated/models/'
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
     | '/_authenticated/users/'
     | '/_authenticated/brands/$brandId/edit'
+    | '/_authenticated/leasing-companies/$companyId/edit'
     | '/_authenticated/models/$modelId/edit'
     | '/_authenticated/users/$userId/edit'
     | '/_authenticated/generations/$generationId/'
@@ -591,6 +630,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedModelsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/leasing-companies/': {
+      id: '/_authenticated/leasing-companies/'
+      path: '/leasing-companies'
+      fullPath: '/leasing-companies'
+      preLoaderRoute: typeof AuthenticatedLeasingCompaniesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/help-center/': {
       id: '/_authenticated/help-center/'
       path: '/help-center'
@@ -668,6 +714,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedModelsNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/leasing-companies/new': {
+      id: '/_authenticated/leasing-companies/new'
+      path: '/leasing-companies/new'
+      fullPath: '/leasing-companies/new'
+      preLoaderRoute: typeof AuthenticatedLeasingCompaniesNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/generations/new': {
       id: '/_authenticated/generations/new'
       path: '/generations/new'
@@ -710,6 +763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedModelsModelIdEditRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/leasing-companies/$companyId/edit': {
+      id: '/_authenticated/leasing-companies/$companyId/edit'
+      path: '/leasing-companies/$companyId/edit'
+      fullPath: '/leasing-companies/$companyId/edit'
+      preLoaderRoute: typeof AuthenticatedLeasingCompaniesCompanyIdEditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/brands/$brandId/edit': {
       id: '/_authenticated/brands/$brandId/edit'
       path: '/brands/$brandId/edit'
@@ -749,6 +809,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBrandsNewRoute: typeof AuthenticatedBrandsNewRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
   AuthenticatedGenerationsNewRoute: typeof AuthenticatedGenerationsNewRoute
+  AuthenticatedLeasingCompaniesNewRoute: typeof AuthenticatedLeasingCompaniesNewRoute
   AuthenticatedModelsNewRoute: typeof AuthenticatedModelsNewRoute
   AuthenticatedUsersAddRoute: typeof AuthenticatedUsersAddRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
@@ -756,10 +817,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
   AuthenticatedGenerationsIndexRoute: typeof AuthenticatedGenerationsIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
+  AuthenticatedLeasingCompaniesIndexRoute: typeof AuthenticatedLeasingCompaniesIndexRoute
   AuthenticatedModelsIndexRoute: typeof AuthenticatedModelsIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
   AuthenticatedBrandsBrandIdEditRoute: typeof AuthenticatedBrandsBrandIdEditRoute
+  AuthenticatedLeasingCompaniesCompanyIdEditRoute: typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   AuthenticatedModelsModelIdEditRoute: typeof AuthenticatedModelsModelIdEditRoute
   AuthenticatedUsersUserIdEditRoute: typeof AuthenticatedUsersUserIdEditRoute
   AuthenticatedGenerationsGenerationIdIndexRoute: typeof AuthenticatedGenerationsGenerationIdIndexRoute
@@ -771,6 +834,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBrandsNewRoute: AuthenticatedBrandsNewRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
   AuthenticatedGenerationsNewRoute: AuthenticatedGenerationsNewRoute,
+  AuthenticatedLeasingCompaniesNewRoute: AuthenticatedLeasingCompaniesNewRoute,
   AuthenticatedModelsNewRoute: AuthenticatedModelsNewRoute,
   AuthenticatedUsersAddRoute: AuthenticatedUsersAddRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
@@ -778,10 +842,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
   AuthenticatedGenerationsIndexRoute: AuthenticatedGenerationsIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
+  AuthenticatedLeasingCompaniesIndexRoute:
+    AuthenticatedLeasingCompaniesIndexRoute,
   AuthenticatedModelsIndexRoute: AuthenticatedModelsIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
   AuthenticatedBrandsBrandIdEditRoute: AuthenticatedBrandsBrandIdEditRoute,
+  AuthenticatedLeasingCompaniesCompanyIdEditRoute:
+    AuthenticatedLeasingCompaniesCompanyIdEditRoute,
   AuthenticatedModelsModelIdEditRoute: AuthenticatedModelsModelIdEditRoute,
   AuthenticatedUsersUserIdEditRoute: AuthenticatedUsersUserIdEditRoute,
   AuthenticatedGenerationsGenerationIdIndexRoute:

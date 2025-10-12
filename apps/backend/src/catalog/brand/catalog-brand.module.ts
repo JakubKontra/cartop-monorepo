@@ -6,9 +6,12 @@ import { CatalogBrandPublicResolver } from './catalog-brand-public.resolver';
 import { CatalogBrandAdminResolver } from './catalog-brand-admin.resolver';
 import { CatalogBrandLegacyFieldResolver } from './catalog-brand-legacy.resolver';
 import { CatalogBrandTestController } from './catalog-brand-test.controller';
+import { File } from '../../file/file.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CatalogBrand])],
+  imports: [
+    TypeOrmModule.forFeature([CatalogBrand, File]), // Include File entity for logo relation
+  ],
   controllers: [CatalogBrandTestController], // Development-only test endpoint
   providers: [
     CatalogBrandService,

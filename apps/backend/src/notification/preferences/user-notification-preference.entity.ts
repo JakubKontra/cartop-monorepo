@@ -23,7 +23,7 @@ export class UserNotificationPreference {
   id: string;
 
   @Field()
-  @Column({ unique: true })
+  @Column({ type: 'uuid', unique: true })
   @Index()
   userId: string;
 
@@ -32,23 +32,23 @@ export class UserNotificationPreference {
   user: User;
 
   @Field()
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   emailEnabled: boolean;
 
   @Field()
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   transactionalEmails: boolean; // Password reset, verification - critical emails
 
   @Field()
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   marketingEmails: boolean; // Newsletters, promotions
 
   @Field()
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   systemAlerts: boolean; // System notifications, updates
 
   @Field({ nullable: true })
-  @Column({ nullable: true, unique: true })
+  @Column({ type: 'varchar', length: 255, nullable: true, unique: true })
   @Index()
   unsubscribeToken: string; // For one-click unsubscribe links
 

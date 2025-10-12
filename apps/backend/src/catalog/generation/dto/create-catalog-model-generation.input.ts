@@ -1,4 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
+import { GraphQLISODateTime } from '@nestjs/graphql';
 import {
   IsString,
   IsBoolean,
@@ -7,7 +8,6 @@ import {
   IsInt,
   IsUUID,
   IsEnum,
-  IsDateString,
 } from 'class-validator';
 import { CatalogBodyType } from '../../../common/enums/catalog/catalog-body-type.enum';
 import { CatalogEquipmentBrakeType } from '../../../common/enums/catalog/catalog-equipment-brake-type.enum';
@@ -39,15 +39,13 @@ export class CreateCatalogModelGenerationInput {
   @IsString()
   description?: string;
 
-  @Field({ nullable: true })
+  @Field(() => GraphQLISODateTime, { nullable: true })
   @IsOptional()
-  @IsDateString()
-  productionStart?: string;
+  productionStart?: Date;
 
-  @Field({ nullable: true })
+  @Field(() => GraphQLISODateTime, { nullable: true })
   @IsOptional()
-  @IsDateString()
-  productionStop?: string;
+  productionStop?: Date;
 
   @Field(() => Int, { nullable: true })
   @IsOptional()
