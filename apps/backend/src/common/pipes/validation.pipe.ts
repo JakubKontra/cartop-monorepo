@@ -9,6 +9,7 @@ import { plainToInstance } from 'class-transformer';
 import { BadRequestException } from '../exceptions/types';
 import { ExceptionKeysEnum } from '../exceptions/keys';
 import { BaseExceptionError } from '../exceptions/base/base-exception-error';
+import { getFieldSpecificErrorKey } from './validation-error-keys';
 
 /**
  * Enhanced Validation Pipe for GraphQL
@@ -125,16 +126,23 @@ export class CustomValidationPipe implements PipeTransform<any> {
 
       // Handle direct validation errors
       if (error.constraints) {
-        const constraintMessages = Object.values(error.constraints);
+        const constraintKeys = Object.keys(error.constraints);
 
-        for (const message of constraintMessages) {
+        for (const constraintKey of constraintKeys) {
+          // Get error key instead of hardcoded message
+          const errorKey = getFieldSpecificErrorKey(
+            error.property,
+            constraintKey,
+          );
+
           formattedErrors.push({
-            message,
+            key: errorKey,
+            message: error.constraints[constraintKey], // Keep English message for debugging
             parent: propertyPath,
             jsonPayload: JSON.stringify({
               property: error.property,
               value: error.value,
-              constraints: error.constraints,
+              constraint: constraintKey,
             }),
           });
         }

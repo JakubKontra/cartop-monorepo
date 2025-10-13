@@ -9,6 +9,12 @@ import { Field, ObjectType } from '@nestjs/graphql';
 })
 export class BaseExceptionError {
   @Field({
+    nullable: true,
+    description: 'Translation key for this specific field error (e.g., VALIDATION_EMAIL_INVALID)',
+  })
+  key?: string;
+
+  @Field({
     description: 'Human-readable error message (in English, for debugging)',
   })
   message: string;

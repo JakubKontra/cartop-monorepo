@@ -20,3 +20,8 @@ export * from './translations'
 
 // Error handler utilities
 export * from './error-handler'
+
+// Regex patterns for validation
+// Use these for backend validation (NestJS @Matches) or custom validators
+// For frontend, prefer using the Zod schemas above
+export * from './regex'

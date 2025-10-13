@@ -28,6 +28,7 @@ import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { usersColumns as columns } from './users-columns'
 import { GET_ALL_USERS } from '../users.graphql'
+import { extractGraphQLErrorMessage } from '@/lib/extract-graphql-error'
 import { Loader2 } from 'lucide-react'
 
 declare module '@tanstack/react-table' {
@@ -80,11 +81,12 @@ export function UsersTable() {
   }
 
   if (error) {
+    const errorMessage = extractGraphQLErrorMessage(error)
     return (
       <div className='flex h-96 items-center justify-center'>
-        <div className='text-center'>
+        <div className='text-center max-w-md'>
           <p className='text-lg font-semibold text-destructive'>Error loading users</p>
-          <p className='text-sm text-muted-foreground'>{error.message}</p>
+          <p className='text-sm text-muted-foreground mt-2'>{errorMessage}</p>
         </div>
       </div>
     )

@@ -14,6 +14,7 @@ export interface GraphQLErrorWithExtensions {
   extensions?: {
     key?: ErrorKey;
     errors?: Array<{
+      key?: ErrorKey;
       message: string;
       parent?: string;
       jsonPayload?: string;
@@ -119,10 +120,10 @@ export function getFieldErrors(
     if (errorDetails) {
       for (const detail of errorDetails) {
         if (detail.parent) {
-          // Use translated error message if key is available
-          const key = error.extensions?.key;
-          fieldErrors[detail.parent] = key
-            ? translateError(key)
+          // Priority: field-level key > error-level key > English message
+          const errorKey = detail.key || error.extensions?.key;
+          fieldErrors[detail.parent] = errorKey
+            ? translateError(errorKey)
             : detail.message;
         }
       }

@@ -16,6 +16,9 @@ node_modules/
 **/.out/
 **/.build
 
+# Package build artifacts
+packages/*/dist/
+
 # We're using yarn instead of NPM, no need for package-lock
 package-lock.json
 

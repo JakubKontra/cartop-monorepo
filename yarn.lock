@@ -1871,6 +1871,7 @@ __metadata:
     "@as-integrations/fastify": "npm:^3.0.0"
     "@aws-sdk/client-s3": "npm:^3.908.0"
     "@aws-sdk/s3-request-presigner": "npm:^3.908.0"
+    "@cartop/validation": "workspace:*"
     "@faker-js/faker": "npm:8.4.1"
     "@fastify/helmet": "npm:^13.0.2"
     "@fastify/static": "npm:^8.2.0"

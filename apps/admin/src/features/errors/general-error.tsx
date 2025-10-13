@@ -1,17 +1,24 @@
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { extractGraphQLErrorMessage } from '@/lib/extract-graphql-error'
 
 type GeneralErrorProps = React.HTMLAttributes<HTMLDivElement> & {
   minimal?: boolean
+  error?: Error | unknown
 }
 
 export function GeneralError({
   className,
   minimal = false,
+  error,
 }: GeneralErrorProps) {
   const navigate = useNavigate()
   const { history } = useRouter()
+
+  // Extract the actual error message
+  const errorMessage = error ? extractGraphQLErrorMessage(error) : null
+
   return (
     <div className={cn('h-svh w-full', className)}>
       <div className='m-auto flex h-full w-full flex-col items-center justify-center gap-2'>
@@ -19,8 +26,14 @@ export function GeneralError({
           <h1 className='text-[7rem] leading-tight font-bold'>500</h1>
         )}
         <span className='font-medium'>Oops! Something went wrong {`:')`}</span>
-        <p className='text-muted-foreground text-center'>
-          We apologize for the inconvenience. <br /> Please try again later.
+        <p className='text-muted-foreground text-center max-w-md'>
+          {errorMessage ? (
+            errorMessage
+          ) : (
+            <>
+              We apologize for the inconvenience. <br /> Please try again later.
+            </>
+          )}
         </p>
         {!minimal && (
           <div className='mt-6 flex gap-4'>
