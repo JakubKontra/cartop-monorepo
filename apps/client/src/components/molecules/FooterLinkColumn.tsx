@@ -14,7 +14,7 @@ interface FooterLinkColumnProps {
 export const FooterLinkColumn = ({ className = '', links, title }: FooterLinkColumnProps) => {
   return (
     <div className={className}>
-      <h3 className="mb-4 text-base font-semibold text-gunmetal-200">{title}</h3>
+      <h3 className="mb-6 text-base font-semibold text-gunmetal-200">{title}</h3>
       <ul className="flex flex-col gap-2">
         {links.map(link => {
           const isViewAll = link.label === 'Zobrazit vše';

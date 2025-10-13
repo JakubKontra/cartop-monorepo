@@ -14,14 +14,12 @@ export const SocialMediaLinks = () => {
     <div className="flex items-center gap-4">
       <SocialIcon
         className="text-white hover:underline"
-        href="https://facebook.com"
+        href="https://facebook.com/cartop.cz"
         icon={Facebook}
         label="Facebook"
       />
-      <SocialIcon href="https://instagram.com" icon={Instagram} label="Instagram" />
-      <SocialIcon href="https://x.com" icon={XIcon} label="X (Twitter)" />
-      <SocialIcon href="https://linkedin.com" icon={Linkedin} label="LinkedIn" />
-      <SocialIcon href="https://youtube.com" icon={Youtube} label="YouTube" />
+      <SocialIcon href="https://instagram.com/cartop.cz" icon={Instagram} label="Instagram" />
+      <SocialIcon href="https://x.com/cartop.cz" icon={XIcon} label="X (Twitter)" />
     </div>
   );
 };

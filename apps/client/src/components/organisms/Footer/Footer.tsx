@@ -64,7 +64,7 @@ const Footer = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             <FooterContactInfo />
           </div>
 
@@ -72,7 +72,7 @@ const Footer = () => {
           <FooterLinkColumn className="lg:col-span-2" links={recommendedLinks} title="Doporučené" />
           <FooterLinkColumn className="lg:col-span-2" links={selectionLinks} title="Náš výběr" />
           <FooterLinkColumn className="lg:col-span-2" links={brandLinks} title="Značky" />
-          <FooterLinkColumn className="lg:col-span-1" links={categoryLinks} title="Kategorie" />
+          <FooterLinkColumn className="lg:col-span-2" links={categoryLinks} title="Kategorie" />
         </div>
 
         <FooterCopyright />
