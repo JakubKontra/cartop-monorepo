@@ -1,35 +1,31 @@
 /* Tailwind v4 */
-@import "tailwindcss"; /* includes preflight + utilities */
+@import 'tailwindcss'; /* includes preflight + utilities */
 
-@theme {
-  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
+@theme inline {
+  --font-sans:
+    'Sora', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 
-  --color-primary: #c90932;
-  --color-red: #c90932;
   --color-french-grey: #c9ccd3;
   --color-black: #131313;
   --color-gunmetal: #262d37;
+  --color-gunmetal-50: #f3f5f7;
+  --color-gunmetal-100: #d9e0e6;
+  --color-gunmetal-700: #4c6172;
   --color-white: #fefefe;
   --color-cadet-grey: #8ca1b2;
+  --color-crimson-red: #c90932;
 
 
   --color-gunmetal-200: #BFCBD4;
 
   /* define this since you use it on body */
   --color-text: var(--color-black);
+  --color-primary: var(--color-crimson-red);
 }
 
-@layer base {
-  h1 {
-    @apply text-3xl font-semibold text-primary;
-  }
-
-  h2 {
-    @apply text-2xl font-semibold text-primary;
-  }
-
-  h3 {
-    @apply text-xl font-semibold text-primary;
+@layer components {
+  .headline-highlight {
+    @apply text-primary font-semibold;
   }
 }

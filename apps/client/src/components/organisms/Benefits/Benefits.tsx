@@ -1,4 +1,6 @@
-import Image from "next/image";
+import Image from 'next/image';
+import Button from '../Button/Button';
+import { AnnotationInfoIcon } from '@/components/icons/AnnotationInfoIcon';
 
 export default function Benefits() {
   return (
@@ -38,8 +40,8 @@ export default function Benefits() {
             </div>
             <h3 className="mt-4 text-xl font-semibold">Ukazujeme souvislosti</h3>
             <p className="mt-2 text-slate-600">
-              Často platí, že nový vůz se slevou vyjde levněji než referenční model. Upozorníme
-              vás na to.
+              Často platí, že nový vůz se slevou vyjde levněji než referenční model. Upozorníme vás
+              na to.
             </p>
           </article>
 
@@ -61,20 +63,13 @@ export default function Benefits() {
             <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5"></div>
 
             <div className="absolute inset-x-6 bottom-6">
-              <button className="w-full rounded-2xl bg-primary py-4 text-white font-semibold shadow-md hover:bg-red-700 transition">
-                <span className="inline-flex items-center justify-center gap-2">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" />
-                  </svg>
-                  Více o nás
-                </span>
-              </button>
+              <Button
+                variant="primary"
+                icon={<AnnotationInfoIcon className="size-6" />}
+                width="full"
+              >
+                Více o nás
+              </Button>
             </div>
           </div>
 
