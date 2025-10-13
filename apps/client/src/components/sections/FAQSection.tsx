@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/utils/cv';
-import { WrapperFadeIn } from '@/components/reusable/aimation-wrappers/WrapperFadeIn';
+import { WrapperFadeIn } from '@/components/organisms/reusable/aimation-wrappers/WrapperFadeIn';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { Minus } from 'lucide-react';
+import HowItWorksButton from '../organisms/reusable/HowItWorksButton';
 
 interface FAQItem {
   question: string;
@@ -61,7 +62,7 @@ export const FAQSection = () => {
   }, [isInView, hasAnimated]);
 
   return (
-    <div className="bg-white py-16 px-4">
+    <section className="bg-white py-16 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center lg:text-left mb-14">
@@ -123,27 +124,10 @@ export const FAQSection = () => {
         </ul>
 
         {/* Contact Support Button */}
-        <div className="text-center mt-12">
-          <button className="bg-primary hover:bg-red-700 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-3 mx-auto transition-colors">
-            Kontakovat podporu
-            <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-              <svg
-                className="w-3 h-3 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </button>
+        <div className="flex justify-center w-full mt-14">
+          <HowItWorksButton />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
