@@ -4,6 +4,12 @@ import cartopJest from "eslint-config-cartop/jest/index.js";
 import cartopTypescript from "eslint-config-cartop/typescript/index.js";
 import cartopReact from "eslint-config-cartop/react/index.js";
 import betterTailwindcss from "eslint-plugin-better-tailwindcss";
+import noSecrets from "eslint-plugin-no-secrets";
+import unicorn from "eslint-plugin-unicorn";
+import sonarjs from "eslint-plugin-sonarjs";
+import regexp from "eslint-plugin-regexp";
+import boundaries from "eslint-plugin-boundaries";
+import prettierConfig from "eslint-config-prettier";
 
 import { FlatCompat } from "@eslint/eslintrc";
 import { dirname } from "path";
@@ -73,6 +79,166 @@ const eslintConfig = [
       },
     },
   },
+
+  // Security: no-secrets plugin - prevents committing API keys/tokens
+  {
+    plugins: {
+      "no-secrets": noSecrets,
+    },
+    rules: {
+      "no-secrets/no-secrets": ["error", { tolerance: 4.5 }],
+    },
+  },
+
+  // Unicorn: Modern JS/TS best practices
+  {
+    plugins: {
+      unicorn,
+    },
+    rules: {
+      "unicorn/filename-case": [
+        "warn",
+        {
+          cases: {
+            kebabCase: true,
+            pascalCase: true, // Allow PascalCase for React components
+            camelCase: true,  // Allow camelCase for hooks (useXxx)
+          },
+          ignore: [
+            "^[A-Z]+\\.tsx?$", // Allow all-caps files (e.g., README.md)
+          ],
+        },
+      ],
+      "unicorn/no-null": "off", // TypeScript often uses null
+      "unicorn/prefer-top-level-await": "warn",
+      "unicorn/no-array-push-push": "error",
+      "unicorn/prevent-abbreviations": "off", // Too strict for existing code
+    },
+  },
+
+  // SonarJS: Code quality and complexity
+  {
+    plugins: {
+      sonarjs,
+    },
+    rules: {
+      "sonarjs/cognitive-complexity": ["warn", 20],
+      "sonarjs/no-duplicate-string": ["warn", { threshold: 5 }],
+      "sonarjs/no-identical-functions": "warn",
+    },
+  },
+
+  // Regexp: Regex optimization and correctness
+  {
+    plugins: {
+      regexp,
+    },
+    rules: {
+      "regexp/optimal-quantifier-concatenation": "warn",
+      "regexp/no-dupe-characters-character-class": "error",
+      "regexp/no-useless-escape": "warn",
+      "regexp/no-useless-flag": "warn",
+    },
+  },
+
+  // Boundaries: Architectural layer enforcement (Atomic Design + Next.js)
+  {
+    plugins: {
+      boundaries,
+    },
+    settings: {
+      "boundaries/elements": [
+        { type: "app", pattern: "src/app/**" },
+        { type: "sections", pattern: "src/components/sections/**" },
+        // Note: animations MUST be before organisms (more specific pattern first)
+        { type: "animations", pattern: "src/components/organisms/animations/**" },
+        { type: "organisms", pattern: "src/components/organisms/**" },
+        { type: "molecules", pattern: "src/components/molecules/**" },
+        { type: "atoms", pattern: "src/components/atoms/**" },
+        { type: "features", pattern: "src/components/features/**" },
+        { type: "branding", pattern: "src/components/branding/**" },
+        { type: "icons", pattern: "src/components/icons/**" },
+        { type: "providers", pattern: "src/components/providers/**" },
+        { type: "hooks", pattern: "src/hooks/**" },
+        { type: "lib", pattern: "src/lib/**" },
+        { type: "queries", pattern: "src/queries/**" },
+        { type: "utils", pattern: "src/utils/**" },
+        { type: "gql", pattern: "src/gql/**" },
+      ],
+    },
+    rules: {
+      "boundaries/element-types": [
+        "error",
+        {
+          default: "disallow",
+          rules: [
+            // App can import anything
+            {
+              from: ["app"],
+              allow: [
+                "sections",
+                "organisms",
+                "animations",
+                "molecules",
+                "atoms",
+                "features",
+                "branding",
+                "icons",
+                "providers",
+                "hooks",
+                "lib",
+                "queries",
+                "utils",
+                "gql",
+              ],
+            },
+            // Sections can import organisms, molecules, and lower layers
+            {
+              from: ["sections"],
+              allow: ["organisms", "animations", "molecules", "atoms", "branding", "icons", "hooks", "utils", "gql"],
+            },
+            // Organisms can import animations, molecules, atoms, and utils
+            {
+              from: ["organisms"],
+              allow: ["animations", "molecules", "atoms", "branding", "icons", "hooks", "utils", "gql"],
+            },
+            // Animations are utility wrappers, can be used by lower layers
+            {
+              from: ["animations"],
+              allow: ["hooks", "utils"],
+            },
+            // Molecules can import animations, atoms, and utils
+            { from: ["molecules"], allow: ["animations", "atoms", "branding", "icons", "hooks", "utils"] },
+            // Atoms can only import utils and icons
+            { from: ["atoms"], allow: ["icons", "utils"] },
+            // Features are like organisms (can import lower layers)
+            {
+              from: ["features"],
+              allow: ["organisms", "animations", "molecules", "atoms", "branding", "icons", "hooks", "lib", "queries", "utils", "gql"],
+            },
+            // Branding can import icons and utils
+            { from: ["branding"], allow: ["icons", "utils"] },
+            // Icons can import utils
+            { from: ["icons"], allow: ["utils"] },
+            // Providers can import hooks and utils
+            { from: ["providers"], allow: ["hooks", "utils", "gql"] },
+            // Hooks can import utils
+            { from: ["hooks"], allow: ["utils"] },
+            // Lib can import utils and gql
+            { from: ["lib"], allow: ["utils", "gql"] },
+            // Queries can import gql and lib
+            { from: ["queries"], allow: ["lib", "gql"] },
+            // Utils and GQL are leaf nodes
+            { from: ["utils"], allow: [] },
+            { from: ["gql"], allow: [] },
+          ],
+        },
+      ],
+    },
+  },
+
+  // Prettier config - disables conflicting stylistic rules
+  prettierConfig,
 
   // Local overrides
   {

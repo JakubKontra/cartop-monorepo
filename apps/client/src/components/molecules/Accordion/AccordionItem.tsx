@@ -3,7 +3,7 @@
 import type { ReactElement, ReactNode, KeyboardEvent } from 'react';
 import { cloneElement, isValidElement, useState } from 'react';
 
-import { WrapperFadeIn } from '@/components/organisms/reusable/aimation-wrappers/WrapperFadeIn';
+import { WrapperFadeIn } from '@/components/organisms/animations/WrapperFadeIn';
 import { cn } from '@/utils/cv';
 
 interface AccordionItemProps {
