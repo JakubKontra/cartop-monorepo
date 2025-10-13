@@ -1,6 +1,8 @@
 import Image from 'next/image';
-import Button from '../Button/Button';
+
 import { AnnotationInfoIcon } from '@/components/icons/AnnotationInfoIcon';
+
+import Button from '../Button/Button';
 
 export default function Benefits() {
   return (
@@ -60,7 +62,7 @@ export default function Benefits() {
               sizes="33vw"
               className="w-full object-cover rounded-[32px] hidden lg:block"
             />
-            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5"></div>
+            <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
 
             <div className="absolute inset-x-6 bottom-6">
               <Button

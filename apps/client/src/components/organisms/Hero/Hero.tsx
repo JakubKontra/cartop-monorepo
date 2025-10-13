@@ -1,6 +1,7 @@
-import Button from '@/components/organisms/Button/Button';
 import { Search } from 'lucide-react';
 import Image from 'next/image';
+
+import Button from '@/components/organisms/Button/Button';
 
 export default function FilterBar() {
   return (

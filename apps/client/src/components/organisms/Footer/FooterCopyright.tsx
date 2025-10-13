@@ -1,5 +1,6 @@
-import Link from "next/link"
-import { SocialMediaLinks } from "../../molecules/SocialMediaLinks"
+import Link from 'next/link';
+
+import { SocialMediaLinks } from '../../molecules/SocialMediaLinks';
 
 export function FooterCopyright() {
   return (
@@ -17,5 +18,5 @@ export function FooterCopyright() {
         <SocialMediaLinks />
       </div>
     </div>
-  )
+  );
 }

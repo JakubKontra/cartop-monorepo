@@ -1,9 +1,11 @@
-"use client";
-import { type HTMLAttributes, JSX, useEffect, useState } from "react";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
-import { useSwiper } from "@/hooks/useSwiper";
+'use client';
+import type { JSX } from 'react';
+import { type HTMLAttributes, useEffect, useState } from 'react';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useSwiper } from '@/hooks/useSwiper';
 
 interface Props {
   slides: JSX.Element[];
@@ -21,7 +23,7 @@ export const CardCarousel = ({
   const { onNext, swiperRef, setActiveSlide } = useSwiper();
 
   const isActive = useIntersectionObserver({
-    elementId: id + "-wrapper",
+    elementId: id + '-wrapper',
     threshold: 0.8,
   });
 
@@ -35,18 +37,14 @@ export const CardCarousel = ({
   const loopSlides = [...slides, ...slides];
 
   return (
-    <div
-      className={`relative overflow-hidden ${className}`}
-      {...rest}
-      id={id + "-wrapper"}
-    >
+    <div className={`relative overflow-hidden ${className}`} {...rest} id={id + '-wrapper'}>
       <div className="relative w-full">
         <Swiper
           speed={1000}
-          onSwiper={(swiper) => {
+          onSwiper={swiper => {
             swiperRef.current = swiper;
           }}
-          grabCursor={true}
+          grabCursor
           slidesPerView="auto"
           centeredSlides
           breakpoints={{
@@ -55,7 +53,7 @@ export const CardCarousel = ({
             },
           }}
           spaceBetween={24}
-          onSlideChange={(swiper) => {
+          onSlideChange={swiper => {
             setActiveSlide(swiper.realIndex);
           }}
           loop

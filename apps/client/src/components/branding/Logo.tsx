@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import type { SVGProps } from 'react';
 
 export type LogoProps = SVGProps<SVGSVGElement>;
 export const Logo = ({ className, width = 132, height = 32, ...props }: LogoProps) => {

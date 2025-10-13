@@ -5,26 +5,30 @@ export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
+  [_ in K]?: never;
+};
+export type Incremental<T> =
+  | T
+  | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: { input: any; output: any; }
+  DateTime: { input: any; output: any };
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-  JSON: { input: any; output: any; }
+  JSON: { input: any; output: any };
 };
 
 /** The type of action performed on the entity */
 export enum AuditAction {
   Create = 'CREATE',
   Delete = 'DELETE',
-  Update = 'UPDATE'
+  Update = 'UPDATE',
 }
 
 export type AuditLog = {
@@ -92,7 +96,7 @@ export type CatalogColor = {
 /** Type of catalog color (exterior or interior) */
 export enum CatalogColorType {
   Exterior = 'EXTERIOR',
-  Interior = 'INTERIOR'
+  Interior = 'INTERIOR',
 }
 
 export type CatalogModel = {
@@ -191,84 +195,68 @@ export type Mutation = {
   updateUser: User;
 };
 
-
 export type MutationCreateCatalogBrandArgs = {
   input: CreateCatalogBrandInput;
 };
-
 
 export type MutationCreateCatalogColorArgs = {
   input: CreateCatalogColorInput;
 };
 
-
 export type MutationCreateCatalogModelArgs = {
   input: CreateCatalogModelInput;
 };
-
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
 
-
 export type MutationDeleteCatalogBrandArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type MutationDeleteCatalogColorArgs = {
   id: Scalars['String']['input'];
 };
 
-
 export type MutationDeleteCatalogModelArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type MutationDeleteUserArgs = {
   id: Scalars['String']['input'];
 };
 
-
 export type MutationImpersonateUserArgs = {
   input: ImpersonateInput;
 };
-
 
 export type MutationLoginArgs = {
   input: LoginInput;
 };
 
-
 export type MutationRefreshTokenArgs = {
   input: RefreshTokenInput;
 };
 
-
 export type MutationSoftDeleteUserArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type MutationUpdateCatalogBrandArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogBrandInput;
 };
 
-
 export type MutationUpdateCatalogColorArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogColorInput;
 };
 
-
 export type MutationUpdateCatalogModelArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogModelInput;
 };
-
 
 export type MutationUpdateUserArgs = {
   id: Scalars['String']['input'];
@@ -305,33 +293,27 @@ export type Query = {
   users: Array<User>;
 };
 
-
 export type QueryAllCatalogBrandsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
-
 
 export type QueryAllCatalogModelsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
-
 export type QueryAuditLogsArgs = {
   query: AuditQueryInput;
 };
-
 
 export type QueryCatalogBrandArgs = {
   id: Scalars['String']['input'];
 };
 
-
 export type QueryCatalogBrandBySlugArgs = {
   slug: Scalars['String']['input'];
 };
-
 
 export type QueryCatalogBrandsArgs = {
   activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
@@ -339,16 +321,13 @@ export type QueryCatalogBrandsArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
-
 export type QueryCatalogColorArgs = {
   id: Scalars['String']['input'];
 };
 
-
 export type QueryCatalogColorBySlugArgs = {
   slug: Scalars['String']['input'];
 };
-
 
 export type QueryCatalogColorsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -356,21 +335,17 @@ export type QueryCatalogColorsArgs = {
   type?: InputMaybe<CatalogColorType>;
 };
 
-
 export type QueryCatalogColorsByTypeArgs = {
   type: CatalogColorType;
 };
-
 
 export type QueryCatalogModelArgs = {
   id: Scalars['String']['input'];
 };
 
-
 export type QueryCatalogModelBySlugArgs = {
   slug: Scalars['String']['input'];
 };
-
 
 export type QueryCatalogModelsArgs = {
   activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
@@ -378,53 +353,44 @@ export type QueryCatalogModelsArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
-
 export type QueryCatalogModelsByBrandArgs = {
   brandId: Scalars['String']['input'];
   limit?: InputMaybe<Scalars['Float']['input']>;
 };
-
 
 export type QueryEntityHistoryArgs = {
   entityId: Scalars['String']['input'];
   entityName: Scalars['String']['input'];
 };
 
-
 export type QuerySearchCatalogBrandsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
-
 
 export type QuerySearchCatalogColorsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
 
-
 export type QuerySearchCatalogModelsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
-
 
 export type QuerySearchUsersArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
 
-
 export type QueryUserArgs = {
   id: Scalars['String']['input'];
 };
-
 
 export type QueryUserActivityArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   userId: Scalars['String']['input'];
 };
-
 
 export type QueryUsersArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -493,7 +459,7 @@ export enum UserRole {
   JuniorSalesRepresentative = 'JUNIOR_SALES_REPRESENTATIVE',
   Marketing = 'MARKETING',
   Public = 'PUBLIC',
-  SalesRepresentative = 'SALES_REPRESENTATIVE'
+  SalesRepresentative = 'SALES_REPRESENTATIVE',
 }
 
 export type GetCatalogBrandsQueryVariables = Exact<{
@@ -501,22 +467,189 @@ export type GetCatalogBrandsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
+export type GetCatalogBrandsQuery = {
+  __typename?: 'Query';
+  catalogBrands: Array<{
+    __typename?: 'CatalogBrand';
+    id: string;
+    name: string;
+    slug: string;
+    description?: string | null;
+    isActive: boolean;
+    isHighlighted: boolean;
+    isRecommended: boolean;
+    createdAt: any;
+    updatedAt?: any | null;
+  }>;
+};
 
-export type GetCatalogBrandsQuery = { __typename?: 'Query', catalogBrands: Array<{ __typename?: 'CatalogBrand', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, createdAt: any, updatedAt?: any | null }> };
+export type GetHighlightedBrandsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetHighlightedBrandsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetHighlightedBrandsQuery = { __typename?: 'Query', highlightedCatalogBrands: Array<{ __typename?: 'CatalogBrand', id: string, name: string, slug: string, description?: string | null, isHighlighted: boolean }> };
+export type GetHighlightedBrandsQuery = {
+  __typename?: 'Query';
+  highlightedCatalogBrands: Array<{
+    __typename?: 'CatalogBrand';
+    id: string;
+    name: string;
+    slug: string;
+    description?: string | null;
+    isHighlighted: boolean;
+  }>;
+};
 
 export type GetBrandBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
+export type GetBrandBySlugQuery = {
+  __typename?: 'Query';
+  catalogBrandBySlug: {
+    __typename?: 'CatalogBrand';
+    id: string;
+    name: string;
+    slug: string;
+    description?: string | null;
+    isActive: boolean;
+    isHighlighted: boolean;
+    isRecommended: boolean;
+    createdAt: any;
+    updatedAt?: any | null;
+  };
+};
 
-export type GetBrandBySlugQuery = { __typename?: 'Query', catalogBrandBySlug: { __typename?: 'CatalogBrand', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, createdAt: any, updatedAt?: any | null } };
-
-
-export const GetCatalogBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogBrands"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrands"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"activeOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogBrandsQuery, GetCatalogBrandsQueryVariables>;
-export const GetHighlightedBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHighlightedBrands"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"highlightedCatalogBrands"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}}]}}]}}]} as unknown as DocumentNode<GetHighlightedBrandsQuery, GetHighlightedBrandsQueryVariables>;
-export const GetBrandBySlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBrandBySlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrandBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetBrandBySlugQuery, GetBrandBySlugQueryVariables>;
+export const GetCatalogBrandsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetCatalogBrands' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'activeOnly' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'catalogBrands' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'activeOnly' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'activeOnly' } },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'limit' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isActive' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isHighlighted' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isRecommended' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetCatalogBrandsQuery, GetCatalogBrandsQueryVariables>;
+export const GetHighlightedBrandsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetHighlightedBrands' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'highlightedCatalogBrands' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isHighlighted' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetHighlightedBrandsQuery, GetHighlightedBrandsQueryVariables>;
+export const GetBrandBySlugDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetBrandBySlug' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'catalogBrandBySlug' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'slug' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isActive' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isHighlighted' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'isRecommended' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetBrandBySlugQuery, GetBrandBySlugQueryVariables>;

@@ -1,17 +1,9 @@
-'use client';
+import type { FaqItemData } from '@/components/organisms/Faq';
+import { Faq } from '@/components/organisms/Faq';
 
-import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/utils/cv';
-import { WrapperFadeIn } from '@/components/organisms/reusable/aimation-wrappers/WrapperFadeIn';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { Minus } from 'lucide-react';
 import HowItWorksButton from '../organisms/reusable/HowItWorksButton';
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-const faqData: FAQItem[] = [
+const faqData: FaqItemData[] = [
   {
     question: 'Vyplatní se mi operativní leasing?',
     answer:
@@ -44,90 +36,48 @@ const faqData: FAQItem[] = [
   },
 ];
 
-export const FAQSection = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLUListElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const isInView = useIntersectionObserver({ ref: sectionRef, threshold: 0.2 });
-
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? -1 : index);
+const generateFaqStructuredData = (items: FaqItemData[]) => {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
   };
 
-  useEffect(() => {
-    if (isInView && !hasAnimated) {
-      setOpenIndex(0);
-      setHasAnimated(true);
-    }
-  }, [isInView, hasAnimated]);
+  return JSON.stringify(structuredData);
+};
+
+export const FaqSection = () => {
+  const faqStructuredData = generateFaqStructuredData(faqData);
 
   return (
-    <section className="bg-white py-16 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center lg:text-left mb-14">
-          <h2 className="mb-4 text-4xl lg:text-5xl">
-            <span className="headline-highlight">Často</span>
-            <br />
-            Kladené otázky
-          </h2>
-        </div>
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqStructuredData }} />
 
-        {/* FAQ Items */}
-        <ul ref={sectionRef} className="space-y-3">
-          {faqData.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <WrapperFadeIn as="li" key={index} duration={0.6} threshold={0.8}>
-                <div
-                  className={cn(
-                    `rounded-2xl lg:rounded-3xl border transition-all duration-300`,
-                    isOpen
-                      ? 'bg-gunmetal-100 text-gunmetal border-gunmetal-100'
-                      : 'bg-white text-gunmetal border-gunmetal-100',
-                  )}
-                >
-                  <button
-                    onClick={() => toggleFAQ(index)}
-                    className="w-full p-4 lg:p-6 text-left flex justify-between gap-4 focus:outline-none"
-                  >
-                    <div className="flex flex-col justify-center">
-                      <span className="font-semibold text-lg lg:text-xl pr-4">{faq.question}</span>
-                      <div
-                        className={cn(
-                          'transition-[max-height, opacity, padding-top] duration-300 h-auto',
-                          isOpen ? 'pt-6 max-h-96 opacity-100' : 'pt-0 max-h-0 opacity-0',
-                        )}
-                      >
-                        <p className="text-gunmetal leading-relaxed">{faq.answer}</p>
-                      </div>
-                    </div>
-                    <div
-                      className={cn(
-                        `relative size-11 lg:size-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300`,
-                        isOpen ? 'bg-gunmetal-700' : 'bg-primary',
-                      )}
-                    >
-                      <Minus className="text-white size-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-                      <Minus
-                        className={cn(
-                          'text-white size-6 transition-transform duration-300',
-                          isOpen ? 'rotate-0' : 'rotate-90',
-                        )}
-                      />
-                    </div>
-                  </button>
-                </div>
-              </WrapperFadeIn>
-            );
-          })}
-        </ul>
+      <section className="bg-white py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center lg:text-left mb-14">
+            <h2 className="mb-4 text-4xl lg:text-5xl">
+              <span className="headline-highlight">Často</span>
+              <br />
+              Kladené otázky
+            </h2>
+          </div>
 
-        {/* Contact Support Button */}
-        <div className="flex justify-center w-full mt-14">
-          <HowItWorksButton />
+          <Faq items={faqData} />
+
+          {/* Contact Support Button */}
+          <div className="flex justify-center w-full mt-14">
+            <HowItWorksButton />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };

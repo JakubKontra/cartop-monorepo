@@ -1,19 +1,19 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { useNewsletterControllerSubscribe } from "@cartop/api-client"
-import { emailSchema, newsletterConsentSchema } from "@cartop/validation"
+import { useNewsletterControllerSubscribe } from '@cartop/api-client';
+import { emailSchema, newsletterConsentSchema } from '@cartop/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 const newsletterSchema = z.object({
   email: emailSchema,
   consent: newsletterConsentSchema,
-})
+});
 
-type NewsletterFormData = z.infer<typeof newsletterSchema>
+type NewsletterFormData = z.infer<typeof newsletterSchema>;
 
 export function NewsletterSignup() {
   const {
@@ -23,7 +23,7 @@ export function NewsletterSignup() {
     isSuccess,
     error,
     reset: resetMutation,
-  } = useNewsletterControllerSubscribe()
+  } = useNewsletterControllerSubscribe();
 
   const {
     register,
@@ -33,29 +33,29 @@ export function NewsletterSignup() {
   } = useForm<NewsletterFormData>({
     resolver: zodResolver(newsletterSchema),
     defaultValues: {
-      email: "",
+      email: '',
       consent: false,
     },
-  })
+  });
 
   const onSubmit = (data: NewsletterFormData) => {
     subscribe({
       email: data.email,
       consent: data.consent,
-      source: "web",
-    })
-  }
+      source: 'web',
+    });
+  };
 
   // Reset form and hide success message after 5 seconds
   useEffect(() => {
     if (isSuccess) {
-      resetForm()
+      resetForm();
       const timer = setTimeout(() => {
-        resetMutation()
-      }, 5000)
-      return () => clearTimeout(timer)
+        resetMutation();
+      }, 5000);
+      return () => clearTimeout(timer);
     }
-  }, [isSuccess, resetForm, resetMutation])
+  }, [isSuccess, resetForm, resetMutation]);
 
   return (
     <div className="bg-gray-100 rounded-3xl p-6 lg:p-8 mb-12">
@@ -74,12 +74,12 @@ export function NewsletterSignup() {
               <div className="flex-1">
                 <input
                   type="email"
-                  {...register("email")}
+                  {...register('email')}
                   placeholder="Zadejte svůj email"
                   disabled={isPending}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#c8102e] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Email address"
-                  aria-invalid={errors.email ? "true" : "false"}
+                  aria-invalid={errors.email ? 'true' : 'false'}
                 />
               </div>
               <button
@@ -87,7 +87,7 @@ export function NewsletterSignup() {
                 disabled={isPending}
                 className="bg-[#c8102e] hover:bg-[#a00d25] text-white px-6 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isPending ? "Odesílání..." : "Přihlásit odběr"}
+                {isPending ? 'Odesílání...' : 'Přihlásit odběr'}
               </button>
             </div>
 
@@ -118,15 +118,12 @@ export function NewsletterSignup() {
                 <label className="flex items-start gap-2 text-gray-600 text-xs cursor-pointer">
                   <input
                     type="checkbox"
-                    {...register("consent")}
+                    {...register('consent')}
                     className="mt-0.5 rounded border-gray-300 text-[#c8102e] focus:ring-[#c8102e]"
                   />
                   <span>
-                    Přihlášením k odběru souhlasíte s{" "}
-                    <Link
-                      href="/privacy-policy"
-                      className="underline hover:text-gray-900"
-                    >
+                    Přihlášením k odběru souhlasíte s{' '}
+                    <Link href="/privacy-policy" className="underline hover:text-gray-900">
                       Privacy Policy
                     </Link>
                   </span>
@@ -142,5 +139,5 @@ export function NewsletterSignup() {
         </div>
       </div>
     </div>
-  )
+  );
 }

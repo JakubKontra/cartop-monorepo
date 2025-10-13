@@ -1,0 +1,56 @@
+---
+description: Next.js with TypeScript and Tailwind UI best practices
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# Next.js Best Practices
+
+## Project Structure
+
+- Use the App Router directory structure
+- Place components in `app` directory for route-specific components
+- Place shared components in `src/components` directory
+- Place utilities and helpers in `src/utils` directory
+- Use lowercase with dashes for directories (e.g., `src./components/auth-wizard`)
+
+## Components
+
+- Mark client components explicitly with 'use client'
+- Use dynamic loading for non-critical components
+- Implement proper error boundaries
+- Place static content and interfaces at file end
+
+## Performance
+
+- Optimize images: Use WebP format, size data, lazy loading
+- Minimize use of 'useEffect' and 'setState'
+- Use dynamic loading for non-critical components
+- Implement proper caching strategies
+
+## Data Fetching
+
+- Implement proper error handling for data fetching
+- Use appropriate caching strategies
+- Handle loading and error states appropriately
+
+## Routing
+
+- Use the App Router conventions
+- Implement proper loading and error states for routes
+- Use dynamic routes appropriately
+- Handle parallel routes when needed
+
+## Forms and Validation
+
+- Use Zod for form validation
+- Implement proper server-side validation
+- Handle form errors appropriately
+- Show loading states during form submission
+- Use `react-hook-forms` library
+
+## State Management
+
+- Minimize client-side state
+- Use React Context sparingly
+- Implement proper loading states

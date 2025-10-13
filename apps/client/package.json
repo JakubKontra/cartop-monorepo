@@ -3,10 +3,29 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port=3001",
-    "build": "next build",
+    "dev": "env-cmd -f ./environments/.env.development --no-override env-cmd -f ./environments/.env.local --silent next dev --turbopack --port=3001",
+    "dev:ssl": "yarn dev --experimental-https",
+    "build": "env-cmd -f \"$ENV_FILE\" next build",
+    "build:dev": "ENV_FILE=./environments/.env.development yarn build",
+    "build:staging": "ENV_FILE=./environments/.env.staging yarn build",
+    "build:test": "ENV_FILE=./environments/.env.test NODE_ENV=test yarn build",
+    "dev:turbo": "next dev --turbopack",
+    "fix:eslint": "eslint --fix src",
+    "fix:prettier": "prettier --write \"src/**/*.{ts,tsx,js,css,json}\"",
+    "fix": "run-p -lsc \"fix:*\"",
+    "lint:eslint": "eslint src --max-warnings=0",
+    "lint:prettier": "prettier \"src/**/*.{ts,tsx,js,css,json}\" -c",
+    "lint:tsc": "tsc",
+    "lint": "yarn lint:eslint",
     "start": "next start",
-    "lint": "eslint .",
+    "storybook:build": "storybook build",
+    "storybook:start": "http-server storybook-static -p 6006 -c-1",
+    "storybook:test-ci": "yarn concurrently -k -s first -n \"storybook,test\" -c \"magenta,blue\" \"yarn storybook:start --silent\" \"yarn wait-on tcp:127.0.0.1:6006 && yarn storybook:test\"",
+    "storybook:test-docker": "cd ../../scripts/storybook-test-runner && ./docker-test-runner.sh crm",
+    "storybook:test-update": "yarn test-storybook --updateSnapshot",
+    "storybook:test": "yarn test-storybook",
+    "storybook": "storybook dev -p 6006",
+    "test": "TZ=GMT jest --coverage",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .next out",
     "codegen": "graphql-codegen --config codegen.ts"
@@ -35,15 +54,41 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/cli": "^4.1.14",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^24.6.2",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.1",
-    "eslint": "^9",
+    "concurrently": "^9.2.1",
+    "depcheck": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "env-cmd": "^11.0.0",
+    "eslint": "^9.20.1",
     "eslint-config-next": "15.5.4",
+    "eslint-plugin-storybook": "9.1.10",
     "graphql": "^16.11.0",
-    "typescript": "^5.8.4"
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.4",
+    "wait-on": "^9.0.1"
+  },
+  "resolutions": {
+    "farmhash": "^3.3.1",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.1"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "exclude": [
+      "**/node_modules/**"
+    ],
+    "excludeAfterRemap": true,
+    "report-dir": "coverage-cypress"
   }
 }

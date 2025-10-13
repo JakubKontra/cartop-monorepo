@@ -6,7 +6,8 @@
  */
 
 import { revalidatePath, revalidateTag } from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // Secret token for webhook security (should match backend CACHE_INVALIDATION_SECRET)
 const REVALIDATION_SECRET = process.env.REVALIDATION_SECRET || 'dev-secret-change-in-production';
@@ -18,10 +19,7 @@ export async function POST(request: NextRequest) {
     const token = authHeader?.replace('Bearer ', '');
 
     if (token !== REVALIDATION_SECRET) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Parse webhook payload
@@ -54,10 +52,7 @@ export async function POST(request: NextRequest) {
 
       default:
         console.log(`[Revalidation] Unknown entity type: ${entityName}`);
-        return NextResponse.json(
-          { error: `Unknown entity type: ${entityName}` },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: `Unknown entity type: ${entityName}` }, { status: 400 });
     }
 
     return NextResponse.json({
@@ -75,7 +70,7 @@ export async function POST(request: NextRequest) {
         error: 'Revalidation failed',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

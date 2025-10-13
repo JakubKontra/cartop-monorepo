@@ -1,6 +1,8 @@
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { VariantProps } from 'tailwind-variants';
+import { tv } from 'tailwind-variants';
+
 import { cn } from '@/utils/cv';
-import { tv, VariantProps } from 'tailwind-variants';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
 
 const buttonVariants = tv({
   base: 'rounded-2xl lg:rounded-3xl text-sm gap-5 lg:text-base flex items-center whitespace-nowrap cursor-pointer transition-colors duration-300',

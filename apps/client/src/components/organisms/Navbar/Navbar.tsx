@@ -1,10 +1,10 @@
-import { Logo } from "@/components/branding/Logo";
-import { ScaleIcon, SearchIcon, UserIcon } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { ScaleIcon, SearchIcon, UserIcon } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
+
+import { Logo } from '@/components/branding/Logo';
 
 export default function Navbar() {
-
   return (
     <header className="w-full bg-white">
       <nav className="max-w-7xl mx-auto h-[60px] md:h-20 px-6 flex items-center justify-between gap-6">
@@ -60,17 +60,17 @@ export default function Navbar() {
             className="h-[45px] w-[45px] rounded-[16px] hover:opacity-80 active:opacity-60 transition-opacity flex items-center justify-center cursor-pointer"
             style={{ backgroundColor: '#8CA1B2' }}
             aria-label="Akce 1"
-        >
-          <ScaleIcon className="text-white w-5 h-5" />
-        </button>
+          >
+            <ScaleIcon className="text-white w-5 h-5" />
+          </button>
           <button
             type="button"
             className="h-[45px] w-[45px] rounded-[16px] hover:opacity-80 active:opacity-60 transition-opacity flex items-center justify-center cursor-pointer"
             style={{ backgroundColor: '#8CA1B2' }}
             aria-label="Akce 1"
-        >
-          <UserIcon className="text-white w-5 h-5" />
-        </button>
+          >
+            <UserIcon className="text-white w-5 h-5" />
+          </button>
         </div>
       </nav>
     </header>

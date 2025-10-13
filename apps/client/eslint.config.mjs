@@ -1,6 +1,3 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
 import cartopCypress from "eslint-config-cartop/cypress/index.js";
 import cartop from "eslint-config-cartop/index.js";
 import cartopJest from "eslint-config-cartop/jest/index.js";
@@ -48,10 +45,8 @@ const eslintConfig = [
       "vite.config.ts",
     ],
   },
-  // Storybook
-  ...storybook.configs["flat/recommended"],
 
-  // Cognetiq configs
+  // Cartop configs
   ...cartop.flatConfig,
   cartopReactWithoutPlugins,
   ...cartopTypescript.flatConfig,
@@ -78,7 +73,7 @@ const eslintConfig = [
     },
   },
   {
-    files: ["**/*.spec.tsx", "**/*.stories.ts", "**/*.stories.tsx"],
+    files: ["**/*.spec.tsx"],
     rules: {
       "no-empty-function": "off",
     },

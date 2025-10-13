@@ -2,8 +2,8 @@
  * GraphQL Client for fetching data from backend
  */
 
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { print } from 'graphql';
-import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
 const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3000/graphql';
 
@@ -14,11 +14,11 @@ export interface GraphQLRequest<TData = unknown, TVariables = Record<string, unk
 
 export interface GraphQLResponse<T> {
   data?: T;
-  errors?: Array<{
+  errors?: {
     message: string;
-    locations?: Array<{ line: number; column: number }>;
+    locations?: { line: number; column: number }[];
     path?: string[];
-  }>;
+  }[];
 }
 
 /**
@@ -26,12 +26,10 @@ export interface GraphQLResponse<T> {
  */
 export async function graphqlRequest<TData, TVariables = Record<string, unknown>>(
   request: GraphQLRequest<TData, TVariables>,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<TData> {
   // Convert DocumentNode to string if needed
-  const query = typeof request.query === 'string'
-    ? request.query
-    : print(request.query);
+  const query = typeof request.query === 'string' ? request.query : print(request.query);
 
   const response = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',

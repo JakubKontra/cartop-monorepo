@@ -11,5 +11,5 @@ export function FooterContactInfo() {
         <p className="text-gray-300">Po-Pá 9.00-18.00 h</p>
       </div>
     </div>
-  )
+  );
 }

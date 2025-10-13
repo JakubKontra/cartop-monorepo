@@ -5,11 +5,12 @@
  * Uses ISR with on-demand revalidation
  */
 
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+
+import type { GetBrandBySlugQuery } from '@/gql/graphql';
 import { graphqlRequest } from '@/lib/graphql-client';
 import { GET_BRAND_BY_SLUG_QUERY } from '@/queries/brands';
-import type { GetBrandBySlugQuery } from '@/gql/graphql';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
 
 // Revalidate every 60 seconds
 export const revalidate = 60;
@@ -32,7 +33,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
       },
       {
         next: { tags: ['brands', `brand-${slug}`] },
-      }
+      },
     );
 
     const brand = data.catalogBrandBySlug;
@@ -110,16 +111,12 @@ export default async function BrandPage({ params }: BrandPageProps) {
             <dl className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <dt className="text-gray-500 font-medium">Created</dt>
-                <dd className="mt-1">
-                  {new Date(brand.createdAt).toLocaleDateString()}
-                </dd>
+                <dd className="mt-1">{new Date(brand.createdAt).toLocaleDateString()}</dd>
               </div>
               {brand.updatedAt && (
                 <div>
                   <dt className="text-gray-500 font-medium">Last Updated</dt>
-                  <dd className="mt-1">
-                    {new Date(brand.updatedAt).toLocaleDateString()}
-                  </dd>
+                  <dd className="mt-1">{new Date(brand.updatedAt).toLocaleDateString()}</dd>
                 </div>
               )}
             </dl>
@@ -128,18 +125,15 @@ export default async function BrandPage({ params }: BrandPageProps) {
 
         {/* Placeholder for future content */}
         <div className="bg-gray-50 rounded-lg p-8 text-center">
-          <p className="text-gray-500">
-            Vehicle listings for {brand.name} will appear here.
-          </p>
+          <p className="text-gray-500">Vehicle listings for {brand.name} will appear here.</p>
         </div>
 
         {/* Cache Info (dev only) */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mt-8 p-4 bg-gray-100 rounded text-sm text-gray-600">
             <p>
-              <strong>Cache Info:</strong> This page uses ISR with brand-specific tags.
-              When this brand is updated, the Watch decorator triggers revalidation
-              of this specific page.
+              <strong>Cache Info:</strong> This page uses ISR with brand-specific tags. When this
+              brand is updated, the Watch decorator triggers revalidation of this specific page.
             </p>
             <p className="mt-2">Cache tags: brands, brand-{slug}</p>
           </div>

@@ -1,14 +1,14 @@
-import Link from "next/link"
-import { LucideIcon } from "lucide-react"
+import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface SocialIconProps {
-  href: string
-  icon: LucideIcon | (() => JSX.Element)
-  label: string
-  className?: string
+  href: string;
+  icon: LucideIcon | (() => JSX.Element);
+  label: string;
+  className?: string;
 }
 
-export function SocialIcon({ href, icon: Icon, label, className = "" }: SocialIconProps) {
+export function SocialIcon({ href, icon: Icon, label, className = '' }: SocialIconProps) {
   return (
     <Link
       href={href}
@@ -19,5 +19,5 @@ export function SocialIcon({ href, icon: Icon, label, className = "" }: SocialIc
     >
       <Icon className="w-5 h-5" />
     </Link>
-  )
+  );
 }

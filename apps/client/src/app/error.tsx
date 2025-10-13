@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import { ServerCrash, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Error({
   error,
@@ -21,9 +21,7 @@ export default function Error({
       <div className="max-w-2xl w-full text-center">
         {/* Error Code */}
         <div className="mb-8">
-          <h1 className="text-9xl md:text-[12rem] font-bold text-primary animate-pulse">
-            500
-          </h1>
+          <h1 className="text-9xl md:text-[12rem] font-bold text-primary animate-pulse">500</h1>
         </div>
 
         {/* Icon */}
@@ -34,11 +32,10 @@ export default function Error({
         </div>
 
         {/* Message */}
-        <h2 className="text-white text-3xl md:text-4xl font-semibold mb-4">
-          Something Went Wrong
-        </h2>
+        <h2 className="text-white text-3xl md:text-4xl font-semibold mb-4">Something Went Wrong</h2>
         <p className="text-cadet-grey text-lg md:text-xl mb-8 max-w-md mx-auto">
-          We encountered an unexpected error. Please try again or contact support if the problem persists.
+          We encountered an unexpected error. Please try again or contact support if the problem
+          persists.
         </p>
 
         {/* Error Details (only in development) */}
@@ -52,9 +49,7 @@ export default function Error({
                 {error.message}
               </pre>
               {error.digest && (
-                <p className="mt-2 text-xs text-french-grey">
-                  Error ID: {error.digest}
-                </p>
+                <p className="mt-2 text-xs text-french-grey">Error ID: {error.digest}</p>
               )}
             </details>
           </div>
@@ -79,9 +74,18 @@ export default function Error({
 
         {/* Decorative Elements */}
         <div className="mt-16 flex justify-center gap-2">
-          <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-          <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-          <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          <div
+            className="w-2 h-2 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: '0ms' }}
+          />
+          <div
+            className="w-2 h-2 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: '150ms' }}
+          />
+          <div
+            className="w-2 h-2 bg-primary rounded-full animate-bounce"
+            style={{ animationDelay: '300ms' }}
+          />
         </div>
       </div>
     </div>

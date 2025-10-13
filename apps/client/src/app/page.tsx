@@ -1,8 +1,17 @@
+import Benefits from '@/components/organisms/Benefits/Benefits';
+import Footer from '@/components/organisms/Footer';
+import { Hero } from '@/components/organisms/Hero/Hero';
+import Navbar from '@/components/organisms/Navbar/Navbar';
+import { FaqSection } from '@/components/sections/FaqSection';
+
 export default function Home() {
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Cartop Frontend</h1>
-      <p>Welcome to the Cartop frontend application.</p>
-    </main>
+    <div>
+      <Navbar />
+      <Hero />
+      <Benefits />
+      <FaqSection />
+      <Footer />
+    </div>
   );
 }
