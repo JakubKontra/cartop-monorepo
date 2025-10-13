@@ -4,7 +4,7 @@ import { useNewsletterControllerSubscribe } from '@cartop/api-client';
 import { emailSchema, newsletterConsentSchema } from '@cartop/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -40,21 +40,29 @@ export const NewsletterSignup = () => {
 
   const onSubmit = (data: NewsletterFormData) => {
     subscribe({
-      consent: data.consent,
-      email: data.email,
-      source: 'web',
+      data: {
+        consent: data.consent,
+        email: data.email,
+        source: 'web',
+      },
     });
   };
 
   // Reset form and hide success message after 5 seconds
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => {
     if (isSuccess) {
       resetForm();
-      const timer = setTimeout(() => {
+      timerRef.current = setTimeout(() => {
         resetMutation();
       }, 5000);
-      return () => clearTimeout(timer);
     }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [isSuccess, resetForm, resetMutation]);
 
   return (
@@ -92,18 +100,18 @@ export const NewsletterSignup = () => {
             </div>
 
             {/* Validation errors */}
-            {errors.email && (
+            {errors.email && 'message' in errors.email ? (
               <p className="mt-2 text-sm text-red-600" role="alert">
                 {errors.email.message}
               </p>
-            )}
+            ) : null}
 
             {/* API error message */}
-            {isError && error && (
+            {isError && error && 'message' in error ? (
               <p className="mt-2 text-sm text-red-600" role="alert">
-                {error.message}
+                {(error as { message: string }).message}
               </p>
-            )}
+            ) : null}
 
             {/* Success message */}
             {isSuccess && (
@@ -128,11 +136,11 @@ export const NewsletterSignup = () => {
                     </Link>
                   </span>
                 </label>
-                {errors.consent && (
+                {errors.consent && 'message' in errors.consent ? (
                   <p className="mt-1 text-xs text-red-600" role="alert">
                     {errors.consent.message}
                   </p>
-                )}
+                ) : null}
               </div>
             )}
           </form>

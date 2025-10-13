@@ -1,11 +1,12 @@
 import type { LucideIcon } from 'lucide-react';
+import type { ReactElement } from 'react';
 
 import Link from 'next/link';
 
 interface SocialIconProps {
   className?: string;
   href: string;
-  icon: (() => JSX.Element) | LucideIcon;
+  icon: (() => ReactElement) | LucideIcon;
   label: string;
 }
 

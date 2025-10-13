@@ -1,8 +1,8 @@
-# Orbis Veritas Frontend - Cursor Rules
+# Cartop Frontend - Cursor Rules
 
 ## 🚨 CRITICAL: Always Read Project Documentation First
 
-**BEFORE writing any code, you MUST read `orbis-veritas-frontend.md` to understand:**
+**BEFORE writing any code, you MUST read `cartop-frontend.md` to understand:**
 
 - Project structure and architecture
 - Database schema and API endpoints
@@ -15,7 +15,7 @@
 
 ### After Major Features
 
-- Update `orbis-veritas-frontend.md` with new features
+- Update `cartop-frontend.md` with new features
 - Document any new API endpoints
 - Update business logic rules
 - Add new environment variables
@@ -42,7 +42,6 @@
 - **CRM App**: `apps/crm/` - Main business application
 - **Customer App**: `apps/customer/` - Customer-facing features
 - **Shared Packages**: `packages/` - Reusable code
-- **API Client**: `packages/veritas-api/` - Centralized API types and functions
 
 ### Code Organization
 
@@ -54,7 +53,7 @@
 
 ### API Integration
 
-- Always use `@veritas/api` package for API calls
+- Always use generated GQL types and orval types
 - Never import from local `_generated` folders
 - Configure API with proper authentication provider
 - Handle loading and error states properly
@@ -133,18 +132,17 @@
 
 ### Do This Instead
 
-- ✅ Use `@veritas/api` package imports
 - ✅ Use environment variables for configuration
 - ✅ Implement proper auth providers
 - ✅ Fix TypeScript errors immediately
 - ✅ Follow documented business rules
-- ✅ Update `orbis-veritas-frontend.md` after changes
+- ✅ Update `cartop-frontend.md` after changes
 
 ## 📚 Key Resources
 
 ### Documentation
 
-- `orbis-veritas-frontend.md` - Main project documentation
+- `cartop-frontend.md` - Main project documentation
 - `README.md` - Setup and development instructions
 - `MIGRATION.md` - Recent migration notes
 
@@ -158,7 +156,6 @@
 ### Important Directories
 
 - `apps/crm/src/` - Main CRM application code
-- `packages/veritas-api/` - Centralized API client
 - `packages/ui/` - Shared UI components
 - `apps/*/docs/` - OpenAPI specifications
 
@@ -166,7 +163,7 @@
 
 When making changes, ensure you:
 
-1. ✅ Read `orbis-veritas-frontend.md` first
+1. ✅ Read `cartop-frontend.md` first
 2. ✅ Understand the existing architecture
 3. ✅ Follow established patterns
 4. ✅ Update documentation if needed
