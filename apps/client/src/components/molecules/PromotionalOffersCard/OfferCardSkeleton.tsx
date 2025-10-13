@@ -1,14 +1,11 @@
 import { cn } from '@/utils/cv';
 
-interface PromotionalOffersCardSkeletonProps {
+export interface OfferCardSkeletonProps {
   className?: string;
   count?: number;
 }
 
-export const PromotionalOffersCardSkeleton = ({
-  className,
-  count = 1,
-}: PromotionalOffersCardSkeletonProps) => {
+export const OfferCardSkeleton = ({ className, count = 1 }: OfferCardSkeletonProps) => {
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
@@ -66,3 +63,7 @@ export const PromotionalOffersCardSkeleton = ({
     </>
   );
 };
+
+// Export with legacy name for backward compatibility
+export const PromotionalOffersCardSkeleton = OfferCardSkeleton;
+export type PromotionalOffersCardSkeletonProps = OfferCardSkeletonProps;

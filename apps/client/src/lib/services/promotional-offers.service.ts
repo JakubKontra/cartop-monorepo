@@ -244,10 +244,24 @@ function generateDummyOffers(): PromotionalOffer[] {
           id: 'gallery-1',
           images: [
             {
-              alt: 'Škoda Octavia',
+              alt: 'Škoda Octavia - Exterior Front',
               height: 800,
               id: 'img-1',
               url: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80',
+              width: 1200,
+            },
+            {
+              alt: 'Škoda Octavia - Side View',
+              height: 800,
+              id: 'img-1-2',
+              url: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80',
+              width: 1200,
+            },
+            {
+              alt: 'Škoda Octavia - Interior',
+              height: 800,
+              id: 'img-1-3',
+              url: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&q=80',
               width: 1200,
             },
           ],
@@ -309,10 +323,17 @@ function generateDummyOffers(): PromotionalOffer[] {
           id: 'gallery-2',
           images: [
             {
-              alt: 'Volkswagen Passat',
+              alt: 'Volkswagen Passat - Front View',
               height: 800,
               id: 'img-2',
               url: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&q=80',
+              width: 1200,
+            },
+            {
+              alt: 'Volkswagen Passat - Rear View',
+              height: 800,
+              id: 'img-2-2',
+              url: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
               width: 1200,
             },
           ],
