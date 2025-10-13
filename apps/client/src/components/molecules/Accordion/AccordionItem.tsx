@@ -53,7 +53,7 @@ export const AccordionItem = ({
           <button
             aria-controls={contentId}
             aria-expanded={isOpen}
-            className="flex w-full justify-between gap-4 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:p-6"
+            className="flex w-full cursor-pointer justify-between gap-4 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:p-6"
             id={headingId}
             type="button"
             onClick={toggle}
@@ -81,7 +81,7 @@ export const AccordionItem = ({
             contentClassName,
           )}
         >
-          <div className="select-text">{content}</div>
+          <div className="max-w-[960px] select-text">{content}</div>
         </div>
       </div>
     </WrapperFadeIn>

@@ -1,4 +1,5 @@
-import { Accordion, AccordionItem } from '@/components/molecules/Accordion';
+import { Accordion } from '@/components/molecules/Accordion/Accordion';
+import { AccordionItem } from '@/components/molecules/Accordion/AccordionItem';
 import { cn } from '@/utils/cv';
 
 import { FaqIcon } from './FaqIcon';

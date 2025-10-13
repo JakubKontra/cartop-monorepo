@@ -1,6 +1,6 @@
-import type { FaqItemData } from '@/components/organisms/Faq';
+import type { FaqItemData } from '@/components/organisms/Faq/Faq';
 
-import { Faq } from '@/components/organisms/Faq';
+import { Faq } from '@/components/organisms/Faq/Faq';
 import HowItWorksButton from '@/components/organisms/HowItWorksButton';
 
 const faqData: FaqItemData[] = [
@@ -62,7 +62,7 @@ export const FaqSection = () => {
       <script dangerouslySetInnerHTML={{ __html: faqStructuredData }} type="application/ld+json" />
 
       <section className="bg-white px-4 py-16">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-[1360px]">
           <div className="mb-14 text-center lg:text-left">
             <h2 className="mb-4 text-4xl lg:text-5xl">
               <span className="headline-highlight">Často</span>
@@ -70,9 +70,7 @@ export const FaqSection = () => {
               Kladené otázky
             </h2>
           </div>
-
           <Faq items={faqData} />
-
           <div className="mt-14 flex w-full justify-center">
             <HowItWorksButton />
           </div>
