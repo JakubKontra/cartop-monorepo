@@ -11,7 +11,7 @@ export const PromotionalOffersSectionLoading = () => {
           subtitle="Vyberte si z našich top možností a jeďěte výhodněji."
         />
 
-        <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mb-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           <PromotionalOffersCardSkeleton count={3} />
         </div>
 
