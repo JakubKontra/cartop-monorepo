@@ -15,14 +15,22 @@ export const FooterLinkColumn = ({ className = '', links, title }: FooterLinkCol
   return (
     <div className={className}>
       <h3 className="mb-4 text-base font-semibold text-gunmetal-200">{title}</h3>
-      <ul className="space-y-2">
-        {links.map(link => (
-          <li key={link.href}>
-            <Link className="text-sm text-white underline hover:no-underline" href={link.href}>
-              {link.label}
-            </Link>
-          </li>
-        ))}
+      <ul className="flex flex-col gap-2">
+        {links.map(link => {
+          const isViewAll = link.label === 'Zobrazit vše';
+          return (
+            <li key={link.href} className={isViewAll ? 'pt-7' : ''}>
+              <Link
+                href={link.href}
+                className={`text-sm underline hover:no-underline ${
+                  isViewAll ? 'text-gunmetal-200' : 'text-white'
+                }`}
+              >
+                {link.label}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
