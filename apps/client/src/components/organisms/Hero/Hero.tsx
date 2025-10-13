@@ -23,7 +23,7 @@ const buttonVariants = tv({
 export default function FilterBar() {
   return (
     <div
-      className="grid grid-cols-2 lg:grid-cols-7 items-center gap-2 p-3 lg:p-4 rounded-3xl lg:rounded-4xl"
+      className="grid grid-cols-2 lg:grid-cols-8 items-center gap-2 p-3 lg:p-4 rounded-3xl lg:rounded-4xl"
       style={{ backgroundColor: '#262D37' }}
     >
       <button className={buttonVariants({ variant: 'secondary' })}>Do 10 tisíc</button>
@@ -36,7 +36,7 @@ export default function FilterBar() {
       <button
         className={cn(
           buttonVariants({ variant: 'primary', size: 'icon' }),
-          'justify-start gap-4 col-span-2 lg:col-span-1',
+          'justify-start gap-4 col-span-2',
         )}
       >
         <span className="flex items-center justify-center w-[48px] h-[48px] rounded-[10px] lg:rounded-2xl bg-primary shrink-0">

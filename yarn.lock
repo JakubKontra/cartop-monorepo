@@ -1954,12 +1954,15 @@ __metadata:
     eslint-config-cartop: "link:../../packages/eslint-config-cartop"
     eslint-config-next: "npm:15.5.4"
     graphql: "npm:^16.11.0"
+    gsap: "npm:^3.13.0"
     lucide-react: "npm:^0.545.0"
     next: "npm:15.5.4"
     postcss: "npm:^8.5.6"
     react: "npm:19.2.0"
     react-dom: "npm:19.2.0"
     react-hook-form: "npm:^7.54.2"
+    swiper: "npm:^12.0.2"
+    tailwind-merge: "npm:^3.3.1"
     tailwind-variants: "npm:^3.1.1"
     tailwindcss: "npm:^4"
     typescript: "npm:^5.8.4"
@@ -15406,6 +15409,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gsap@npm:^3.13.0":
+  version: 3.13.0
+  resolution: "gsap@npm:3.13.0"
+  checksum: 10c0/a42dd2e02467a4abe96409aaf6cd0e5d697c72e05ec13c18c2271330493983aa63cc717c9dd0740fda2f884d0f56c7b98fc18b13500f0c1da94864985840da7c
+  languageName: node
+  linkType: hard
+
 "handlebars@npm:^4.7.8":
   version: 4.7.8
   resolution: "handlebars@npm:4.7.8"
@@ -21809,6 +21819,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swiper@npm:^12.0.2":
+  version: 12.0.2
+  resolution: "swiper@npm:12.0.2"
+  checksum: 10c0/e7826eb5973828c622a30f321dc7740300a32666d26810b381e2498ad60f2f84e070058a1aa0ee32acce8a6d31f2d2919c388b2e5921db45690c59af41b1c7b8
+  languageName: node
+  linkType: hard
+
 "swr@npm:2.3.4":
   version: 2.3.4
   resolution: "swr@npm:2.3.4"
@@ -21859,6 +21876,13 @@ __metadata:
   version: 2.6.0
   resolution: "tailwind-merge@npm:2.6.0"
   checksum: 10c0/fc8a5535524de9f4dacf1c16ab298581c7bb757d68a95faaf28942b1c555a619bba9d4c6726fe83986e44973b315410c1a5226e5354c30ba82353bd6d2288fa5
+  languageName: node
+  linkType: hard
+
+"tailwind-merge@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "tailwind-merge@npm:3.3.1"
+  checksum: 10c0/b84c6a78d4669fa12bf5ab8f0cdc4400a3ce0a7c006511af4af4be70bb664a27466dbe13ee9e3b31f50ddf6c51d380e8192ce0ec9effce23ca729d71a9f63818
   languageName: node
   linkType: hard
 
