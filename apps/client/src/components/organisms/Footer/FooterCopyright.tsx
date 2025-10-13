@@ -10,19 +10,19 @@ export const FooterCopyright = () => {
         <div className="flex flex-wrap items-center gap-6 text-sm text-white">
           <p>&copy; {currentYear} Cartop.cz. Všechna práva vyhrazena.</p>
           <Link
-            className="transition-colors text-xs text-gunmetal-200 underline hover:no-underline"
+            className="text-xs text-gunmetal-200 underline transition-colors hover:no-underline"
             href="/privacy-policy"
           >
             Všeobecné obchodní podmínky
           </Link>
           <Link
-            className="transition-colors text-xs text-gunmetal-200 underline hover:no-underline"
+            className="text-xs text-gunmetal-200 underline transition-colors hover:no-underline"
             href="/terms-of-service"
           >
             Nakládání s osobními údaji
           </Link>
           <Link
-            className="transition-colors text-xs text-gunmetal-200 underline hover:no-underline"
+            className="text-xs text-gunmetal-200 underline transition-colors hover:no-underline"
             href="/terms-of-service"
           >
             Nakládání s cookies

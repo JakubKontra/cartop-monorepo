@@ -112,11 +112,12 @@ export class CatalogBrandService {
     return true;
   }
 
-  async getHighlighted(): Promise<CatalogBrand[]> {
+  async getHighlighted(limit?: number): Promise<CatalogBrand[]> {
     return this.brandRepository.find({
       where: { isHighlighted: true, isActive: true },
       relations: ['logo'],
       order: { name: 'ASC' },
+      ...(limit && { take: limit }),
     });
   }
 

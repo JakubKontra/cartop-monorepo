@@ -28,13 +28,20 @@ export const GET_BRANDS_QUERY = graphql(`
  * Get highlighted brands for homepage
  */
 export const GET_HIGHLIGHTED_BRANDS_QUERY = graphql(`
-  query GetHighlightedBrands {
-    highlightedCatalogBrands {
+  query GetHighlightedBrands($limit: Float) {
+    highlightedCatalogBrands(limit: $limit) {
       id
       name
       slug
       description
       isHighlighted
+      logo {
+        id
+        url
+        alt
+        width
+        height
+      }
     }
   }
 `);

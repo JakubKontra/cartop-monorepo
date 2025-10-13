@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { Facebook, Instagram } from 'lucide-react';
 
 import { SocialIcon } from '../atoms/SocialIcon';
 

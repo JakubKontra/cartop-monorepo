@@ -8,15 +8,16 @@
 
   --color-french-grey: #c9ccd3;
   --color-black: #131313;
-  --color-gunmetal: #262d37;
-  --color-gunmetal-50: #f3f5f7;
-  --color-gunmetal-100: #d9e0e6;
-  --color-gunmetal-700: #4c6172;
   --color-white: #fefefe;
   --color-cadet-grey: #8ca1b2;
   --color-crimson-red: #c90932;
 
+  --color-gunmetal: #262d37;
+  --color-gunmetal-50: #f3f5f7;
+  --color-gunmetal-100: #d9e0e6;
   --color-gunmetal-200: #bfcbd4;
+  --color-gunmetal-700: #4c6172;
+  --color-gunmetal-800: #3b4b58;
 
   /* define this since you use it on body */
   --color-text: var(--color-black);

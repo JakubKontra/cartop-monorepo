@@ -2,6 +2,7 @@ import type { FaqItemData } from '@/components/organisms/Faq/Faq';
 
 import { Faq } from '@/components/organisms/Faq/Faq';
 import HowItWorksButton from '@/components/organisms/HowItWorksButton';
+import { SectionHeader } from '@/components/sections/Homepage/SectionHeader';
 
 const faqData: FaqItemData[] = [
   {
@@ -63,13 +64,7 @@ export const FaqSection = () => {
 
       <section className="bg-white px-4 py-16">
         <div className="mx-auto max-w-[1360px]">
-          <div className="mb-14 text-center lg:text-left">
-            <h2 className="mb-4 text-4xl lg:text-5xl">
-              <span className="headline-highlight">Často</span>
-              <br />
-              Kladené otázky
-            </h2>
-          </div>
+          <SectionHeader highlightedWord="Často" remainingTitle="kladené otázky" />
           <Faq items={faqData} />
           <div className="mt-14 flex w-full justify-center">
             <HowItWorksButton />

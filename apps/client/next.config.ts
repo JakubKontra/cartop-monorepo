@@ -1,23 +1,25 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const isProd =
-  process.env.NEXT_PUBLIC_VERCEL_BRANCH === "production" ||
-  process.env.NODE_ENV === "production";
+  process.env.NEXT_PUBLIC_VERCEL_BRANCH === 'production' || process.env.NODE_ENV === 'production';
 
-const enableProdSourceMaps = process.env.NEXT_ENABLE_SOURCEMAPS === "true";
+const enableProdSourceMaps = process.env.NEXT_ENABLE_SOURCEMAPS === 'true';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  output: "standalone",
+  output: 'standalone',
   productionBrowserSourceMaps: enableProdSourceMaps,
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ['lucide-react'],
     // reactCompiler: true, // Disabled - requires babel-plugin-react-compiler
   },
   compiler: {
-    removeConsole: isProd ? { exclude: ["error", "warn"] } : false,
+    removeConsole: isProd ? { exclude: ['error', 'warn'] } : false,
+  },
+  images: {
+    domains: ['localhost', '127.0.0.1'],
   },
 };
 

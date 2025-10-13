@@ -62,8 +62,10 @@ export class CatalogBrandPublicResolver {
    * Used for featured sections on the homepage
    */
   @Query(() => [CatalogBrand], { name: 'highlightedCatalogBrands' })
-  async getHighlightedCatalogBrands(): Promise<CatalogBrand[]> {
-    return this.brandService.getHighlighted();
+  async getHighlightedCatalogBrands(
+    @Args('limit', { nullable: true }) limit?: number,
+  ): Promise<CatalogBrand[]> {
+    return this.brandService.getHighlighted(limit);
   }
 
   /**
