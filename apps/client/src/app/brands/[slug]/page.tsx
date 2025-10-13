@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import type { GetBrandBySlugQuery } from '@/gql/graphql';
+
 import { graphqlRequest } from '@/lib/graphql-client';
 import { GET_BRAND_BY_SLUG_QUERY } from '@/queries/brands';
 
@@ -45,16 +46,16 @@ export default async function BrandPage({ params }: BrandPageProps) {
     // Generate timestamp to verify cache revalidation
     const renderedAt = new Date().toLocaleString('en-US', {
       dateStyle: 'medium',
-      timeStyle: 'medium',
       hour12: true,
+      timeStyle: 'medium',
     });
 
     return (
       <main className="container mx-auto px-4 py-8">
         {/* Back Navigation */}
         <Link
-          href="/brands"
           className="mb-4 inline-flex items-center text-blue-600 hover:text-blue-800"
+          href="/brands"
         >
           ← Back to all brands
         </Link>
@@ -182,8 +183,8 @@ export async function generateMetadata({ params }: BrandPageProps) {
     }
 
     return {
-      title: `${brand.name} | Cartop`,
       description: brand.description || `Browse ${brand.name} vehicles on Cartop`,
+      title: `${brand.name} | Cartop`,
     };
   } catch {
     return {

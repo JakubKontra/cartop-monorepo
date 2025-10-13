@@ -1,33 +1,34 @@
 'use client';
 
-import type { ReactElement, ReactNode, KeyboardEvent } from 'react';
+import type { KeyboardEvent, ReactElement, ReactNode } from 'react';
+
 import { cloneElement, isValidElement, useState } from 'react';
 
 import { WrapperFadeIn } from '@/components/organisms/animations/WrapperFadeIn';
 import { cn } from '@/utils/cv';
 
 interface AccordionItemProps {
-  title: ReactNode;
+  containerClassName?: string;
   content: ReactNode;
+  contentClassName?: string;
+  icon?: ReactElement<{ isOpen?: boolean }>;
+  iconClassName?: string;
   index: number;
   isDefaultOpen?: boolean;
-  icon?: ReactElement<{ isOpen?: boolean }>;
-  containerClassName?: string;
+  title: ReactNode;
   titleClassName?: string;
-  contentClassName?: string;
-  iconClassName?: string;
 }
 
 export const AccordionItem = ({
-  title,
+  containerClassName,
   content,
+  contentClassName,
+  icon,
+  iconClassName,
   index,
   isDefaultOpen = false,
-  icon,
-  containerClassName,
+  title,
   titleClassName,
-  contentClassName,
-  iconClassName,
 }: AccordionItemProps) => {
   const [isOpen, setIsOpen] = useState(isDefaultOpen);
 
@@ -50,13 +51,13 @@ export const AccordionItem = ({
       <div className={cn('transition-all duration-300', containerClassName)}>
         <h3 className="m-0">
           <button
-            onClick={toggle}
-            onKeyDown={handleKeyDown}
-            className="flex w-full justify-between gap-4 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:p-6"
-            aria-expanded={isOpen}
             aria-controls={contentId}
+            aria-expanded={isOpen}
+            className="flex w-full justify-between gap-4 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:p-6"
             id={headingId}
             type="button"
+            onClick={toggle}
+            onKeyDown={handleKeyDown}
           >
             <span className={cn('flex-1 pr-4 text-lg font-semibold lg:text-xl', titleClassName)}>
               {title}
@@ -69,9 +70,9 @@ export const AccordionItem = ({
           </button>
         </h3>
         <div
+          aria-labelledby={headingId}
           id={contentId}
           role="region"
-          aria-labelledby={headingId}
           className={cn(
             'transition-[max-height, opacity, padding] overflow-hidden duration-300',
             isOpen

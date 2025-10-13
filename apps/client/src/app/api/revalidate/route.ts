@@ -5,8 +5,9 @@
  * Triggers Next.js ISR revalidation for affected pages
  */
 
-import { revalidatePath, revalidateTag } from 'next/cache';
 import type { NextRequest } from 'next/server';
+
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 
 // Secret token for webhook security (should match backend CACHE_INVALIDATION_SECRET)
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     // Parse webhook payload
     const body = await request.json();
-    const { entityName, action, data } = body;
+    const { action, data, entityName } = body;
 
     console.warn(`[Revalidation] Received webhook: ${entityName} - ${action}`, data);
 
@@ -56,10 +57,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      success: true,
-      revalidated: true,
-      entityName,
       action,
+      entityName,
+      revalidated: true,
+      success: true,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
@@ -77,10 +78,10 @@ export async function POST(request: NextRequest) {
 
 export function GET() {
   return NextResponse.json({
-    status: 'ok',
+    description: 'Cache revalidation webhook endpoint',
     endpoint: '/api/revalidate',
     method: 'POST',
-    description: 'Cache revalidation webhook endpoint',
+    status: 'ok',
     usage: 'Send POST with Authorization header and entity/action payload',
   });
 }

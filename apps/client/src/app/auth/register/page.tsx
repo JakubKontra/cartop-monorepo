@@ -25,11 +25,11 @@ export default function RegisterPage() {
           <SignInForm />
           <p className="text-muted-foreground px-8 text-center text-sm">
             By clicking sign in, you agree to our{' '}
-            <a href="/terms" className="underline underline-offset-4 hover:text-primary">
+            <a className="underline underline-offset-4 hover:text-primary" href="/terms">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="/privacy" className="underline underline-offset-4 hover:text-primary">
+            <a className="underline underline-offset-4 hover:text-primary" href="/privacy">
               Privacy Policy
             </a>
           </p>
@@ -43,11 +43,11 @@ export default function RegisterPage() {
         )}
       >
         <Image
-          src={'/images/auth/register.png'}
-          className="dark:hidden"
-          width={1024}
-          height={1151}
           alt="Shadcn-Admin"
+          className="dark:hidden"
+          height={1151}
+          src={'/images/auth/register.png'}
+          width={1024}
         />
       </div>
     </div>

@@ -3,14 +3,14 @@ import type { ReactNode } from 'react';
 import { cn } from '@/utils/cv';
 
 interface AccordionProps {
+  ariaLabel?: string;
   children: ReactNode;
   className?: string;
-  ariaLabel?: string;
 }
 
-export const Accordion = ({ children, className, ariaLabel = 'Accordion' }: AccordionProps) => {
+export const Accordion = ({ ariaLabel = 'Accordion', children, className }: AccordionProps) => {
   return (
-    <ul className={cn('space-y-3', className)} role="region" aria-label={ariaLabel}>
+    <ul aria-label={ariaLabel} className={cn('space-y-3', className)} role="region">
       {children}
     </ul>
   );

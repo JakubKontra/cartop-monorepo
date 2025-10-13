@@ -1,4 +1,4 @@
-export function FooterContactInfo() {
+export const FooterContactInfo = () => {
   return (
     <div className="space-y-4">
       <div>
@@ -12,4 +12,4 @@ export function FooterContactInfo() {
       </div>
     </div>
   );
-}
+};

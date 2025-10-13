@@ -6,19 +6,19 @@ export interface FooterLink {
 }
 
 interface FooterLinkColumnProps {
-  title: string;
-  links: FooterLink[];
   className?: string;
+  links: FooterLink[];
+  title: string;
 }
 
-export function FooterLinkColumn({ title, links, className = '' }: FooterLinkColumnProps) {
+export const FooterLinkColumn = ({ className = '', links, title }: FooterLinkColumnProps) => {
   return (
     <div className={className}>
       <h3 className="mb-4 text-base font-semibold text-gunmetal-200">{title}</h3>
       <ul className="space-y-2">
         {links.map(link => (
           <li key={link.href}>
-            <Link href={link.href} className="text-sm text-white underline hover:no-underline">
+            <Link className="text-sm text-white underline hover:no-underline" href={link.href}>
               {link.label}
             </Link>
           </li>
@@ -26,4 +26,4 @@ export function FooterLinkColumn({ title, links, className = '' }: FooterLinkCol
       </ul>
     </div>
   );
-}
+};

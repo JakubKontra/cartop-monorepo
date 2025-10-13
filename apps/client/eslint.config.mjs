@@ -9,6 +9,9 @@ import unicorn from "eslint-plugin-unicorn";
 import sonarjs from "eslint-plugin-sonarjs";
 import regexp from "eslint-plugin-regexp";
 import boundaries from "eslint-plugin-boundaries";
+import perfectionist from "eslint-plugin-perfectionist";
+import typescriptSortKeys from "eslint-plugin-typescript-sort-keys";
+import sortDestructureKeys from "eslint-plugin-sort-destructure-keys";
 import prettierConfig from "eslint-config-prettier";
 
 import { FlatCompat } from "@eslint/eslintrc";
@@ -237,6 +240,146 @@ const eslintConfig = [
     },
   },
 
+  // React: Code quality and best practices
+  {
+    rules: {
+      // Prevent unstable nested components (causes re-renders)
+      "react/no-unstable-nested-components": ["error", { allowAsProps: false }],
+
+      // Consistent JSX props ordering
+      "react/jsx-sort-props": [
+        "warn",
+        {
+          callbacksLast: true,
+          shorthandFirst: true,
+          reservedFirst: true, // key, ref first
+          ignoreCase: true,
+          multiline: "last",
+          noSortAlphabetically: false,
+        },
+      ],
+
+      // Standardize function component definition style
+      "react/function-component-definition": [
+        "warn",
+        {
+          namedComponents: "arrow-function",
+          unnamedComponents: "arrow-function",
+        },
+      ],
+
+      // Warn against using array index as key
+      "react/no-array-index-key": "warn",
+
+      // Re-enable: avoid useless fragments
+      "react/jsx-no-useless-fragment": "warn",
+
+      // Unicorn: suggest extracting functions that don't use closure
+      "unicorn/consistent-function-scoping": "warn",
+    },
+  },
+
+  // Disable function-component-definition for Next.js app directory (async server components)
+  {
+    files: ["src/app/**/*.tsx", "src/app/**/*.ts"],
+    rules: {
+      "react/function-component-definition": "off",
+    },
+  },
+
+  // Perfectionist: Sorting and organization
+  {
+    plugins: {
+      perfectionist,
+    },
+    rules: {
+      // Sort object properties alphabetically
+      "perfectionist/sort-objects": [
+        "warn",
+        {
+          type: "alphabetical",
+          order: "asc",
+          ignoreCase: true,
+        },
+      ],
+
+      // Sort imports
+      "perfectionist/sort-imports": [
+        "warn",
+        {
+          type: "alphabetical",
+          order: "asc",
+          ignoreCase: true,
+          newlinesBetween: "always",
+          groups: [
+            "type",
+            ["builtin", "external"],
+            "internal-type",
+            "internal",
+            ["parent-type", "sibling-type", "index-type"],
+            ["parent", "sibling", "index"],
+            "object",
+            "unknown",
+          ],
+        },
+      ],
+
+      // Sort named imports
+      "perfectionist/sort-named-imports": [
+        "warn",
+        {
+          type: "alphabetical",
+          order: "asc",
+        },
+      ],
+
+      // Sort union/intersection types
+      "perfectionist/sort-union-types": [
+        "warn",
+        {
+          type: "alphabetical",
+          order: "asc",
+        },
+      ],
+
+      // Sort interface properties
+      "perfectionist/sort-interfaces": [
+        "warn",
+        {
+          type: "alphabetical",
+          order: "asc",
+          ignoreCase: true,
+        },
+      ],
+    },
+  },
+
+  // TypeScript Sort Keys: Sort TypeScript types and interfaces
+  {
+    plugins: {
+      "typescript-sort-keys": typescriptSortKeys,
+    },
+    rules: {
+      "typescript-sort-keys/interface": "warn",
+      "typescript-sort-keys/string-enum": "warn",
+    },
+  },
+
+  // Sort Destructure Keys: Sort destructured object keys
+  {
+    plugins: {
+      "sort-destructure-keys": sortDestructureKeys,
+    },
+    rules: {
+      "sort-destructure-keys/sort-destructure-keys": [
+        "warn",
+        {
+          caseSensitive: false,
+        },
+      ],
+    },
+  },
+
   // Prettier config - disables conflicting stylistic rules
   prettierConfig,
 
@@ -258,7 +401,6 @@ const eslintConfig = [
       "eslint@typescript-eslint/no-var-requires": "off",
       "import-x/no-cycle": "off",
       "import-x/no-named-as-default": "off",
-      "react/jsx-no-useless-fragment": "off",
     },
   },
   {
@@ -289,8 +431,8 @@ const eslintConfig = [
   },
   {
     rules: {
-      // keep ordering rule
-      "import-x/order": "error",
+      // Disable import-x/order - using perfectionist/sort-imports instead (more powerful)
+      "import-x/order": "off",
       // disable other import-x rules
       "import-x/named": "off",
       "import-x/first": "off",

@@ -1,13 +1,14 @@
-import { useRef, useState } from 'react';
+import type { Swiper as SwiperType } from 'swiper/types';
+
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
-import type { Swiper as SwiperType } from 'swiper/types';
+import { useRef, useState } from 'react';
 
 export const useSwiper = () => {
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const swiperRef = useRef<SwiperType | null>(null);
+  const swiperRef = useRef<null | SwiperType>(null);
 
   const slidesLength = swiperRef.current?.slides?.length || 0;
 
@@ -47,14 +48,14 @@ export const useSwiper = () => {
 
   return {
     activeSlide,
-    realIndex,
-    setActiveSlide,
-    onNext,
-    onPrevious,
-    swiperRef,
     isFirst,
     isLast,
+    onNext,
+    onPrevious,
     onSetActiveSlide,
     onSetActiveSlideToLoop,
+    realIndex,
+    setActiveSlide,
+    swiperRef,
   };
 };

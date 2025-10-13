@@ -1,6 +1,6 @@
 'use client';
 
-import { ServerCrash, RefreshCw } from 'lucide-react';
+import { RefreshCw, ServerCrash } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -58,16 +58,16 @@ export default function Error({
         {/* Actions */}
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
+            className="flex items-center gap-2 rounded-lg bg-primary px-8 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/50"
             type="button"
             onClick={reset}
-            className="flex items-center gap-2 rounded-lg bg-primary px-8 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/50"
           >
             <RefreshCw className="h-5 w-5" />
             Try Again
           </button>
           <Link
-            href="/"
             className="rounded-lg border-2 border-primary px-8 py-3 font-semibold text-primary transition-all duration-300 hover:bg-primary hover:text-white"
+            href="/"
           >
             Go Home
           </Link>

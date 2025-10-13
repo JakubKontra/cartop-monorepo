@@ -3,41 +3,41 @@ import Image from 'next/image';
 
 import Button from '@/components/organisms/Button/Button';
 
-export default function FilterBar() {
+const FilterBar = () => {
   return (
     <div
       className="items-center gap-2 rounded-3xl p-3 max-lg:grid max-lg:grid-cols-2 lg:flex lg:rounded-4xl lg:p-4"
       style={{ backgroundColor: '#262D37' }}
     >
-      <Button variant="outline-white" width="full" size="narrow">
+      <Button size="narrow" variant="outline-white" width="full">
         Do 10 tisíc
       </Button>
-      <Button variant="outline-white" width="full" size="narrow">
+      <Button size="narrow" variant="outline-white" width="full">
         Užitkové
       </Button>
-      <Button variant="outline-white" width="full" size="narrow">
+      <Button size="narrow" variant="outline-white" width="full">
         Kategorie
       </Button>
-      <Button variant="outline-white" width="full" size="narrow">
+      <Button size="narrow" variant="outline-white" width="full">
         Skladové
       </Button>
-      <Button variant="outline-white" width="full" size="narrow">
+      <Button size="narrow" variant="outline-white" width="full">
         Náš výběr
       </Button>
-      <Button variant="outline-white" width="full" size="narrow">
+      <Button size="narrow" variant="outline-white" width="full">
         Značky
       </Button>
       <Button
-        variant="primary-inverted"
+        className="max-lg:col-span-2"
         icon={<Search className="size-5" />}
         size="narrow"
-        className="max-lg:col-span-2"
+        variant="primary-inverted"
       >
         Všechny nabídky
       </Button>
     </div>
   );
-}
+};
 
 export const Hero = () => {
   return (
@@ -45,11 +45,11 @@ export const Hero = () => {
       <div className="mx-auto w-full max-w-[1420px] px-4 lg:px-6">
         <div className="relative h-[600px] overflow-visible rounded-[32px] lg:h-[645px] lg:rounded-[48px]">
           <Image
-            src="/mock/mock-1-bg.jpg"
-            alt="Hero"
             fill
-            className="rounded-[32px] object-cover lg:rounded-[48px]"
             priority
+            alt="Hero"
+            className="rounded-[32px] object-cover lg:rounded-[48px]"
+            src="/mock/mock-1-bg.jpg"
           />
 
           <div className="absolute inset-0 flex flex-col justify-start px-6 pt-8 lg:pt-[88px] lg:pl-[72px]">
@@ -64,7 +64,7 @@ export const Hero = () => {
               Prémiové SUV za jedinečných podmínek
             </p>
             <div>
-              <Button variant="primary" icon={<Search className="size-5" />}>
+              <Button icon={<Search className="size-5" />} variant="primary">
                 Prohlédnout
               </Button>
             </div>

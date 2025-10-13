@@ -1,51 +1,52 @@
 'use client';
 
+import type { ElementType, ReactNode } from 'react';
+
 import { gsap } from 'gsap';
-import type { ReactNode, ElementType } from 'react';
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 // Map element types to their corresponding HTML element refs
 type ElementTagNameMap = {
-  div: HTMLDivElement;
-  span: HTMLSpanElement;
-  ul: HTMLUListElement;
-  li: HTMLLIElement;
-  section: HTMLElement;
   article: HTMLElement;
   aside: HTMLElement;
-  nav: HTMLElement;
-  header: HTMLElement;
+  div: HTMLDivElement;
   footer: HTMLElement;
-  main: HTMLElement;
-  p: HTMLParagraphElement;
   h1: HTMLHeadingElement;
   h2: HTMLHeadingElement;
   h3: HTMLHeadingElement;
   h4: HTMLHeadingElement;
   h5: HTMLHeadingElement;
   h6: HTMLHeadingElement;
+  header: HTMLElement;
+  li: HTMLLIElement;
+  main: HTMLElement;
+  nav: HTMLElement;
+  p: HTMLParagraphElement;
+  section: HTMLElement;
+  span: HTMLSpanElement;
+  ul: HTMLUListElement;
 };
 
 type ElementTag = keyof ElementTagNameMap;
 
 interface WrapperFadeInProps<TElement extends ElementTag = 'div'> {
+  as?: TElement;
   children: ReactNode;
+  className?: string;
   delay?: number;
   duration?: number;
   threshold?: number;
-  className?: string;
-  as?: TElement;
 }
 
 export const WrapperFadeIn = <TElement extends ElementTag = 'div'>({
+  as,
   children,
+  className = '',
   delay = 0,
   duration = 0.6,
   threshold = 0.8,
-  className = '',
-  as,
 }: WrapperFadeInProps<TElement>) => {
   const Component = (as || 'div') as ElementType;
   const elementRef = useRef<ElementTagNameMap[TElement]>(null);
@@ -67,11 +68,11 @@ export const WrapperFadeIn = <TElement extends ElementTag = 'div'>({
     if (isInView && !hasAnimated.current) {
       hasAnimated.current = true;
       gsap.to(element, {
+        delay,
+        duration,
+        ease: 'power2.out',
         opacity: 1,
         y: 0,
-        duration,
-        delay,
-        ease: 'power2.out',
       });
     }
   }, [isInView, delay, duration]);

@@ -3,6 +3,7 @@
  */
 
 import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
+
 import { print } from 'graphql';
 
 const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3000/graphql';
@@ -15,8 +16,8 @@ export interface GraphQLRequest<TData = unknown, TVariables = Record<string, unk
 export interface GraphQLResponse<TData> {
   data?: TData;
   errors?: {
+    locations?: { column: number; line: number }[];
     message: string;
-    locations?: { line: number; column: number }[];
     path?: string[];
   }[];
 }
@@ -32,15 +33,15 @@ export async function graphqlRequest<TData, TVariables = Record<string, unknown>
   const query = typeof request.query === 'string' ? request.query : print(request.query);
 
   const response = await fetch(GRAPHQL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
     body: JSON.stringify({
       query,
       variables: request.variables,
     }),
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+    method: 'POST',
     ...options,
   });
 

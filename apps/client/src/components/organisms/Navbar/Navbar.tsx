@@ -4,31 +4,31 @@ import React from 'react';
 
 import { Logo } from '@/components/branding/Logo';
 
-export default function Navbar() {
+const Navbar = () => {
   return (
     <header className="w-full bg-white">
       <nav className="mx-auto flex h-[60px] max-w-7xl items-center justify-between gap-6 px-6 md:h-20">
-        <Link href="/" className="shrink-0 select-none" aria-label="Cartop — home">
+        <Link aria-label="Cartop — home" className="shrink-0 select-none" href="/">
           <Logo className="text-primary" />
         </Link>
 
         <ul className="font-sora hidden flex-grow items-center justify-center gap-10 text-base leading-[160%] font-normal tracking-[0.01em] text-gunmetal lg:flex">
           <li>
             <Link
-              href="#offers"
               className="inline-flex items-center gap-1 transition hover:text-slate-900"
+              href="#offers"
             >
               <span>Všechny nabídky</span>
               <span className="text-slate-400">▾</span>
             </Link>
           </li>
           <li>
-            <Link href="#how" className="transition hover:text-slate-900">
+            <Link className="transition hover:text-slate-900" href="#how">
               Jak to funguje?
             </Link>
           </li>
           <li>
-            <Link href="#contact" className="transition hover:text-slate-900">
+            <Link className="transition hover:text-slate-900" href="#contact">
               Kontakt
             </Link>
           </li>
@@ -41,33 +41,33 @@ export default function Navbar() {
             style={{ width: '282px' }}
           >
             <input
-              type="text"
-              placeholder="Hledat..."
-              className="flex-1 bg-transparent text-[14px] outline-none placeholder:text-slate-400"
               aria-label="Hledat"
+              className="flex-1 bg-transparent text-[14px] outline-none placeholder:text-slate-400"
+              placeholder="Hledat..."
+              type="text"
             />
             <button
-              type="submit"
-              className="h-5 w-5 shrink-0 cursor-pointer text-slate-400 transition hover:text-slate-600"
               aria-label="Hledat"
+              className="h-5 w-5 shrink-0 cursor-pointer text-slate-400 transition hover:text-slate-600"
+              type="submit"
             >
               <SearchIcon className="h-5 w-5 text-slate-400" />
             </button>
           </form>
 
           <button
-            type="button"
+            aria-label="Akce 1"
             className="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-[16px] transition-opacity hover:opacity-80 active:opacity-60"
             style={{ backgroundColor: '#8CA1B2' }}
-            aria-label="Akce 1"
+            type="button"
           >
             <ScaleIcon className="h-5 w-5 text-white" />
           </button>
           <button
-            type="button"
+            aria-label="Akce 1"
             className="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-[16px] transition-opacity hover:opacity-80 active:opacity-60"
             style={{ backgroundColor: '#8CA1B2' }}
-            aria-label="Akce 1"
+            type="button"
           >
             <UserIcon className="h-5 w-5 text-white" />
           </button>
@@ -75,4 +75,6 @@ export default function Navbar() {
       </nav>
     </header>
   );
-}
+};
+
+export default Navbar;

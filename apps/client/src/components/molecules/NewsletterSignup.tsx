@@ -9,39 +9,39 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 const newsletterSchema = z.object({
-  email: emailSchema,
   consent: newsletterConsentSchema,
+  email: emailSchema,
 });
 
 type NewsletterFormData = z.infer<typeof newsletterSchema>;
 
-export function NewsletterSignup() {
+export const NewsletterSignup = () => {
   const {
-    mutate: subscribe,
-    isPending,
-    isError,
-    isSuccess,
     error,
+    isError,
+    isPending,
+    isSuccess,
+    mutate: subscribe,
     reset: resetMutation,
   } = useNewsletterControllerSubscribe();
 
   const {
-    register,
-    handleSubmit,
     formState: { errors },
+    handleSubmit,
+    register,
     reset: resetForm,
   } = useForm<NewsletterFormData>({
-    resolver: zodResolver(newsletterSchema),
     defaultValues: {
-      email: '',
       consent: false,
+      email: '',
     },
+    resolver: zodResolver(newsletterSchema),
   });
 
   const onSubmit = (data: NewsletterFormData) => {
     subscribe({
-      email: data.email,
       consent: data.consent,
+      email: data.email,
       source: 'web',
     });
   };
@@ -75,17 +75,17 @@ export function NewsletterSignup() {
                 <input
                   type="email"
                   {...register('email')}
-                  placeholder="Zadejte svůj email"
-                  disabled={isPending}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#c8102e] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                  aria-label="Email address"
                   aria-invalid={errors.email ? 'true' : 'false'}
+                  aria-label="Email address"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#c8102e] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={isPending}
+                  placeholder="Zadejte svůj email"
                 />
               </div>
               <button
-                type="submit"
-                disabled={isPending}
                 className="rounded-lg bg-[#c8102e] px-6 py-3 font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#a00d25] disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isPending}
+                type="submit"
               >
                 {isPending ? 'Odesílání...' : 'Přihlásit odběr'}
               </button>
@@ -123,7 +123,7 @@ export function NewsletterSignup() {
                   />
                   <span>
                     Přihlášením k odběru souhlasíte s{' '}
-                    <Link href="/privacy-policy" className="underline hover:text-gray-900">
+                    <Link className="underline hover:text-gray-900" href="/privacy-policy">
                       Privacy Policy
                     </Link>
                   </span>
@@ -140,4 +140,4 @@ export function NewsletterSignup() {
       </div>
     </div>
   );
-}
+};

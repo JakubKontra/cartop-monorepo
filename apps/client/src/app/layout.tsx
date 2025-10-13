@@ -1,24 +1,26 @@
 import type { Metadata } from 'next';
+
 import { Sora } from 'next/font/google';
 
 import { QueryProvider } from '@/components/providers/QueryProvider';
+
 import './globals.css';
 
 const sora = Sora({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-sora',
   display: 'swap',
+  subsets: ['latin'],
+  variable: '--font-sora',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
-  title: 'Cartop',
   description: 'Cartop Frontend Application',
+  title: 'Cartop',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={sora.variable}>
+    <html className={sora.variable} lang="en">
       <body className={sora.className}>
         <QueryProvider>{children}</QueryProvider>
       </body>

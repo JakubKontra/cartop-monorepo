@@ -1,9 +1,9 @@
+import type { FooterLink } from '../../molecules/FooterLinkColumn';
+
 import { Logo } from '../../branding/Logo';
 import { FooterContactInfo } from '../../molecules/FooterContactInfo';
-import type { FooterLink } from '../../molecules/FooterLinkColumn';
 import { FooterLinkColumn } from '../../molecules/FooterLinkColumn';
 import { NewsletterSignup } from '../../molecules/NewsletterSignup';
-
 import { FooterCopyright } from './FooterCopyright';
 
 const menuLinks: FooterLink[] = [
@@ -53,14 +53,14 @@ const categoryLinks: FooterLink[] = [
   { href: '/kategorie', label: 'Zobrazit vše' },
 ];
 
-export default function Footer() {
+const Footer = () => {
   return (
     <footer className="rounded-t-[32px] bg-[#262D37] text-white ">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         <NewsletterSignup />
 
         <div className="mb-6">
-          <Logo width={170} height={34} />
+          <Logo height={34} width={170} />
         </div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
@@ -68,15 +68,17 @@ export default function Footer() {
             <FooterContactInfo />
           </div>
 
-          <FooterLinkColumn title="Menu" links={menuLinks} className="lg:col-span-2" />
-          <FooterLinkColumn title="Doporučené" links={recommendedLinks} className="lg:col-span-2" />
-          <FooterLinkColumn title="Náš výběr" links={selectionLinks} className="lg:col-span-2" />
-          <FooterLinkColumn title="Značky" links={brandLinks} className="lg:col-span-2" />
-          <FooterLinkColumn title="Kategorie" links={categoryLinks} className="lg:col-span-1" />
+          <FooterLinkColumn className="lg:col-span-2" links={menuLinks} title="Menu" />
+          <FooterLinkColumn className="lg:col-span-2" links={recommendedLinks} title="Doporučené" />
+          <FooterLinkColumn className="lg:col-span-2" links={selectionLinks} title="Náš výběr" />
+          <FooterLinkColumn className="lg:col-span-2" links={brandLinks} title="Značky" />
+          <FooterLinkColumn className="lg:col-span-1" links={categoryLinks} title="Kategorie" />
         </div>
 
         <FooterCopyright />
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

@@ -1,38 +1,38 @@
 import type { FaqItemData } from '@/components/organisms/Faq';
-import { Faq } from '@/components/organisms/Faq';
 
-import HowItWorksButton from '../organisms/reusable/HowItWorksButton';
+import { Faq } from '@/components/organisms/Faq';
+import HowItWorksButton from '@/components/organisms/HowItWorksButton';
 
 const faqData: FaqItemData[] = [
   {
-    question: 'Vyplatní se mi operativní leasing?',
     answer:
       'Ano, protože platíte jen měsíční částku, která už zahrnuje servis, pojištění, amortizaci i financování. Odpadá vstupní investice, starost o prodej vozu i průběžné nečekané náklady.',
+    question: 'Vyplatní se mi operativní leasing?',
   },
   {
-    question: 'Proč jsou vaše nabídky tak zajímavé?',
     answer:
       'Protože vozy řešíme ve velkých objemech přímo s importéry a dealery. Díky tomu získáme lepší podmínky a ty pak kombinujeme s financováním od všech velkých leasingových společností. Jsme jediní na trhu, kdo může spolupracovat se všemi – proto vám umíme objektivně ukázat nejlepší řešení.',
+    question: 'Proč jsou vaše nabídky tak zajímavé?',
   },
   {
-    question: 'Pro koho jsou nabídky určené?',
     answer:
       'Pro firmy, OSVČ i soukromé osoby. Cena je vždy stejná – nehledíme na to, kdo auto bere. Všechny spojuje to, že chtějí mít náklady pod kontrolou a ušetřené peníze využít efektivněji.',
+    question: 'Pro koho jsou nabídky určené?',
   },
   {
-    question: 'Co potřebuji ke schválení operativního leasingu?',
     answer:
       'Stačí doložit daňová přiznání za poslední dvě účetní období (u firem a OSVČ), nebo potvrzení příjmu (u soukromých osob). Přidáte kopii občanského a řidičského průkazu a je hotovo. Vše probíhá online a bez složitého papírování.Nemáte dvouletou historii? Není to problém. Potřebujeme jen poslední tři měsíce historie, případně ručitele. Vždy hledáme cestu, jak řešení nastavit.',
+    question: 'Co potřebuji ke schválení operativního leasingu?',
   },
   {
-    question: 'Kdo je smluvním partnerem?',
     answer:
       'Jsme tvůrci nabídek a řešení. Smluvním partnerem je vždy renomovaná leasingová společnost nebo dealer, u kterého si vůz převezmete.',
+    question: 'Kdo je smluvním partnerem?',
   },
   {
-    question: 'Kde a jak probíhá předání vozu?',
     answer:
       'Předání probíhá vždy u jednoho z největších dealerů – s kompletním představením vozu a ve vámi zvoleném termínu. Obvykle to zvládneme během pár pracovních dnů od podpisu, nebo hned, jak dorazí vůz z výroby.',
+    question: 'Kde a jak probíhá předání vozu?',
   },
 ];
 
@@ -42,11 +42,11 @@ const generateFaqStructuredData = (items: FaqItemData[]) => {
     '@type': 'FAQPage',
     mainEntity: items.map(item => ({
       '@type': 'Question',
-      name: item.question,
       acceptedAnswer: {
         '@type': 'Answer',
         text: item.answer,
       },
+      name: item.question,
     })),
   };
 
@@ -59,7 +59,7 @@ export const FaqSection = () => {
   return (
     <>
       {/* eslint-disable-next-line react/no-danger */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqStructuredData }} />
+      <script dangerouslySetInnerHTML={{ __html: faqStructuredData }} type="application/ld+json" />
 
       <section className="bg-white px-4 py-16">
         <div className="mx-auto max-w-4xl">
@@ -73,7 +73,6 @@ export const FaqSection = () => {
 
           <Faq items={faqData} />
 
-          {/* Contact Support Button */}
           <div className="mt-14 flex w-full justify-center">
             <HowItWorksButton />
           </div>

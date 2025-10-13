@@ -4,7 +4,7 @@ import { AnnotationInfoIcon } from '@/components/icons/AnnotationInfoIcon';
 
 import Button from '../Button/Button';
 
-export default function Benefits() {
+const Benefits = () => {
   return (
     <section className="relative py-20">
       <div className="mx-auto max-w-6xl px-4">
@@ -30,11 +30,11 @@ export default function Benefits() {
           <article className="order-1 rounded-[32px] border border-slate-200 bg-white p-6 lg:order-none lg:row-span-1">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-red-600/10 text-red-600">
               <svg
-                viewBox="0 0 24 24"
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                viewBox="0 0 24 24"
               >
                 <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 1 0-7.07-7.07L10 5" />
                 <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 1 0 7.07 7.07L14 19" />
@@ -49,25 +49,25 @@ export default function Benefits() {
 
           <div className="relative order-3 col-span-2 h-[300px] overflow-hidden rounded-3xl sm:h-[400px] lg:order-none lg:col-span-1 lg:row-span-2 lg:h-[560px]">
             <Image
-              src="/mock/tile.mobile@2x.png"
-              alt="Klient s poradcem u auta"
               fill
-              sizes="100vw"
+              alt="Klient s poradcem u auta"
               className="w-full rounded-[32px] object-cover lg:hidden"
+              sizes="100vw"
+              src="/mock/tile.mobile@2x.png"
             />
             <Image
-              src="/mock/tile@2x.png"
-              alt="Klient s poradcem u auta"
               fill
-              sizes="33vw"
+              alt="Klient s poradcem u auta"
               className="hidden w-full rounded-[32px] object-cover lg:block"
+              sizes="33vw"
+              src="/mock/tile@2x.png"
             />
             <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
 
             <div className="absolute inset-x-6 bottom-6">
               <Button
-                variant="primary"
                 icon={<AnnotationInfoIcon className="size-6" />}
+                variant="primary"
                 width="full"
               >
                 Více o nás
@@ -78,11 +78,11 @@ export default function Benefits() {
           <article className="order-2 rounded-[32px] bg-slate-900 p-6 text-white lg:order-none lg:row-span-1">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-white">
               <svg
-                viewBox="0 0 24 24"
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                viewBox="0 0 24 24"
               >
                 <path d="M3 6h7M3 12h12M3 18h7M14 6h7M18 18h3" />
               </svg>
@@ -97,11 +97,11 @@ export default function Benefits() {
           <article className="order-4 col-span-1 rounded-[32px] border border-slate-200 bg-white p-6 lg:order-none lg:row-span-1">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-red-600/10 text-red-600">
               <svg
-                viewBox="0 0 24 24"
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                viewBox="0 0 24 24"
               >
                 <path d="M12 3l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4z" />
                 <path d="M19 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z" />
@@ -117,11 +117,11 @@ export default function Benefits() {
           <article className="order-5 col-span-1 rounded-[32px] border border-slate-200 bg-white p-6 lg:order-none lg:row-span-1">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-red-600/10 text-red-600">
               <svg
-                viewBox="0 0 24 24"
                 className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                viewBox="0 0 24 24"
               >
                 <path d="M20 6L9 17l-5-5" />
               </svg>
@@ -135,4 +135,6 @@ export default function Benefits() {
       </div>
     </section>
   );
-}
+};
+
+export default Benefits;

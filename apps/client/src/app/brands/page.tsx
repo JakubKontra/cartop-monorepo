@@ -8,6 +8,7 @@
 import Link from 'next/link';
 
 import type { GetCatalogBrandsQuery } from '@/gql/graphql';
+
 import { graphqlRequest } from '@/lib/graphql-client';
 import { GET_BRANDS_QUERY } from '@/queries/brands';
 
@@ -16,6 +17,47 @@ export const revalidate = 60;
 
 // Add tags for on-demand revalidation
 export const dynamic = 'force-static';
+
+/**
+ * Brand Card Component
+ */
+const BrandCard = ({
+  brand,
+  isFeatured = false,
+}: {
+  brand: GetCatalogBrandsQuery['catalogBrands'][0];
+  isFeatured?: boolean;
+}) => {
+  return (
+    <Link
+      href={`/brands/${brand.slug}`}
+      className={`
+        block rounded-lg border p-6 transition-all hover:shadow-lg
+        ${
+          isFeatured
+            ? 'border-blue-300 bg-blue-50 hover:border-blue-400'
+            : 'border-gray-200 bg-white hover:border-gray-300'
+        }
+      `}
+    >
+      <div className="mb-2 flex items-start justify-between">
+        <h3 className="text-xl font-semibold">{brand.name}</h3>
+        {brand.isRecommended && (
+          <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">Recommended</span>
+        )}
+      </div>
+
+      {brand.description && (
+        <p className="mb-3 line-clamp-2 text-sm text-gray-600">{brand.description}</p>
+      )}
+
+      <div className="flex items-center justify-between text-xs text-gray-500">
+        <span>{brand.slug}</span>
+        {isFeatured && <span className="font-medium text-blue-600">⭐ Featured</span>}
+      </div>
+    </Link>
+  );
+};
 
 export default async function BrandsPage() {
   // Fetch brands at build time / on revalidation
@@ -47,7 +89,7 @@ export default async function BrandsPage() {
           <h2 className="mb-4 text-2xl font-semibold text-blue-600">⭐ Featured Brands</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {highlightedBrands.map(brand => (
-              <BrandCard key={brand.id} brand={brand} isFeatured />
+              <BrandCard key={brand.id} isFeatured brand={brand} />
             ))}
           </div>
         </section>
@@ -85,50 +127,9 @@ export default async function BrandsPage() {
 }
 
 /**
- * Brand Card Component
- */
-function BrandCard({
-  brand,
-  isFeatured = false,
-}: {
-  brand: GetCatalogBrandsQuery['catalogBrands'][0];
-  isFeatured?: boolean;
-}) {
-  return (
-    <Link
-      href={`/brands/${brand.slug}`}
-      className={`
-        block rounded-lg border p-6 transition-all hover:shadow-lg
-        ${
-          isFeatured
-            ? 'border-blue-300 bg-blue-50 hover:border-blue-400'
-            : 'border-gray-200 bg-white hover:border-gray-300'
-        }
-      `}
-    >
-      <div className="mb-2 flex items-start justify-between">
-        <h3 className="text-xl font-semibold">{brand.name}</h3>
-        {brand.isRecommended && (
-          <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">Recommended</span>
-        )}
-      </div>
-
-      {brand.description && (
-        <p className="mb-3 line-clamp-2 text-sm text-gray-600">{brand.description}</p>
-      )}
-
-      <div className="flex items-center justify-between text-xs text-gray-500">
-        <span>{brand.slug}</span>
-        {isFeatured && <span className="font-medium text-blue-600">⭐ Featured</span>}
-      </div>
-    </Link>
-  );
-}
-
-/**
  * Metadata
  */
 export const metadata = {
-  title: 'Car Brands | Cartop',
   description: 'Browse our selection of car brands',
+  title: 'Car Brands | Cartop',
 };
