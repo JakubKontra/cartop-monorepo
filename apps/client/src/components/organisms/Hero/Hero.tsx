@@ -26,7 +26,12 @@ export default function FilterBar() {
       <Button variant="outline-white" width="full" size="narrow">
         Značky
       </Button>
-      <Button variant="primary-inverted" icon={<Search className="size-5" />} size="narrow">
+      <Button
+        variant="primary-inverted"
+        icon={<Search className="size-5" />}
+        size="narrow"
+        className="max-lg:col-span-2"
+      >
         Všechny nabídky
       </Button>
     </div>
