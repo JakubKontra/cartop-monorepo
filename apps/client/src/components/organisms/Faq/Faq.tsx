@@ -23,12 +23,12 @@ export const Faq = ({ items, defaultOpenIndex }: FaqProps) => {
           <AccordionItem
             key={index}
             index={index}
-            defaultOpen={isDefaultOpen}
+            isDefaultOpen={isDefaultOpen}
             title={item.question}
-            content={<p className="text-gunmetal leading-relaxed">{item.answer}</p>}
+            content={<p className="leading-relaxed text-gunmetal">{item.answer}</p>}
             containerClassName={cn(
-              'rounded-2xl lg:rounded-3xl border transition-all duration-300',
-              'bg-white text-gunmetal border-gunmetal-100',
+              'rounded-2xl border transition-all duration-300 lg:rounded-3xl',
+              'border-gunmetal-100 bg-white text-gunmetal',
               '[&:has(button[aria-expanded="true"])]:bg-gunmetal-100',
             )}
             icon={<FaqIcon />}

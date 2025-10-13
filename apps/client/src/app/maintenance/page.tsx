@@ -2,59 +2,59 @@ import { Construction, Clock, Mail } from 'lucide-react';
 
 export default function Maintenance() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gunmetal via-black to-gunmetal flex items-center justify-center px-4">
-      <div className="max-w-3xl w-full text-center">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gunmetal via-black to-gunmetal px-4">
+      <div className="w-full max-w-3xl text-center">
         {/* Icon */}
-        <div className="flex justify-center mb-8">
+        <div className="mb-8 flex justify-center">
           <div className="relative">
-            <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse" />
-            <div className="relative bg-primary/10 rounded-full p-8">
-              <Construction className="w-20 h-20 text-primary" strokeWidth={1.5} />
+            <div className="absolute inset-0 animate-pulse rounded-full bg-primary/20 blur-xl" />
+            <div className="relative rounded-full bg-primary/10 p-8">
+              <Construction className="h-20 w-20 text-primary" strokeWidth={1.5} />
             </div>
           </div>
         </div>
 
         {/* Main Message */}
-        <h1 className="text-white text-4xl md:text-6xl font-bold mb-6">Well Be Right Back</h1>
-        <p className="text-cadet-grey text-xl md:text-2xl mb-12 max-w-2xl mx-auto">
+        <h1 className="mb-6 text-4xl font-bold text-white md:text-6xl">Well Be Right Back</h1>
+        <p className="mx-auto mb-12 max-w-2xl text-xl text-cadet-grey md:text-2xl">
           Were currently performing scheduled maintenance to improve your experience.
         </p>
 
         {/* Info Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-2xl mx-auto">
+        <div className="mx-auto mb-12 grid max-w-2xl gap-6 md:grid-cols-2">
           {/* Expected Duration */}
-          <div className="bg-gunmetal/50 backdrop-blur-sm border border-primary/20 rounded-lg p-6 hover:border-primary/40 transition-all duration-300">
-            <div className="flex items-center justify-center mb-3">
-              <Clock className="w-8 h-8 text-primary" strokeWidth={1.5} />
+          <div className="rounded-lg border border-primary/20 bg-gunmetal/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/40">
+            <div className="mb-3 flex items-center justify-center">
+              <Clock className="h-8 w-8 text-primary" strokeWidth={1.5} />
             </div>
-            <h3 className="text-white font-semibold text-lg mb-2">Expected Duration</h3>
+            <h3 className="mb-2 text-lg font-semibold text-white">Expected Duration</h3>
             <p className="text-cadet-grey">Approximately 1-2 hours</p>
           </div>
 
           {/* Contact */}
-          <div className="bg-gunmetal/50 backdrop-blur-sm border border-primary/20 rounded-lg p-6 hover:border-primary/40 transition-all duration-300">
-            <div className="flex items-center justify-center mb-3">
-              <Mail className="w-8 h-8 text-primary" strokeWidth={1.5} />
+          <div className="rounded-lg border border-primary/20 bg-gunmetal/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/40">
+            <div className="mb-3 flex items-center justify-center">
+              <Mail className="h-8 w-8 text-primary" strokeWidth={1.5} />
             </div>
-            <h3 className="text-white font-semibold text-lg mb-2">Need Help?</h3>
+            <h3 className="mb-2 text-lg font-semibold text-white">Need Help?</h3>
             <p className="text-cadet-grey">Contact support@cartop.com</p>
           </div>
         </div>
 
         {/* What We're Doing */}
-        <div className="bg-gunmetal/30 backdrop-blur-sm border border-primary/10 rounded-lg p-8 mb-12 max-w-2xl mx-auto">
-          <h3 className="text-white text-xl font-semibold mb-4">What Were Working On</h3>
-          <ul className="text-cadet-grey space-y-3 text-left max-w-md mx-auto">
+        <div className="mx-auto mb-12 max-w-2xl rounded-lg border border-primary/10 bg-gunmetal/30 p-8 backdrop-blur-sm">
+          <h3 className="mb-4 text-xl font-semibold text-white">What Were Working On</h3>
+          <ul className="mx-auto max-w-md space-y-3 text-left text-cadet-grey">
             <li className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+              <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
               <span>System performance improvements</span>
             </li>
             <li className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+              <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
               <span>Security enhancements</span>
             </li>
             <li className="flex items-start gap-3">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+              <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
               <span>Database optimizations</span>
             </li>
           </ul>
@@ -63,21 +63,21 @@ export default function Maintenance() {
         {/* Loading Animation */}
         <div className="flex justify-center gap-2">
           <div
-            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            className="h-3 w-3 animate-bounce rounded-full bg-primary"
             style={{ animationDelay: '0ms' }}
           />
           <div
-            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            className="h-3 w-3 animate-bounce rounded-full bg-primary"
             style={{ animationDelay: '150ms' }}
           />
           <div
-            className="w-3 h-3 bg-primary rounded-full animate-bounce"
+            className="h-3 w-3 animate-bounce rounded-full bg-primary"
             style={{ animationDelay: '300ms' }}
           />
         </div>
 
         {/* Footer Message */}
-        <p className="text-french-grey text-sm mt-8">Thank you for your patience</p>
+        <p className="mt-8 text-sm text-french-grey">Thank you for your patience</p>
       </div>
     </div>
   );

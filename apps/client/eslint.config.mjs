@@ -3,6 +3,7 @@ import cartop from "eslint-config-cartop/index.js";
 import cartopJest from "eslint-config-cartop/jest/index.js";
 import cartopTypescript from "eslint-config-cartop/typescript/index.js";
 import cartopReact from "eslint-config-cartop/react/index.js";
+import betterTailwindcss from "eslint-plugin-better-tailwindcss";
 
 import { FlatCompat } from "@eslint/eslintrc";
 import { dirname } from "path";
@@ -50,6 +51,28 @@ const eslintConfig = [
   ...cartop.flatConfig,
   cartopReactWithoutPlugins,
   ...cartopTypescript.flatConfig,
+
+  // Tailwind CSS plugin (better-tailwindcss supports v4)
+  {
+    plugins: {
+      "better-tailwindcss": betterTailwindcss,
+    },
+    rules: {
+      "better-tailwindcss/sort-classes": [
+        "warn",
+        {
+          entryPoint: "./src/app/globals.css",
+        },
+      ],
+      "better-tailwindcss/no-arbitrary-value": "off",
+      "better-tailwindcss/no-custom-classname": "off",
+    },
+    settings: {
+      "better-tailwindcss": {
+        callees: ["cn", "tv", "cva"],
+      },
+    },
+  },
 
   // Local overrides
   {

@@ -10,7 +10,7 @@ interface AccordionItemProps {
   title: ReactNode;
   content: ReactNode;
   index: number;
-  defaultOpen?: boolean;
+  isDefaultOpen?: boolean;
   icon?: ReactElement<{ isOpen?: boolean }>;
   containerClassName?: string;
   titleClassName?: string;
@@ -22,14 +22,14 @@ export const AccordionItem = ({
   title,
   content,
   index,
-  defaultOpen = false,
+  isDefaultOpen = false,
   icon,
   containerClassName,
   titleClassName,
   contentClassName,
   iconClassName,
 }: AccordionItemProps) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isOpen, setIsOpen] = useState(isDefaultOpen);
 
   const toggle = () => {
     setIsOpen(prev => !prev);
@@ -52,17 +52,17 @@ export const AccordionItem = ({
           <button
             onClick={toggle}
             onKeyDown={handleKeyDown}
-            className="w-full p-4 lg:p-6 text-left flex justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="flex w-full justify-between gap-4 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:p-6"
             aria-expanded={isOpen}
             aria-controls={contentId}
             id={headingId}
             type="button"
           >
-            <span className={cn('font-semibold text-lg lg:text-xl pr-4 flex-1', titleClassName)}>
+            <span className={cn('flex-1 pr-4 text-lg font-semibold lg:text-xl', titleClassName)}>
               {title}
             </span>
             {icon && (
-              <span className={cn('flex items-center justify-center flex-shrink-0', iconClassName)}>
+              <span className={cn('flex flex-shrink-0 items-center justify-center', iconClassName)}>
                 {isValidElement(icon) ? cloneElement(icon, { isOpen }) : icon}
               </span>
             )}
@@ -73,7 +73,7 @@ export const AccordionItem = ({
           role="region"
           aria-labelledby={headingId}
           className={cn(
-            'transition-[max-height, opacity, padding] duration-300 overflow-hidden',
+            'transition-[max-height, opacity, padding] overflow-hidden duration-300',
             isOpen
               ? 'max-h-96 opacity-100 px-4 lg:px-6 pb-4 lg:pb-6'
               : 'max-h-0 opacity-0 px-4 lg:px-6 pb-0',

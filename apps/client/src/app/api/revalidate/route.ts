@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { entityName, action, data } = body;
 
-    console.log(`[Revalidation] Received webhook: ${entityName} - ${action}`, data);
+    console.warn(`[Revalidation] Received webhook: ${entityName} - ${action}`, data);
 
     // Revalidate based on entity type
     switch (entityName) {
@@ -41,17 +41,17 @@ export async function POST(request: NextRequest) {
           revalidateTag(`brand-${data.slug}`);
         }
 
-        console.log(`[Revalidation] Revalidated brand pages`);
+        console.warn(`[Revalidation] Revalidated brand pages`);
         break;
 
       case 'CatalogColor':
         revalidatePath('/colors');
         revalidateTag('colors');
-        console.log(`[Revalidation] Revalidated color pages`);
+        console.warn(`[Revalidation] Revalidated color pages`);
         break;
 
       default:
-        console.log(`[Revalidation] Unknown entity type: ${entityName}`);
+        console.warn(`[Revalidation] Unknown entity type: ${entityName}`);
         return NextResponse.json({ error: `Unknown entity type: ${entityName}` }, { status: 400 });
     }
 
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('[Revalidation] Error:', error);
+    console.warn('[Revalidation] Error:', error);
 
     return NextResponse.json(
       {
@@ -75,8 +75,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Handle GET requests with status info
-export async function GET() {
+export function GET() {
   return NextResponse.json({
     status: 'ok',
     endpoint: '/api/revalidate',

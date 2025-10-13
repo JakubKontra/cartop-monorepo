@@ -55,15 +55,15 @@ const categoryLinks: FooterLink[] = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#262D37] text-white rounded-t-[32px] ">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <footer className="rounded-t-[32px] bg-[#262D37] text-white ">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
         <NewsletterSignup />
 
         <div className="mb-6">
           <Logo width={170} height={34} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-3">
             <FooterContactInfo />
           </div>

@@ -12,14 +12,14 @@ export const FaqIcon = ({ isOpen = false }: FaqIconProps) => {
   return (
     <div
       className={cn(
-        'relative size-11 lg:size-14 rounded-xl flex items-center justify-center transition-colors duration-300',
+        'relative flex size-11 items-center justify-center rounded-xl transition-colors duration-300 lg:size-14',
         isOpen ? 'bg-gunmetal-700' : 'bg-primary',
       )}
     >
-      <Minus className="text-white size-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+      <Minus className="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2 text-white" />
       <Minus
         className={cn(
-          'text-white size-6 transition-transform duration-300',
+          'size-6 text-white transition-transform duration-300',
           isOpen ? 'rotate-0' : 'rotate-90',
         )}
       />

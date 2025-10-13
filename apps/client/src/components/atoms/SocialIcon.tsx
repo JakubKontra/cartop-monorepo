@@ -14,10 +14,10 @@ export function SocialIcon({ href, icon: Icon, label, className = '' }: SocialIc
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`text-gray-300 hover:text-white transition-colors ${className}`}
+      className={`text-gray-300 transition-colors hover:text-white ${className}`}
       aria-label={label}
     >
-      <Icon className="w-5 h-5" />
+      <Icon className="h-5 w-5" />
     </Link>
   );
 }

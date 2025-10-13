@@ -12,8 +12,8 @@ export interface GraphQLRequest<TData = unknown, TVariables = Record<string, unk
   variables?: TVariables;
 }
 
-export interface GraphQLResponse<T> {
-  data?: T;
+export interface GraphQLResponse<TData> {
+  data?: TData;
   errors?: {
     message: string;
     locations?: { line: number; column: number }[];

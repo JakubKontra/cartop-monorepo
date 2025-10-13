@@ -8,8 +8,8 @@ export default function Benefits() {
   return (
     <section className="relative py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl sm:text-5xl font-extrabold leading-tight">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="text-4xl leading-tight font-extrabold sm:text-5xl">
             <span className="text-red-600">Nový standard,</span>
             <br />
             jak si pořídit auto
@@ -26,9 +26,9 @@ export default function Benefits() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-5 grid-cols-2 lg:grid-cols-3 lg:auto-rows-fr">
-          <article className="rounded-[32px] border border-slate-200 p-6 bg-white order-1 lg:order-none lg:row-span-1">
-            <div className="h-10 w-10 rounded-xl bg-red-600/10 text-red-600 grid place-items-center">
+        <div className="mt-14 grid grid-cols-2 gap-5 lg:auto-rows-fr lg:grid-cols-3">
+          <article className="order-1 rounded-[32px] border border-slate-200 bg-white p-6 lg:order-none lg:row-span-1">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-red-600/10 text-red-600">
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5"
@@ -47,20 +47,20 @@ export default function Benefits() {
             </p>
           </article>
 
-          <div className="relative rounded-3xl overflow-hidden col-span-2 order-3 lg:col-span-1 lg:order-none lg:row-span-2 h-[300px] sm:h-[400px] lg:h-[560px]">
+          <div className="relative order-3 col-span-2 h-[300px] overflow-hidden rounded-3xl sm:h-[400px] lg:order-none lg:col-span-1 lg:row-span-2 lg:h-[560px]">
             <Image
               src="/mock/tile.mobile@2x.png"
               alt="Klient s poradcem u auta"
               fill
               sizes="100vw"
-              className="w-full object-cover rounded-[32px] lg:hidden"
+              className="w-full rounded-[32px] object-cover lg:hidden"
             />
             <Image
               src="/mock/tile@2x.png"
               alt="Klient s poradcem u auta"
               fill
               sizes="33vw"
-              className="w-full object-cover rounded-[32px] hidden lg:block"
+              className="hidden w-full rounded-[32px] object-cover lg:block"
             />
             <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/5" />
 
@@ -75,8 +75,8 @@ export default function Benefits() {
             </div>
           </div>
 
-          <article className="rounded-[32px] p-6 bg-slate-900 text-white order-2 lg:order-none lg:row-span-1">
-            <div className="h-10 w-10 rounded-xl bg-white/10 text-white grid place-items-center">
+          <article className="order-2 rounded-[32px] bg-slate-900 p-6 text-white lg:order-none lg:row-span-1">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-white">
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5"
@@ -94,8 +94,8 @@ export default function Benefits() {
             </p>
           </article>
 
-          <article className="rounded-[32px] border border-slate-200 p-6 bg-white col-span-1 order-4 lg:order-none lg:row-span-1">
-            <div className="h-10 w-10 rounded-xl bg-red-600/10 text-red-600 grid place-items-center">
+          <article className="order-4 col-span-1 rounded-[32px] border border-slate-200 bg-white p-6 lg:order-none lg:row-span-1">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-red-600/10 text-red-600">
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5"
@@ -114,8 +114,8 @@ export default function Benefits() {
             </p>
           </article>
 
-          <article className="rounded-[32px] border border-slate-200 p-6 bg-white col-span-1 order-5 lg:order-none lg:row-span-1">
-            <div className="h-10 w-10 rounded-xl bg-red-600/10 text-red-600 grid place-items-center">
+          <article className="order-5 col-span-1 rounded-[32px] border border-slate-200 bg-white p-6 lg:order-none lg:row-span-1">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-red-600/10 text-red-600">
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5"

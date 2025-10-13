@@ -30,25 +30,25 @@ type ElementTagNameMap = {
 
 type ElementTag = keyof ElementTagNameMap;
 
-interface WrapperFadeInProps<T extends ElementTag = 'div'> {
+interface WrapperFadeInProps<TElement extends ElementTag = 'div'> {
   children: ReactNode;
   delay?: number;
   duration?: number;
   threshold?: number;
   className?: string;
-  as?: T;
+  as?: TElement;
 }
 
-export const WrapperFadeIn = <T extends ElementTag = 'div'>({
+export const WrapperFadeIn = <TElement extends ElementTag = 'div'>({
   children,
   delay = 0,
   duration = 0.6,
   threshold = 0.8,
   className = '',
   as,
-}: WrapperFadeInProps<T>) => {
+}: WrapperFadeInProps<TElement>) => {
   const Component = (as || 'div') as ElementType;
-  const elementRef = useRef<ElementTagNameMap[T]>(null);
+  const elementRef = useRef<ElementTagNameMap[TElement]>(null);
   const hasAnimated = useRef(false);
   const isInView = useIntersectionObserver({ ref: elementRef, threshold });
 

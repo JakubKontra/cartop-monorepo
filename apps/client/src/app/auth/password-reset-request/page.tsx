@@ -1,4 +1,5 @@
 import { cn } from '@cartop/ui-utils';
+import Image from 'next/image';
 
 import { Logo } from '@/components/branding/Logo';
 import SignInForm from '@/components/features/auth/forms/SignInForm';
@@ -24,14 +25,13 @@ export default function PasswordResetRequestPage() {
           <SignInForm />
           <p className="text-muted-foreground px-8 text-center text-sm">
             By clicking sign in, you agree to our{' '}
-            <a href="/terms" className="hover:text-primary underline underline-offset-4">
+            <a href="/terms" className="underline underline-offset-4 hover:text-primary">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="/privacy" className="hover:text-primary underline underline-offset-4">
+            <a href="/privacy" className="underline underline-offset-4 hover:text-primary">
               Privacy Policy
             </a>
-            .
           </p>
         </div>
       </div>
@@ -42,7 +42,7 @@ export default function PasswordResetRequestPage() {
           '[&>img]:absolute [&>img]:top-[15%] [&>img]:left-20 [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:object-top-left [&>img]:select-none',
         )}
       >
-        <img
+        <Image
           src={'/images/auth/register.png'}
           className="dark:hidden"
           width={1024}

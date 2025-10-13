@@ -54,44 +54,44 @@ export default async function BrandPage({ params }: BrandPageProps) {
         {/* Back Navigation */}
         <Link
           href="/brands"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
+          className="mb-4 inline-flex items-center text-blue-600 hover:text-blue-800"
         >
           ← Back to all brands
         </Link>
 
         {/* Render Timestamp (ISR Cache Verification) */}
-        <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r">
+        <div className="mb-6 rounded-r border-l-4 border-blue-500 bg-blue-50 p-4">
           <p className="text-sm text-gray-700">
             <strong className="text-blue-900">Page rendered at:</strong>{' '}
             <span className="font-mono text-blue-800">{renderedAt}</span>
           </p>
-          <p className="text-xs text-gray-600 mt-1">
+          <p className="mt-1 text-xs text-gray-600">
             This timestamp updates when the cache is revalidated (either after 60s or via webhook)
           </p>
         </div>
 
         {/* Brand Header */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div className="mb-8 rounded-lg bg-white p-8 shadow-lg">
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-4xl font-bold mb-2">{brand.name}</h1>
-              <p className="text-gray-500 text-sm">Slug: {brand.slug}</p>
+              <h1 className="mb-2 text-4xl font-bold">{brand.name}</h1>
+              <p className="text-sm text-gray-500">Slug: {brand.slug}</p>
             </div>
 
             {/* Badges */}
             <div className="flex gap-2">
               {brand.isHighlighted && (
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
                   ⭐ Featured
                 </span>
               )}
               {brand.isRecommended && (
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
                   ✓ Recommended
                 </span>
               )}
               {brand.isActive && (
-                <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
+                <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">
                   Active
                 </span>
               )}
@@ -101,21 +101,21 @@ export default async function BrandPage({ params }: BrandPageProps) {
           {/* Description */}
           {brand.description && (
             <div className="mt-6">
-              <h2 className="text-xl font-semibold mb-2">About</h2>
-              <p className="text-gray-700 leading-relaxed">{brand.description}</p>
+              <h2 className="mb-2 text-xl font-semibold">About</h2>
+              <p className="leading-relaxed text-gray-700">{brand.description}</p>
             </div>
           )}
 
           {/* Metadata */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
+          <div className="mt-6 border-t border-gray-200 pt-6">
             <dl className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <dt className="text-gray-500 font-medium">Created</dt>
+                <dt className="font-medium text-gray-500">Created</dt>
                 <dd className="mt-1">{new Date(brand.createdAt).toLocaleDateString()}</dd>
               </div>
               {brand.updatedAt && (
                 <div>
-                  <dt className="text-gray-500 font-medium">Last Updated</dt>
+                  <dt className="font-medium text-gray-500">Last Updated</dt>
                   <dd className="mt-1">{new Date(brand.updatedAt).toLocaleDateString()}</dd>
                 </div>
               )}
@@ -124,13 +124,13 @@ export default async function BrandPage({ params }: BrandPageProps) {
         </div>
 
         {/* Placeholder for future content */}
-        <div className="bg-gray-50 rounded-lg p-8 text-center">
+        <div className="rounded-lg bg-gray-50 p-8 text-center">
           <p className="text-gray-500">Vehicle listings for {brand.name} will appear here.</p>
         </div>
 
         {/* Cache Info (dev only) */}
         {process.env.NODE_ENV === 'development' && (
-          <div className="mt-8 p-4 bg-gray-100 rounded text-sm text-gray-600">
+          <div className="mt-8 rounded bg-gray-100 p-4 text-sm text-gray-600">
             <p>
               <strong>Cache Info:</strong> This page uses ISR with brand-specific tags. When this
               brand is updated, the Watch decorator triggers revalidation of this specific page.

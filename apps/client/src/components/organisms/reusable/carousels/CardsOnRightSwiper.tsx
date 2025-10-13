@@ -14,7 +14,7 @@ export const CardsOnRightSwiper = ({ slides, id }: Props) => {
   const { setActiveSlide, swiperRef, onSetActiveSlideToLoop, realIndex } = useSwiper();
 
   return (
-    <div className="relative flex w-full flex-col justify-start sm:!w-[515px] 4xl:!w-[800px] 5xl:!w-[1000px]">
+    <div className="4xl:!w-[800px] 5xl:!w-[1000px] relative flex w-full flex-col justify-start sm:!w-[515px]">
       <div className="mb-[20px] w-full">
         <Swiper
           id={id}
@@ -38,7 +38,7 @@ export const CardsOnRightSwiper = ({ slides, id }: Props) => {
             return (
               <SwiperSlide
                 key={index}
-                className="max-md:px-4 sm:!w-[515px] 4xl:!w-[800px] 5xl:!w-[1000px]"
+                className="4xl:!w-[800px] 5xl:!w-[1000px] max-md:px-4 sm:!w-[515px]"
                 onClick={() => onSetActiveSlideToLoop(index)}
               >
                 <div

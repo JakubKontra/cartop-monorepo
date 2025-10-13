@@ -39,15 +39,15 @@ export default async function BrandsPage() {
 
   return (
     <main className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Car Brands</h1>
+      <h1 className="mb-8 text-4xl font-bold">Car Brands</h1>
 
       {/* Highlighted Brands Section */}
       {highlightedBrands.length > 0 && (
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4 text-blue-600">⭐ Featured Brands</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="mb-4 text-2xl font-semibold text-blue-600">⭐ Featured Brands</h2>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {highlightedBrands.map(brand => (
-              <BrandCard key={brand.id} brand={brand} featured />
+              <BrandCard key={brand.id} brand={brand} isFeatured />
             ))}
           </div>
         </section>
@@ -55,8 +55,8 @@ export default async function BrandsPage() {
 
       {/* Regular Brands Section */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">All Brands</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <h2 className="mb-4 text-2xl font-semibold">All Brands</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {regularBrands.map(brand => (
             <BrandCard key={brand.id} brand={brand} />
           ))}
@@ -65,14 +65,14 @@ export default async function BrandsPage() {
 
       {/* Empty State */}
       {brands.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No brands available yet.</p>
+        <div className="py-12 text-center">
+          <p className="text-lg text-gray-500">No brands available yet.</p>
         </div>
       )}
 
       {/* Cache Info (dev only) */}
       {process.env.NODE_ENV === 'development' && (
-        <div className="mt-12 p-4 bg-gray-100 rounded text-sm text-gray-600">
+        <div className="mt-12 rounded bg-gray-100 p-4 text-sm text-gray-600">
           <p>
             <strong>Cache Info:</strong> This page uses ISR with 60s revalidation. When brands are
             updated in the backend, the Watch decorator triggers immediate revalidation via webhook.
@@ -89,37 +89,37 @@ export default async function BrandsPage() {
  */
 function BrandCard({
   brand,
-  featured = false,
+  isFeatured = false,
 }: {
   brand: GetCatalogBrandsQuery['catalogBrands'][0];
-  featured?: boolean;
+  isFeatured?: boolean;
 }) {
   return (
     <Link
       href={`/brands/${brand.slug}`}
       className={`
-        block p-6 rounded-lg border transition-all hover:shadow-lg
+        block rounded-lg border p-6 transition-all hover:shadow-lg
         ${
-          featured
+          isFeatured
             ? 'border-blue-300 bg-blue-50 hover:border-blue-400'
             : 'border-gray-200 bg-white hover:border-gray-300'
         }
       `}
     >
-      <div className="flex items-start justify-between mb-2">
+      <div className="mb-2 flex items-start justify-between">
         <h3 className="text-xl font-semibold">{brand.name}</h3>
         {brand.isRecommended && (
-          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Recommended</span>
+          <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">Recommended</span>
         )}
       </div>
 
       {brand.description && (
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{brand.description}</p>
+        <p className="mb-3 line-clamp-2 text-sm text-gray-600">{brand.description}</p>
       )}
 
       <div className="flex items-center justify-between text-xs text-gray-500">
         <span>{brand.slug}</span>
-        {featured && <span className="text-blue-600 font-medium">⭐ Featured</span>}
+        {isFeatured && <span className="font-medium text-blue-600">⭐ Featured</span>}
       </div>
     </Link>
   );

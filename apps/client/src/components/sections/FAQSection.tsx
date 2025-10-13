@@ -58,11 +58,12 @@ export const FaqSection = () => {
 
   return (
     <>
+      {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqStructuredData }} />
 
-      <section className="bg-white py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center lg:text-left mb-14">
+      <section className="bg-white px-4 py-16">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-14 text-center lg:text-left">
             <h2 className="mb-4 text-4xl lg:text-5xl">
               <span className="headline-highlight">Často</span>
               <br />
@@ -73,7 +74,7 @@ export const FaqSection = () => {
           <Faq items={faqData} />
 
           {/* Contact Support Button */}
-          <div className="flex justify-center w-full mt-14">
+          <div className="mt-14 flex w-full justify-center">
             <HowItWorksButton />
           </div>
         </div>

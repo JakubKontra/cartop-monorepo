@@ -58,26 +58,26 @@ export function NewsletterSignup() {
   }, [isSuccess, resetForm, resetMutation]);
 
   return (
-    <div className="bg-gray-100 rounded-3xl p-6 lg:p-8 mb-12">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+    <div className="mb-12 rounded-3xl bg-gray-100 p-6 lg:p-8">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex-1">
-          <h2 className="text-gray-900 text-2xl lg:text-3xl font-bold mb-2">
+          <h2 className="mb-2 text-2xl font-bold text-gray-900 lg:text-3xl">
             Chcete dostávat <span className="text-[#c8102e]">TOP nabídky?</span>
           </h2>
-          <p className="text-gray-700 text-sm lg:text-base">
+          <p className="text-sm text-gray-700 lg:text-base">
             Výběr nejzajímavějších vozů vám zašleme přímo do e-mailu.
           </p>
         </div>
         <div className="flex-1 lg:max-w-md">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <div className="flex-1">
                 <input
                   type="email"
                   {...register('email')}
                   placeholder="Zadejte svůj email"
                   disabled={isPending}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#c8102e] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#c8102e] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label="Email address"
                   aria-invalid={errors.email ? 'true' : 'false'}
                 />
@@ -85,7 +85,7 @@ export function NewsletterSignup() {
               <button
                 type="submit"
                 disabled={isPending}
-                className="bg-[#c8102e] hover:bg-[#a00d25] text-white px-6 py-3 rounded-lg font-semibold transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-lg bg-[#c8102e] px-6 py-3 font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#a00d25] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isPending ? 'Odesílání...' : 'Přihlásit odběr'}
               </button>
@@ -93,21 +93,21 @@ export function NewsletterSignup() {
 
             {/* Validation errors */}
             {errors.email && (
-              <p className="text-red-600 text-sm mt-2" role="alert">
+              <p className="mt-2 text-sm text-red-600" role="alert">
                 {errors.email.message}
               </p>
             )}
 
             {/* API error message */}
             {isError && error && (
-              <p className="text-red-600 text-sm mt-2" role="alert">
+              <p className="mt-2 text-sm text-red-600" role="alert">
                 {error.message}
               </p>
             )}
 
             {/* Success message */}
             {isSuccess && (
-              <p className="text-green-600 text-sm mt-3" role="status">
+              <p className="mt-3 text-sm text-green-600" role="status">
                 Děkujeme! Váš email byl úspěšně přihlášen k odběru.
               </p>
             )}
@@ -115,7 +115,7 @@ export function NewsletterSignup() {
             {/* Privacy policy notice with consent checkbox */}
             {!isError && !isSuccess && (
               <div className="mt-3">
-                <label className="flex items-start gap-2 text-gray-600 text-xs cursor-pointer">
+                <label className="flex cursor-pointer items-start gap-2 text-xs text-gray-600">
                   <input
                     type="checkbox"
                     {...register('consent')}
@@ -129,7 +129,7 @@ export function NewsletterSignup() {
                   </span>
                 </label>
                 {errors.consent && (
-                  <p className="text-red-600 text-xs mt-1" role="alert">
+                  <p className="mt-1 text-xs text-red-600" role="alert">
                     {errors.consent.message}
                   </p>
                 )}

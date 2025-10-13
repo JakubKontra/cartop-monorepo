@@ -79,6 +79,7 @@ export default function Button({
 
   return (
     <button
+      type="button"
       className={cn(
         buttonVariants({ variant, size: realSize, sizeWithIcon, iconPosition, width }),
         className,
