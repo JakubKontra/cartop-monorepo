@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
     removeConsole: isProd ? { exclude: ['error', 'warn'] } : false,
   },
   images: {
-    domains: ['localhost', '127.0.0.1'],
+    domains: ['localhost', '127.0.0.1', 'cartop.cz', 'unsplash.com', 'images.unsplash.com'],
   },
 };
 

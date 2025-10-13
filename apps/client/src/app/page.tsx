@@ -8,6 +8,9 @@ import { BrandsSection } from '@/components/sections/Homepage/Brands/BrandsSecti
 import { BrandsSectionLoading } from '@/components/sections/Homepage/Brands/BrandsSectionLoading';
 import { BrandsSectionWrapper } from '@/components/sections/Homepage/Brands/BrandsSectionWrapper';
 import { FaqSection } from '@/components/sections/Homepage/Faq/FaqSection';
+import { PromotionalOffersSectionWrapper } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionWrapper';
+import { PromotionalOffersSectionLoading } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionLoading';
+import { PromotionalOffersSection } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSection';
 
 export default function Home() {
   return (
@@ -15,6 +18,28 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Benefits />
+      <div>
+        <PromotionalOffersSectionWrapper>
+          <Suspense fallback={<PromotionalOffersSectionLoading />}>
+            <PromotionalOffersSection
+              backgroundColor="#EFEFEF"
+              limit={3}
+              offerType="OPERATIONAL_LEASING"
+            />
+          </Suspense>
+        </PromotionalOffersSectionWrapper>
+
+        <PromotionalOffersSectionWrapper>
+          <Suspense fallback={<PromotionalOffersSectionLoading />}>
+            <PromotionalOffersSection
+              highlightedTitle="Přímý"
+              limit={3}
+              offerType="DIRECT_PURCHASE"
+              title="nákup"
+            />
+          </Suspense>
+        </PromotionalOffersSectionWrapper>
+      </div>
       <BrandsSectionWrapper>
         <Suspense fallback={<BrandsSectionLoading />}>
           <BrandsSection />

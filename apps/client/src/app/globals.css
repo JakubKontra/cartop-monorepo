@@ -28,4 +28,26 @@
   .headline-highlight {
     @apply text-primary font-semibold;
   }
+
+  /* Promotional Offers Section Header Styles */
+  .promotional-offers-heading {
+    @apply mb-5 font-sans text-[32px] font-normal leading-[120%] tracking-[0.01em] text-gray-900;
+    /* CSS draft properties for leading-trim */
+    leading-trim: both;
+    text-edge: cap;
+  }
+
+  .promotional-offers-heading-highlight {
+    @apply text-primary font-normal;
+    /* CSS draft properties for leading-trim */
+    leading-trim: both;
+    text-edge: cap;
+  }
+
+  .promotional-offers-subtitle {
+    @apply font-sans text-base font-normal leading-[160%] tracking-[0.01em] text-gunmetal-800;
+    /* CSS draft properties for leading-trim */
+    leading-trim: both;
+    text-edge: cap;
+  }
 }
