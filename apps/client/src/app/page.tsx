@@ -11,6 +11,7 @@ import { FaqSection } from '@/components/sections/Homepage/Faq/FaqSection';
 import { PromotionalOffersSectionWrapper } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionWrapper';
 import { PromotionalOffersSectionLoading } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionLoading';
 import { PromotionalOffersSection } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSection';
+import { ReliablePartner } from '@/components/sections/Homepage/ReliablePartner/ReliablePartner';
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
       <Hero />
       <Benefits />
       <div>
+        <ReliablePartner />
         <PromotionalOffersSectionWrapper>
           <Suspense fallback={<PromotionalOffersSectionLoading />}>
             <PromotionalOffersSection
