@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/select'
 import { DatePicker } from '@/components/date-picker'
 import { BrandModelSelector } from '@/components/brand-model-selector'
+import { UserSelectField, EmployeeSelectField } from '@/components/fields'
 import { carRequestSchema, type CarRequestFormValues } from '../data/schema'
 import { Loader2 } from 'lucide-react'
 
@@ -286,44 +287,18 @@ export function CarRequestForm({
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-6'>
-            <FormField
-              control={form.control}
+            <UserSelectField
               name='customerId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Customer</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Customer ID'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    TODO: Replace with customer selector
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label='Customer'
+              placeholder='Select a customer'
+              description='Link this request to an existing customer account'
             />
 
-            <FormField
-              control={form.control}
+            <EmployeeSelectField
               name='assignedAgentId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Assigned Agent</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Agent ID'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    TODO: Replace with agent selector
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label='Assigned Agent'
+              placeholder='Select an agent'
+              description='Assign a sales representative to handle this request'
             />
           </CardContent>
         </Card>
