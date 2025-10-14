@@ -25,6 +25,7 @@ import {
   Car,
   History,
   Building2,
+  ClipboardList,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 import { Permission } from '@/lib/permissions'
@@ -110,6 +111,16 @@ export const sidebarData: SidebarData = {
           title: 'Leasing Companies',
           url: '/leasing-companies',
           icon: Building2,
+        },
+      ],
+    },
+    {
+      title: 'Requests',
+      items: [
+        {
+          title: 'Car Requests',
+          url: '/car-requests',
+          icon: ClipboardList,
         },
       ],
     },
