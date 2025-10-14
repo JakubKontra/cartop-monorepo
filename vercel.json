@@ -1,4 +1,7 @@
 {
   "installCommand": "corepack enable && corepack prepare yarn@stable --activate && yarn install",
-  "buildCommand": "yarn build"
+  "buildCommand": "yarn build",
+  "version": 2,
+  "builds": [{ "src": "apps/backend/api/index.ts", "use": "@vercel/node" }],
+  "rewrites": [{ "source": "/(.*)", "destination": "/apps/backend/api/index" }]
 }
