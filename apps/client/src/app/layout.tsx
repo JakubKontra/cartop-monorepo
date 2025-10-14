@@ -7,8 +7,8 @@ import { QueryProvider } from '@/components/providers/QueryProvider';
 import './globals.css';
 
 const sora = Sora({
-  display: 'swap',
-  subsets: ['latin'],
+  display: 'auto',
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-sora',
   weight: ['400', '500', '600', '700'],
 });

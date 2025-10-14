@@ -31,10 +31,10 @@ export const SectionHeader = ({
 
   return (
     <div className={cn('mb-14 text-center lg:text-left', className)}>
-      <h2 className={cn('mb-4 text-4xl lg:text-5xl', textColor)}>
+      <h2 className={cn('mb-4 text-4xl lg:text-5xl leading-[120%] tracking-[1%]', textColor)}>
         <span className="headline-highlight">{highlightedWord}</span>
         <br />
-        {remainingTitle}
+        <span className="font-normal">{remainingTitle}</span>
       </h2>
       {subtitle && <p className={cn('text-base lg:text-lg', subtitleColor)}>{subtitle}</p>}
     </div>
