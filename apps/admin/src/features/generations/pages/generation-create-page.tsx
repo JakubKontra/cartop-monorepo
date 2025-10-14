@@ -7,6 +7,7 @@ import { GenerationForm } from '../components/generation-form'
 import { type GenerationFormValues } from '../data/schema'
 import { CREATE_CATALOG_MODEL_GENERATION, GET_ALL_CATALOG_MODEL_GENERATIONS } from '../generations.graphql'
 import { toast } from 'sonner'
+import { logger } from '@/lib/logger'
 
 export function GenerationCreatePage() {
   const navigate = useNavigate()
@@ -53,9 +54,10 @@ export function GenerationCreatePage() {
       })
       toast.success('Generation created successfully')
       navigate({ to: '/generations' })
-    } catch (error: any) {
-      console.error('Generation creation error:', error)
-      toast.error(error.message || 'Failed to create generation')
+    } catch (error: unknown) {
+      logger.error('Generation creation failed', error, { generationName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to create generation'
+      toast.error(message)
     }
   }
 

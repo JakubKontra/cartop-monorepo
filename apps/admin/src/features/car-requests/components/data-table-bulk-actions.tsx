@@ -1,7 +1,6 @@
 import { type Table } from '@tanstack/react-table'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { type CarRequest } from '../types'
 
 interface DataTableBulkActionsProps<TData> {
   table: Table<TData>

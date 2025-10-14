@@ -8,6 +8,7 @@ import { CarRequestForm } from '../components/car-request-form'
 import { type CarRequestFormValues } from '../data/schema'
 import { toCreateInput } from '../data/transformers'
 import { CREATE_CAR_REQUEST, GET_ALL_CAR_REQUESTS } from '../car-requests.graphql'
+import { logger } from '@/lib/logger'
 
 export function CarRequestCreatePage() {
   const navigate = useNavigate()
@@ -25,9 +26,10 @@ export function CarRequestCreatePage() {
       })
       toast.success('Car request created successfully')
       navigate({ to: '/car-requests' })
-    } catch (error: any) {
-      console.error('Car request creation error:', error)
-      toast.error(error.message || 'Failed to create car request')
+    } catch (error: unknown) {
+      logger.error('Car request creation failed', error, { customerEmail: values.customerEmail })
+      const message = error instanceof Error ? error.message : 'Failed to create car request'
+      toast.error(message)
     }
   }
 

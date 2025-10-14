@@ -6,7 +6,9 @@ import { toast } from 'sonner'
 import { CrudPageLayout } from '@/components/crud-page-layout'
 import { LeasingCompanyForm } from '../components/leasing-company-form'
 import { type LeasingCompanyFormValues } from '../data/schema'
+import { toFormValues, toUpdateInput } from '../data/transformers'
 import { GET_LEASING_COMPANY, UPDATE_LEASING_COMPANY, GET_ALL_LEASING_COMPANIES } from '../leasing-companies.graphql'
+import { logger } from '@/lib/logger'
 
 export function LeasingCompanyEditPage() {
   const navigate = useNavigate()
@@ -28,18 +30,15 @@ export function LeasingCompanyEditPage() {
       await updateLeasingCompany({
         variables: {
           id: companyId,
-          input: {
-            name: values.name,
-            link: values.link || null,
-            logoId: values.logoId || null,
-          },
+          input: toUpdateInput(values),
         },
       })
       toast.success('Leasing company updated successfully')
       navigate({ to: '/leasing-companies' })
-    } catch (error: any) {
-      console.error('Leasing company update error:', error)
-      toast.error(error.message || 'Failed to update leasing company')
+    } catch (error: unknown) {
+      logger.error('Leasing company update failed', error, { companyId, companyName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to update leasing company'
+      toast.error(message)
     }
   }
 
@@ -65,11 +64,7 @@ export function LeasingCompanyEditPage() {
           isEdit={true}
           loading={updating}
           logoUrl={leasingCompany.logo?.url}
-          defaultValues={{
-            name: leasingCompany.name,
-            link: leasingCompany.link || '',
-            logoId: leasingCompany.logoId || '',
-          }}
+          defaultValues={toFormValues(leasingCompany)}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
         />

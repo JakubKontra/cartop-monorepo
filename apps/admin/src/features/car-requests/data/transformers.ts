@@ -147,3 +147,40 @@ export function toUpdateInput(values: CarRequestFormValues): UpdateCarRequestInp
   // (it's a PartialType in backend), so we can reuse the same logic
   return toCreateInput(values) as UpdateCarRequestInput
 }
+
+// ============================================================================
+// Type-Level Tests (Compile-Time Only - Zero Runtime Cost)
+// ============================================================================
+
+import type { Expect, IsSubset } from '@/lib/type-utils'
+
+/**
+ * Test 1: Verify toCreateInput returns a valid CreateCarRequestInput
+ * This ensures the transformer output is compatible with GraphQL mutation
+ */
+type _TestCreateInputCompatibility = Expect<
+  IsSubset<ReturnType<typeof toCreateInput>, CreateCarRequestInput>
+>
+
+/**
+ * Test 2: Verify toUpdateInput returns a valid UpdateCarRequestInput
+ * This ensures the transformer output is compatible with GraphQL mutation
+ */
+type _TestUpdateInputCompatibility = Expect<
+  IsSubset<ReturnType<typeof toUpdateInput>, UpdateCarRequestInput>
+>
+
+/**
+ * Test 3: Verify toFormValues returns valid CarRequestFormValues
+ * This ensures API data can be properly transformed to form values
+ */
+type _TestFormValuesCompatibility = Expect<
+  IsSubset<ReturnType<typeof toFormValues>, CarRequestFormValues>
+>
+
+/**
+ * If you see TypeScript errors here, it means:
+ * - Your transformer is missing required fields from the GraphQL input type
+ * - The types have drifted between form schema and GraphQL schema
+ * - You need to update the transformer to match the latest GraphQL schema
+ */

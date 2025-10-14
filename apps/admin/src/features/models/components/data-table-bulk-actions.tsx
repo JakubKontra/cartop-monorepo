@@ -13,6 +13,7 @@ import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-ta
 import { type Model } from '../types'
 import { UPDATE_CATALOG_MODEL, GET_ALL_CATALOG_MODELS } from '../models.graphql'
 import { ModelsMultiDeleteDialog } from './models-multi-delete-dialog'
+import { logger } from '@/lib/logger'
 
 type DataTableBulkActionsProps<TData> = {
   table: Table<TData>
@@ -50,9 +51,10 @@ export function DataTableBulkActions<TData>({
         `Successfully ${value ? 'set' : 'unset'} ${selectedModels.length} model${selectedModels.length > 1 ? 's' : ''} as ${fieldLabel}`
       )
       table.resetRowSelection()
-    } catch (error: any) {
-      console.error(`Bulk update error:`, error)
-      toast.error(error.message || `Failed to update models`)
+    } catch (error: unknown) {
+      logger.error('Bulk update models failed', error, { field, value, count: selectedModels.length })
+      const message = error instanceof Error ? error.message : 'Failed to update models'
+      toast.error(message)
     }
   }
 

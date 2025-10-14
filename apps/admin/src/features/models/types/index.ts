@@ -1,4 +1,4 @@
-import { GetAllCatalogModelsQuery } from '@/gql/graphql'
+import { type GetAllCatalogModelsQuery } from '@/gql/graphql'
 
 // Use generated type from GraphQL Codegen
 export type Model = GetAllCatalogModelsQuery['allCatalogModels'][0]

@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { type Generation } from '../types'
 import { DELETE_CATALOG_MODEL_GENERATION, GET_ALL_CATALOG_MODEL_GENERATIONS } from '../generations.graphql'
+import { logger } from '@/lib/logger'
 
 type GenerationsMultiDeleteDialogProps<TData> = {
   table: Table<TData>
@@ -52,9 +53,10 @@ export function GenerationsMultiDeleteDialog<TData>({
       )
       table.resetRowSelection()
       onOpenChange(false)
-    } catch (error: any) {
-      console.error('Bulk delete error:', error)
-      toast.error(error.message || 'Failed to delete generations')
+    } catch (error: unknown) {
+      logger.error('Bulk delete generations failed', error, { count: selectedGenerations.length })
+      const message = error instanceof Error ? error.message : 'Failed to delete generations'
+      toast.error(message)
     } finally {
       setIsDeleting(false)
     }

@@ -11,6 +11,7 @@ import {
   GET_ALL_CATALOG_MODEL_GENERATIONS,
 } from '../generations.graphql'
 import { toast } from 'sonner'
+import { logger } from '@/lib/logger'
 
 export function GenerationEditPage() {
   const params = useParams({ from: '/_authenticated/generations/$generationId/' })
@@ -65,9 +66,10 @@ export function GenerationEditPage() {
       })
       toast.success('Generation updated successfully')
       navigate({ to: '/generations' })
-    } catch (error: any) {
-      console.error('Generation update error:', error)
-      toast.error(error.message || 'Failed to update generation')
+    } catch (error: unknown) {
+      logger.error('Generation update failed', error, { generationId: params.generationId, generationName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to update generation'
+      toast.error(message)
     }
   }
 

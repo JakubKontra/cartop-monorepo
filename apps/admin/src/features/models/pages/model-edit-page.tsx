@@ -6,7 +6,9 @@ import { toast } from 'sonner'
 import { CrudPageLayout } from '@/components/crud-page-layout'
 import { ModelForm } from '../components/model-form'
 import { type ModelFormValues } from '../data/schema'
+import { toFormValues, toUpdateInput } from '../data/transformers'
 import { GET_CATALOG_MODEL, UPDATE_CATALOG_MODEL, GET_ALL_CATALOG_MODELS } from '../models.graphql'
+import { logger } from '@/lib/logger'
 
 export function ModelEditPage() {
   const navigate = useNavigate()
@@ -25,22 +27,15 @@ export function ModelEditPage() {
       await updateModel({
         variables: {
           id: modelId,
-          input: {
-            name: values.name,
-            slug: values.slug,
-            description: values.description || null,
-            brandId: values.brandId,
-            isActive: values.isActive,
-            isHighlighted: values.isHighlighted,
-            isRecommended: values.isRecommended,
-          },
+          input: toUpdateInput(values),
         },
       })
       toast.success('Model updated successfully')
       navigate({ to: '/models' })
-    } catch (error: any) {
-      console.error('Model update error:', error)
-      toast.error(error.message || 'Failed to update model')
+    } catch (error: unknown) {
+      logger.error('Model update failed', error, { modelId, modelName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to update model'
+      toast.error(message)
     }
   }
 
@@ -65,17 +60,7 @@ export function ModelEditPage() {
         <ModelForm
           isEdit={true}
           loading={updating}
-          defaultValues={{
-            name: model.name,
-            slug: model.slug,
-            description: model.description || '',
-            brandId: model.brandId,
-            isActive: model.isActive,
-            isHighlighted: model.isHighlighted,
-            isRecommended: model.isRecommended,
-            legacySystemId: model.legacySystemId || '',
-            legacySlug: model.legacySlug || '',
-          }}
+          defaultValues={toFormValues(model)}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
         />

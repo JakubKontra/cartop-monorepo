@@ -1,4 +1,4 @@
-import { CodegenConfig } from '@graphql-codegen/cli';
+import { type CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   // GraphQL schema from local backend (make sure backend is running on port 3000)

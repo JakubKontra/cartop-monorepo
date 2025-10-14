@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { type Brand } from '../types'
 import { DELETE_CATALOG_BRAND, GET_ALL_CATALOG_BRANDS } from '../brands.graphql'
+import { logger } from '@/lib/logger'
 
 type BrandMultiDeleteDialogProps<TData> = {
   open: boolean
@@ -61,9 +62,10 @@ export function BrandsMultiDeleteDialog<TData>({
       table.resetRowSelection()
       setValue('')
       onOpenChange(false)
-    } catch (error: any) {
-      console.error('Bulk delete error:', error)
-      toast.error(error.message || 'Failed to delete brands')
+    } catch (error: unknown) {
+      logger.error('Bulk delete brands failed', error, { count: selectedRows.length })
+      const message = error instanceof Error ? error.message : 'Failed to delete brands'
+      toast.error(message)
     } finally {
       setDeleting(false)
     }

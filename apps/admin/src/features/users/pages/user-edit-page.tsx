@@ -24,6 +24,7 @@ import { userEditFormSchema, type UserEditFormValues } from '../data/schema'
 import { GET_USER, UPDATE_USER } from '../users.graphql'
 import { useIsAdmin } from '@/hooks/use-permission'
 import { normalizeRolesFromApi } from '@/lib/role-utils'
+import { logger } from '@/lib/logger'
 
 export function UserEditPage() {
   const { userId } = useParams({ from: '/_authenticated/users/$userId/edit' })
@@ -77,9 +78,10 @@ export function UserEditPage() {
       })
       toast.success('User updated successfully')
       navigate({ to: '/users' })
-    } catch (error: any) {
-      console.error('User update error:', error)
-      toast.error(error.message || 'Failed to update user')
+    } catch (error: unknown) {
+      logger.error('User update failed', error, { userId, userEmail: values.email })
+      const message = error instanceof Error ? error.message : 'Failed to update user'
+      toast.error(message)
     }
   }
 

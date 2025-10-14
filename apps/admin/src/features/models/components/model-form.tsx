@@ -80,7 +80,7 @@ export function ModelForm({
       }
 
       return true // Slug is available
-    } catch (error) {
+    } catch (_error) {
       // If the query errors (e.g., model not found), the slug is available
       return true
     }

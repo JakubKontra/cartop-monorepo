@@ -23,6 +23,7 @@ import { ImageUpload } from '@/components/image-upload'
 import { brandSchema, type BrandFormValues } from '../data/schema'
 import { CHECK_BRAND_SLUG } from '../brands.graphql'
 import { Loader2 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 interface BrandFormProps {
   /** Initial values for the form (for editing) */
@@ -87,7 +88,7 @@ export function BrandForm({
         return true // Slug is available (null response)
       } catch (error) {
         // If the query errors, assume slug is available
-        console.error('Error validating slug:', error)
+        logger.error('Error validating brand slug', error, { slug })
         return true
       }
     },

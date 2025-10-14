@@ -9,8 +9,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
+import { logger } from '@/lib/logger'
 
-type GenericDeleteDialogProps<TData = any> = {
+type GenericDeleteDialogProps<TData = Record<string, unknown>> = {
   /** Dialog open state */
   open: boolean
   /** Function to toggle dialog open state */
@@ -58,7 +59,7 @@ type GenericDeleteDialogProps<TData = any> = {
  * />
  * ```
  */
-export function GenericDeleteDialog<TData extends Record<string, any> = any>({
+export function GenericDeleteDialog<TData extends Record<string, unknown> = Record<string, unknown>>({
   open,
   onOpenChange,
   entityType,
@@ -101,10 +102,11 @@ export function GenericDeleteDialog<TData extends Record<string, any> = any>({
 
       setValue('')
       onOpenChange(false)
-    } catch (error: any) {
-      console.error(`Delete ${entityType} error:`, error)
+    } catch (error: unknown) {
+      logger.error(`Delete ${entityType} failed`, error, { entityType, entityId: entity.id })
       const errorPrefix = errorMessagePrefix || `Failed to delete ${entityType}`
-      toast.error(error.message || errorPrefix)
+      const message = error instanceof Error ? error.message : errorPrefix
+      toast.error(message)
     }
   }
 

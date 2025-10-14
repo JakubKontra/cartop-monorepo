@@ -21,10 +21,11 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { RoleSelect } from '../components/role-select'
 import { userRoleSchema } from '../data/schema'
-import { UserRole } from '@/gql/graphql'
+import { type UserRole } from '@/gql/graphql'
 import { CREATE_USER } from '../users.graphql'
 import { useIsAdmin } from '@/hooks/use-permission'
 import { normalizeRolesForApi } from '@/lib/role-utils'
+import { logger } from '@/lib/logger'
 
 const formSchema = z
   .object({
@@ -92,9 +93,10 @@ export function UserAddPage() {
       })
       toast.success('User created successfully')
       navigate({ to: '/users' })
-    } catch (error: any) {
-      console.error('User creation error:', error)
-      toast.error(error.message || 'Failed to create user')
+    } catch (error: unknown) {
+      logger.error('User creation failed', error, { userEmail: values.email })
+      const message = error instanceof Error ? error.message : 'Failed to create user'
+      toast.error(message)
     }
   }
 

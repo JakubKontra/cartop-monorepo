@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress'
 import { StorageImage } from '@/components/storage-image'
 import { type UploadResult } from '@/lib/upload/upload-service'
 import { useFileUpload } from '@/lib/upload/use-file-upload'
+import { logger } from '@/lib/logger'
 
 interface ImageUploadProps {
   /** Current image URL (for preview) */
@@ -31,7 +32,7 @@ interface ImageUploadProps {
 
 export function ImageUpload({
   value,
-  fileId,
+  fileId: _fileId,
   onUploadComplete,
   onRemove,
   maxSize = 5 * 1024 * 1024, // 5MB
@@ -60,7 +61,7 @@ export function ImageUpload({
         const result = await upload(file)
         onUploadComplete?.(result)
       } catch (err) {
-        console.error('Upload error:', err)
+        logger.error('Upload error in image upload component', err)
         // Error is already tracked in the hook
       }
     },

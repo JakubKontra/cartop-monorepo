@@ -5,10 +5,11 @@ import {
   from,
   Observable,
 } from '@apollo/client/core';
-import { onError } from '@apollo/client/link/error';
+import { onError, type ErrorResponse } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { useAuthStore } from '@/stores/auth-store';
 import { graphql } from '@/gql';
+import { logger } from '@/lib/logger';
 
 const GRAPHQL_URL = import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:3000/graphql';
 
@@ -98,7 +99,7 @@ const refreshToken = async (): Promise<{ accessToken: string; refreshToken: stri
 
     return null;
   } catch (error) {
-    console.error('Token refresh failed:', error);
+    logger.error('Token refresh failed', error);
     return null;
   }
 };
@@ -106,7 +107,7 @@ const refreshToken = async (): Promise<{ accessToken: string; refreshToken: stri
 /**
  * Error link: Handles token refresh on 401 errors
  */
-const errorLink = onError((errorResponse: any) => {
+const errorLink = onError((errorResponse: ErrorResponse) => {
   const { graphQLErrors, networkError, operation, forward } = errorResponse;
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
@@ -151,7 +152,7 @@ const errorLink = onError((errorResponse: any) => {
   }
 
   if (networkError) {
-    console.error('[Network error]:', networkError);
+    logger.error('GraphQL network error', networkError);
   }
 });
 

@@ -1,4 +1,17 @@
-import { ApolloError } from '@apollo/client/core'
+import { type ApolloError } from '@apollo/client/core'
+import { logger } from '@/lib/logger'
+
+/**
+ * Type for errors with nested errors array
+ */
+interface ErrorWithErrors {
+  errors: Array<{
+    message?: string
+    extensions?: {
+      errors?: Array<{ message?: string }>
+    }
+  }>
+}
 
 /**
  * Extracts the actual error message from a GraphQL error
@@ -20,30 +33,28 @@ import { ApolloError } from '@apollo/client/core'
  */
 export function extractGraphQLErrorMessage(error: ApolloError | Error | unknown): string {
   // Debug logging in development
-  if (import.meta.env.DEV) {
-    console.log('extractGraphQLErrorMessage - Full error:', error)
-  }
+  logger.debug('Extracting GraphQL error message', { error })
 
   // Handle ApolloError and CombinedGraphQLErrors
   if (error && typeof error === 'object') {
     // First, check if it has a direct 'errors' array (common in Apollo errors)
-    if ('errors' in error && Array.isArray((error as any).errors)) {
-      const errors = (error as any).errors
+    if ('errors' in error && Array.isArray((error as ErrorWithErrors).errors)) {
+      const errors = (error as ErrorWithErrors).errors
       if (errors.length > 0) {
         const firstError = errors[0]
 
-        if (import.meta.env.DEV) {
-          console.log('extractGraphQLErrorMessage - First error:', firstError)
-          console.log('extractGraphQLErrorMessage - Extensions:', firstError.extensions)
-        }
+        logger.debug('Found first error in errors array', {
+          firstError,
+          extensions: firstError.extensions,
+        })
 
         // Check for errors array in extensions (this is where the actual message is)
         if (firstError.extensions?.errors && Array.isArray(firstError.extensions.errors)) {
           const nestedErrors = firstError.extensions.errors as Array<{ message?: string }>
           if (nestedErrors.length > 0 && nestedErrors[0].message) {
-            if (import.meta.env.DEV) {
-              console.log('extractGraphQLErrorMessage - Extracted nested message:', nestedErrors[0].message)
-            }
+            logger.debug('Extracted nested error message', {
+              message: nestedErrors[0].message,
+            })
             return nestedErrors[0].message
           }
         }

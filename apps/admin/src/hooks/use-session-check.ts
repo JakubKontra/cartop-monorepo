@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client/react';
 import { useAuthStore } from '@/stores/auth-store';
 import { REFRESH_TOKEN_MUTATION } from '@/features/auth/auth.graphql';
+import { logger } from '@/lib/logger';
 
 /**
  * Hook to check and restore active session on app load
@@ -43,10 +44,10 @@ export function useSessionCheck() {
               roles: user.roles,
             });
 
-            console.log('Session restored successfully');
+            logger.info('Session restored successfully', { userId: user.id });
           }
         } catch (error) {
-          console.error('Failed to restore session:', error);
+          logger.error('Failed to restore session', error);
           // Clear invalid tokens
           auth.reset();
         }

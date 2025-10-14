@@ -8,6 +8,7 @@ import { CarRequestForm } from '../components/car-request-form'
 import { type CarRequestFormValues } from '../data/schema'
 import { toFormValues, toUpdateInput } from '../data/transformers'
 import { GET_CAR_REQUEST, UPDATE_CAR_REQUEST, GET_ALL_CAR_REQUESTS } from '../car-requests.graphql'
+import { logger } from '@/lib/logger'
 
 export function CarRequestEditPage() {
   const navigate = useNavigate()
@@ -34,9 +35,10 @@ export function CarRequestEditPage() {
       })
       toast.success('Car request updated successfully')
       navigate({ to: '/car-requests' })
-    } catch (error: any) {
-      console.error('Car request update error:', error)
-      toast.error(error.message || 'Failed to update car request')
+    } catch (error: unknown) {
+      logger.error('Car request update failed', error, { carRequestId, customerEmail: values.customerEmail })
+      const message = error instanceof Error ? error.message : 'Failed to update car request'
+      toast.error(message)
     }
   }
 

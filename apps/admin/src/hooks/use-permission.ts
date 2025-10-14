@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
 import {
-  Permission,
+  type Permission,
   UserRole,
   hasPermission,
   hasAnyPermission,

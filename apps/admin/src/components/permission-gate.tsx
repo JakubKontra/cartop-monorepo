@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { Permission, UserRole } from '@/lib/permissions'
+import { type Permission, type UserRole } from '@/lib/permissions'
 import {
   usePermission,
   useAnyPermission,

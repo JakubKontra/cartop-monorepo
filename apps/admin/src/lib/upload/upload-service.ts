@@ -4,6 +4,7 @@ import {
   CREATE_FILE,
   GET_FILE_BY_CHECKSUM,
 } from './upload.graphql';
+import { logger } from '@/lib/logger';
 
 /**
  * Upload Result
@@ -102,7 +103,7 @@ export class UploadService {
 
       // Step 7: Parse file metadata
       const extension = file.name.split('.').pop() || '';
-      const isImage = file.type.startsWith('image/');
+      const _isImage = file.type.startsWith('image/');
 
       // Step 8: Create File entity in database
       const { data: fileData } = await client.mutate({
@@ -141,7 +142,7 @@ export class UploadService {
         isImage: createdFile.isImage,
       };
     } catch (error) {
-      console.error('Upload error:', error);
+      logger.error('Upload failed', error, { fileName: file.name, fileSize: file.size });
       throw error instanceof Error ? error : new Error('Upload failed');
     }
   }
@@ -223,7 +224,7 @@ export class UploadService {
 
       // If there are errors, log them but don't fail
       if (errors && errors.length > 0) {
-        console.warn('Errors during duplicate check:', errors);
+        logger.warn('Errors during duplicate check', { errors, checksum });
         // Continue anyway - we'll try to upload
       }
 
@@ -248,7 +249,7 @@ export class UploadService {
       return null;
     } catch (error) {
       // If duplicate check fails, continue with upload
-      console.warn('Duplicate check failed:', error);
+      logger.warn('Duplicate check failed', error, { checksum });
       return null;
     }
   }
@@ -307,7 +308,10 @@ export class UploadService {
 
       return hashHex;
     } catch (error) {
-      console.error('Checksum calculation failed:', error);
+      logger.error('Checksum calculation failed', error, {
+        fileName: file.name,
+        fileSize: file.size,
+      });
       // Fallback to timestamp-based checksum if crypto fails
       return `fallback-${Date.now()}-${file.name}-${file.size}`;
     }
@@ -320,9 +324,10 @@ export class UploadService {
    * @param fileId - The file ID to delete
    */
   static async deleteFile(fileId: string): Promise<void> {
+    // TODO: Implement file deletion
     // This will be implemented when needed
     // Uses DELETE_FILE mutation from upload.graphql.ts
-    console.log('Delete file:', fileId);
+    logger.info('Delete file called (not implemented)', { fileId });
   }
 
   /**
@@ -331,8 +336,9 @@ export class UploadService {
    * @param fileId - The file ID to delete
    */
   static async deleteFileCompletely(fileId: string): Promise<void> {
+    // TODO: Implement complete file deletion
     // This will be implemented when needed
     // Uses DELETE_FILE_COMPLETELY mutation from upload.graphql.ts
-    console.log('Delete file completely:', fileId);
+    logger.info('Delete file completely called (not implemented)', { fileId });
   }
 }

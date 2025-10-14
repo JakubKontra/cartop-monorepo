@@ -6,7 +6,9 @@ import { toast } from 'sonner'
 import { CrudPageLayout } from '@/components/crud-page-layout'
 import { ModelForm } from '../components/model-form'
 import { type ModelFormValues } from '../data/schema'
+import { toCreateInput } from '../data/transformers'
 import { CREATE_CATALOG_MODEL, GET_ALL_CATALOG_MODELS } from '../models.graphql'
+import { logger } from '@/lib/logger'
 
 export function ModelCreatePage() {
   const navigate = useNavigate()
@@ -19,24 +21,15 @@ export function ModelCreatePage() {
     try {
       await createModel({
         variables: {
-          input: {
-            name: values.name,
-            slug: values.slug,
-            description: values.description || null,
-            brandId: values.brandId,
-            isActive: values.isActive,
-            isHighlighted: values.isHighlighted,
-            isRecommended: values.isRecommended,
-            legacySystemId: values.legacySystemId || null,
-            legacySlug: values.legacySlug || null,
-          },
+          input: toCreateInput(values),
         },
       })
       toast.success('Model created successfully')
       navigate({ to: '/models' })
-    } catch (error: any) {
-      console.error('Model creation error:', error)
-      toast.error(error.message || 'Failed to create model')
+    } catch (error: unknown) {
+      logger.error('Model creation failed', error, { modelName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to create model'
+      toast.error(message)
     }
   }
 
