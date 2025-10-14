@@ -22,6 +22,9 @@ export default function Home() {
         <PromotionalOffersSectionWrapper>
           <Suspense fallback={<PromotionalOffersSectionLoading />}>
             <PromotionalOffersSection
+              highlightedTitle="Stálá"
+              title="akční nabídka"
+              subtitle="Pravidelně pro vás vybíráme vozy s nejlepšími podmínkami."
               backgroundColor="#EFEFEF"
               limit={3}
               offerType="OPERATIONAL_LEASING"

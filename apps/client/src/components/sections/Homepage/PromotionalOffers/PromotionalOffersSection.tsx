@@ -73,14 +73,14 @@ export const PromotionalOffersSection = async ({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       <div className="mx-auto max-w-[1360px] px-2 py-8 lg:py-12">
-        <div>
+        <div className="flex flex-col gap-10 w-[1360px]">
           <PromotionalOffersSectionHeader
             highlightedTitle={highlightedTitle}
             subtitle={subtitle}
             title={title}
           />
 
-          <div className="mb-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 grid-cols-[repeat(auto-fit,minmax(0,440px))] ">
+          <div className="mb-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3 grid-cols-[repeat(auto-fit,minmax(0,440px))] ">
             {offers.map(offer => {
               // Get all images from gallery
               const galleryImages =

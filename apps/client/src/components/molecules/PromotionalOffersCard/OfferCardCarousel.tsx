@@ -53,8 +53,8 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
   const currentImage = images[currentIndex];
 
   return (
-    <div className="relative h-full w-full">
-      <div className="relative h-full w-full overflow-hidden">
+    <div className="relative h-full w-full rounded-b-3xl">
+      <div className="relative h-full w-full overflow-hidden rounded-b-3xl">
         <Image
           key={currentImage.url}
           alt={currentImage.alt || title}
@@ -65,10 +65,8 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
         />
       </div>
 
-      {/* Navigation Arrows - only show if more than 1 image and on hover */}
       {images.length > 1 && (
         <>
-          {/* Left Arrow */}
           <button
             className="absolute left-2 top-1/2 z-10 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/90 text-gray-900 opacity-0 pointer-events-none backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white group-hover:opacity-100 group-hover:pointer-events-auto"
             onClick={goToPrevious}
@@ -86,7 +84,6 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
             </svg>
           </button>
 
-          {/* Right Arrow */}
           <button
             className="absolute right-2 top-1/2 z-10 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/90 text-gray-900 opacity-0 pointer-events-none backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white group-hover:opacity-100 group-hover:pointer-events-auto"
             onClick={goToNext}
@@ -104,7 +101,6 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
             </svg>
           </button>
 
-          {/* Dots Indicator */}
           <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             {images.map((_, index) => (
               <button

@@ -10,7 +10,7 @@ export const OfferCardSpec = ({ className = '', icon, label }: OfferCardSpecProp
   return (
     <div className={`flex items-center gap-1.5 text-[#262D37] ${className}`}>
       {icon}
-      <span>{label}</span>
+      <span className="text-sm font-semibold leading-[120%] tracking-[1%]">{label}</span>
     </div>
   );
 };

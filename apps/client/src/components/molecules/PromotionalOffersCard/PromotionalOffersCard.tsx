@@ -119,56 +119,56 @@ export const OfferCard = ({
 
   if (vehicleType) {
     specs.push({
-      icon: <CarIcon className="size-7 shrink-0" />,
+      icon: <CarIcon className="size-6 shrink-0" />,
       label: vehicleType,
     });
   }
 
   if (mileage) {
     specs.push({
-      icon: <SpeedMeterIcon className="size-7 shrink-0" />,
+      icon: <SpeedMeterIcon className="size-6 shrink-0" />,
       label: mileage,
     });
   }
 
   if (condition) {
     specs.push({
-      icon: <LikeIcon className="size-7 shrink-0" />,
+      icon: <LikeIcon className="size-6 shrink-0" />,
       label: condition,
     });
   }
 
   if (drivetrain) {
     specs.push({
-      icon: <DrivetrainIcon className="size-7 shrink-0" />,
+      icon: <DrivetrainIcon className="size-6 shrink-0" />,
       label: drivetrain,
     });
   }
 
   if (identifier) {
     specs.push({
-      icon: <VehicleIdIcon className="size-7 shrink-0" />,
+      icon: <VehicleIdIcon className="size-6 shrink-0" />,
       label: identifier,
     });
   }
 
   if (fuelType) {
     specs.push({
-      icon: <FuelTypeIcon className="size-7 shrink-0" />,
+      icon: <FuelTypeIcon className="size-6 shrink-0" />,
       label: fuelType,
     });
   }
 
   if (horsepower) {
     specs.push({
-      icon: <EngineIcon className="size-7 shrink-0" />,
+      icon: <EngineIcon className="size-6 shrink-0" />,
       label: horsepower,
     });
   }
 
   if (transmission) {
     specs.push({
-      icon: <TransmissionTypeIcon className="size-7 shrink-0" />,
+      icon: <TransmissionTypeIcon className="size-6 shrink-0" />,
       label: transmission,
     });
   }
@@ -177,14 +177,14 @@ export const OfferCard = ({
     <div
       {...rest}
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-2xl border border-gunmetal-200 bg-white transition-all duration-300',
+        'group relative flex flex-col overflow-hidden rounded-3xl border border-gunmetal-200 bg-white transition-all duration-300',
         // 'hover:border-primary hover:shadow-lg',
         className,
       )}
     >
       <Link aria-label={`View ${title}`} className="absolute inset-0 z-0" href={href} />
 
-      <div className="relative z-10 aspect-[4/3] w-full overflow-hidden bg-gray-100">
+      <div className="relative z-10 aspect-[4/3] w-full max-h-[250px] overflow-hidden rounded-b-3xl">
         <OfferCardCarousel images={galleryImages} title={title} />
         <OfferCardLabels labels={labels} />
         <OfferCardActions
@@ -205,7 +205,7 @@ export const OfferCard = ({
         <OfferCardSpecs specs={specs} />
       </div>
       <div className="padding-[24px] -mb-p pointer-events-none relative z-10 mt-auto">
-        <div className="flex w-full max-w-3xl flex-col items-center rounded-t-none rounded-b-2xl bg-gray-50 p-6 transition-colors duration-300 group-hover:bg-[#262D37]">
+        <div className="flex w-full max-w-3xl flex-col items-center rounded-t-3xl rounded-b-3xl bg-gray-50 p-6 transition-colors duration-300 group-hover:bg-[#262D37]">
           <div className="flex flex-wrap items-start justify-between gap-4">
             {annualMileage && <OfferCardAnnualMileage mileage={annualMileage} />}
             {monthlyPrice && (

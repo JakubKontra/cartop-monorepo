@@ -10,7 +10,7 @@ export const OfferCardCTA = ({ text, ...linkProps }: OfferCardCTAProps) => {
   return (
     <Link
       {...linkProps}
-      className="flex w-full items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90 pointer-events-auto"
+      className="flex w-full items-center justify-center rounded-xl bg-primary px-6 py-4 max-h-[56px] text-sm text-white transition-colors hover:bg-primary/90 pointer-events-auto leading-[160%] tracking-[0] font-normal"
     >
       {text}
     </Link>
