@@ -59,7 +59,7 @@ const iconVariants = tv({
 type ButtonVariants = Omit<VariantProps<typeof buttonVariants>, 'sizeWithIcon'>;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariants {
-  children?: ReactNode;
+  children: ReactNode;
   icon?: ReactNode;
 }
 

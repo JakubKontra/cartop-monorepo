@@ -57,7 +57,7 @@ const Footer = () => {
   return (
     <footer className="rounded-t-[32px] bg-[#262D37] text-white ">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        {/* <NewsletterSignup /> */}
+        <NewsletterSignup />
 
         <div className="mb-6">
           <Logo height={34} width={170} />

@@ -5,7 +5,7 @@ export const ReliablePartner = () => {
   return (
     <div className="w-full py-20">
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 mb-4 px-4 max-w-[1360px] mx-auto">
-        <h2 className={'w-full text-4xl lg:text-5xl'}>
+        <h2 className="w-full text-4xl lg:text-5xl">
           Váš <span className="headline-highlight">spolehlivý</span>
           <br />
           partner
