@@ -8,6 +8,7 @@ import { BrandsSection } from '@/components/sections/Homepage/Brands/BrandsSecti
 import { BrandsSectionLoading } from '@/components/sections/Homepage/Brands/BrandsSectionLoading';
 import { BrandsSectionWrapper } from '@/components/sections/Homepage/Brands/BrandsSectionWrapper';
 import { FaqSection } from '@/components/sections/Homepage/Faq/FaqSection';
+import { JourneySection } from '@/components/sections/Homepage/Journey';
 import { PromotionalOffersSectionWrapper } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionWrapper';
 import { PromotionalOffersSectionLoading } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionLoading';
 import { PromotionalOffersSection } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSection';
@@ -19,6 +20,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Benefits />
+      <JourneySection />
       <div>
         <ReliablePartner />
         <PromotionalOffersSectionWrapper>

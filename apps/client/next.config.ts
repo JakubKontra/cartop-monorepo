@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   compress: true,
   output: 'standalone',
   productionBrowserSourceMaps: enableProdSourceMaps,
+  transpilePackages: ['@cartop/validation', '@cartop/api-client', '@cartop/ui-utils'],
   experimental: {
     optimizePackageImports: ['lucide-react'],
     // reactCompiler: true, // Disabled - requires babel-plugin-react-compiler
