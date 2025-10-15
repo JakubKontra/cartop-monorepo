@@ -1,10 +1,11 @@
 'use client';
 
-import { WrapperFadeIn } from '@/components/organisms/animations/WrapperFadeIn';
-import { cn } from '@/utils/cv';
-import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from 'react';
+
+import { WrapperFadeIn } from '@/components/organisms/animations/WrapperFadeIn';
+import { cn } from '@/utils/cv';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -122,13 +123,13 @@ export const JourneyTimeline = () => {
           transformOrigin: 'top center',
         },
         {
-          scaleY: 1,
           ease: 'none',
+          scaleY: 1,
           scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top center+=10%',
             end: 'bottom center+=10%',
             scrub: 1,
+            start: 'top center+=10%',
+            trigger: containerRef.current,
           },
         },
       );

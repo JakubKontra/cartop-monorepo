@@ -6,8 +6,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { graphqlRequest } from '@/lib/graphql-client';
 import type { PasswordResetRequestResponse, RequestPasswordResetInput } from '@/gql/graphql';
+
+import { graphqlRequest } from '@/lib/graphql-client';
 
 const REQUEST_PASSWORD_RESET_MUTATION = `
   mutation RequestPasswordReset($input: RequestPasswordResetInput!) {
@@ -26,8 +27,8 @@ type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 export const ForgotPasswordForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<null | string>(null);
+  const [errorMessage, setErrorMessage] = useState<null | string>(null);
 
   const {
     formState: { errors },
@@ -63,9 +64,7 @@ export const ForgotPasswordForm = () => {
       reset();
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'An error occurred. Please try again.',
+        error instanceof Error ? error.message : 'An error occurred. Please try again.',
       );
     } finally {
       setIsSubmitting(false);
@@ -73,12 +72,9 @@ export const ForgotPasswordForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-900 mb-2"
-        >
+        <label className="mb-2 block text-sm font-medium text-gray-900" htmlFor="email">
           Email address
         </label>
         <input
@@ -87,8 +83,8 @@ export const ForgotPasswordForm = () => {
           {...register('email')}
           aria-invalid={errors.email ? 'true' : 'false'}
           className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:border-transparent focus:ring-2 focus:ring-[#c8102e] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          placeholder="Enter your email"
           disabled={isSubmitting}
+          placeholder="Enter your email"
         />
         {errors.email && (
           <p className="mt-2 text-sm text-red-600" role="alert">
@@ -114,17 +110,17 @@ export const ForgotPasswordForm = () => {
       )}
 
       <button
-        type="submit"
-        disabled={isSubmitting}
         className="w-full rounded-lg bg-[#c8102e] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#a00d25] disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={isSubmitting}
+        type="submit"
       >
         {isSubmitting ? 'Sending...' : 'Send reset link'}
       </button>
 
       <div className="text-center">
         <Link
+          className="text-sm text-gray-600 underline underline-offset-4 hover:text-gray-900"
           href="/auth/login"
-          className="text-sm text-gray-600 hover:text-gray-900 underline underline-offset-4"
         >
           Back to login
         </Link>

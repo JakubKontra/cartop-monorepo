@@ -26,7 +26,7 @@ interface ButtonIconProps
 
 export const ButtonIcon = ({ className, icon, variant, ...props }: ButtonIconProps) => {
   return (
-    <button type="button" className={cn(iconVariants({ variant }), className)} {...props}>
+    <button className={cn(iconVariants({ variant }), className)} type="button" {...props}>
       {icon}
     </button>
   );

@@ -19,11 +19,11 @@ import {
 } from '@/queries/promotional-offers';
 
 export type OfferImage = {
-  alt?: string | null;
-  height?: number | null;
+  alt?: null | string;
+  height?: null | number;
   id: string;
   url: string;
-  width?: number | null;
+  width?: null | number;
 };
 
 export type OfferGallery = {
@@ -35,11 +35,11 @@ export type OfferGallery = {
 export type OfferBrand = {
   id: string;
   logo?: {
-    alt?: string | null;
-    height?: number | null;
+    alt?: null | string;
+    height?: null | number;
     id: string;
     url: string;
-    width?: number | null;
+    width?: null | number;
   } | null;
   name: string;
   slug: string;
@@ -52,26 +52,26 @@ export type OfferModel = {
 };
 
 export type OfferModelGeneration = {
-  bodyType?: string | null;
-  drivetrain?: string | null;
-  engineDisplacement?: number | null;
-  fuelType?: string | null;
-  gallery?: OfferGallery | null;
-  horsepower?: number | null;
+  bodyType?: null | string;
+  drivetrain?: null | string;
+  engineDisplacement?: null | number;
+  fuelType?: null | string;
+  gallery?: null | OfferGallery;
+  horsepower?: null | number;
   id: string;
   name: string;
   slug: string;
-  transmission?: string | null;
-  year?: number | null;
+  transmission?: null | string;
+  year?: null | number;
 };
 
 export type PromotionalOffer = {
-  annualMileageLimit?: number | null;
-  brand?: OfferBrand | null;
+  annualMileageLimit?: null | number;
+  brand?: null | OfferBrand;
   createdAt: string;
-  description?: string | null;
-  discountAmount?: number | null;
-  discountPercentage?: number | null;
+  description?: null | string;
+  discountAmount?: null | number;
+  discountPercentage?: null | number;
   financingAvailable?: boolean | null;
   hasAssistanceServiceIncluded?: boolean | null;
   hasGapIncluded?: boolean | null;
@@ -81,15 +81,15 @@ export type PromotionalOffer = {
   includesWarranty?: boolean | null;
   isActive: boolean;
   isPublic: boolean;
-  leasingDurationMonths?: number | null;
-  model?: OfferModel | null;
+  leasingDurationMonths?: null | number;
+  model?: null | OfferModel;
   modelGeneration: OfferModelGeneration;
-  monthlyPayment?: number | null;
-  slug?: string | null;
-  totalPrice?: number | null;
+  monthlyPayment?: null | number;
+  slug?: null | string;
+  totalPrice?: null | number;
   type: string;
   updatedAt: string;
-  warrantyYears?: number | null;
+  warrantyYears?: null | number;
 };
 
 export type GetPromotionalOffersOptions = {
@@ -114,7 +114,7 @@ export type GetPromotionalOffersOptions = {
     /** Minimum price filter */
     priceMin?: number;
     /** Filter by offer type */
-    type?: 'OPERATIONAL_LEASING' | 'DIRECT_PURCHASE' | 'INDIVIDUAL';
+    type?: 'DIRECT_PURCHASE' | 'INDIVIDUAL' | 'OPERATIONAL_LEASING';
   };
   /** Additional fetch options */
   requestInit?: RequestInit;

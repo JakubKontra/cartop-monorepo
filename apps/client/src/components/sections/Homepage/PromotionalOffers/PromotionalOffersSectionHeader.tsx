@@ -1,14 +1,14 @@
 import { cn } from '@/utils/cv';
 
 export interface PromotionalOffersSectionHeaderProps {
-  /** Zvýrazněné slovo v nadpisu */
-  highlightedTitle: string;
-  /** Zbytek nadpisu */
-  title: string;
-  /** Optional podnadpis */
-  subtitle?: string;
   /** Optional CSS classes */
   className?: string;
+  /** Zvýrazněné slovo v nadpisu */
+  highlightedTitle: string;
+  /** Optional podnadpis */
+  subtitle?: string;
+  /** Zbytek nadpisu */
+  title: string;
 }
 
 /**

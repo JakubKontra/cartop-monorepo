@@ -4,20 +4,20 @@ import Link from 'next/link';
 import { cn } from '@/utils/cv';
 
 export interface BrandCardProps {
-  /** Brand name */
-  name: string;
-  /** Brand URL slug */
-  href: string;
-  /** Logo URL */
-  logoUrl?: string;
-  /** Logo alt text */
-  logoAlt?: string;
-  /** Logo width (for optimization) */
-  logoWidth?: number;
-  /** Logo height (for optimization) */
-  logoHeight?: number;
   /** Additional CSS classes */
   className?: string;
+  /** Brand URL slug */
+  href: string;
+  /** Logo alt text */
+  logoAlt?: string;
+  /** Logo height (for optimization) */
+  logoHeight?: number;
+  /** Logo URL */
+  logoUrl?: string;
+  /** Logo width (for optimization) */
+  logoWidth?: number;
+  /** Brand name */
+  name: string;
 }
 
 /**
@@ -44,19 +44,19 @@ export const BrandCard = ({
       className={cn(
         'group flex flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white p-4 transition-all duration-300',
         'hover:scale-105 hover:border-primary',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+        'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none',
         className,
       )}
     >
-      <div className="flex size-24 items-center justify-center overflow-hiddenp-3">
+      <div className="overflow-hiddenp-3 flex size-24 items-center justify-center">
         {logoUrl ? (
           <Image
-            src={logoUrl}
             alt={logoAlt || `${name} logo`}
-            width={logoWidth || 96}
-            height={logoHeight || 96}
             className="h-full w-full object-contain"
+            height={logoHeight || 96}
             loading="lazy"
+            src={logoUrl}
+            width={logoWidth || 96}
           />
         ) : (
           <div className="flex size-full items-center justify-center text-4xl font-bold text-gray-400">

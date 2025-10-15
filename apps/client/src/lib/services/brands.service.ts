@@ -11,11 +11,11 @@ import { graphqlRequest } from '@/lib/graphql-client';
 import { GET_HIGHLIGHTED_BRANDS_QUERY } from '@/queries/brands';
 
 export type BrandLogo = {
-  alt?: string | null;
-  height?: number | null;
+  alt?: null | string;
+  height?: null | number;
   id: string;
   url: string;
-  width?: number | null;
+  width?: null | number;
 };
 
 export type Brand = {
@@ -43,10 +43,7 @@ export async function getHighlightedBrands(
 ): Promise<Brand[]> {
   const { limit, requestInit } = options || {};
 
-  const data = await graphqlRequest<
-    GetHighlightedBrandsQuery,
-    { limit?: number }
-  >(
+  const data = await graphqlRequest<GetHighlightedBrandsQuery, { limit?: number }>(
     {
       query: GET_HIGHLIGHTED_BRANDS_QUERY,
       variables: limit ? { limit } : {},

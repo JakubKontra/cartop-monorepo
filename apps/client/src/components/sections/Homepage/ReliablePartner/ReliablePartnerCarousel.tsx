@@ -1,37 +1,38 @@
 'use client';
+import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useSwiper } from '@/hooks/useSwiper';
 import { cn } from '@/utils/cv';
-import { useEffect, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import Image from 'next/image';
-import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
-import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
 
 interface CarouselSlideProps {
-  image: string;
-  title: string;
-  text: string;
   alt?: string;
+  image: string;
   isActive?: boolean;
+  text: string;
+  title: string;
 }
 
-const CarouselSlide = ({ image, title, text, alt, isActive }: CarouselSlideProps) => {
+const CarouselSlide = ({ alt, image, isActive, text, title }: CarouselSlideProps) => {
   return (
     <div
       className={cn(
-        'aspect-[307/444] w-56 lg:w-80 rounded-4xl flex flex-col justify-between items-center px-4 py-6 lg:p-10 pt-12 lg:pt-20 border shrink-0 transition-colors duration-1000',
+        'flex aspect-[307/444] w-56 shrink-0 flex-col items-center justify-between rounded-4xl border px-4 py-6 pt-12 transition-colors duration-1000 lg:w-80 lg:p-10 lg:pt-20',
         isActive ? 'bg-gunmetal-50 border-gunmetal' : 'bg-white border-french-grey',
       )}
     >
-      <div className="relative aspect-[169/200] w-24 lg:w-44 overflow-hidden rounded-lg">
-        <Image src={image} alt={alt || title} fill className="object-cover" />
+      <div className="relative aspect-[169/200] w-24 overflow-hidden rounded-lg lg:w-44">
+        <Image fill alt={alt || title} className="object-cover" src={image} />
       </div>
       <div className="flex flex-col gap-6">
         <h3 className="text-center text-base font-semibold text-gunmetal">{title}</h3>
         <p
           className={cn(
-            'text-center text-4xl lg:text-5xl text-gunmetal whitespace-nowrap',
+            'text-center text-4xl whitespace-nowrap text-gunmetal lg:text-5xl',
             isActive ? 'font-semibold' : 'font-medium',
           )}
         >
@@ -45,44 +46,44 @@ const CarouselSlide = ({ image, title, text, alt, isActive }: CarouselSlideProps
 const slidesData = [
   {
     image: '/images/homepage/partners/Pocet-znacek.png',
-    title: 'Počet značek v nabídce',
     text: '29',
+    title: 'Počet značek v nabídce',
   },
   {
     image: '/images/homepage/partners/Vydejni-mista.png',
-    title: 'Počet výdejních míst',
     text: '350',
+    title: 'Počet výdejních míst',
   },
   {
     image: '/images/homepage/partners/Hodnota-vozu.png',
-    title: 'Hodnota řešených vozů',
     text: '36 mld. Kč',
+    title: 'Hodnota řešených vozů',
   },
   {
     image: '/images/homepage/partners/Pocet-zakazniku.png',
-    title: 'Počer zákazníků',
     text: '24 000+',
+    title: 'Počer zákazníků',
   },
   {
     image: '/images/homepage/partners/Prumerna-uspora.png',
-    title: 'Průměrná úspora',
     text: '30 %',
+    title: 'Průměrná úspora',
   },
   {
     image: '/images/homepage/partners/Dostupnost.png',
-    title: 'Dostupnost',
     text: '80 %',
+    title: 'Dostupnost',
   },
   {
     image: '/images/homepage/partners/Pomoc-zakaznikum.png',
-    title: 'Zákazníkům, kterým pomůžeme s výběrem',
     text: '54 %',
+    title: 'Zákazníkům, kterým pomůžeme s výběrem',
   },
 ];
 
 export const ReliablePartnerCarousel = ({ className }: { className?: string }) => {
   const [isItFirstInteraction, setIsItFirstInteraction] = useState(true);
-  const { realIndex, onNext, onPrevious, swiperRef, setActiveSlide, onSetActiveSlideToLoop } =
+  const { onNext, onPrevious, onSetActiveSlideToLoop, realIndex, setActiveSlide, swiperRef } =
     useSwiper();
 
   const isActive = useIntersectionObserver({
@@ -98,24 +99,24 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
   }, [isActive]);
 
   return (
-    <div className={cn('py-12 overflow-hidden', className)}>
+    <div className={cn('overflow-hidden py-12', className)}>
       <div className="relative" id="partner-carousel-wrapper">
         <div className="relative w-full">
           <Swiper
-            speed={600}
-            onSwiper={swiper => {
-              swiperRef.current = swiper;
-            }}
-            grabCursor={true}
+            centeredSlides
+            grabCursor
+            loop
+            className="!py-4"
+            id="partner-carousel"
             slidesPerView="auto"
-            centeredSlides={true}
             spaceBetween={24}
+            speed={600}
             onSlideChange={swiper => {
               setActiveSlide(swiper.realIndex);
             }}
-            id="partner-carousel"
-            className="!py-4"
-            loop={true}
+            onSwiper={swiper => {
+              swiperRef.current = swiper;
+            }}
           >
             {[...slidesData, ...slidesData].map((item, index) => {
               const isActive = realIndex === index;
@@ -129,11 +130,11 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
                   >
                     <CarouselSlide
                       key={item.title}
-                      image={item.image}
-                      title={item.title}
-                      text={item.text}
                       alt={item.title}
+                      image={item.image}
                       isActive={isActive}
+                      text={item.text}
+                      title={item.title}
                     />
                   </div>
                 </SwiperSlide>
@@ -141,7 +142,7 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
             })}
           </Swiper>
         </div>
-        <div className="flex gap-4 items-center justify-between mt-14 max-w-6xl mx-auto px-4">
+        <div className="mx-auto mt-14 flex max-w-6xl items-center justify-between gap-4 px-4">
           <ButtonIcon
             icon={<ArrowLeftIcon className="size-5" />}
             variant="primary-inverted"
@@ -151,13 +152,13 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
             {slidesData.map((_, index) => (
               <button
                 key={index}
-                className={`size-2 rounded-full transition-width duration-300 cursor-pointer ${
+                type="button"
+                className={`transition-width size-2 cursor-pointer rounded-full duration-300 ${
                   index === realIndex % slidesData.length
                     ? 'w-8 bg-gunmetal'
                     : 'bg-gunmetal-200 hover:bg-gunmetal-700'
                 }`}
                 onClick={() => onSetActiveSlideToLoop(index)}
-                type="button"
               />
             ))}
           </div>

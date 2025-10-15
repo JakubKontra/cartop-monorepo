@@ -10,7 +10,7 @@ const menuLinks: FooterLink[] = [
   { href: '/nas-vyber', label: 'Náš výběr' },
   { href: '/produkty', label: 'Produkty' },
   { href: '/jak-to-funguje', label: 'Jak to funguje' },
-  { href: '/kontakt', label: 'Kontakt' },
+  { href: '/kontakty', label: 'Kontakt' },
 ];
 
 const recommendedLinks: FooterLink[] = [
@@ -19,6 +19,7 @@ const recommendedLinks: FooterLink[] = [
   { href: '/akcni-vozy', label: 'Akční vozy' },
   { href: '/nas-vyber', label: 'Náš výběr' },
   { href: '/nejnovejsi-nabidky', label: 'Nejnovější nabídky' },
+  { href: '/katalog', label: 'Katalog' },
 ];
 
 const selectionLinks: FooterLink[] = [

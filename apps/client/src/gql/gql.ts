@@ -14,14 +14,17 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetCatalogBrandsDocument,
-    "\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n": typeof types.GetHighlightedBrandsDocument,
-    "\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetBrandBySlugDocument,
+  '\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n': typeof types.GetCatalogBrandsDocument;
+  '\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n': typeof types.GetHighlightedBrandsDocument;
+  '\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n': typeof types.GetBrandBySlugDocument;
 };
 const documents: Documents = {
-    "\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetCatalogBrandsDocument,
-    "\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n": types.GetHighlightedBrandsDocument,
-    "\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetBrandBySlugDocument,
+  '\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n':
+    types.GetCatalogBrandsDocument,
+  '\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n':
+    types.GetHighlightedBrandsDocument,
+  '\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n':
+    types.GetBrandBySlugDocument,
 };
 
 /**
@@ -41,18 +44,25 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n"];
+export function graphql(
+  source: '\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetCatalogBrands($activeOnly: Boolean, $limit: Float) {\n    catalogBrands(activeOnly: $activeOnly, limit: $limit) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n"];
+export function graphql(
+  source: '\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n',
+): (typeof documents)['\n  query GetHighlightedBrands($limit: Float) {\n    highlightedCatalogBrands(limit: $limit) {\n      id\n      name\n      slug\n      description\n      isHighlighted\n      logo {\n        id\n        url\n        alt\n        width\n        height\n      }\n    }\n  }\n'];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n"];
+export function graphql(
+  source: '\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n',
+): (typeof documents)['\n  query GetBrandBySlug($slug: String!) {\n    catalogBrandBySlug(slug: $slug) {\n      id\n      name\n      slug\n      description\n      isActive\n      isHighlighted\n      isRecommended\n      createdAt\n      updatedAt\n    }\n  }\n'];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
 }
 
-export type DocumentType<TDocumentNode extends DocumentNode<any, any>> = TDocumentNode extends DocumentNode<  infer TType,  any>  ? TType  : never;
+export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
+  TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;

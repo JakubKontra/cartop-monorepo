@@ -11,9 +11,9 @@ import type { PromotionalOffer } from '@/lib/services/promotional-offers.service
 
 import { PromotionalOffersCard } from '@/components/molecules/PromotionalOffersCard';
 import { getPromotionalOffers } from '@/lib/services/promotional-offers.service';
+import { cn } from '@/utils/cv';
 
 import { PromotionalOffersSectionHeader } from './PromotionalOffersSectionHeader';
-import { cn } from '@/utils/cv';
 
 // ISR revalidation: 60 seconds
 export const revalidate = 60;
@@ -74,14 +74,14 @@ export const PromotionalOffersSection = async ({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       <div className="mx-auto max-w-[1360px] px-2 py-8 lg:py-12">
-        <div className="flex flex-col gap-10 w-[1360px]">
+        <div className="flex w-[1360px] flex-col gap-10">
           <PromotionalOffersSectionHeader
             highlightedTitle={highlightedTitle}
             subtitle={subtitle}
             title={title}
           />
 
-          <div className="mb-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3 grid-cols-[repeat(auto-fit,minmax(0,440px))] ">
+          <div className="mb-10 grid grid-cols-[repeat(auto-fit,minmax(0,440px))] gap-5 md:grid-cols-2 lg:grid-cols-3 ">
             {offers.map(offer => {
               // Get all images from gallery
               const galleryImages =

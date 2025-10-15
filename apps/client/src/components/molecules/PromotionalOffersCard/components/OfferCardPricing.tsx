@@ -11,7 +11,9 @@ export const OfferCardPricing = ({
 }: OfferCardPricingProps) => {
   return (
     <div className="text-left">
-      <div className="font-regular text-gunmetal-700 transition-colors duration-300 group-hover:text-white/70">{frequencyText}</div>
+      <div className="font-regular text-gunmetal-700 transition-colors duration-300 group-hover:text-white/70">
+        {frequencyText}
+      </div>
       <div className="text-2xl font-semibold text-gray-900 transition-colors duration-300 group-hover:text-white">
         {price.toLocaleString('cs-CZ')} {currency}
       </div>
