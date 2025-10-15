@@ -5,7 +5,6 @@ import { cn } from '@/utils/cv';
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
-import Button from '@/components/organisms/Button/Button';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
 
