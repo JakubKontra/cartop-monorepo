@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BullModule } from '@nestjs/bull';
+import { QueueModule } from '../../common/queue/queue.module';
 import { AuditLog } from './audit-log.entity';
 import { AuditService } from './audit.service';
 import { AuditResolver } from './audit.resolver';
@@ -10,9 +10,7 @@ import { AuditSubscriber } from './audit.subscriber';
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuditLog], 'audit'),
-    BullModule.registerQueue({
-      name: 'audit',
-    }),
+    QueueModule.register({ name: 'audit' }),
   ],
   providers: [
     AuditService,

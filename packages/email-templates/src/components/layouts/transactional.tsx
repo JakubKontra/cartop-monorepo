@@ -1,16 +1,12 @@
 import {
   Body,
-  Container,
   Head,
   Html,
-  Img,
   Preview,
-  Section,
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 import { ReactNode } from "react";
 import { Footer } from "../parts/Footer";
-import { CustomerTestimonials } from "../CustomerTestimonials";
 
 export const LayoutTransactional = ({
   title,
@@ -45,7 +41,7 @@ export const LayoutTransactional = ({
               },
             },
           },
-        }}
+        } as any}
       >
         <Head />
         <Body className="bg-[#F5F5F5] font-verdana">

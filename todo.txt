@@ -1,0 +1,205 @@
+1. "Dovolal jsem se" (Call Reached/Successful)
+
+  Location: CarRequestPresenter.php:1641
+  - Action: handleCallSuccessful()
+  - What it does:
+    - Sets confirmedAt timestamp to current date/time
+    - Changes state to CALL_SUCCESSFUL (state ID: 2)
+    - Creates a log entry: "Zákazník kontaktován" (Customer contacted)
+    - Persists changes to database
+    - Shows success message "Uloženo" (Saved)
+
+  ---
+  2. "Nedovolal jsem se" (Not Reached/Call Missed)
+
+  Location: CarRequestPresenter.php:1667
+  - Action: handleCallMissed()
+  - What it does:
+    - Creates a log entry: "Nedovoláno" (Not reached)
+    - Changes state to CALL_MISSED (state ID: 1)
+    - Automatically sends an email to the customer:
+        - Subject: "Zmeškaný hovor" (Missed call)
+      - Template: CarRequest/callMissed
+      - From: info@cartop.cz
+      - Contains customer's phone number in params
+    - Persists changes to database
+
+  ---
+  3. "Nedovolal jsem se, zkusit zítra" (Try Tomorrow)
+
+  Location: CarRequestPresenter.php:1667
+  - Action: handleCallMissed($scheduleForTomorrow = TRUE)
+  - What it does:
+    - Same as "Not Reached" above, PLUS:
+    - Sets nextCallAt field to tomorrow's date (+1 day)
+    - This schedules the request to be called again tomorrow
+
+  ---
+  4. "Poslat nabídku" (Send Email/Offer)
+
+  Location: Template shows a collapsible form
+  - Action: Displays a complex form with multiple configurations
+  - What it does:
+    - Shows form to create and send car offer email
+    - Supports multiple offer types:
+        - Basic configurations (buy offers with pricing)
+      - Operational leasing configurations (OL offers with duration, mileage, etc.)
+    - Form fields include:
+        - Email template selection
+      - Greeting text
+      - Up to 3 car configurations (title, prices, discounts, availability)
+      - File attachments
+    - When submitted (handleAddOfferForm):
+        - Creates a CarRequestOffer entity
+      - Sends email to customer
+      - Logs the action in history
+      - Can be previewed before sending
+
+  ---
+  5. "Zaslat email s dotazem" (Send Email with Question)
+
+  Location: Template line 472-475
+  - Action: Shows feedback/question email form
+  - What it does:
+    - Displays form to send a feedback/satisfaction survey email
+    - Different from regular offer email
+    - Has preview functionality
+    - Component: sendEmailWithFeedback
+
+  ---
+  6. "Předáno dealerovi" (Pass to Dealer)
+
+  Location: CarRequestPresenter.php:1794
+  - Action: handleRelayedToDealer($dealerId)
+  - What it does:
+    - Optionally assigns a specific dealer to the request
+    - Creates log entry: "Předáno dealerovi (Dealer Name)"
+    - Changes state to RELAYED_TO_DEALER (state ID: 4)
+    - Sets relayedAt timestamp to current date/time
+    - Persists changes to database
+
+  ---
+  7. "Čeká na nabídku" (Waiting for Offer)
+
+  Location: CarRequestPresenter.php:1360
+  - Action: handleToggleWaitingForOffer()
+  - What it does:
+    - Toggles the waitingForOffer boolean flag (true/false)
+    - This is a toggle - clicking it again will turn it off
+    - Used to mark requests that are waiting for an offer from supplier
+    - Shows stopwatch icon (⏱️) in the UI when enabled
+    - Persists changes to database
+
+  ---
+  8. "Změnit prioritu" (Change Priority) - Multiple Color Options
+
+  Location: CarRequestPresenter.php:1405-1619
+  - Actions: Multiple handlers for different priority levels
+  - What it does:
+    - Sets priority level with color coding:
+        - Warning (yellow/orange) - handleTogglePriorityWarning()
+      - Primary (blue) - handleTogglePriorityPrimary()
+      - Secondary (gray) - handleTogglePrioritySecondary()
+      - Danger (red) - handleTogglePriorityDanger()
+      - Success (green) - handleTogglePrioritySuccess()
+      - Custom Purple - handleTogglePriorityCustomPurple()
+      - Custom Lime - handleTogglePriorityCustomLime()
+      - Custom Blue - handleTogglePriorityCustomBlue()
+      - Hot Pink - handleTogglePriorityHotPink()
+      - Coral Pink - handleTogglePriorityCoralPink()
+      - Mint Green - handleTogglePriorityMintGreen()
+    - Each toggles the priority value (0 = off, or specific number for that color)
+    - Shows star icon (⭐) in the UI when enabled
+    - Used for visual organization and filtering of requests
+
+  ---
+  9. "Nastavit VIP" (Set VIP Customer)
+
+  Location: CarRequestPresenter.php:1382
+  - Action: handleToggleVipCustomer()
+  - What it does:
+    - Toggles the VIP status on the customer/user (not the request itself)
+    - Sets author->setVip() to true/false
+    - VIP customers show with crown icon (👑) and green background in UI
+    - Persists changes to the user entity
+
+  ---
+  10. "Uzavřít / Zrušeno" (Cancel Request)
+
+  Location: CarRequestPresenter.php:1827
+  - Action: handleClose($withState = 8)
+  - What it does:
+    - Closes the request with state CANCELLED (state ID: 8)
+    - Sets closedAt timestamp to current date/time
+    - Creates log entry: "Uzavřeno (Zrušeno)"
+    - Does NOT create additional log entry if cancelled
+    - Persists changes to database
+
+  ---
+  11. "Uzavřít / Koupeno" (Mark as Purchased)
+
+  Location: Modal form + CarRequestPresenter.php:1827
+  - Action: handleClose($withState = 6) + additional purchase details
+  - What it does:
+    - Opens modal dialog to collect purchase details:
+        - Offer type (Buy / Operational Leasing)
+      - Brand and Model
+      - For OL: duration, mileage, prices with/without VAT
+      - For Buy: prices with/without VAT
+    - Changes state to BOUGHT (state ID: 6)
+    - Sets closedAt timestamp
+    - Stores purchase details in closed* fields on the entity:
+        - closedOfferType, closedBrand, closedModel
+      - closedOlDuration, closedOlMileage, closedOlPriceWithVAT, etc.
+      - closedBuyPriceWithVAT, closedBuyPriceWithoutVAT
+    - Creates log entry: "Uzavřeno (Koupeno)"
+    - This is a successful conversion - customer bought from CARTOP
+
+  ---
+  12. "Uzavřít / Koupeno jinde" (Bought Elsewhere)
+
+  Location: CarRequestPresenter.php:1827
+  - Action: handleClose($withState = 7)
+  - What it does:
+    - Closes the request with state BOUGHT_ELSEWHERE (state ID: 7)
+    - Sets closedAt timestamp
+    - Creates log entry: "Uzavřeno (Koupeno jinde)"
+    - This is a lost conversion - customer bought from competitor
+    - Persists changes to database
+
+  ---
+  Request States (ECarRequestState)
+
+  The system uses these states to track request lifecycle:
+  - NULL - Nová (New)
+  - 1 - Nedovoláno (Call Missed)
+  - 2 - Dovoláno (Call Successful)
+  - 3 - Zaslány nabídky (Offers Sent)
+  - 4 - Předáno dealerovi (Relayed to Dealer)
+  - 5 - Obchodovatelný (Potential Buyer)
+  - 6 - Koupeno (Bought from us) ✅
+  - 7 - Koupeno jinde (Bought Elsewhere) ❌
+  - 8 - Zrušeno (Cancelled) ❌
+
+  ---
+  Additional Features
+
+  Highlighting Colors
+
+  Similar to priority, there are highlight toggle options (same color palette) that can be toggled separately from priority for additional visual organization.
+
+  Notes and Comments
+
+  Admins can add internal notes that appear in the history/log section.
+
+  Offer Email System
+
+  The system supports sophisticated email templates for:
+  - Regular car offers (buy)
+  - Operational leasing offers
+  - Multiple configurations per email (up to 3 cars)
+  - File attachments
+  - Email preview before sending
+  - Tracking of email views
+
+  This is a comprehensive CRM system for managing car sales leads from initial contact through to purchase or cancellation.

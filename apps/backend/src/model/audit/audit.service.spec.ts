@@ -1,16 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { getQueueToken } from '@nestjs/bull';
 import { Repository } from 'typeorm';
-import { Queue } from 'bull';
 import { AuditService } from './audit.service';
 import { AuditLog } from './audit-log.entity';
 import { AuditAction } from '../../common/interfaces/audit.interface';
+import { IQueueService } from '../../common/queue/queue.interface';
 
 describe('AuditService', () => {
   let service: AuditService;
   let repository: jest.Mocked<Repository<AuditLog>>;
-  let queue: jest.Mocked<Queue>;
+  let queue: jest.Mocked<IQueueService>;
 
   const mockRepository = {
     create: jest.fn(),
@@ -21,6 +20,7 @@ describe('AuditService', () => {
 
   const mockQueue = {
     add: jest.fn(),
+    process: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -32,7 +32,7 @@ describe('AuditService', () => {
           useValue: mockRepository,
         },
         {
-          provide: getQueueToken('audit'),
+          provide: 'QUEUE_AUDIT',
           useValue: mockQueue,
         },
       ],
@@ -40,7 +40,7 @@ describe('AuditService', () => {
 
     service = module.get<AuditService>(AuditService);
     repository = module.get(getRepositoryToken(AuditLog, 'audit'));
-    queue = module.get(getQueueToken('audit'));
+    queue = module.get('QUEUE_AUDIT');
 
     // Clear all mocks
     jest.clearAllMocks();

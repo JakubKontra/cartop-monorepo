@@ -3,8 +3,12 @@ import { AuthService } from './auth.service';
 import { LoginInput } from './dto/login.input';
 import { RefreshTokenInput } from './dto/refresh-token.input';
 import { ImpersonateInput } from './dto/impersonate.input';
+import { RequestPasswordResetInput } from './dto/request-password-reset.input';
+import { ResetPasswordInput } from './dto/reset-password.input';
 import { AuthResponse } from './dto/auth-response.type';
 import { ImpersonateResponse } from './dto/impersonate-response.type';
+import { PasswordResetRequestResponse } from './dto/password-reset-request-response.type';
+import { PasswordResetResponse } from './dto/password-reset-response.type';
 import { Public } from '../common/decorators/auth/public.decorator';
 import { Roles } from '../common/decorators/auth/roles.decorator';
 import { CurrentUser } from '../common/decorators/auth/current-user.decorator';
@@ -66,5 +70,31 @@ export class AuthResolver {
       throw new Error('Not currently impersonating a user');
     }
     return this.authService.stopImpersonation(user.impersonatedBy);
+  }
+
+  /**
+   * Request password reset mutation
+   * Sends password reset email to user
+   * @Public - No authentication required
+   */
+  @Mutation(() => PasswordResetRequestResponse)
+  @Public()
+  async requestPasswordReset(
+    @Args('input') input: RequestPasswordResetInput,
+  ): Promise<PasswordResetRequestResponse> {
+    return this.authService.requestPasswordReset(input);
+  }
+
+  /**
+   * Reset password mutation
+   * Updates user password using reset token
+   * @Public - No authentication required (token is validated)
+   */
+  @Mutation(() => PasswordResetResponse)
+  @Public()
+  async resetPassword(
+    @Args('input') input: ResetPasswordInput,
+  ): Promise<PasswordResetResponse> {
+    return this.authService.resetPassword(input);
   }
 }

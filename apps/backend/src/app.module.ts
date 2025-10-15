@@ -3,7 +3,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BullModule } from '@nestjs/bull';
 import { join } from 'path';
 import { AuditModule } from './model/audit/audit.module';
 import { UserModule } from './model/user/user.module';
@@ -88,14 +87,6 @@ import { SubscriberRegistryProvider } from './common/providers/subscriber-regist
         min: parseInt(process.env.DB_AUDIT_POOL_MIN || '2', 10),  // Minimum pool size for audit
         idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE_TIMEOUT_MS || '30000', 10),
         statement_timeout: parseInt(process.env.DB_QUERY_TIMEOUT_MS || '10000', 10), // Query timeout in ms
-      },
-    }),
-
-    // Bull Queue Configuration
-    BullModule.forRoot({
-      redis: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379', 10),
       },
     }),
 

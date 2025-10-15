@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getQueueToken } from '@nestjs/bull';
-import { Queue } from 'bull';
 import { WebhookService } from './webhook.service';
 import { WatchConfig } from '../common/interfaces/watch.interface';
+import { IQueueService } from '../common/queue/queue.interface';
 
 // Mock fetch globally
 global.fetch = jest.fn();
 
 describe('WebhookService', () => {
   let service: WebhookService;
-  let queue: jest.Mocked<Queue>;
+  let queue: jest.Mocked<IQueueService>;
 
   const mockQueue = {
     add: jest.fn(),
+    process: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -20,14 +20,14 @@ describe('WebhookService', () => {
       providers: [
         WebhookService,
         {
-          provide: getQueueToken('webhooks'),
+          provide: 'QUEUE_WEBHOOKS',
           useValue: mockQueue,
         },
       ],
     }).compile();
 
     service = module.get<WebhookService>(WebhookService);
-    queue = module.get(getQueueToken('webhooks'));
+    queue = module.get('QUEUE_WEBHOOKS');
 
     jest.clearAllMocks();
   });

@@ -94,4 +94,13 @@ export class User {
   @Field({ nullable: true })
   @Column({ type: 'uuid', nullable: true })
   avatarId?: string;
+
+  // === Password Reset ===
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Index()
+  passwordResetToken?: string;
+
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  passwordResetExpires?: Date;
 }

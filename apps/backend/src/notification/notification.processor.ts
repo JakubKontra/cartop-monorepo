@@ -1,6 +1,5 @@
-import { Processor, Process } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
-import { Job } from 'bull';
+import { Injectable, Logger, Inject, OnModuleInit } from '@nestjs/common';
+import { IQueueService, QueueJob } from '../common/queue/queue.interface';
 import { EmailService } from './email/email.service';
 import { SendEmailJobData } from './notification.service';
 
@@ -8,14 +7,25 @@ import { SendEmailJobData } from './notification.service';
  * Notification Queue Processor
  * Handles async processing of notification jobs (emails, etc.)
  */
-@Processor('notifications')
-export class NotificationProcessor {
+@Injectable()
+export class NotificationProcessor implements OnModuleInit {
   private readonly logger = new Logger(NotificationProcessor.name);
 
-  constructor(private readonly emailService: EmailService) {}
+  constructor(
+    @Inject('QUEUE_NOTIFICATIONS')
+    private readonly notificationQueue: IQueueService,
+    private readonly emailService: EmailService,
+  ) {}
 
-  @Process('send-email')
-  async handleSendEmail(job: Job<SendEmailJobData>) {
+  onModuleInit() {
+    // Register processor for send-email jobs
+    this.notificationQueue.process<SendEmailJobData>(
+      'send-email',
+      this.handleSendEmail.bind(this),
+    );
+  }
+
+  async handleSendEmail(job: QueueJob<SendEmailJobData>) {
     const { to, subject, template, data, userId, replyTo } = job.data;
 
     try {

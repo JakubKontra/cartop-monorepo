@@ -1,0 +1,315 @@
+/**
+ * TEMPLATE MAPPER
+ *
+ * Copy this file to create a new entity mapper.
+ * Replace all instances of "YourEntity" with your actual entity name.
+ * Update the MySQL interface to match your legacy schema.
+ *
+ * Steps:
+ * 1. Copy this file: cp _template.mapper.ts your-entity.mapper.ts
+ * 2. Find and replace "YourEntity" with your entity name
+ * 3. Update MySQLYourEntity interface with your legacy fields
+ * 4. Implement the map() function
+ * 5. Register mapper in mysql-to-postgres.ts
+ * 6. Test with: yarn migrate:mysql:dry-run --entities YourEntity
+ */
+
+import { EntityMapper, MigrationContext } from '../types/migration.types';
+import { YourEntity } from '../../../path/to/your-entity.entity'; // Update path
+import {
+  mysqlDateToDate,
+  mysqlBoolToBoolean,
+  safeJsonParse,
+} from '../utils/migration.utils';
+
+/**
+ * MySQL table structure for your legacy entity
+ * Define all fields from your MySQL table here
+ */
+interface MySQLYourEntity {
+  // Primary key (usually auto-increment integer in MySQL)
+  id: number | string;
+
+  // Basic fields - adjust types based on your MySQL schema
+  name: string;
+  description?: string;
+
+  // Numeric fields
+  amount?: number;
+  count?: number;
+
+  // Boolean fields (MySQL often uses tinyint(1))
+  is_active?: number | boolean;
+  is_deleted?: number | boolean;
+
+  // Date fields (can be Date or string)
+  created_at?: Date | string;
+  updated_at?: Date | string;
+  deleted_at?: Date | string;
+
+  // Foreign keys (usually integers in MySQL)
+  user_id?: number | string;
+  category_id?: number | string;
+
+  // JSON fields (might be stored as text)
+  metadata?: string | object;
+  settings?: string | object;
+
+  // Add all other fields from your MySQL table
+  // ...
+}
+
+/**
+ * YourEntity Mapper
+ *
+ * Maps legacy MySQL records to new PostgreSQL entities
+ */
+export class YourEntityMapper implements EntityMapper<MySQLYourEntity, YourEntity> {
+  // MySQL table name (adjust to match your legacy database)
+  sourceTable = 'your_mysql_table_name';
+
+  // PostgreSQL entity class
+  targetEntity = YourEntity;
+
+  // Human-readable name for logging
+  entityName = 'YourEntity';
+
+  /**
+   * Dependencies - List other mappers that must run first
+   *
+   * Example: If YourEntity has foreign keys to User and Category:
+   * dependencies = ['User', 'Category'];
+   *
+   * Leave empty if no dependencies:
+   * dependencies = [];
+   */
+  dependencies: string[] = [];
+
+  /**
+   * Map a single MySQL record to PostgreSQL entity
+   *
+   * @param source - MySQL record
+   * @param context - Migration context with connections
+   * @returns Mapped entity or null to skip this record
+   */
+  async map(
+    source: MySQLYourEntity,
+    context: MigrationContext
+  ): Promise<YourEntity | null> {
+    try {
+      const entity = new YourEntity();
+
+      // === Basic Field Mapping ===
+
+      // Simple string fields
+      entity.name = source.name?.trim();
+      entity.description = source.description?.trim() || null;
+
+      // Numeric fields
+      entity.amount = source.amount || 0;
+      entity.count = source.count || null;
+
+      // === Boolean Conversions ===
+      // MySQL tinyint(1) → PostgreSQL boolean
+      entity.isActive = source.is_active !== undefined
+        ? mysqlBoolToBoolean(source.is_active)
+        : true;
+
+      // === Date Conversions ===
+      // MySQL datetime → PostgreSQL timestamp
+      entity.createdAt = mysqlDateToDate(source.created_at) || new Date();
+      entity.updatedAt = mysqlDateToDate(source.updated_at) || new Date();
+      entity.deletedAt = mysqlDateToDate(source.deleted_at) || null;
+
+      // === JSON Field Parsing ===
+      // MySQL text/varchar → PostgreSQL jsonb
+      entity.metadata = safeJsonParse(source.metadata, {});
+      entity.settings = safeJsonParse(source.settings, null);
+
+      // === Foreign Key Mapping ===
+      // Map old integer IDs to new UUIDs
+      entity.userId = await this.mapForeignKey(
+        context,
+        'users',
+        source.user_id
+      );
+
+      entity.categoryId = await this.mapForeignKey(
+        context,
+        'categories',
+        source.category_id
+      );
+
+      // === Legacy System Tracking ===
+      // Track that this record came from the old system
+      // (Only if your entity has these fields)
+      // entity.isFromLegacySystem = true;
+      // entity.legacySystemId = String(source.id);
+
+      // === Data Validation ===
+      // Skip records with invalid/missing required data
+      if (!entity.name) {
+        console.warn(
+          `⚠️  Skipping ${this.entityName} with missing name: ID=${source.id}`
+        );
+        return null;
+      }
+
+      return entity;
+    } catch (error) {
+      console.error(`❌ Error mapping ${this.entityName} ${source.id}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Map foreign key from legacy integer ID to new UUID
+   *
+   * This helper looks up the new UUID based on the legacy ID
+   * stored during migration of the related entity.
+   *
+   * @param context - Migration context
+   * @param targetTable - PostgreSQL table name
+   * @param legacyId - Old MySQL ID
+   * @returns New UUID or null
+   */
+  private async mapForeignKey(
+    context: MigrationContext,
+    targetTable: string,
+    legacyId: string | number | undefined
+  ): Promise<string | null> {
+    if (!legacyId) return null;
+
+    try {
+      // Assumes the target entity has a legacy_system_id field
+      // Adjust the column name if your entities use a different field
+      const query = `
+        SELECT id FROM ${targetTable}
+        WHERE legacy_system_id = $1
+        LIMIT 1
+      `;
+      const result = await context.postgresConnection.query(query, [
+        String(legacyId),
+      ]);
+
+      if (result.length > 0) {
+        return result[0].id;
+      }
+
+      console.warn(
+        `⚠️  Could not map foreign key: ${targetTable}.id=${legacyId}`
+      );
+      return null;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.warn(
+        `⚠️  Error mapping foreign key for ${targetTable}: ${errorMessage}`
+      );
+      return null;
+    }
+  }
+
+  /**
+   * OPTIONAL: Custom query for fetching data from MySQL
+   *
+   * Override this if you need to:
+   * - Filter records (e.g., only active records)
+   * - Join related tables
+   * - Transform data before mapping
+   *
+   * If not provided, will fetch all records from sourceTable.
+   */
+  async fetchQuery(context: MigrationContext): Promise<MySQLYourEntity[]> {
+    // Example: Only migrate active records
+    const query = `
+      SELECT * FROM ${this.sourceTable}
+      WHERE is_deleted = 0
+      ORDER BY id
+    `;
+    return context.mysqlConnection.query(query);
+
+    // Or use default behavior:
+    // return context.mysqlConnection.query(`SELECT * FROM ${this.sourceTable}`);
+  }
+
+  /**
+   * OPTIONAL: Validate a migrated record
+   *
+   * Called after mapping to verify the entity is valid.
+   * Return true if valid, or an error message string if invalid.
+   *
+   * @param target - Mapped PostgreSQL entity
+   * @param source - Original MySQL record
+   * @returns true if valid, error message if invalid
+   */
+  async validate(
+    target: YourEntity,
+    source: MySQLYourEntity
+  ): Promise<boolean | string> {
+    // Example validations:
+
+    // Check required fields
+    if (!target.name) {
+      return 'Name is required';
+    }
+
+    // Verify data integrity
+    if (target.amount < 0) {
+      return 'Amount cannot be negative';
+    }
+
+    // Compare with source
+    if (target.name !== source.name.trim()) {
+      return `Name mismatch: ${target.name} !== ${source.name}`;
+    }
+
+    return true;
+  }
+
+  /**
+   * OPTIONAL: Post-migration processing
+   *
+   * Called after all records of this entity type have been migrated.
+   * Use this for:
+   * - Updating computed fields
+   * - Fixing relationships that couldn't be set during initial migration
+   * - Running cleanup tasks
+   * - Updating sequences or indexes
+   *
+   * @param context - Migration context
+   */
+  async afterMigration(_context: MigrationContext): Promise<void> {
+    console.log(`  Post-processing ${this.entityName}...`);
+
+    // Example: Update a computed field
+    // await context.postgresConnection.query(`
+    //   UPDATE ${this.targetEntity.name}
+    //   SET computed_field = calculate_value(some_field)
+    // `);
+
+    // Example: Fix relationships using a second pass
+    // const mysqlRecords = await context.mysqlConnection.query(
+    //   `SELECT id, related_id FROM ${this.sourceTable} WHERE related_id IS NOT NULL`
+    // );
+    //
+    // for (const record of mysqlRecords) {
+    //   // Look up new UUIDs and update relationships
+    // }
+
+    console.log(`  ✅ Post-processing complete`);
+  }
+}
+
+/**
+ * CHECKLIST:
+ *
+ * Before using this mapper:
+ * [ ] Updated MySQLYourEntity interface with your legacy schema
+ * [ ] Updated sourceTable name
+ * [ ] Updated targetEntity import path
+ * [ ] Implemented map() function with your field mappings
+ * [ ] Set dependencies array if needed
+ * [ ] Registered mapper in mysql-to-postgres.ts
+ * [ ] Tested with dry-run: yarn migrate:mysql:dry-run --entities YourEntity
+ * [ ] Verified data after migration
+ */

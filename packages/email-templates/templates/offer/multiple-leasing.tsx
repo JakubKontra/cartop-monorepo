@@ -1,18 +1,14 @@
-import {
-  Container,
-  Img,
-  Section
-} from "@react-email/components";
-import { OfferCard } from "../../src/components/OfferCard";
-import { LayoutTransactional } from "../../src/components/layouts/transactional";
-import CustomerTestimonials from "../../src/components/CustomerTestimonials";
-import CallCta from "../../src/components/CallCta";
+import { Container, Img, Section } from '@react-email/components';
+import { OfferCard } from '../../src/components/OfferCard';
+import { LayoutTransactional } from '../../src/components/layouts/transactional';
+import CustomerTestimonials from '../../src/components/CustomerTestimonials';
+import CallCta from '../../src/components/CallCta';
 
 type MultipleLeasingEmailProps = {
   // Props can be extended later for dynamic content
 };
 
-function MultipleLeasingTemplate({}: MultipleLeasingEmailProps) {
+export function MultipleLeasingTemplate({}: MultipleLeasingEmailProps) {
   return (
     <LayoutTransactional title="Multiple Leasing Offers - Cartop">
       <Container className="mx-auto max-w-2xl bg-white rounded-lg border border-gray-200 w-full">
@@ -38,14 +34,14 @@ function MultipleLeasingTemplate({}: MultipleLeasingEmailProps) {
           inclusions="kompletního servisu, letní pneu, POV + HAV"
           description="BMW X1 v designovém provedení a výbavě M sportovní paket. Vozidlo disponuje silným dieselovým motorem, prémiovým zpracováním, pohonem všech kol a paketem Premium, který zahrnuje například adaptivní LED světlomety. Díky svým rozměrům se hodí i do městského provozu. Jedinečná nabídka v poměru cena/výkon pro menší prémiové SUV."
           pricingOptions={[
-            { mileage: "10 000 km", duration: "12 Měsíců", price: "9 753 Kč" },
-            { mileage: "15 000 km", duration: "24 Měsíců", price: "11 250 Kč" },
-            { mileage: "20 000 km", duration: "36 Měsíců", price: "12 890 Kč" }
+            { mileage: '10 000 km', duration: '12 Měsíců', price: '9 753 Kč' },
+            { mileage: '15 000 km', duration: '24 Měsíců', price: '11 250 Kč' },
+            { mileage: '20 000 km', duration: '36 Měsíců', price: '12 890 Kč' },
           ]}
         />
 
         {/* Spacing between offers */}
-        <Section style={{ height: "32px" }} />
+        <Section style={{ height: '32px' }} />
 
         {/* Second Offer - Audi A4 */}
         <OfferCard
@@ -61,14 +57,14 @@ function MultipleLeasingTemplate({}: MultipleLeasingEmailProps) {
           inclusions="plného servisu, zimní pneu, pojištění"
           description="Audi A4 ve sportovní verzi S line s pokročilými technologiemi. Elegantní sedan s výkonným dieselovým motorem a pohon všech kol Quattro. Perfektní volba pro náročné zákazníky, kteří hledají kombinaci luxusu, výkonu a spolehlivosti. Ideální pro dlouhé cesty i městské ježdění."
           pricingOptions={[
-            { mileage: "15 000 km", duration: "24 Měsíců", price: "12 890 Kč" },
-            { mileage: "20 000 km", duration: "36 Měsíců", price: "13 500 Kč" },
-            { mileage: "25 000 km", duration: "48 Měsíců", price: "14 250 Kč" }
+            { mileage: '15 000 km', duration: '24 Měsíců', price: '12 890 Kč' },
+            { mileage: '20 000 km', duration: '36 Měsíců', price: '13 500 Kč' },
+            { mileage: '25 000 km', duration: '48 Měsíců', price: '14 250 Kč' },
           ]}
         />
 
         {/* Spacing between offers */}
-        <Section style={{ height: "32px" }} />
+        <Section style={{ height: '32px' }} />
 
         {/* Third Offer - Mercedes C-Class */}
         <OfferCard
@@ -84,19 +80,22 @@ function MultipleLeasingTemplate({}: MultipleLeasingEmailProps) {
           inclusions="prémiového servisu, komplexního pojištění, asistenčních systémů"
           description="Mercedes-Benz C-Class v prestižní AMG Line výbavě. Luxusní sedan s nejnovějšími technologiami a bezpečnostními systémy. Pohon všech kol 4MATIC a automatická převodovka 9G-TRONIC zajišťují maximální komfort jízdy. Symbol elegance a špičkové kvality německého automobilového průmyslu."
           pricingOptions={[
-            { mileage: "20 000 km", duration: "24 Měsíců", price: "14 500 Kč" },
-            { mileage: "25 000 km", duration: "36 Měsíců", price: "15 200 Kč" },
-            { mileage: "30 000 km", duration: "48 Měsíců", price: "16 100 Kč" }
+            { mileage: '20 000 km', duration: '24 Měsíců', price: '14 500 Kč' },
+            { mileage: '25 000 km', duration: '36 Měsíců', price: '15 200 Kč' },
+            { mileage: '30 000 km', duration: '48 Měsíců', price: '16 100 Kč' },
           ]}
         />
 
         <CallCta />
         <Section className="text-center mt-12 mb-12">
-        <Img src="https://cartop.madebykontra.com/emails/v2/cars.png" alt="Call Cta" className="mx-auto w-auto max-w-full" style={{ maxHeight: "250px", height: "auto" }} />
+          <Img
+            src="https://cartop.madebykontra.com/emails/v2/cars.png"
+            alt="Call Cta"
+            className="mx-auto w-auto max-w-full"
+            style={{ maxHeight: '250px', height: 'auto' }}
+          />
         </Section>
       </Container>
     </LayoutTransactional>
   );
-};
-
-export default MultipleLeasingTemplate;
+}
