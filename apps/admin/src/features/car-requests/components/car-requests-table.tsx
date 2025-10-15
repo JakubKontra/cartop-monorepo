@@ -28,6 +28,7 @@ import { type CarRequest } from '../types'
 import { carRequestsColumns as columns } from './car-requests-columns'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { Loader2 } from 'lucide-react'
+import { CAR_REQUEST_STATES, type CarRequestStateCode } from '../constants/states'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -142,28 +143,38 @@ export function CarRequestsTable() {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className='group/row'
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cn(
-                        'bg-background group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
-                        cell.column.columnDef.meta?.className ?? ''
-                      )}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              table.getRowModel().rows.map((row) => {
+                const carRequest = row.original
+                const stateCode = carRequest.state?.code as CarRequestStateCode | undefined
+                const state = stateCode ? CAR_REQUEST_STATES[stateCode] : null
+                const bgColorLight = state?.bgColorLight
+
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    className='group/row'
+                    style={{
+                      backgroundColor: bgColorLight || undefined,
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          'group-hover/row:bg-muted/50 group-data-[state=selected]/row:bg-muted',
+                          cell.column.columnDef.meta?.className ?? ''
+                        )}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )
+              })
             ) : (
               <TableRow>
                 <TableCell

@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsString, IsOptional, IsBoolean, IsInt, IsEnum, IsUUID, IsEmail, IsDate } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsEnum, IsUUID, IsEmail, MaxLength, ValidateIf, IsNotEmpty } from 'class-validator';
 import { FinancingType } from '../enums/financing-type.enum';
 import { CancellationReason } from '../enums/cancellation-reason.enum';
 
@@ -12,21 +12,25 @@ export class CreateCarRequestInput {
   @Field({ nullable: true })
   @IsOptional()
   @IsEmail()
+  @MaxLength(255)
   requestEmail?: string;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
+  @MaxLength(50)
   requestPhone?: string;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
+  @MaxLength(100)
   requestFirstName?: string;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
+  @MaxLength(100)
   requestLastName?: string;
 
   @Field({ nullable: true })
@@ -37,6 +41,7 @@ export class CreateCarRequestInput {
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
+  @MaxLength(20)
   requestPostalCode?: string;
 
   // Car Details
@@ -46,86 +51,46 @@ export class CreateCarRequestInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsUUID()
+  @IsUUID('all')
   brandId?: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsUUID()
+  @IsUUID('all')
   modelId?: string;
 
   @Field({ nullable: true })
-  @IsOptional()
-  @IsUUID()
+  @ValidateIf((o) => o.financingType === FinancingType.LEASING)
+  @IsNotEmpty({ message: 'Leasing company is required when financing type is leasing' })
+  @IsUUID('all')
   leasingCompanyId?: string;
 
   // Customer & Agent
   @Field({ nullable: true })
   @IsOptional()
-  @IsUUID()
+  @IsUUID('all')
   customerId?: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsUUID()
+  @IsUUID('all')
   assignedAgentId?: string;
 
   // Workflow & Status
   @Field({ nullable: true })
   @IsOptional()
-  @IsUUID()
+  @IsString()
   statusId?: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsUUID()
+  @IsString()
   stateId?: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsInt()
-  order?: number;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsInt()
-  displayOrder?: number;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsBoolean()
   waitingForOffer?: boolean;
-
-  // Dates
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsDate()
-  nextCallAt?: Date;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsDate()
-  confirmedAt?: Date;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsDate()
-  relayedAt?: Date;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsDate()
-  feedbackAt?: Date;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsDate()
-  closedAt?: Date;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsDate()
-  completedAt?: Date;
 
   // Notes
   @Field({ nullable: true })
@@ -141,6 +106,7 @@ export class CreateCarRequestInput {
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
+  @MaxLength(255)
   gclid?: string;
 
   // Cancellation
@@ -158,6 +124,7 @@ export class CreateCarRequestInput {
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
+  @MaxLength(100)
   legacySystemId?: string;
 
   @Field({ nullable: true })

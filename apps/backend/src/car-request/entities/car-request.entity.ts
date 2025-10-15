@@ -7,6 +7,7 @@ import {
   Index,
   ManyToOne,
   OneToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
@@ -184,6 +185,18 @@ export class CarRequest {
   @Column({ type: 'boolean', nullable: true })
   waitingForOffer?: boolean;
 
+  @Field({ nullable: true })
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  offersSentAt?: Date;
+
+  @Field({ nullable: true })
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  deliveryExpectedAt?: Date;
+
+  @Field({ nullable: true })
+  @Column({ type: 'boolean', default: false })
+  carDelivered?: boolean;
+
   @Field(() => Int)
   @Column({ type: 'integer', default: 0 })
   displayOrder: number;
@@ -223,4 +236,13 @@ export class CarRequest {
   @Column({ type: 'uuid', nullable: true })
   @Index()
   stateId?: string;
+
+  // === Activity Logs ===
+
+  @Field(() => [CarRequestLog], { nullable: true })
+  @OneToMany(() => CarRequestLog, (log) => log.carRequest)
+  logs?: CarRequestLog[];
 }
+
+// Import CarRequestLog at the end to avoid circular dependency issues
+import { CarRequestLog } from './car-request-log.entity';

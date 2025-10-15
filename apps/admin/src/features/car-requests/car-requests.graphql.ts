@@ -61,6 +61,9 @@ export const GET_ALL_CAR_REQUESTS = graphql(`
       feedbackAt
       closedAt
       waitingForOffer
+      offersSentAt
+      deliveryExpectedAt
+      carDelivered
       displayOrder
       cancellationReason
       cancellationNote
@@ -85,7 +88,7 @@ export const GET_ALL_CAR_REQUESTS = graphql(`
 
 /**
  * Get Single Car Request Query
- * Fetches a single car request by ID
+ * Fetches a single car request by ID with activity logs
  */
 export const GET_CAR_REQUEST = graphql(`
   query GetCarRequest($id: String!) {
@@ -144,6 +147,9 @@ export const GET_CAR_REQUEST = graphql(`
       feedbackAt
       closedAt
       waitingForOffer
+      offersSentAt
+      deliveryExpectedAt
+      carDelivered
       displayOrder
       cancellationReason
       cancellationNote
@@ -162,6 +168,22 @@ export const GET_CAR_REQUEST = graphql(`
         colorHex
       }
       stateId
+      logs {
+        id
+        createdAt
+        message
+        actionType
+        metadata
+        carRequestId
+        author {
+          id
+          firstName
+          lastName
+          email
+        }
+        authorId
+        legacySystemId
+      }
     }
   }
 `);
@@ -202,3 +224,136 @@ export const DELETE_CAR_REQUEST = graphql(`
     deleteCarRequest(id: $id)
   }
 `);
+
+/**
+ * Get All Car Request States Query
+ * Fetches all available car request states
+ */
+export const GET_ALL_CAR_REQUEST_STATES = graphql(`
+  query GetAllCarRequestStates {
+    allCarRequestStates {
+      id
+      name
+      code
+      colorHex
+      createdAt
+      updatedAt
+    }
+  }
+`);
+
+/**
+ * Get All Car Request Statuses Query
+ * Fetches all available car request statuses
+ */
+export const GET_ALL_CAR_REQUEST_STATUSES = graphql(`
+  query GetAllCarRequestStatuses {
+    allCarRequestStatuses {
+      id
+      name
+      code
+      colorHex
+      isFinal
+      displayOrder
+      columnDisplayOrder
+      createdAt
+      updatedAt
+    }
+  }
+`);
+
+/**
+ * Get Car Request Logs Query
+ * Fetches activity logs for a car request with optional filtering
+ */
+export const GET_CAR_REQUEST_LOGS = graphql(`
+  query GetCarRequestLogs($filter: CarRequestLogFilterInput!) {
+    carRequestLogs(filter: $filter) {
+      id
+      createdAt
+      message
+      actionType
+      metadata
+      carRequestId
+      author {
+        id
+        firstName
+        lastName
+        email
+      }
+      authorId
+      legacySystemId
+    }
+  }
+`);
+
+/**
+ * Create Car Request Log Mutation
+ * Creates a new activity log entry for a car request
+ */
+export const CREATE_CAR_REQUEST_LOG = graphql(`
+  mutation CreateCarRequestLog($input: CreateCarRequestLogInput!) {
+    createCarRequestLog(input: $input) {
+      id
+      createdAt
+      message
+      actionType
+      metadata
+      carRequestId
+      author {
+        id
+        firstName
+        lastName
+        email
+      }
+      authorId
+      legacySystemId
+    }
+  }
+`);
+
+/**
+ * Get All Offers Query
+ * Fetches all offers (for sending to customers)
+ */
+export const GET_ALL_OFFERS = graphql(`
+  query GetAllOffers {
+    allOffers {
+      id
+      type
+      isPublic
+      isActive
+      totalPrice
+      description
+      slug
+      modelGeneration {
+        id
+        name
+      }
+      brand {
+        id
+        name
+      }
+      model {
+        id
+        name
+      }
+      leasingDurationMonths
+      monthlyPayment
+      annualMileageLimit
+      downPaymentLeasing
+      hasServiceIncluded
+      hasWinterTyresIncluded
+      hasAssistanceServiceIncluded
+      hasGapIncluded
+      discountAmount
+      discountPercentage
+      includesWarranty
+      warrantyYears
+      financingAvailable
+      createdAt
+      updatedAt
+    }
+  }
+`);
+

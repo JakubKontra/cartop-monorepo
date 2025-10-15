@@ -1,0 +1,14 @@
+{
+	"extends": [ ],
+	"include": [ "./templates", "src" ],
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"outDir": "./dist",
+		"noEmit": false,
+		"lib": [
+			"esnext",
+			"dom",
+			"dom.iterable"
+		]
+	}
+}

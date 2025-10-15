@@ -9,6 +9,7 @@ import { type CarRequestFormValues } from '../data/schema'
 import { toCreateInput } from '../data/transformers'
 import { CREATE_CAR_REQUEST, GET_ALL_CAR_REQUESTS } from '../car-requests.graphql'
 import { logger } from '@/lib/logger'
+import { extractAllGraphQLErrorMessages } from '@/lib/extract-graphql-error'
 
 export function CarRequestCreatePage() {
   const navigate = useNavigate()
@@ -27,9 +28,15 @@ export function CarRequestCreatePage() {
       toast.success('Car request created successfully')
       navigate({ to: '/car-requests' })
     } catch (error: unknown) {
-      logger.error('Car request creation failed', error, { customerEmail: values.customerEmail })
-      const message = error instanceof Error ? error.message : 'Failed to create car request'
-      toast.error(message)
+      logger.error('Car request creation failed', error, { requestEmail: values.requestEmail })
+
+      // Extract all validation errors from the GraphQL error
+      const errorMessages = extractAllGraphQLErrorMessages(error)
+
+      // Display each error in a separate toast
+      errorMessages.forEach((message) => {
+        toast.error(message)
+      })
     }
   }
 

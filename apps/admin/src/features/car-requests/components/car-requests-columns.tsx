@@ -6,7 +6,9 @@ import { DataTableColumnHeader } from '@/components/data-table'
 import { LongText } from '@/components/long-text'
 import { type CarRequest } from '../types'
 import { DataTableRowActions } from './data-table-row-actions'
+import { CarRequestStateBadge } from './car-request-state-badge'
 import { format } from 'date-fns'
+import { type CarRequestStateCode } from '../constants/states'
 
 export const carRequestsColumns: ColumnDef<CarRequest>[] = [
   {
@@ -162,19 +164,14 @@ export const carRequestsColumns: ColumnDef<CarRequest>[] = [
       <DataTableColumnHeader column={column} title='State' />
     ),
     cell: ({ row }) => {
-      const state = row.original.state
-      if (!state) return <span className='text-muted-foreground'>-</span>
+      const stateCode = row.original.state?.code as CarRequestStateCode | undefined
+      const offersSentAt = row.original.offersSentAt
 
       return (
-        <Badge
-          variant='outline'
-          style={{
-            borderColor: state.colorHex || undefined,
-            color: state.colorHex || undefined
-          }}
-        >
-          {state.name}
-        </Badge>
+        <CarRequestStateBadge
+          stateCode={stateCode}
+          offersSentAt={offersSentAt}
+        />
       )
     },
   },

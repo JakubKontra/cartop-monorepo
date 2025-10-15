@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@apollo/client/react'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -23,10 +24,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { DatePicker } from '@/components/date-picker'
-import { BrandModelSelector } from '@/components/brand-model-selector'
 import { UserSelectField, EmployeeSelectField } from '@/components/fields'
+import { StatusSelectField, StateSelectField } from './fields'
 import { carRequestSchema, type CarRequestFormValues } from '../data/schema'
+import { GET_ALL_LEASING_COMPANIES } from '@/features/leasing-companies/leasing-companies.graphql'
 import { Loader2 } from 'lucide-react'
 
 interface CarRequestFormProps {
@@ -52,241 +53,80 @@ export function CarRequestForm({
   const form = useForm<CarRequestFormValues>({
     resolver: zodResolver(carRequestSchema),
     defaultValues: defaultValues || {
+      // Request Information
       requestEmail: '',
       requestPhone: '',
       requestFirstName: '',
       requestLastName: '',
       requestNewsletter: false,
       requestPostalCode: '',
+      // Car Details
       brandId: '',
       modelId: '',
       financingType: 'cash',
+      // Leasing
       leasingCompanyId: '',
+      // Customer & Agent
       customerId: '',
       assignedAgentId: '',
+      // Workflow & Status
       statusId: '',
       stateId: '',
-      order: 0,
-      displayOrder: 0,
       waitingForOffer: false,
+      // Notes
       notes: '',
       noteInternal: '',
       gclid: '',
-      isFromLegacySystem: false,
+      // Cancellation
+      cancellationReason: undefined,
+      cancellationNote: '',
+      // Legacy
       legacySystemId: '',
+      isFromLegacySystem: false,
     },
   })
 
+  // Fetch leasing companies for the select dropdown
+  const { data: leasingCompaniesData } = useQuery(GET_ALL_LEASING_COMPANIES)
+  const leasingCompanies = leasingCompaniesData?.leasingCompanies || []
+
+  // Watch financingType to show/hide leasing company field
   const financingType = form.watch('financingType')
+
+  // Cancellation reason options
+  const cancellationReasonOptions = [
+    { label: 'Other', value: 'other' },
+    { label: 'No Interest', value: 'no_interest' },
+    { label: 'No Time', value: 'no_time' },
+    { label: 'No Money', value: 'no_money' },
+    { label: 'No Need', value: 'no_need' },
+    { label: 'No Opportunity', value: 'no_opportunity' },
+    { label: 'No Other', value: 'no_other' },
+    { label: 'Rejected by Finance', value: 'rejected_by_finance' },
+    { label: 'Bad Credit Score', value: 'bad_credit_score' },
+    { label: 'Ineligible Customer', value: 'ineligible_customer' },
+    { label: 'Price Too High', value: 'price_too_high' },
+    { label: 'Car Unavailable', value: 'car_unavailable' },
+    { label: 'Wait Time Too Long', value: 'wait_time_too_long' },
+    { label: 'Competitor Offer', value: 'competitor_offer' },
+    { label: 'Changed Mind', value: 'changed_mind' },
+    { label: 'Invalid Contact', value: 'invalid_contact' },
+    { label: 'Duplicate Request', value: 'duplicate_request' },
+    { label: 'Internal Error', value: 'internal_error' },
+  ]
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-        {/* Request Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Request Information</CardTitle>
-            <CardDescription>
-              Contact information from the request
-            </CardDescription>
-          </CardHeader>
-          <CardContent className='space-y-6'>
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-              <FormField
-                control={form.control}
-                name='requestFirstName'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='John'
-                        autoComplete='off'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='requestLastName'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Doe'
-                        autoComplete='off'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-              <FormField
-                control={form.control}
-                name='requestEmail'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type='email'
-                        placeholder='john.doe@example.com'
-                        autoComplete='off'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='requestPhone'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='+420 123 456 789'
-                        autoComplete='off'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-              <FormField
-                control={form.control}
-                name='requestPostalCode'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Postal Code</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='12000'
-                        autoComplete='off'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='requestNewsletter'
-                render={({ field }) => (
-                  <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                    <div className='space-y-0.5'>
-                      <FormLabel className='text-base'>Newsletter</FormLabel>
-                      <FormDescription>
-                        {field.value ? 'Subscribed' : 'Not subscribed'}
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Car Details */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Car Details</CardTitle>
-            <CardDescription>
-              Vehicle information
-            </CardDescription>
-          </CardHeader>
-          <CardContent className='space-y-6'>
-            <FormField
-              control={form.control}
-              name='financingType'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Financing Type <span className='text-destructive'>*</span>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select financing type' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value='cash'>Cash</SelectItem>
-                      <SelectItem value='leasing'>Leasing</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <BrandModelSelector
-              brandValue={form.watch('brandId')}
-              modelValue={form.watch('modelId')}
-              onBrandChange={(value) => form.setValue('brandId', value)}
-              onModelChange={(value) => form.setValue('modelId', value)}
-            />
-
-            {financingType === 'leasing' && (
-              <FormField
-                control={form.control}
-                name='leasingCompanyId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Leasing Company</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Leasing Company ID'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      TODO: Replace with selector component
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-          </CardContent>
-        </Card>
-
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
         {/* Customer & Agent */}
         <Card>
-          <CardHeader>
-            <CardTitle>Customer & Agent</CardTitle>
-            <CardDescription>
+          <CardHeader className='pb-3'>
+            <CardTitle className='text-base'>Customer & Agent</CardTitle>
+            <CardDescription className='text-xs'>
               Assignment information
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-6'>
+          <CardContent className='space-y-4'>
             <UserSelectField
               name='customerId'
               label='Customer'
@@ -303,183 +143,100 @@ export function CarRequestForm({
           </CardContent>
         </Card>
 
-        {/* Workflow & Status */}
+        {/* Car Details */}
         <Card>
-          <CardHeader>
-            <CardTitle>Workflow & Status</CardTitle>
-            <CardDescription>
-              Status and scheduling information
+          <CardHeader className='pb-3'>
+            <CardTitle className='text-base'>Car Details</CardTitle>
+            <CardDescription className='text-xs'>
+              Vehicle and financing information
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-6'>
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
+          <CardContent className='space-y-4'>
+            <FormField
+              control={form.control}
+              name='financingType'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Financing Type</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? 'cash'}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select financing type' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value='cash'>Cash</SelectItem>
+                      <SelectItem value='leasing'>Leasing</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    How the customer plans to finance the vehicle
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {financingType === 'leasing' && (
               <FormField
                 control={form.control}
+                name='leasingCompanyId'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Leasing Company</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? ''}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select leasing company' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {leasingCompanies.map((company) => (
+                          <SelectItem key={company.id} value={company.id}>
+                            {company.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Select the leasing company for this request
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Status & Workflow */}
+        <Card>
+          <CardHeader className='pb-3'>
+            <CardTitle className='text-base'>Status & Workflow</CardTitle>
+            <CardDescription className='text-xs'>
+              Current status and state of the request
+            </CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-4'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+              <StatusSelectField
                 name='statusId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Status ID'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      TODO: Replace with status selector
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label='Status'
+                placeholder='Select status'
+                description='Overall status of the request'
               />
 
-              <FormField
-                control={form.control}
+              <StateSelectField
                 name='stateId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>State</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='State ID'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      TODO: Replace with state selector
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-              <FormField
-                control={form.control}
-                name='nextCallAt'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Next Call At</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='waitingForOffer'
-                render={({ field }) => (
-                  <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                    <div className='space-y-0.5'>
-                      <FormLabel className='text-base'>Waiting for Offer</FormLabel>
-                      <FormDescription>
-                        {field.value ? 'Yes' : 'No'}
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
-              <FormField
-                control={form.control}
-                name='confirmedAt'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirmed At</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='relayedAt'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Relayed At</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='feedbackAt'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Feedback At</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-              <FormField
-                control={form.control}
-                name='completedAt'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Completed At</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='closedAt'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Closed At</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        date={field.value}
-                        onSelect={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label='State'
+                placeholder='Select state'
+                description='Current workflow state'
               />
             </div>
           </CardContent>
@@ -487,13 +244,13 @@ export function CarRequestForm({
 
         {/* Notes */}
         <Card>
-          <CardHeader>
-            <CardTitle>Notes</CardTitle>
-            <CardDescription>
-              Additional information
+          <CardHeader className='pb-3'>
+            <CardTitle className='text-base'>Notes</CardTitle>
+            <CardDescription className='text-xs'>
+              Additional information and comments
             </CardDescription>
           </CardHeader>
-          <CardContent className='space-y-6'>
+          <CardContent className='space-y-4'>
             <FormField
               control={form.control}
               name='notes'
@@ -504,7 +261,7 @@ export function CarRequestForm({
                     <Textarea
                       placeholder='Notes visible to customer...'
                       className='resize-none'
-                      rows={4}
+                      rows={3}
                       {...field}
                     />
                   </FormControl>
@@ -523,7 +280,7 @@ export function CarRequestForm({
                     <Textarea
                       placeholder='Internal notes for staff only...'
                       className='resize-none'
-                      rows={4}
+                      rows={3}
                       {...field}
                     />
                   </FormControl>
@@ -531,7 +288,76 @@ export function CarRequestForm({
                 </FormItem>
               )}
             />
+          </CardContent>
+        </Card>
 
+        {/* Cancellation */}
+        <Card>
+          <CardHeader className='pb-3'>
+            <CardTitle className='text-base'>Cancellation</CardTitle>
+            <CardDescription className='text-xs'>
+              Cancellation details (if applicable)
+            </CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-4'>
+            <FormField
+              control={form.control}
+              name='cancellationReason'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cancellation Reason</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select reason' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {cancellationReasonOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='cancellationNote'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cancellation Note</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder='Additional details about cancellation...'
+                      className='resize-none'
+                      rows={3}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Advanced */}
+        <Card>
+          <CardHeader className='pb-3'>
+            <CardTitle className='text-base'>Advanced</CardTitle>
+            <CardDescription className='text-xs'>
+              Technical and tracking information
+            </CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-4'>
             <FormField
               control={form.control}
               name='gclid'
@@ -551,135 +377,55 @@ export function CarRequestForm({
                 </FormItem>
               )}
             />
-          </CardContent>
-        </Card>
 
-        {/* Cancellation */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Cancellation</CardTitle>
-            <CardDescription>
-              Cancellation details (if applicable)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className='space-y-6'>
-            <FormField
-              control={form.control}
-              name='cancellationReason'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cancellation Reason</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select reason' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value='other'>Other</SelectItem>
-                      <SelectItem value='no_interest'>No Interest</SelectItem>
-                      <SelectItem value='no_time'>No Time</SelectItem>
-                      <SelectItem value='no_money'>No Money</SelectItem>
-                      <SelectItem value='no_need'>No Need</SelectItem>
-                      <SelectItem value='no_opportunity'>No Opportunity</SelectItem>
-                      <SelectItem value='no_other'>No Other</SelectItem>
-                      <SelectItem value='rejected_by_finance'>Rejected by Finance</SelectItem>
-                      <SelectItem value='bad_credit_score'>Bad Credit Score</SelectItem>
-                      <SelectItem value='ineligible_customer'>Ineligible Customer</SelectItem>
-                      <SelectItem value='price_too_high'>Price Too High</SelectItem>
-                      <SelectItem value='car_unavailable'>Car Unavailable</SelectItem>
-                      <SelectItem value='wait_time_too_long'>Wait Time Too Long</SelectItem>
-                      <SelectItem value='competitor_offer'>Competitor Offer</SelectItem>
-                      <SelectItem value='changed_mind'>Changed Mind</SelectItem>
-                      <SelectItem value='invalid_contact'>Invalid Contact</SelectItem>
-                      <SelectItem value='duplicate_request'>Duplicate Request</SelectItem>
-                      <SelectItem value='internal_error'>Internal Error</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='cancellationNote'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cancellation Note</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder='Additional details about cancellation...'
-                      className='resize-none'
-                      rows={4}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Legacy System Fields (only for create) */}
-        {!isEdit && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Legacy System</CardTitle>
-              <CardDescription>
-                Optional fields for migration from legacy systems
-              </CardDescription>
-            </CardHeader>
-            <CardContent className='space-y-6'>
-              <FormField
-                control={form.control}
-                name='legacySystemId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className='text-muted-foreground'>
-                      Legacy System ID
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Optional'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      ID from the previous system
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='isFromLegacySystem'
-                render={({ field }) => (
-                  <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                    <div className='space-y-0.5'>
-                      <FormLabel className='text-base'>From Legacy System</FormLabel>
+            {!isEdit && (
+              <>
+                <FormField
+                  control={form.control}
+                  name='legacySystemId'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='text-muted-foreground'>
+                        Legacy System ID
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='Optional'
+                          {...field}
+                        />
+                      </FormControl>
                       <FormDescription>
-                        {field.value ? 'Migrated from old system' : 'Created in new system'}
+                        ID from the previous system
                       </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
-        )}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='isFromLegacySystem'
+                  render={({ field }) => (
+                    <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                      <div className='space-y-0.5'>
+                        <FormLabel className='text-base'>From Legacy System</FormLabel>
+                        <FormDescription>
+                          {field.value ? 'Migrated from old system' : 'Created in new system'}
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Form Actions */}
         <div className='flex items-center justify-end gap-4'>

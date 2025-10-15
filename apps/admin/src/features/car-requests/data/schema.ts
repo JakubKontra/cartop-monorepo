@@ -4,14 +4,16 @@ import { z } from 'zod'
  * Helper to transform empty strings to undefined
  * This ensures optional fields are properly handled by the API
  */
-const optionalString = () =>
-  z.string().optional().transform((val) => (val === '' ? undefined : val))
+const optionalString = (maxLength?: number) =>
+  maxLength
+    ? z.string().max(maxLength).optional().transform((val) => (val === '' ? undefined : val))
+    : z.string().optional().transform((val) => (val === '' ? undefined : val))
 
 /**
  * Helper for optional email fields
  */
 const optionalEmail = () =>
-  z.string().email('Invalid email').optional().or(z.literal(''))
+  z.string().email('Invalid email').max(255).optional().or(z.literal(''))
     .transform((val) => (val === '' ? undefined : val))
 
 /**
@@ -25,16 +27,16 @@ const optionalEmail = () =>
 export const carRequestSchema = z.object({
   // Request Information
   requestEmail: optionalEmail(),
-  requestPhone: optionalString(),
-  requestFirstName: optionalString(),
-  requestLastName: optionalString(),
+  requestPhone: optionalString(50),
+  requestFirstName: optionalString(100),
+  requestLastName: optionalString(100),
   requestNewsletter: z.boolean().optional(),
-  requestPostalCode: optionalString(),
+  requestPostalCode: optionalString(20),
 
   // Car Details
   brandId: optionalString(),
   modelId: optionalString(),
-  financingType: z.enum(['cash', 'leasing']), // Required field
+  financingType: z.enum(['cash', 'leasing']).default('cash'), // Required field with default
 
   // Leasing
   leasingCompanyId: optionalString(),
@@ -46,22 +48,12 @@ export const carRequestSchema = z.object({
   // Workflow & Status
   statusId: optionalString(),
   stateId: optionalString(),
-  order: z.number().optional(),
-  displayOrder: z.number().optional(),
   waitingForOffer: z.boolean().optional(),
-
-  // Dates - Date objects will be converted to ISO strings in transformers
-  nextCallAt: z.date().optional(),
-  confirmedAt: z.date().optional(),
-  relayedAt: z.date().optional(),
-  feedbackAt: z.date().optional(),
-  closedAt: z.date().optional(),
-  completedAt: z.date().optional(),
 
   // Notes
   notes: optionalString(),
   noteInternal: optionalString(),
-  gclid: optionalString(),
+  gclid: optionalString(255),
 
   // Cancellation
   cancellationReason: z.enum([
@@ -87,8 +79,12 @@ export const carRequestSchema = z.object({
   cancellationNote: optionalString(),
 
   // Legacy
-  legacySystemId: optionalString(),
+  legacySystemId: optionalString(100),
   isFromLegacySystem: z.boolean().optional(),
 })
+
+// Note: Leasing company validation is handled by the backend
+// Backend validates: if financingType === 'leasing', then leasingCompanyId is required
+// This allows the form to be edited without requiring leasing company immediately
 
 export type CarRequestFormValues = z.infer<typeof carRequestSchema>

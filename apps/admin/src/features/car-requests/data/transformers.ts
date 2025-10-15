@@ -24,6 +24,14 @@ export type CarRequest = NonNullable<GetCarRequestQuery['carRequest']>
 export type CarRequestListItem = GetAllCarRequestsQuery['allCarRequests'][0]
 
 /**
+ * Helper function to convert GraphQL enum values (UPPERCASE) to lowercase
+ * for use in forms and UI components
+ */
+function enumToLowercase<T extends string>(value: T | null | undefined): Lowercase<T> | undefined {
+  return value?.toLowerCase() as Lowercase<T> | undefined
+}
+
+/**
  * Transform CarRequest from API to Form Values
  * Used for populating edit form with existing data
  */
@@ -40,7 +48,7 @@ export function toFormValues(carRequest: CarRequest | CarRequestListItem): CarRe
     // Car Details
     brandId: carRequest.brandId || '',
     modelId: carRequest.modelId || '',
-    financingType: carRequest.financingType,
+    financingType: enumToLowercase(carRequest.financingType) || 'cash',
 
     // Leasing
     leasingCompanyId: carRequest.leasingCompanyId || '',
@@ -52,17 +60,7 @@ export function toFormValues(carRequest: CarRequest | CarRequestListItem): CarRe
     // Workflow & Status
     statusId: carRequest.statusId || '',
     stateId: carRequest.stateId || '',
-    order: carRequest.order ?? undefined,
-    displayOrder: carRequest.displayOrder ?? undefined,
     waitingForOffer: carRequest.waitingForOffer || false,
-
-    // Dates - convert ISO strings to Date objects
-    nextCallAt: carRequest.nextCallAt ? new Date(carRequest.nextCallAt) : undefined,
-    confirmedAt: carRequest.confirmedAt ? new Date(carRequest.confirmedAt) : undefined,
-    relayedAt: carRequest.relayedAt ? new Date(carRequest.relayedAt) : undefined,
-    feedbackAt: carRequest.feedbackAt ? new Date(carRequest.feedbackAt) : undefined,
-    closedAt: carRequest.closedAt ? new Date(carRequest.closedAt) : undefined,
-    completedAt: carRequest.completedAt ? new Date(carRequest.completedAt) : undefined,
 
     // Notes
     notes: carRequest.notes || '',
@@ -70,7 +68,7 @@ export function toFormValues(carRequest: CarRequest | CarRequestListItem): CarRe
     gclid: carRequest.gclid || '',
 
     // Cancellation
-    cancellationReason: carRequest.cancellationReason || undefined,
+    cancellationReason: enumToLowercase(carRequest.cancellationReason),
     cancellationNote: carRequest.cancellationNote || '',
 
     // Legacy
@@ -111,17 +109,7 @@ export function toCreateInput(values: CarRequestFormValues): CreateCarRequestInp
     // Workflow & Status
     statusId: values.statusId || undefined,
     stateId: values.stateId || undefined,
-    order: values.order ?? undefined,
-    displayOrder: values.displayOrder ?? undefined,
     waitingForOffer: values.waitingForOffer || undefined,
-
-    // Dates - convert Date objects to ISO strings
-    nextCallAt: values.nextCallAt?.toISOString(),
-    confirmedAt: values.confirmedAt?.toISOString(),
-    relayedAt: values.relayedAt?.toISOString(),
-    feedbackAt: values.feedbackAt?.toISOString(),
-    closedAt: values.closedAt?.toISOString(),
-    completedAt: values.completedAt?.toISOString(),
 
     // Notes
     notes: values.notes || undefined,
