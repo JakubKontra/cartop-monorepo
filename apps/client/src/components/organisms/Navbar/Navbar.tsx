@@ -28,7 +28,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link className="transition hover:text-slate-900" href="#contact">
+            <Link className="transition hover:text-slate-900" href="/contacts">
               Kontakt
             </Link>
           </li>
