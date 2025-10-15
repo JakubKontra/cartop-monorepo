@@ -5,7 +5,6 @@ import { cn } from '@/utils/cv';
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
-import Button from '@/components/organisms/Button/Button';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
 
@@ -83,7 +82,8 @@ const slidesData = [
 
 export const ReliablePartnerCarousel = ({ className }: { className?: string }) => {
   const [isItFirstInteraction, setIsItFirstInteraction] = useState(true);
-  const { realIndex, onNext, onPrevious, swiperRef, setActiveSlide } = useSwiper();
+  const { realIndex, onNext, onPrevious, swiperRef, setActiveSlide, onSetActiveSlideToLoop } =
+    useSwiper();
 
   const isActive = useIntersectionObserver({
     elementId: 'partner-carousel-wrapper',
@@ -117,7 +117,7 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
             className="!py-4"
             loop={true}
           >
-            {slidesData.map((item, index) => {
+            {[...slidesData, ...slidesData].map((item, index) => {
               const isActive = realIndex === index;
               return (
                 <SwiperSlide key={index} className="!w-auto">
@@ -141,12 +141,26 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
             })}
           </Swiper>
         </div>
-        <div className="flex gap-4 justify-between mt-14 max-w-6xl mx-auto px-4">
+        <div className="flex gap-4 items-center justify-between mt-14 max-w-6xl mx-auto px-4">
           <ButtonIcon
             icon={<ArrowLeftIcon className="size-5" />}
             variant="primary-inverted"
             onClick={onPrevious}
           />
+          <div className="flex gap-1.5 lg:gap-3">
+            {slidesData.map((_, index) => (
+              <button
+                key={index}
+                className={`size-2 rounded-full transition-width duration-300 cursor-pointer ${
+                  index === realIndex % slidesData.length
+                    ? 'w-8 bg-gunmetal'
+                    : 'bg-gunmetal-200 hover:bg-gunmetal-700'
+                }`}
+                onClick={() => onSetActiveSlideToLoop(index)}
+                type="button"
+              />
+            ))}
+          </div>
           <ButtonIcon
             icon={<ArrowRightIcon className="size-5" />}
             variant="primary-inverted"

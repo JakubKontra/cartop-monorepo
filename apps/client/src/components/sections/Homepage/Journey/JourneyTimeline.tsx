@@ -2,6 +2,11 @@
 
 import { WrapperFadeIn } from '@/components/organisms/animations/WrapperFadeIn';
 import { cn } from '@/utils/cv';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface TimelineStep {
   description: string;
@@ -103,10 +108,43 @@ const TimelineItem = ({ step }: TimelineItemProps) => {
 };
 
 export const JourneyTimeline = () => {
+  const lineRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!lineRef.current || !containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        lineRef.current,
+        {
+          scaleY: 0,
+          transformOrigin: 'top center',
+        },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top center+=10%',
+            end: 'bottom center+=10%',
+            scrub: 1,
+          },
+        },
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative mx-auto w-full max-w-6xl py-12">
+    <div ref={containerRef} className="relative mx-auto w-full max-w-6xl py-12">
       {/* Vertical red line - ends at center of last circle */}
-      <div className="absolute top-0 left-1/2 w-0.5 -translate-x-1/2 bg-primary" style={{ height: 'calc(100% - 96px)' }} />
+      <div
+        ref={lineRef}
+        className="absolute top-12 left-1/2 w-0.5 -translate-x-1/2 bg-primary"
+        style={{ height: 'calc(100% - 196px)' }}
+      />
 
       {/* Timeline items */}
       <div className="space-y-24">

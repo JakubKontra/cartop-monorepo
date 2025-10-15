@@ -13,6 +13,7 @@ import { PromotionalOffersSectionWrapper } from '@/components/sections/Homepage/
 import { PromotionalOffersSectionLoading } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionLoading';
 import { PromotionalOffersSection } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSection';
 import { ReliablePartner } from '@/components/sections/Homepage/ReliablePartner/ReliablePartner';
+import ExploreSelection from '@/components/sections/Homepage/ExploreSelection/ExploreSelection';
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <Hero />
       <Benefits />
       <JourneySection />
+      <ExploreSelection />
       <div>
         <ReliablePartner />
         <PromotionalOffersSectionWrapper>
