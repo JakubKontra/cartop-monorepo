@@ -3,7 +3,7 @@ echo "Initializing localstack services"
 
 # S3 Bucket
 echo "Creating S3 bucket..."
-awslocal s3 mb s3://incircl
+awslocal s3 mb s3://cartop
 
 # SQS Queues for Bull replacement
 echo "Creating SQS queues..."
