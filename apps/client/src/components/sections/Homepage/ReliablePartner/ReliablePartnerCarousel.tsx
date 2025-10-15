@@ -11,28 +11,60 @@ import { cn } from '@/utils/cv';
 
 interface CarouselSlideProps {
   alt?: string;
+  backgroundImage?: string;
   image: string;
   isActive?: boolean;
+  shouldBeIconVisible?: boolean;
+  shouldBeWithBackgroundImage?: boolean;
   text: string;
   title: string;
 }
 
-const CarouselSlide = ({ alt, image, isActive, text, title }: CarouselSlideProps) => {
+const CarouselSlide = ({
+  alt,
+  backgroundImage,
+  image,
+  isActive,
+  shouldBeIconVisible = true,
+  shouldBeWithBackgroundImage = false,
+  text,
+  title,
+}: CarouselSlideProps) => {
   return (
     <div
       className={cn(
-        'flex aspect-[307/444] w-56 shrink-0 flex-col items-center justify-between rounded-4xl border px-4 py-6 pt-12 transition-colors duration-1000 lg:w-80 lg:p-10 lg:pt-20',
-        isActive ? 'bg-gunmetal-50 border-gunmetal' : 'bg-white border-french-grey',
+        'flex h-[480px] w-56 shrink-0 flex-col justify-between rounded-4xl px-4 py-6 pt-12 transition-colors duration-1000 lg:w-80 lg:p-10 lg:pt-20',
+        shouldBeIconVisible ? 'items-center' : 'items-start',
+        isActive ? '' : '',
       )}
+      style={
+        shouldBeWithBackgroundImage && backgroundImage
+          ? {
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+            }
+          : undefined
+      }
     >
-      <div className="relative aspect-[169/200] w-24 overflow-hidden rounded-lg lg:w-44">
-        <Image fill alt={alt || title} className="object-cover" src={image} />
-      </div>
-      <div className="flex flex-col gap-6">
-        <h3 className="text-center text-base font-semibold text-gunmetal">{title}</h3>
+      {shouldBeIconVisible && (
+        <div className="relative aspect-[169/200] w-24 overflow-hidden rounded-lg lg:w-44">
+          <Image fill alt={alt || title} className="object-cover" src={image} />
+        </div>
+      )}
+      <div className={cn('flex flex-col gap-3', shouldBeIconVisible ? '' : 'mt-70')}>
+        <h3
+          className={cn(
+            'text-base font-semibold',
+            shouldBeIconVisible ? 'text-gunmetal text-center' : 'text-white text-left',
+          )}
+        >
+          {title}
+        </h3>
         <p
           className={cn(
-            'text-center text-4xl whitespace-nowrap text-gunmetal lg:text-5xl',
+            'text-4xl whitespace-nowrap lg:text-5xl',
+            shouldBeIconVisible ? 'text-gunmetal text-center' : 'text-primary text-left',
             isActive ? 'font-semibold' : 'font-medium',
           )}
         >
@@ -45,39 +77,60 @@ const CarouselSlide = ({ alt, image, isActive, text, title }: CarouselSlideProps
 
 const slidesData = [
   {
+    backgroundImage: '/images/homepage/reliable-partners/pocet-znacek-v-nabidce.png',
     image: '/images/homepage/partners/Pocet-znacek.png',
+    shouldBeIconVisible: false,
+    shouldBeWithBackgroundImage: true,
     text: '29',
     title: 'Počet značek v nabídce',
   },
   {
+    backgroundImage: '/images/homepage/reliable-partners/pocet-vydejnich-mist.png',
     image: '/images/homepage/partners/Vydejni-mista.png',
+    shouldBeIconVisible: false,
+    shouldBeWithBackgroundImage: true,
     text: '350',
     title: 'Počet výdejních míst',
   },
   {
+    backgroundImage: '/images/homepage/reliable-partners/hodnota-resenych-vozu.png',
     image: '/images/homepage/partners/Hodnota-vozu.png',
+    shouldBeIconVisible: false,
+    shouldBeWithBackgroundImage: true,
     text: '36 mld. Kč',
     title: 'Hodnota řešených vozů',
   },
   {
+    backgroundImage: '/images/homepage/reliable-partners/pocet-zakazniku.png',
     image: '/images/homepage/partners/Pocet-zakazniku.png',
+    shouldBeIconVisible: false,
+    shouldBeWithBackgroundImage: true,
     text: '24 000+',
     title: 'Počer zákazníků',
   },
   {
+    backgroundImage: '/images/homepage/reliable-partners/prumerna-uspora.png',
     image: '/images/homepage/partners/Prumerna-uspora.png',
+    shouldBeIconVisible: false,
+    shouldBeWithBackgroundImage: true,
     text: '30 %',
     title: 'Průměrná úspora',
   },
   {
+    backgroundImage: '/images/homepage/reliable-partners/dostupnost.png',
     image: '/images/homepage/partners/Dostupnost.png',
+    shouldBeIconVisible: false,
+    shouldBeWithBackgroundImage: true,
     text: '80 %',
     title: 'Dostupnost',
   },
   {
+    backgroundImage: '/images/homepage/reliable-partners/zakazniku-kterym-pomuzeme-s-vyberem.png',
     image: '/images/homepage/partners/Pomoc-zakaznikum.png',
+    shouldBeIconVisible: false,
+    shouldBeWithBackgroundImage: true,
     text: '54 %',
-    title: 'Zákazníkům, kterým pomůžeme s výběrem',
+    title: 'Pomáháme s výběrem',
   },
 ];
 
@@ -122,21 +175,17 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
               const isActive = realIndex === index;
               return (
                 <SwiperSlide key={index} className="!w-auto">
-                  <div
-                    className={cn(
-                      'transition-all duration-600',
-                      isActive ? 'scale-105' : 'scale-100',
-                    )}
-                  >
-                    <CarouselSlide
-                      key={item.title}
-                      alt={item.title}
-                      image={item.image}
-                      isActive={isActive}
-                      text={item.text}
-                      title={item.title}
-                    />
-                  </div>
+                  <CarouselSlide
+                    key={item.title}
+                    alt={item.title}
+                    backgroundImage={item.backgroundImage}
+                    image={item.image}
+                    isActive={isActive}
+                    shouldBeIconVisible={item.shouldBeIconVisible}
+                    shouldBeWithBackgroundImage={item.shouldBeWithBackgroundImage}
+                    text={item.text}
+                    title={item.title}
+                  />
                 </SwiperSlide>
               );
             })}
