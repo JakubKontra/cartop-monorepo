@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { type GetAllUsersQuery } from '@/gql/graphql'
+import { logger } from '@/lib/logger'
 
 // Use GraphQL User type to match table data
 type User = GetAllUsersQuery['users'][number]
@@ -84,9 +85,10 @@ export function ImpersonateDialog({
         // Reload the page to apply new permissions
         window.location.reload()
       }
-    } catch (error: any) {
-      console.error('Impersonation error:', error)
-      toast.error(error.message || 'Failed to impersonate user')
+    } catch (error: unknown) {
+      logger.error('Impersonation failed', error, { userId: user.id, userEmail: user.email })
+      const message = error instanceof Error ? error.message : 'Failed to impersonate user'
+      toast.error(message)
     }
   }
 

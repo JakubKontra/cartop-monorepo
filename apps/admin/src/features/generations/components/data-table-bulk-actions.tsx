@@ -15,6 +15,7 @@ import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-ta
 import { type Generation } from '../types'
 import { UPDATE_CATALOG_MODEL_GENERATION, GET_ALL_CATALOG_MODEL_GENERATIONS } from '../generations.graphql'
 import { GenerationsMultiDeleteDialog } from './generations-multi-delete-dialog'
+import { logger } from '@/lib/logger'
 
 type DataTableBulkActionsProps<TData> = {
   table: Table<TData>
@@ -52,9 +53,10 @@ export function DataTableBulkActions<TData>({
         `Successfully ${value ? 'set' : 'unset'} ${selectedGenerations.length} generation${selectedGenerations.length > 1 ? 's' : ''} as ${fieldLabel}`
       )
       table.resetRowSelection()
-    } catch (error: any) {
-      console.error(`Bulk update error:`, error)
-      toast.error(error.message || `Failed to update generations`)
+    } catch (error: unknown) {
+      logger.error('Bulk update generations failed', error, { field, value, count: selectedGenerations.length })
+      const message = error instanceof Error ? error.message : 'Failed to update generations'
+      toast.error(message)
     }
   }
 

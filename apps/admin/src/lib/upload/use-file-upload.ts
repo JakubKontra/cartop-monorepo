@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useApolloClient } from '@apollo/client/react';
 import { UploadService, type UploadResult, type UploadProgress } from './upload-service';
+import { logger } from '@/lib/logger';
 
 /**
  * File Upload Hook State
@@ -117,7 +118,7 @@ export function useFileUpload(): UseFileUploadReturn {
     try {
       await UploadService.deleteFile(fileId);
     } catch (error) {
-      console.error('Delete file error:', error);
+      logger.error('Delete file error', error, { fileId });
       throw error;
     }
   }, []);
@@ -129,7 +130,7 @@ export function useFileUpload(): UseFileUploadReturn {
     try {
       await UploadService.deleteFileCompletely(fileId);
     } catch (error) {
-      console.error('Delete file completely error:', error);
+      logger.error('Delete file completely error', error, { fileId });
       throw error;
     }
   }, []);

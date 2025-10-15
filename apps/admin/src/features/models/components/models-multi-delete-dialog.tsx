@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { type Model } from '../types'
 import { DELETE_CATALOG_MODEL, GET_ALL_CATALOG_MODELS } from '../models.graphql'
+import { logger } from '@/lib/logger'
 
 type ModelMultiDeleteDialogProps<TData> = {
   open: boolean
@@ -61,9 +62,10 @@ export function ModelsMultiDeleteDialog<TData>({
       table.resetRowSelection()
       setValue('')
       onOpenChange(false)
-    } catch (error: any) {
-      console.error('Bulk delete error:', error)
-      toast.error(error.message || 'Failed to delete models')
+    } catch (error: unknown) {
+      logger.error('Bulk delete models failed', error, { count: selectedRows.length })
+      const message = error instanceof Error ? error.message : 'Failed to delete models'
+      toast.error(message)
     } finally {
       setDeleting(false)
     }

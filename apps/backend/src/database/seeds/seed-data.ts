@@ -14,6 +14,8 @@ import { generateOfferVariants } from './generators/offer-variants.generator';
 import { generateOfferColorVariants } from './generators/offer-colors.generator';
 import { generateOfferEquipment } from './generators/offer-equipment.generator';
 import { generateOfferCalculations } from './generators/offer-calculations.generator';
+import { generateCarRequestStates } from './generators/car-request-states.generator';
+import { generateCarRequestStatuses } from './generators/car-request-statuses.generator';
 
 /**
  * Main seeding script
@@ -57,6 +59,14 @@ async function seedDatabase(dataSource: DataSource): Promise<void> {
     }
 
     // Step 5: Generate seed data in proper order
+
+    // Car Request States (independent, should be generated first)
+    await generateCarRequestStates(dataSource);
+    console.log('');
+
+    // Car Request Statuses (independent, should be generated first)
+    await generateCarRequestStatuses(dataSource);
+    console.log('');
 
     // Files
     const files = await generateFiles(dataSource, config.files);

@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
+import { logger } from '@/lib/logger'
 
 const formSchema = z.object({
   email: z.email({
@@ -84,11 +85,10 @@ export function UserAuthForm({
         const targetPath = redirectTo || '/'
         navigate({ to: targetPath, replace: true })
       }
-    } catch (error: any) {
-      console.error('Login error:', error)
-      toast.error(
-        error.message || 'Invalid email or password. Please try again.'
-      )
+    } catch (error: unknown) {
+      logger.error('Login failed', error, { email: data.email })
+      const message = error instanceof Error ? error.message : 'Invalid email or password. Please try again.'
+      toast.error(message)
     }
   }
 

@@ -121,7 +121,7 @@ export function GenerationForm({
       }
 
       return true // Slug is available
-    } catch (error) {
+    } catch (_error) {
       // If the query errors (e.g., generation not found), the slug is available
       return true
     }
@@ -318,7 +318,7 @@ export function GenerationForm({
                   <FormControl>
                     <SelectDropdown
                       defaultValue={field.value as string | undefined}
-                      onValueChange={(value) => field.onChange(value as any)}
+                      onValueChange={(value) => field.onChange(value)}
                       placeholder='Select body type'
                       items={BODY_TYPE_OPTIONS}
                     />
@@ -341,7 +341,7 @@ export function GenerationForm({
                     <FormControl>
                       <SelectDropdown
                         defaultValue={field.value as string | undefined}
-                        onValueChange={(value) => field.onChange(value as any)}
+                        onValueChange={(value) => field.onChange(value)}
                         placeholder='Select brake type'
                         items={BRAKE_TYPE_OPTIONS}
                       />
@@ -363,7 +363,7 @@ export function GenerationForm({
                     <FormControl>
                       <SelectDropdown
                         defaultValue={field.value as string | undefined}
-                        onValueChange={(value) => field.onChange(value as any)}
+                        onValueChange={(value) => field.onChange(value)}
                         placeholder='Select brake type'
                         items={BRAKE_TYPE_OPTIONS}
                       />

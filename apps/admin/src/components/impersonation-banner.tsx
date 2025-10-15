@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { useAuthStore } from '@/stores/auth-store'
 import { STOP_IMPERSONATION_MUTATION } from '@/features/auth/impersonation.graphql'
 import { Button } from './ui/button'
+import { logger } from '@/lib/logger'
 
 export function ImpersonationBanner() {
   const { auth } = useAuthStore()
@@ -36,9 +37,10 @@ export function ImpersonationBanner() {
 
         toast.success(`Stopped impersonating. Welcome back, ${user.firstName}!`)
       }
-    } catch (error: any) {
-      console.error('Stop impersonation error:', error)
-      toast.error(error.message || 'Failed to stop impersonation')
+    } catch (error: unknown) {
+      logger.error('Failed to stop impersonation', error)
+      const message = error instanceof Error ? error.message : 'Failed to stop impersonation'
+      toast.error(message)
     }
   }
 

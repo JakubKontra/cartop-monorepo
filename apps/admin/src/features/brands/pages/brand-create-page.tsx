@@ -6,7 +6,9 @@ import { toast } from 'sonner'
 import { CrudPageLayout } from '@/components/crud-page-layout'
 import { BrandForm } from '../components/brand-form'
 import { type BrandFormValues } from '../data/schema'
+import { toCreateInput } from '../data/transformers'
 import { CREATE_CATALOG_BRAND, GET_ALL_CATALOG_BRANDS } from '../brands.graphql'
+import { logger } from '@/lib/logger'
 
 export function BrandCreatePage() {
   const navigate = useNavigate()
@@ -19,24 +21,15 @@ export function BrandCreatePage() {
     try {
       await createBrand({
         variables: {
-          input: {
-            name: values.name,
-            slug: values.slug,
-            description: values.description || null,
-            logoId: values.logoId || null,
-            isActive: values.isActive,
-            isHighlighted: values.isHighlighted,
-            isRecommended: values.isRecommended,
-            legacySystemId: values.legacySystemId || null,
-            legacySlug: values.legacySlug || null,
-          },
+          input: toCreateInput(values),
         },
       })
       toast.success('Brand created successfully')
       navigate({ to: '/brands' })
-    } catch (error: any) {
-      console.error('Brand creation error:', error)
-      toast.error(error.message || 'Failed to create brand')
+    } catch (error: unknown) {
+      logger.error('Brand creation failed', error, { brandName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to create brand'
+      toast.error(message)
     }
   }
 

@@ -29,6 +29,7 @@ import { brandSchema, type BrandFormValues } from '../data/schema'
 import { type Brand } from '../types'
 import { CREATE_CATALOG_BRAND, UPDATE_CATALOG_BRAND, GET_ALL_CATALOG_BRANDS } from '../brands.graphql'
 import { Loader2 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 type BrandActionDialogProps = {
   currentRow?: Brand
@@ -112,9 +113,10 @@ export function BrandsActionDialog({
       }
       form.reset()
       onOpenChange(false)
-    } catch (error: any) {
-      console.error('Brand operation error:', error)
-      toast.error(error.message || 'Failed to save brand')
+    } catch (error: unknown) {
+      logger.error('Brand operation failed', error, { operation: isEdit ? 'update' : 'create', brandName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to save brand'
+      toast.error(message)
     }
   }
 

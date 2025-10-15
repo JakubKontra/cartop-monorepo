@@ -31,6 +31,7 @@ import { type Model } from '../types'
 import { CREATE_CATALOG_MODEL, UPDATE_CATALOG_MODEL, GET_ALL_CATALOG_MODELS } from '../models.graphql'
 import { GET_ALL_CATALOG_BRANDS } from '../../brands/brands.graphql'
 import { Loader2 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 
 type ModelActionDialogProps = {
   currentRow?: Model
@@ -124,9 +125,10 @@ export function ModelsActionDialog({
       }
       form.reset()
       onOpenChange(false)
-    } catch (error: any) {
-      console.error('Model operation error:', error)
-      toast.error(error.message || 'Failed to save model')
+    } catch (error: unknown) {
+      logger.error('Model operation failed', error, { operation: isEdit ? 'update' : 'create', modelName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to save model'
+      toast.error(message)
     }
   }
 

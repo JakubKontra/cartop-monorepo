@@ -1,4 +1,4 @@
-import { GetAllLeasingCompaniesQuery } from '@/gql/graphql'
+import { type GetAllLeasingCompaniesQuery } from '@/gql/graphql'
 
 // Use generated type from GraphQL
 export type LeasingCompany = GetAllLeasingCompaniesQuery['leasingCompanies'][0]

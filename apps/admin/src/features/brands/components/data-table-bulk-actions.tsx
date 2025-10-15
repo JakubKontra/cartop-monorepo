@@ -13,6 +13,7 @@ import { DataTableBulkActions as BulkActionsToolbar } from '@/components/data-ta
 import { type Brand } from '../types'
 import { UPDATE_CATALOG_BRAND, GET_ALL_CATALOG_BRANDS } from '../brands.graphql'
 import { BrandsMultiDeleteDialog } from './brands-multi-delete-dialog'
+import { logger } from '@/lib/logger'
 
 type DataTableBulkActionsProps<TData> = {
   table: Table<TData>
@@ -50,9 +51,10 @@ export function DataTableBulkActions<TData>({
         `Successfully ${value ? 'set' : 'unset'} ${selectedBrands.length} brand${selectedBrands.length > 1 ? 's' : ''} as ${fieldLabel}`
       )
       table.resetRowSelection()
-    } catch (error: any) {
-      console.error(`Bulk update error:`, error)
-      toast.error(error.message || `Failed to update brands`)
+    } catch (error: unknown) {
+      logger.error('Bulk update brands failed', error, { field, value, count: selectedBrands.length })
+      const message = error instanceof Error ? error.message : 'Failed to update brands'
+      toast.error(message)
     }
   }
 

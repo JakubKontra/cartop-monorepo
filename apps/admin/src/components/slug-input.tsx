@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import slugifyLib from 'slugify'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 
 interface SlugInputProps extends Omit<React.ComponentProps<'input'>, 'onChange' | 'value'> {
   /** The name of the field in the form that should be watched and slugified */
@@ -93,7 +94,7 @@ export function SlugInput({
           clearErrors(name)
         }
       } catch (error) {
-        console.error('Error validating slug uniqueness:', error)
+        logger.error('Error validating slug uniqueness', error, { slug: currentSlug })
       } finally {
         setIsValidating(false)
       }

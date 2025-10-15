@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client/react'
 import {
+  type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
   flexRender,
@@ -27,7 +28,6 @@ import { type Model } from '../types'
 import { modelsColumns as columns } from './models-columns'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { Loader2 } from 'lucide-react'
-import { useState } from 'react'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,7 +40,7 @@ export function ModelsTable() {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<any[]>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 })
 
   const { data, loading, error, refetch } = useQuery(GET_ALL_CATALOG_MODELS, {

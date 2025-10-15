@@ -6,7 +6,9 @@ import { toast } from 'sonner'
 import { CrudPageLayout } from '@/components/crud-page-layout'
 import { BrandForm } from '../components/brand-form'
 import { type BrandFormValues } from '../data/schema'
+import { toFormValues, toUpdateInput } from '../data/transformers'
 import { GET_CATALOG_BRAND, UPDATE_CATALOG_BRAND, GET_ALL_CATALOG_BRANDS } from '../brands.graphql'
+import { logger } from '@/lib/logger'
 
 export function BrandEditPage() {
   const navigate = useNavigate()
@@ -28,22 +30,15 @@ export function BrandEditPage() {
       await updateBrand({
         variables: {
           id: brandId,
-          input: {
-            name: values.name,
-            slug: values.slug,
-            description: values.description || null,
-            logoId: values.logoId || null,
-            isActive: values.isActive,
-            isHighlighted: values.isHighlighted,
-            isRecommended: values.isRecommended,
-          },
+          input: toUpdateInput(values),
         },
       })
       toast.success('Brand updated successfully')
       navigate({ to: '/brands' })
-    } catch (error: any) {
-      console.error('Brand update error:', error)
-      toast.error(error.message || 'Failed to update brand')
+    } catch (error: unknown) {
+      logger.error('Brand update failed', error, { brandId, brandName: values.name })
+      const message = error instanceof Error ? error.message : 'Failed to update brand'
+      toast.error(message)
     }
   }
 
@@ -69,17 +64,7 @@ export function BrandEditPage() {
           isEdit={true}
           loading={updating}
           logoUrl={brand.logo?.url}
-          defaultValues={{
-            name: brand.name,
-            slug: brand.slug,
-            description: brand.description || '',
-            logoId: brand.logoId || '',
-            isActive: brand.isActive,
-            isHighlighted: brand.isHighlighted,
-            isRecommended: brand.isRecommended,
-            legacySystemId: brand.legacySystemId || '',
-            legacySlug: brand.legacySlug || '',
-          }}
+          defaultValues={toFormValues(brand)}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
         />
