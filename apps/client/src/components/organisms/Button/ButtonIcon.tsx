@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants';
 import { cn } from '@/utils/cv';
 
 const iconVariants = tv({
-  base: 'shrink-0 size-14 rounded-2xl flex items-center justify-center cursor-pointer transition-colors duration-300',
+  base: 'shrink-0 size-11 lg:size-14 rounded-2xl flex items-center justify-center cursor-pointer transition-colors duration-300',
   variants: {
     variant: {
       'outline-white': 'text-white bg-transparent',
