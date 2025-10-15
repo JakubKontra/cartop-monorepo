@@ -117,7 +117,7 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
             className="!py-4"
             loop={true}
           >
-            {slidesData.map((item, index) => {
+            {[...slidesData, ...slidesData].map((item, index) => {
               const isActive = realIndex === index;
               return (
                 <SwiperSlide key={index} className="!w-auto">
