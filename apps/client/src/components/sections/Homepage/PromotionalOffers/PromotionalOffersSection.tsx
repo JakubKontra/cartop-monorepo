@@ -13,6 +13,7 @@ import { PromotionalOffersCard } from '@/components/molecules/PromotionalOffersC
 import { getPromotionalOffers } from '@/lib/services/promotional-offers.service';
 
 import { PromotionalOffersSectionHeader } from './PromotionalOffersSectionHeader';
+import { cn } from '@/utils/cv';
 
 // ISR revalidation: 60 seconds
 export const revalidate = 60;
@@ -69,7 +70,7 @@ export const PromotionalOffersSection = async ({
 
   return (
     <section
-      className={backgroundColor ? 'mr-4 ml-4 rounded-3xl p-4 lg:p-6' : ''}
+      className={cn(backgroundColor && 'mr-4 ml-4 rounded-3xl p-4 lg:p-6', className)}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       <div className="mx-auto max-w-[1360px] px-2 py-8 lg:py-12">

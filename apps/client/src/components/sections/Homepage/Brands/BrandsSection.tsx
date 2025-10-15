@@ -8,7 +8,6 @@
 import Link from 'next/link';
 
 import { BrandCard } from '@/components/molecules/BrandCard';
-import Button from '@/components/organisms/Button/Button';
 import { SectionHeader } from '@/components/sections/Homepage/SectionHeader';
 import { getHighlightedBrands } from '@/lib/services/brands.service';
 
