@@ -15,7 +15,7 @@ export const PromotionalOffersSectionError = ({
   reset,
 }: PromotionalOffersSectionErrorProps) => {
   const [isPending, startTransition] = useTransition();
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<null | string>(null);
 
   const handleRetry = async () => {
     setMessage(null);

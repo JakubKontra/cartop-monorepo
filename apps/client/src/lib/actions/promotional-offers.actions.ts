@@ -31,7 +31,7 @@ export async function getPromotionalOffersAction(filters?: {
   offset?: number;
   priceMax?: number;
   priceMin?: number;
-  type?: 'OPERATIONAL_LEASING' | 'DIRECT_PURCHASE' | 'INDIVIDUAL';
+  type?: 'DIRECT_PURCHASE' | 'INDIVIDUAL' | 'OPERATIONAL_LEASING';
 }): Promise<{
   error?: string;
   offers?: PromotionalOffer[];
@@ -115,8 +115,7 @@ export async function getDirectPurchaseOffersAction(filters?: {
   } catch (error) {
     console.error('[getDirectPurchaseOffersAction] Error:', error);
     return {
-      error:
-        error instanceof Error ? error.message : 'Nepodařilo se načíst nabídky přímého nákupu',
+      error: error instanceof Error ? error.message : 'Nepodařilo se načíst nabídky přímého nákupu',
       success: false,
     };
   }
@@ -148,13 +147,14 @@ export async function revalidatePromotionalOffersCacheAction(): Promise<{
  * Server Action: Revalidate specific offer type cache
  */
 export async function revalidateOfferTypeCacheAction(
-  type: 'operational-leasing' | 'direct-purchase',
+  type: 'direct-purchase' | 'operational-leasing',
 ): Promise<{
   message: string;
   success: boolean;
 }> {
   try {
-    const tag = type === 'operational-leasing' ? 'operational-leasing-offers' : 'direct-purchase-offers';
+    const tag =
+      type === 'operational-leasing' ? 'operational-leasing-offers' : 'direct-purchase-offers';
     revalidateTag(tag);
     return {
       message: `Cache pro ${type} byl úspěšně aktualizován`,

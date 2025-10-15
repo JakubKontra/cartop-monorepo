@@ -5,12 +5,12 @@ import { Send } from 'lucide-react';
 export const ContactForm = () => (
   <div className="rounded-2xl bg-gunmetal-50 p-4 sm:p-6 md:p-8">
     <div className="mb-6 md:mb-8">
-      <h3 className="mb-3 text-2xl font-normal leading-[120%] tracking-[0.01em] md:mb-4">
+      <h3 className="mb-3 text-2xl leading-[120%] font-normal tracking-[0.01em] md:mb-4">
         Nenašli jste <span className="font-semibold text-primary">to pravé?</span>
       </h3>
-      <p className="text-base font-normal leading-[160%] tracking-[0.01em] text-gunmetal-800">
-        Rádi Vás budeme upozorňovat na ty nejlepší nabídky, ale pokud Vás zajímá něco
-        konkrétního, stačí si jen vybrat kategorii, značku či model.
+      <p className="text-base leading-[160%] font-normal tracking-[0.01em] text-gunmetal-800">
+        Rádi Vás budeme upozorňovat na ty nejlepší nabídky, ale pokud Vás zajímá něco konkrétního,
+        stačí si jen vybrat kategorii, značku či model.
       </p>
     </div>
 

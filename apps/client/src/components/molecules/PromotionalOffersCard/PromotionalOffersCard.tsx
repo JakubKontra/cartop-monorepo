@@ -184,7 +184,7 @@ export const OfferCard = ({
     >
       <Link aria-label={`View ${title}`} className="absolute inset-0 z-0" href={href} />
 
-      <div className="relative z-10 aspect-[4/3] w-full max-h-[250px] overflow-hidden rounded-b-3xl">
+      <div className="relative z-10 aspect-[4/3] max-h-[250px] w-full overflow-hidden rounded-b-3xl">
         <OfferCardCarousel images={galleryImages} title={title} />
         <OfferCardLabels labels={labels} />
         <OfferCardActions

@@ -1,62 +1,71 @@
 'use client';
 
-import Button from '@/components/organisms/Button/Button';
-import { ReviewsCarousel } from './ReviewsCarousel';
 import { MessageCircleQuestionMark } from 'lucide-react';
 
-const GoogleSvg = () => {
-  return (
-    <svg width="95" height="32" viewBox="0 0 95 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_5513_200449)">
-        <path
-          d="M40.6511 16.4101C40.6511 20.8518 37.1763 24.1249 32.912 24.1249C28.6476 24.1249 25.1729 20.8518 25.1729 16.4101C25.1729 11.9371 28.6476 8.69531 32.912 8.69531C37.1763 8.69531 40.6511 11.9371 40.6511 16.4101ZM37.2633 16.4101C37.2633 13.6344 35.2494 11.7353 32.912 11.7353C30.5746 11.7353 28.5607 13.6344 28.5607 16.4101C28.5607 19.1579 30.5746 21.0849 32.912 21.0849C35.2494 21.0849 37.2633 19.1544 37.2633 16.4101Z"
-          fill="#A6B6C3"
-        />
-        <path
-          d="M57.3503 16.4101C57.3503 20.8518 53.8755 24.1249 49.6112 24.1249C45.3469 24.1249 41.8721 20.8518 41.8721 16.4101C41.8721 11.9405 45.3469 8.69531 49.6112 8.69531C53.8755 8.69531 57.3503 11.9371 57.3503 16.4101ZM53.9625 16.4101C53.9625 13.6344 51.9486 11.7353 49.6112 11.7353C47.2738 11.7353 45.2599 13.6344 45.2599 16.4101C45.2599 19.1579 47.2738 21.0849 49.6112 21.0849C51.9486 21.0849 53.9625 19.1544 53.9625 16.4101Z"
-          fill="#A6B6C3"
-        />
-        <path
-          d="M73.3491 9.1614V23.0118C73.3491 28.7092 69.9891 31.0362 66.017 31.0362C62.2778 31.0362 60.0274 28.5353 59.1787 26.4901L62.1283 25.2623C62.6535 26.5179 63.9404 27.9997 66.0135 27.9997C68.5561 27.9997 70.1317 26.431 70.1317 23.4779V22.3684H70.0135C69.2552 23.304 67.7944 24.1214 65.9509 24.1214C62.0935 24.1214 58.5596 20.7614 58.5596 16.4379C58.5596 12.0831 62.0935 8.69531 65.9509 8.69531C67.7909 8.69531 69.2517 9.5127 70.0135 10.4205H70.1317V9.16488H73.3491V9.1614ZM70.3717 16.4379C70.3717 13.7214 68.5596 11.7353 66.2535 11.7353C63.9161 11.7353 61.9578 13.7214 61.9578 16.4379C61.9578 19.1266 63.9161 21.0849 66.2535 21.0849C68.5596 21.0849 70.3717 19.1266 70.3717 16.4379Z"
-          fill="#A6B6C3"
-        />
-        <path d="M78.653 1.04297V23.6517H75.3486V1.04297H78.653Z" fill="#A6B6C3" />
-        <path
-          d="M91.5291 18.9488L94.1587 20.7018C93.31 21.9575 91.2648 24.121 87.7309 24.121C83.3482 24.121 80.0752 20.7331 80.0752 16.4062C80.0752 11.8184 83.3761 8.69141 87.3517 8.69141C91.3552 8.69141 93.3135 11.8775 93.9535 13.5992L94.3048 14.4758L83.9917 18.7471C84.7813 20.2949 86.0091 21.0844 87.7309 21.0844C89.4561 21.0844 90.6526 20.2358 91.5291 18.9488ZM83.4352 16.1731L90.3291 13.3105C89.95 12.3471 88.8091 11.6758 87.4665 11.6758C85.7448 11.6758 83.3482 13.1958 83.4352 16.1731Z"
-          fill="#A6B6C3"
-        />
-        <path
-          d="M12.6662 14.4041V11.131H23.6957C23.8036 11.7015 23.8592 12.3762 23.8592 13.1067C23.8592 15.5623 23.1879 18.5988 21.0244 20.7623C18.9201 22.9536 16.2314 24.1223 12.6696 24.1223C6.06791 24.1223 0.516602 18.7449 0.516602 12.1432C0.516602 5.54145 6.06791 0.164062 12.6696 0.164062C16.3218 0.164062 18.9236 1.59711 20.8783 3.46493L18.5688 5.7745C17.167 4.45972 15.2679 3.43711 12.6662 3.43711C7.8453 3.43711 4.07486 7.32232 4.07486 12.1432C4.07486 16.9641 7.8453 20.8493 12.6662 20.8493C15.7931 20.8493 17.574 19.5936 18.7149 18.4528C19.6401 17.5275 20.2488 16.2058 20.4888 14.4006L12.6662 14.4041Z"
-          fill="#A6B6C3"
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_5513_200449">
-          <rect width="94.6087" height="32" fill="white" transform="translate(0.391602)" />
-        </clipPath>
-      </defs>
-    </svg>
-  );
-};
+import type { ReviewCardProps } from '@/components/molecules/ReviewCard';
+
+import { GoogleVerifiedBadge } from '@/components/atoms/GoogleVerifiedBadge';
+import Button from '@/components/organisms/Button/Button';
+import { ReviewsCarousel } from '@/components/organisms/Reviews';
+
+const reviewsData: ReviewCardProps[] = [
+  {
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscingLorem.',
+    date: '17.6. 2025',
+    initials: 'PN',
+    name: 'Pavel Novák',
+    rating: 5,
+  },
+  {
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscingLorem.',
+    date: '17.6. 2025',
+    initials: 'PN',
+    name: 'Pavel Novák',
+    rating: 4.5,
+  },
+  {
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscingLorem.',
+    date: '17.6. 2025',
+    initials: 'PN',
+    name: 'Pavel Novák',
+    rating: 3.5,
+  },
+  {
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscingLorem.',
+    date: '17.6. 2025',
+    initials: 'PN',
+    name: 'Pavel Novák',
+    rating: 2.2,
+  },
+  {
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Lorem ipsum dolor sit amet, consectetur adipiscingLorem ipsum dolor sit amet, consectetur adipiscingLorem.',
+    date: '17.6. 2025',
+    initials: 'PN',
+    name: 'Pavel Novák',
+    rating: 2,
+  },
+];
 
 export default function ReviewsSection() {
   return (
-    <div className="w-full py-20">
-      <div className="mx-auto mb-4 flex max-w-[1360px] flex-col gap-4 px-4 lg:flex-row lg:gap-8">
-        <h2 className="w-full text-center lg:text-left text-4xl lg:text-5xl">
+    <div className="w-full py-12 md:py-16 lg:py-20">
+      <div className="mx-auto mb-6 flex max-w-[1360px] flex-col gap-4 px-4 md:mb-8 md:gap-6 lg:flex-row lg:gap-8">
+        <h2 className="w-full text-center text-4xl lg:text-left lg:text-5xl">
           <span className="headline-highlight">Proč si lidé</span>
           <br />
           vybírají Cartop?
         </h2>
         <div className="flex items-end max-lg:hidden">
-          <div className="flex flex-col gap-4">
-            <p className="font-semibold text-gunmetal-300 leading-none">Verified by</p>
-            <GoogleSvg />
-          </div>
+          <GoogleVerifiedBadge />
         </div>
       </div>
-      <ReviewsCarousel className="w-full" />
-      <div className="w-full flex justify-center mt-4 lg:mt-2">
+      <ReviewsCarousel className="w-full" reviews={reviewsData} />
+      <div className="mt-6 flex w-full justify-center md:mt-8 lg:mt-10">
         <Button icon={<MessageCircleQuestionMark className="size-5" />} variant="primary">
           Chci být spokojený zákazník
         </Button>

@@ -12,7 +12,7 @@ interface BrandsSectionErrorProps {
 
 export const BrandsSectionError = ({ error, reset }: BrandsSectionErrorProps) => {
   const [isPending, startTransition] = useTransition();
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<null | string>(null);
 
   const handleRetry = async () => {
     setMessage(null);
@@ -56,9 +56,7 @@ export const BrandsSectionError = ({ error, reset }: BrandsSectionErrorProps) =>
           </p>
 
           {/* Success/Info Message */}
-          {message && (
-            <p className="mb-4 max-w-md text-sm text-green-300">{message}</p>
-          )}
+          {message && <p className="mb-4 max-w-md text-sm text-green-300">{message}</p>}
 
           {/* Retry Button */}
           <button

@@ -1,14 +1,14 @@
 import { cn } from '@/utils/cv';
 
 export interface SectionHeaderProps {
+  /** Optional CSS classes */
+  className?: string;
   /** Zvýrazněné slovo (první řádek) */
   highlightedWord: string;
   /** Zbytek nadpisu (druhý řádek) */
   remainingTitle: string;
   /** Optional podnadpis */
   subtitle?: string;
-  /** Optional CSS classes */
-  className?: string;
   /** Theme variant for text colors */
   variant?: 'dark' | 'light';
 }
@@ -31,7 +31,7 @@ export const SectionHeader = ({
 
   return (
     <div className={cn('mb-14 text-center lg:text-left', className)}>
-      <h2 className={cn('mb-4 text-4xl lg:text-5xl leading-[120%] tracking-[1%]', textColor)}>
+      <h2 className={cn('mb-4 text-4xl leading-[120%] tracking-[1%] lg:text-5xl', textColor)}>
         <span className="headline-highlight">{highlightedWord}</span>
         <br />
         <span className="font-normal">{remainingTitle}</span>

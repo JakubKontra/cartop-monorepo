@@ -7,13 +7,13 @@ import Navbar from '@/components/organisms/Navbar/Navbar';
 import { BrandsSection } from '@/components/sections/Homepage/Brands/BrandsSection';
 import { BrandsSectionLoading } from '@/components/sections/Homepage/Brands/BrandsSectionLoading';
 import { BrandsSectionWrapper } from '@/components/sections/Homepage/Brands/BrandsSectionWrapper';
+import ExploreSelection from '@/components/sections/Homepage/ExploreSelection/ExploreSelection';
 import { FaqSection } from '@/components/sections/Homepage/Faq/FaqSection';
 import { JourneySection } from '@/components/sections/Homepage/Journey';
-import { PromotionalOffersSectionWrapper } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionWrapper';
-import { PromotionalOffersSectionLoading } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionLoading';
 import { PromotionalOffersSection } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSection';
+import { PromotionalOffersSectionLoading } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionLoading';
+import { PromotionalOffersSectionWrapper } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSectionWrapper';
 import { ReliablePartner } from '@/components/sections/Homepage/ReliablePartner/ReliablePartner';
-import ExploreSelection from '@/components/sections/Homepage/ExploreSelection/ExploreSelection';
 import { ReviewsSection } from '@/components/sections/Homepage/Reviews';
 
 export default function Home() {
@@ -30,12 +30,12 @@ export default function Home() {
         <PromotionalOffersSectionWrapper>
           <Suspense fallback={<PromotionalOffersSectionLoading />}>
             <PromotionalOffersSection
-              highlightedTitle="Stálá"
-              title="akční nabídka"
-              subtitle="Pravidelně pro vás vybíráme vozy s nejlepšími podmínkami."
               backgroundColor="#EFEFEF"
+              highlightedTitle="Stálá"
               limit={3}
               offerType="OPERATIONAL_LEASING"
+              subtitle="Pravidelně pro vás vybíráme vozy s nejlepšími podmínkami."
+              title="akční nabídka"
             />
           </Suspense>
         </PromotionalOffersSectionWrapper>

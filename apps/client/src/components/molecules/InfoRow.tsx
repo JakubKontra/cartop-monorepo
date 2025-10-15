@@ -12,10 +12,10 @@ export const InfoRow = ({ children, icon, title }: InfoRowProps) => (
       {icon}
     </div>
     <div className="flex flex-col">
-      <p className="text-xs font-normal leading-[160%] tracking-[0.01em] text-gunmetal-700">
+      <p className="text-xs leading-[160%] font-normal tracking-[0.01em] text-gunmetal-700">
         {title}
       </p>
-      <div className="text-sm font-semibold leading-[160%] tracking-[0.01em] text-gunmetal">
+      <div className="text-sm leading-[160%] font-semibold tracking-[0.01em] text-gunmetal">
         {children}
       </div>
     </div>

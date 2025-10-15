@@ -1,12 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 
-import Image from 'next/image';
-
 type ImageType = {
-  url: string;
   alt?: string;
+  url: string;
 };
 
 export interface OfferCardCarouselProps {
@@ -57,9 +56,9 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
       <div className="relative h-full w-full overflow-hidden rounded-b-3xl">
         <Image
           key={currentImage.url}
+          fill
           alt={currentImage.alt || title}
           className="animate-fade-in object-cover transition-transform duration-300 group-hover:scale-105"
-          fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={currentImage.url}
         />
@@ -68,9 +67,9 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
       {images.length > 1 && (
         <>
           <button
-            className="absolute left-2 top-1/2 z-10 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/90 text-gray-900 opacity-0 pointer-events-none backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white group-hover:opacity-100 group-hover:pointer-events-auto"
-            onClick={goToPrevious}
+            className="pointer-events-none absolute top-1/2 left-2 z-10 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/90 text-gray-900 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100 hover:scale-110 hover:bg-white"
             type="button"
+            onClick={goToPrevious}
           >
             <svg
               className="size-5"
@@ -85,9 +84,9 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
           </button>
 
           <button
-            className="absolute right-2 top-1/2 z-10 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/90 text-gray-900 opacity-0 pointer-events-none backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white group-hover:opacity-100 group-hover:pointer-events-auto"
-            onClick={goToNext}
+            className="pointer-events-none absolute top-1/2 right-2 z-10 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-white/90 text-gray-900 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100 hover:scale-110 hover:bg-white"
             type="button"
+            onClick={goToNext}
           >
             <svg
               className="size-5"
@@ -105,11 +104,11 @@ export const OfferCardCarousel = ({ images, title }: OfferCardCarouselProps) => 
             {images.map((_, index) => (
               <button
                 key={index}
+                type="button"
                 className={`size-2 rounded-full transition-all ${
                   index === currentIndex ? 'w-6 bg-white' : 'bg-white/60 hover:bg-white/80'
                 }`}
                 onClick={e => goToIndex(e, index)}
-                type="button"
               />
             ))}
           </div>
