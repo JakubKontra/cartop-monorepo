@@ -1,6 +1,5 @@
+import { InfoRow } from '@/components/molecules/InfoRow';
 import { Facebook, Instagram } from 'lucide-react';
-
-import { InfoRow } from './InfoRow';
 
 export const ContactSocialMediaSection = () => (
   <div className="mt-12 md:mt-16 lg:mt-20">

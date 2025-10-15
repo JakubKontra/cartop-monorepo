@@ -2,10 +2,10 @@
 
 import { MessageCircleQuestionMark } from 'lucide-react';
 
-import type { ReviewCardProps } from '@/components/molecules/ReviewCard';
+import type { ReviewCardProps } from '@/components/molecules/review/ReviewCard';
 
 import { GoogleVerifiedBadge } from '@/components/atoms/GoogleVerifiedBadge';
-import Button from '@/components/organisms/Button/Button';
+import Button from '@/components/atoms/button/Button';
 import { ReviewsCarousel } from '@/components/organisms/Reviews';
 
 const reviewsData: ReviewCardProps[] = [

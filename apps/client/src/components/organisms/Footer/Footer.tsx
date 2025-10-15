@@ -1,9 +1,9 @@
-import type { FooterLink } from '../../molecules/FooterLinkColumn';
+import type { FooterLink } from './FooterLinkColumn';
 
 import { Logo } from '../../branding/Logo';
-import { FooterContactInfo } from '../../molecules/FooterContactInfo';
-import { FooterLinkColumn } from '../../molecules/FooterLinkColumn';
-import { NewsletterSignup } from '../../molecules/NewsletterSignup';
+import { FooterContactInfo } from './FooterContactInfo';
+import { FooterLinkColumn } from './FooterLinkColumn';
+import { NewsletterSignup } from '../../molecules/newsletter/NewsletterSignup';
 import { FooterCopyright } from './FooterCopyright';
 
 const menuLinks: FooterLink[] = [

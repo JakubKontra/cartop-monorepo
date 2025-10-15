@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 import { WrapperFadeIn } from '@/components/organisms/animations/WrapperFadeIn';
-import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
+import { ButtonIcon } from '@/components/atoms/button/ButtonIcon';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { cn } from '@/utils/cv';
 

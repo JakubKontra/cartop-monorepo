@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
+import { ButtonIcon } from '@/components/atoms/button/ButtonIcon';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useSwiper } from '@/hooks/useSwiper';
 import { cn } from '@/utils/cv';

@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react';
 import Image from 'next/image';
 
-import Button from '@/components/organisms/Button/Button';
+import Button from '@/components/atoms/button/Button';
 
 const FilterBar = () => {
   return (

@@ -1,10 +1,10 @@
 import { Home } from 'lucide-react';
 
 import { Breadcrumbs } from '@/components/atoms/Breadcrumbs';
-import { ContactHeader } from '@/components/molecules/ContactHeader';
-import { ContactSocialMediaSection } from '@/components/molecules/ContactSocialMediaSection';
-import { ContactForm } from '@/components/organisms/ContactForm';
-import { ContactInfoSection } from '@/components/organisms/ContactInfoSection';
+import { ContactHeader } from '@/components/organisms/contact/ContactHeader';
+import { ContactSocialMediaSection } from '@/components/organisms/contact/ContactSocialMediaSection';
+import { ContactForm } from '@/components/organisms/contact/ContactForm';
+import { ContactInfoSection } from '@/components/organisms/contact/ContactInfoSection';
 
 export default function Contacts() {
   return (

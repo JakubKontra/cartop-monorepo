@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
-import { AnnotationInfoIcon } from '@/components/icons/AnnotationInfoIcon';
+import { AnnotationInfoIcon } from '@/components/atoms/icons/AnnotationInfoIcon';
 
-import Button from '../Button/Button';
+import Button from '@/components/atoms/button/Button';
 
 const Benefits = () => {
   return (

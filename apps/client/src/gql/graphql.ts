@@ -5,30 +5,26 @@ export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
-  [_ in K]?: never;
-};
-export type Incremental<T> =
-  | T
-  | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: { input: any; output: any };
+  DateTime: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
-  JSON: { input: any; output: any };
+  JSON: { input: any; output: any; }
 };
 
 /** The type of action performed on the entity */
 export enum AuditAction {
   Create = 'CREATE',
   Delete = 'DELETE',
-  Update = 'UPDATE',
+  Update = 'UPDATE'
 }
 
 export type AuditLog = {
@@ -66,6 +62,142 @@ export type AuthResponse = {
   user: User;
 };
 
+/** Reason why a car request was cancelled */
+export enum CancellationReason {
+  BadCreditScore = 'BAD_CREDIT_SCORE',
+  CarUnavailable = 'CAR_UNAVAILABLE',
+  ChangedMind = 'CHANGED_MIND',
+  CompetitorOffer = 'COMPETITOR_OFFER',
+  DuplicateRequest = 'DUPLICATE_REQUEST',
+  IneligibleCustomer = 'INELIGIBLE_CUSTOMER',
+  InternalError = 'INTERNAL_ERROR',
+  InvalidContact = 'INVALID_CONTACT',
+  NoInterest = 'NO_INTEREST',
+  NoMoney = 'NO_MONEY',
+  NoNeed = 'NO_NEED',
+  NoOpportunity = 'NO_OPPORTUNITY',
+  NoOther = 'NO_OTHER',
+  NoTime = 'NO_TIME',
+  Other = 'OTHER',
+  PriceTooHigh = 'PRICE_TOO_HIGH',
+  RejectedByFinance = 'REJECTED_BY_FINANCE',
+  WaitTimeTooLong = 'WAIT_TIME_TOO_LONG'
+}
+
+export type CarRequest = {
+  __typename?: 'CarRequest';
+  assignedAgent?: Maybe<User>;
+  assignedAgentId?: Maybe<Scalars['String']['output']>;
+  brand?: Maybe<CatalogBrand>;
+  brandId?: Maybe<Scalars['String']['output']>;
+  cancellationNote?: Maybe<Scalars['String']['output']>;
+  cancellationReason?: Maybe<CancellationReason>;
+  carDelivered?: Maybe<Scalars['Boolean']['output']>;
+  closedAt?: Maybe<Scalars['DateTime']['output']>;
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
+  confirmedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  customer?: Maybe<User>;
+  customerId?: Maybe<Scalars['String']['output']>;
+  deliveryExpectedAt?: Maybe<Scalars['DateTime']['output']>;
+  displayOrder: Scalars['Int']['output'];
+  feedbackAt?: Maybe<Scalars['DateTime']['output']>;
+  financingType: FinancingType;
+  gclid?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isFromLegacySystem: Scalars['Boolean']['output'];
+  leasingCompany?: Maybe<LeasingCompany>;
+  leasingCompanyId?: Maybe<Scalars['String']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  logs?: Maybe<Array<CarRequestLog>>;
+  model?: Maybe<CatalogModel>;
+  modelId?: Maybe<Scalars['String']['output']>;
+  modifiedAt: Scalars['DateTime']['output'];
+  nextCallAt?: Maybe<Scalars['DateTime']['output']>;
+  noteInternal?: Maybe<Scalars['String']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  offersSentAt?: Maybe<Scalars['DateTime']['output']>;
+  order?: Maybe<Scalars['Int']['output']>;
+  relayedAt?: Maybe<Scalars['DateTime']['output']>;
+  requestEmail?: Maybe<Scalars['String']['output']>;
+  requestFirstName?: Maybe<Scalars['String']['output']>;
+  requestLastName?: Maybe<Scalars['String']['output']>;
+  requestNewsletter?: Maybe<Scalars['Boolean']['output']>;
+  requestPhone?: Maybe<Scalars['String']['output']>;
+  requestPostalCode?: Maybe<Scalars['String']['output']>;
+  state?: Maybe<CarRequestState>;
+  stateId?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<CarRequestStatus>;
+  statusId?: Maybe<Scalars['String']['output']>;
+  waitingForOffer?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type CarRequestLog = {
+  __typename?: 'CarRequestLog';
+  actionType: CarRequestLogAction;
+  author?: Maybe<User>;
+  authorId?: Maybe<Scalars['ID']['output']>;
+  carRequest: CarRequest;
+  carRequestId: Scalars['ID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+};
+
+/** The type of action performed on a car request */
+export enum CarRequestLogAction {
+  Assigned = 'ASSIGNED',
+  CallbackScheduled = 'CALLBACK_SCHEDULED',
+  CallLogged = 'CALL_LOGGED',
+  Cancelled = 'CANCELLED',
+  Completed = 'COMPLETED',
+  Created = 'CREATED',
+  Custom = 'CUSTOM',
+  EmailSent = 'EMAIL_SENT',
+  MarkedPurchased = 'MARKED_PURCHASED',
+  MarkedVip = 'MARKED_VIP',
+  MessageSent = 'MESSAGE_SENT',
+  NoteAdded = 'NOTE_ADDED',
+  OfferSent = 'OFFER_SENT',
+  PassedToDealer = 'PASSED_TO_DEALER',
+  StateChanged = 'STATE_CHANGED',
+  StatusChanged = 'STATUS_CHANGED',
+  WaitingForOffer = 'WAITING_FOR_OFFER'
+}
+
+export type CarRequestLogFilterInput = {
+  actionTypes?: InputMaybe<Array<CarRequestLogAction>>;
+  authorId?: InputMaybe<Scalars['ID']['input']>;
+  carRequestId?: InputMaybe<Scalars['ID']['input']>;
+  endDate?: InputMaybe<Scalars['String']['input']>;
+  startDate?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CarRequestState = {
+  __typename?: 'CarRequestState';
+  code: Scalars['String']['output'];
+  colorHex?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CarRequestStatus = {
+  __typename?: 'CarRequestStatus';
+  code: Scalars['String']['output'];
+  colorHex?: Maybe<Scalars['String']['output']>;
+  columnDisplayOrder: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  displayOrder: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  isFinal: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 /** Type of vehicle body style */
 export enum CatalogBodyType {
   CommercialVan = 'COMMERCIAL_VAN',
@@ -86,7 +218,7 @@ export enum CatalogBodyType {
   Suv = 'SUV',
   Van = 'VAN',
   WagonCrossover = 'WAGON_CROSSOVER',
-  WagonMpv = 'WAGON_MPV',
+  WagonMpv = 'WAGON_MPV'
 }
 
 export type CatalogBrand = {
@@ -121,14 +253,14 @@ export type CatalogColor = {
 /** Type of catalog color (exterior or interior) */
 export enum CatalogColorType {
   Exterior = 'EXTERIOR',
-  Interior = 'INTERIOR',
+  Interior = 'INTERIOR'
 }
 
 /** Type of braking system used in vehicles */
 export enum CatalogEquipmentBrakeType {
   Disc = 'DISC',
   Drum = 'DRUM',
-  VentilatedDisc = 'VENTILATED_DISC',
+  VentilatedDisc = 'VENTILATED_DISC'
 }
 
 export type CatalogModel = {
@@ -184,6 +316,39 @@ export type CatalogModelGeneration = {
   wheelbase?: Maybe<Scalars['Int']['output']>;
   /** Width in mm */
   width?: Maybe<Scalars['Int']['output']>;
+};
+
+export type CreateCarRequestInput = {
+  assignedAgentId?: InputMaybe<Scalars['String']['input']>;
+  brandId?: InputMaybe<Scalars['String']['input']>;
+  cancellationNote?: InputMaybe<Scalars['String']['input']>;
+  cancellationReason?: InputMaybe<Scalars['String']['input']>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  financingType: Scalars['String']['input'];
+  gclid?: InputMaybe<Scalars['String']['input']>;
+  isFromLegacySystem?: InputMaybe<Scalars['Boolean']['input']>;
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  modelId?: InputMaybe<Scalars['String']['input']>;
+  noteInternal?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  requestEmail?: InputMaybe<Scalars['String']['input']>;
+  requestFirstName?: InputMaybe<Scalars['String']['input']>;
+  requestLastName?: InputMaybe<Scalars['String']['input']>;
+  requestNewsletter?: InputMaybe<Scalars['Boolean']['input']>;
+  requestPhone?: InputMaybe<Scalars['String']['input']>;
+  requestPostalCode?: InputMaybe<Scalars['String']['input']>;
+  stateId?: InputMaybe<Scalars['String']['input']>;
+  statusId?: InputMaybe<Scalars['String']['input']>;
+  waitingForOffer?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type CreateCarRequestLogInput = {
+  actionType: CarRequestLogAction;
+  authorId?: InputMaybe<Scalars['ID']['input']>;
+  carRequestId: Scalars['ID']['input'];
+  message: Scalars['String']['input'];
+  metadata?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 export type CreateCatalogBrandInput = {
@@ -400,6 +565,12 @@ export type FileFiltersInput = {
   onlyOrphaned?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+/** Type of financing for the car request */
+export enum FinancingType {
+  Cash = 'CASH',
+  Leasing = 'LEASING'
+}
+
 export type ImpersonateInput = {
   targetUserId: Scalars['String']['input'];
 };
@@ -462,7 +633,7 @@ export enum IndividualOfferStatus {
   /** New offer, not yet processed */
   New = 'NEW',
   /** Offer was rejected */
-  Rejected = 'REJECTED',
+  Rejected = 'REJECTED'
 }
 
 export type LeasingCompany = {
@@ -481,34 +652,14 @@ export type LoginInput = {
   password: Scalars['String']['input'];
 };
 
-export type RequestPasswordResetInput = {
-  email: Scalars['String']['input'];
-};
-
-export type ResetPasswordInput = {
-  token: Scalars['String']['input'];
-  newPassword: Scalars['String']['input'];
-  confirmPassword: Scalars['String']['input'];
-};
-
-export type PasswordResetRequestResponse = {
-  __typename?: 'PasswordResetRequestResponse';
-  success: Scalars['Boolean']['output'];
-  message: Scalars['String']['output'];
-};
-
-export type PasswordResetResponse = {
-  __typename?: 'PasswordResetResponse';
-  success: Scalars['Boolean']['output'];
-  message: Scalars['String']['output'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   /** Add a feature to a calculation (admin only) */
   addFeatureToCalculation: OfferCalculationFeature;
   /** Create a calculation for individual offer (admin only) */
   createCalculation: OfferCalculation;
+  createCarRequest: CarRequest;
+  createCarRequestLog: CarRequestLog;
   createCatalogBrand: CatalogBrand;
   createCatalogColor: CatalogColor;
   createCatalogModel: CatalogModel;
@@ -530,6 +681,7 @@ export type Mutation = {
   createUser: User;
   /** Delete a calculation (admin only) */
   deleteCalculation: Scalars['Boolean']['output'];
+  deleteCarRequest: Scalars['Boolean']['output'];
   deleteCatalogBrand: Scalars['Boolean']['output'];
   deleteCatalogColor: Scalars['Boolean']['output'];
   deleteCatalogModel: Scalars['Boolean']['output'];
@@ -554,6 +706,7 @@ export type Mutation = {
   resetPassword: PasswordResetResponse;
   softDeleteUser: User;
   stopImpersonation: AuthResponse;
+  updateCarRequest: CarRequest;
   updateCatalogBrand: CatalogBrand;
   updateCatalogColor: CatalogColor;
   updateCatalogModel: CatalogModel;
@@ -567,11 +720,13 @@ export type Mutation = {
   updateUser: User;
 };
 
+
 export type MutationAddFeatureToCalculationArgs = {
   calculationId: Scalars['String']['input'];
   featureDescription?: InputMaybe<Scalars['String']['input']>;
   featureName: Scalars['String']['input'];
 };
+
 
 export type MutationCreateCalculationArgs = {
   availability?: InputMaybe<Scalars['String']['input']>;
@@ -580,21 +735,36 @@ export type MutationCreateCalculationArgs = {
   offerId: Scalars['String']['input'];
 };
 
+
+export type MutationCreateCarRequestArgs = {
+  input: CreateCarRequestInput;
+};
+
+
+export type MutationCreateCarRequestLogArgs = {
+  input: CreateCarRequestLogInput;
+};
+
+
 export type MutationCreateCatalogBrandArgs = {
   input: CreateCatalogBrandInput;
 };
+
 
 export type MutationCreateCatalogColorArgs = {
   input: CreateCatalogColorInput;
 };
 
+
 export type MutationCreateCatalogModelArgs = {
   input: CreateCatalogModelInput;
 };
 
+
 export type MutationCreateCatalogModelGenerationArgs = {
   input: CreateCatalogModelGenerationInput;
 };
+
 
 export type MutationCreateColorVariantArgs = {
   colorName?: InputMaybe<Scalars['String']['input']>;
@@ -604,21 +774,26 @@ export type MutationCreateColorVariantArgs = {
   offerId: Scalars['String']['input'];
 };
 
+
 export type MutationCreateDirectPurchaseOfferArgs = {
   input: CreateDirectPurchaseOfferInput;
 };
+
 
 export type MutationCreateFileArgs = {
   input: CreateFileInput;
 };
 
+
 export type MutationCreateIndividualOfferArgs = {
   input: CreateIndividualOfferInput;
 };
 
+
 export type MutationCreateLeasingCompanyArgs = {
   input: CreateLeasingCompanyInput;
 };
+
 
 export type MutationCreateLeasingVariantArgs = {
   annualMileageLimit: Scalars['Float']['input'];
@@ -631,9 +806,11 @@ export type MutationCreateLeasingVariantArgs = {
   totalPrice: Scalars['Float']['input'];
 };
 
+
 export type MutationCreateOperationalLeasingOfferArgs = {
   input: CreateOperationalLeasingOfferInput;
 };
+
 
 export type MutationCreateOptionalEquipmentArgs = {
   additionalPrice: Scalars['Float']['input'];
@@ -642,130 +819,171 @@ export type MutationCreateOptionalEquipmentArgs = {
   offerId: Scalars['String']['input'];
 };
 
+
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
+
 
 export type MutationDeleteCalculationArgs = {
   id: Scalars['String']['input'];
 };
 
+
+export type MutationDeleteCarRequestArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationDeleteCatalogBrandArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteCatalogColorArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type MutationDeleteCatalogModelArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteCatalogModelGenerationArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type MutationDeleteColorVariantArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteFileArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type MutationDeleteFileCompletelyArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteLeasingCompanyArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type MutationDeleteLeasingVariantArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationDeleteOfferArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type MutationDeleteOptionalEquipmentArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type MutationDeleteUserArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationGenerateUploadUrlArgs = {
   contentType: Scalars['String']['input'];
   filename: Scalars['String']['input'];
 };
 
+
 export type MutationImpersonateUserArgs = {
   input: ImpersonateInput;
 };
+
 
 export type MutationLoginArgs = {
   input: LoginInput;
 };
 
+
 export type MutationRefreshTokenArgs = {
   input: RefreshTokenInput;
 };
+
 
 export type MutationRequestPasswordResetArgs = {
   input: RequestPasswordResetInput;
 };
 
+
 export type MutationResetPasswordArgs = {
   input: ResetPasswordInput;
 };
 
+
 export type MutationSoftDeleteUserArgs = {
   id: Scalars['String']['input'];
 };
+
+
+export type MutationUpdateCarRequestArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCarRequestInput;
+};
+
 
 export type MutationUpdateCatalogBrandArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogBrandInput;
 };
 
+
 export type MutationUpdateCatalogColorArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogColorInput;
 };
+
 
 export type MutationUpdateCatalogModelArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogModelInput;
 };
 
+
 export type MutationUpdateCatalogModelGenerationArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogModelGenerationInput;
 };
+
 
 export type MutationUpdateFileArgs = {
   id: Scalars['String']['input'];
   input: UpdateFileInput;
 };
 
+
 export type MutationUpdateIndividualOfferStatusArgs = {
   id: Scalars['String']['input'];
   status: IndividualOfferStatus;
 };
+
 
 export type MutationUpdateLeasingCompanyArgs = {
   id: Scalars['String']['input'];
   input: UpdateLeasingCompanyInput;
 };
 
+
 export type MutationUpdateOfferArgs = {
   id: Scalars['String']['input'];
   input: UpdateOfferInput;
 };
+
 
 export type MutationUpdateUserArgs = {
   id: Scalars['String']['input'];
@@ -830,7 +1048,7 @@ export type OfferCalculation = {
 export enum OfferCalculationAvailability {
   InStock = 'IN_STOCK',
   NotAvailable = 'NOT_AVAILABLE',
-  OnOrder = 'ON_ORDER',
+  OnOrder = 'ON_ORDER'
 }
 
 export type OfferCalculationFeature = {
@@ -922,7 +1140,7 @@ export enum OfferType {
   /** Individual custom offer (admin-only) */
   Individual = 'INDIVIDUAL',
   /** Operational leasing offer (public) */
-  OperationalLeasing = 'OPERATIONAL_LEASING',
+  OperationalLeasing = 'OPERATIONAL_LEASING'
 }
 
 export type OperationalLeasingOffer = {
@@ -968,8 +1186,23 @@ export type OperationalLeasingOffer = {
   warrantyYears?: Maybe<Scalars['Int']['output']>;
 };
 
+export type PasswordResetRequestResponse = {
+  __typename?: 'PasswordResetRequestResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type PasswordResetResponse = {
+  __typename?: 'PasswordResetResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  allCarRequestStates: Array<CarRequestState>;
+  allCarRequestStatuses: Array<CarRequestStatus>;
+  allCarRequests: Array<CarRequest>;
   allCatalogBrands: Array<CatalogBrand>;
   allCatalogModels: Array<CatalogModel>;
   /** Get all offers including individual offers (admin only) */
@@ -977,6 +1210,9 @@ export type Query = {
   auditLogs: Array<AuditLog>;
   /** Get all calculations for an individual offer (admin only) */
   calculationsByOffer: Array<OfferCalculation>;
+  carRequest: CarRequest;
+  carRequestLogs: Array<CarRequestLog>;
+  carRequestsCount: Scalars['Int']['output'];
   catalogBrand: CatalogBrand;
   catalogBrandBySlug: CatalogBrand;
   catalogBrands: Array<CatalogBrand>;
@@ -1047,35 +1283,59 @@ export type Query = {
   users: Array<User>;
 };
 
+
+export type QueryAllCarRequestsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
 export type QueryAllCatalogBrandsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
+
 
 export type QueryAllCatalogModelsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
+
 export type QueryAllOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
 };
+
 
 export type QueryAuditLogsArgs = {
   query: AuditQueryInput;
 };
 
+
 export type QueryCalculationsByOfferArgs = {
   offerId: Scalars['String']['input'];
 };
+
+
+export type QueryCarRequestArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCarRequestLogsArgs = {
+  filter: CarRequestLogFilterInput;
+};
+
 
 export type QueryCatalogBrandArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryCatalogBrandBySlugArgs = {
   slug: Scalars['String']['input'];
 };
+
 
 export type QueryCatalogBrandsArgs = {
   activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1083,13 +1343,16 @@ export type QueryCatalogBrandsArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
+
 export type QueryCatalogColorArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryCatalogColorBySlugArgs = {
   slug: Scalars['String']['input'];
 };
+
 
 export type QueryCatalogColorsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -1097,29 +1360,36 @@ export type QueryCatalogColorsArgs = {
   type?: InputMaybe<CatalogColorType>;
 };
 
+
 export type QueryCatalogColorsByTypeArgs = {
   type: CatalogColorType;
 };
+
 
 export type QueryCatalogModelArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryCatalogModelBySlugArgs = {
   slug: Scalars['String']['input'];
 };
+
 
 export type QueryCatalogModelGenerationArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryCatalogModelGenerationByLegacySlugArgs = {
   legacySlug: Scalars['String']['input'];
 };
 
+
 export type QueryCatalogModelGenerationBySlugArgs = {
   slug: Scalars['String']['input'];
 };
+
 
 export type QueryCatalogModelGenerationsArgs = {
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1128,9 +1398,11 @@ export type QueryCatalogModelGenerationsArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
+
 export type QueryCatalogModelGenerationsByModelIdArgs = {
   modelId: Scalars['String']['input'];
 };
+
 
 export type QueryCatalogModelsArgs = {
   activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1138,137 +1410,169 @@ export type QueryCatalogModelsArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
+
 export type QueryCatalogModelsByBrandArgs = {
   brandId: Scalars['String']['input'];
   limit?: InputMaybe<Scalars['Float']['input']>;
 };
 
+
 export type QueryCheckBrandSlugAvailabilityArgs = {
   slug: Scalars['String']['input'];
 };
+
 
 export type QueryColorVariantsByOfferArgs = {
   offerId: Scalars['String']['input'];
 };
 
+
 export type QueryDirectPurchaseOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
 };
+
 
 export type QueryEntityHistoryArgs = {
   entityId: Scalars['String']['input'];
   entityName: Scalars['String']['input'];
 };
 
+
 export type QueryFileArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryFileByChecksumArgs = {
   checksum: Scalars['String']['input'];
 };
 
+
 export type QueryFilesArgs = {
   filters?: InputMaybe<FileFiltersInput>;
 };
+
 
 export type QueryFilesCountArgs = {
   filters?: InputMaybe<FileFiltersInput>;
 };
 
+
 export type QueryHighlightedCatalogBrandsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
 };
+
 
 export type QueryIndividualOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
 };
 
+
 export type QueryLeasingCompanyArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryLeasingCompanyByNameArgs = {
   name: Scalars['String']['input'];
 };
 
+
 export type QueryLeasingVariantsByOfferArgs = {
   offerId: Scalars['String']['input'];
 };
+
 
 export type QueryOfferArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryOfferBySlugArgs = {
   slug: Scalars['String']['input'];
 };
+
 
 export type QueryOffersByModelGenerationArgs = {
   modelGenerationId: Scalars['String']['input'];
 };
 
+
 export type QueryOperationalLeasingOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
 };
+
 
 export type QueryOptionalEquipmentByOfferArgs = {
   offerId: Scalars['String']['input'];
 };
 
+
 export type QueryPublicFileArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryPublicFileByLegacyIdArgs = {
   legacySystemId: Scalars['String']['input'];
 };
 
+
 export type QueryPublicOfferArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryPublicOfferBySlugArgs = {
   slug: Scalars['String']['input'];
 };
 
+
 export type QueryPublicOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
 };
+
 
 export type QuerySearchCatalogBrandsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
 
+
 export type QuerySearchCatalogColorsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
+
 
 export type QuerySearchCatalogModelGenerationsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
 
+
 export type QuerySearchCatalogModelsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
+
 
 export type QuerySearchUsersArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
 
+
 export type QueryUserArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryUserActivityArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   userId: Scalars['String']['input'];
 };
+
 
 export type QueryUsersArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -1279,6 +1583,16 @@ export type RefreshTokenInput = {
   refreshToken: Scalars['String']['input'];
 };
 
+export type RequestPasswordResetInput = {
+  email: Scalars['String']['input'];
+};
+
+export type ResetPasswordInput = {
+  confirmPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
+};
+
 export type StorageStats = {
   __typename?: 'StorageStats';
   documentCount: Scalars['Int']['output'];
@@ -1287,6 +1601,31 @@ export type StorageStats = {
   imageSize: Scalars['Int']['output'];
   totalCount: Scalars['Int']['output'];
   totalSize: Scalars['Int']['output'];
+};
+
+export type UpdateCarRequestInput = {
+  assignedAgentId?: InputMaybe<Scalars['String']['input']>;
+  brandId?: InputMaybe<Scalars['String']['input']>;
+  cancellationNote?: InputMaybe<Scalars['String']['input']>;
+  cancellationReason?: InputMaybe<Scalars['String']['input']>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  financingType?: InputMaybe<Scalars['String']['input']>;
+  gclid?: InputMaybe<Scalars['String']['input']>;
+  isFromLegacySystem?: InputMaybe<Scalars['Boolean']['input']>;
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  modelId?: InputMaybe<Scalars['String']['input']>;
+  noteInternal?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  requestEmail?: InputMaybe<Scalars['String']['input']>;
+  requestFirstName?: InputMaybe<Scalars['String']['input']>;
+  requestLastName?: InputMaybe<Scalars['String']['input']>;
+  requestNewsletter?: InputMaybe<Scalars['Boolean']['input']>;
+  requestPhone?: InputMaybe<Scalars['String']['input']>;
+  requestPostalCode?: InputMaybe<Scalars['String']['input']>;
+  stateId?: InputMaybe<Scalars['String']['input']>;
+  statusId?: InputMaybe<Scalars['String']['input']>;
+  waitingForOffer?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateCatalogBrandInput = {
@@ -1384,6 +1723,7 @@ export type UpdateOfferInput = {
 
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
@@ -1417,235 +1757,48 @@ export enum UserRole {
   JuniorSalesRepresentative = 'JUNIOR_SALES_REPRESENTATIVE',
   Marketing = 'MARKETING',
   Public = 'PUBLIC',
-  SalesRepresentative = 'SALES_REPRESENTATIVE',
+  SalesRepresentative = 'SALES_REPRESENTATIVE'
 }
+
+export type RequestPasswordResetMutationVariables = Exact<{
+  input: RequestPasswordResetInput;
+}>;
+
+
+export type RequestPasswordResetMutation = { __typename?: 'Mutation', requestPasswordReset: { __typename?: 'PasswordResetRequestResponse', success: boolean, message: string } };
+
+export type ResetPasswordMutationVariables = Exact<{
+  input: ResetPasswordInput;
+}>;
+
+
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'PasswordResetResponse', success: boolean, message: string } };
 
 export type GetCatalogBrandsQueryVariables = Exact<{
   activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
-export type GetCatalogBrandsQuery = {
-  __typename?: 'Query';
-  catalogBrands: Array<{
-    __typename?: 'CatalogBrand';
-    id: string;
-    name: string;
-    slug: string;
-    description?: string | null;
-    isActive: boolean;
-    isHighlighted: boolean;
-    isRecommended: boolean;
-    createdAt: any;
-    updatedAt?: any | null;
-  }>;
-};
+
+export type GetCatalogBrandsQuery = { __typename?: 'Query', catalogBrands: Array<{ __typename?: 'CatalogBrand', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, createdAt: any, updatedAt?: any | null, logo?: { __typename?: 'File', id: string, url: string, alt?: string | null, width?: number | null, height?: number | null } | null }> };
 
 export type GetHighlightedBrandsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
-export type GetHighlightedBrandsQuery = {
-  __typename?: 'Query';
-  highlightedCatalogBrands: Array<{
-    __typename?: 'CatalogBrand';
-    id: string;
-    name: string;
-    slug: string;
-    description?: string | null;
-    isHighlighted: boolean;
-    logo?: {
-      __typename?: 'File';
-      id: string;
-      url: string;
-      alt?: string | null;
-      width?: number | null;
-      height?: number | null;
-    } | null;
-  }>;
-};
+
+export type GetHighlightedBrandsQuery = { __typename?: 'Query', highlightedCatalogBrands: Array<{ __typename?: 'CatalogBrand', id: string, name: string, slug: string, description?: string | null, isHighlighted: boolean, logo?: { __typename?: 'File', id: string, url: string, alt?: string | null, width?: number | null, height?: number | null } | null }> };
 
 export type GetBrandBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
-export type GetBrandBySlugQuery = {
-  __typename?: 'Query';
-  catalogBrandBySlug: {
-    __typename?: 'CatalogBrand';
-    id: string;
-    name: string;
-    slug: string;
-    description?: string | null;
-    isActive: boolean;
-    isHighlighted: boolean;
-    isRecommended: boolean;
-    createdAt: any;
-    updatedAt?: any | null;
-  };
-};
 
-export const GetCatalogBrandsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetCatalogBrands' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'activeOnly' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'catalogBrands' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'activeOnly' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'activeOnly' } },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'limit' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'isActive' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'isHighlighted' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'isRecommended' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetCatalogBrandsQuery, GetCatalogBrandsQueryVariables>;
-export const GetHighlightedBrandsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetHighlightedBrands' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Float' } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'highlightedCatalogBrands' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'limit' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'limit' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'isHighlighted' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'logo' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'alt' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'width' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'height' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetHighlightedBrandsQuery, GetHighlightedBrandsQueryVariables>;
-export const GetBrandBySlugDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetBrandBySlug' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'catalogBrandBySlug' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'slug' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'isActive' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'isHighlighted' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'isRecommended' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetBrandBySlugQuery, GetBrandBySlugQueryVariables>;
+export type GetBrandBySlugQuery = { __typename?: 'Query', catalogBrandBySlug: { __typename?: 'CatalogBrand', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, createdAt: any, updatedAt?: any | null } };
+
+
+export const RequestPasswordResetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestPasswordReset"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RequestPasswordResetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestPasswordReset"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>;
+export const ResetPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ResetPasswordInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const GetCatalogBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogBrands"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrands"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"activeOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogBrandsQuery, GetCatalogBrandsQueryVariables>;
+export const GetHighlightedBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHighlightedBrands"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"highlightedCatalogBrands"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}}]}}]}}]} as unknown as DocumentNode<GetHighlightedBrandsQuery, GetHighlightedBrandsQueryVariables>;
+export const GetBrandBySlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBrandBySlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrandBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetBrandBySlugQuery, GetBrandBySlugQueryVariables>;

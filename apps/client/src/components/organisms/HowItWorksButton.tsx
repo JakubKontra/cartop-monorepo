@@ -1,6 +1,6 @@
 import { MessageCircleQuestionMark } from 'lucide-react';
 
-import Button from '@/components/organisms/Button/Button';
+import Button from '@/components/atoms/button/Button';
 
 const HowItWorksButton = ({ className }: { className?: string }) => {
   return (

@@ -4,10 +4,10 @@ import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import type { ReviewCardProps } from '@/components/molecules/ReviewCard';
+import type { ReviewCardProps } from '@/components/molecules/review/ReviewCard';
 
-import { ReviewCard } from '@/components/molecules/ReviewCard';
-import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
+import { ReviewCard } from '@/components/molecules/review/ReviewCard';
+import { ButtonIcon } from '@/components/atoms/button/ButtonIcon';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useSwiper } from '@/hooks/useSwiper';
 import { cn } from '@/utils/cv';

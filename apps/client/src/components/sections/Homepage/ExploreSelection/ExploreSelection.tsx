@@ -2,7 +2,7 @@
 
 import { Filter } from 'lucide-react';
 
-import Button from '@/components/organisms/Button/Button';
+import Button from '@/components/atoms/button/Button';
 
 import { ExploreCard } from './ExploreCard';
 

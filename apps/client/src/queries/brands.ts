@@ -18,6 +18,13 @@ export const GET_BRANDS_QUERY = graphql(`
       isActive
       isHighlighted
       isRecommended
+      logo {
+        id
+        url
+        alt
+        width
+        height
+      }
       createdAt
       updatedAt
     }

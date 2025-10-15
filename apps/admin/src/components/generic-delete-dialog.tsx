@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { logger } from '@/lib/logger'
+import { extractGraphQLErrorMessage } from '@/lib/extract-graphql-error'
 
 type GenericDeleteDialogProps<TData = Record<string, unknown>> = {
   /** Dialog open state */
@@ -91,11 +92,16 @@ export function GenericDeleteDialog<TData extends Record<string, unknown> = Reco
     if (value.trim() !== confirmValue) return
 
     try {
-      await deleteEntity({
+      const result = await deleteEntity({
         variables: {
           [idVariableName]: entity.id,
         },
       })
+
+      // Check if there are errors in the result (Apollo errorPolicy: 'all' returns both data and errors)
+      if (result.errors && result.errors.length > 0) {
+        throw result.errors[0]
+      }
 
       const message = successMessage || `${entityType.charAt(0).toUpperCase() + entityType.slice(1)} "${entityName}" deleted successfully`
       toast.success(message)
@@ -104,9 +110,24 @@ export function GenericDeleteDialog<TData extends Record<string, unknown> = Reco
       onOpenChange(false)
     } catch (error: unknown) {
       logger.error(`Delete ${entityType} failed`, error, { entityType, entityId: entity.id })
-      const errorPrefix = errorMessagePrefix || `Failed to delete ${entityType}`
-      const message = error instanceof Error ? error.message : errorPrefix
-      toast.error(message)
+
+      // Extract the actual error message from nested GraphQL errors
+      const extractedMessage = extractGraphQLErrorMessage(error)
+
+      // Provide user-friendly message for common errors
+      let displayMessage = extractedMessage
+
+      if (extractedMessage.includes('foreign key constraint')) {
+        // Extract the referenced table name if possible
+        const tableMatch = extractedMessage.match(/on table "(\w+)"/)
+        const referencedTable = tableMatch ? tableMatch[1] : 'other records'
+
+        displayMessage = `Cannot delete: This ${entityType} is being used by ${referencedTable}. Please remove those references first.`
+      } else if (errorMessagePrefix) {
+        displayMessage = `${errorMessagePrefix}: ${extractedMessage}`
+      }
+
+      toast.error(displayMessage)
     }
   }
 

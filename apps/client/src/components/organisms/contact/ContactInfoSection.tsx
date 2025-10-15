@@ -1,6 +1,5 @@
+import { InfoRow } from '@/components/molecules/InfoRow';
 import { Clock, FileText, Mail, Phone, Users } from 'lucide-react';
-
-import { InfoRow } from '../molecules/InfoRow';
 
 export const ContactInfoSection = () => (
   <div>

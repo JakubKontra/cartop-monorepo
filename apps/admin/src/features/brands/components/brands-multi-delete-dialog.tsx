@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { type Table } from '@tanstack/react-table'
 import { AlertTriangle, Loader2 } from 'lucide-react'
-import { useMutation } from '@apollo/client/react'
 import { toast } from 'sonner'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
@@ -12,6 +11,8 @@ import { ConfirmDialog } from '@/components/confirm-dialog'
 import { type Brand } from '../types'
 import { DELETE_CATALOG_BRAND, GET_ALL_CATALOG_BRANDS } from '../brands.graphql'
 import { logger } from '@/lib/logger'
+import { useMutationWithErrorHandling } from '@/hooks/use-mutation-with-error-handling'
+import { extractGraphQLErrorMessage } from '@/lib/extract-graphql-error'
 
 type BrandMultiDeleteDialogProps<TData> = {
   open: boolean
@@ -31,8 +32,10 @@ export function BrandsMultiDeleteDialog<TData>({
 
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
-  const [deleteBrand] = useMutation(DELETE_CATALOG_BRAND, {
+  const [deleteBrand] = useMutationWithErrorHandling(DELETE_CATALOG_BRAND, {
     refetchQueries: [{ query: GET_ALL_CATALOG_BRANDS, variables: { limit: 1000, offset: 0 } }],
+    showSuccessToast: false, // We'll show custom success toast for bulk operations
+    showErrorToast: false, // We'll handle errors manually for bulk operations
   })
 
   const handleDelete = async () => {
@@ -46,26 +49,68 @@ export function BrandsMultiDeleteDialog<TData>({
     try {
       const selectedBrands = selectedRows.map((row) => row.original as Brand)
 
-      const deletePromises = selectedBrands.map((brand) =>
-        deleteBrand({
-          variables: {
-            id: brand.id,
-          },
+      // Delete all brands, collecting any errors
+      const results = await Promise.allSettled(
+        selectedBrands.map((brand) =>
+          deleteBrand({
+            variables: {
+              id: brand.id,
+            },
+          })
+        )
+      )
+
+      // Count successes and failures
+      const successes = results.filter((r) => r.status === 'fulfilled').length
+      const failures = results.filter((r) => r.status === 'rejected').length
+
+      // Handle results
+      if (failures === 0) {
+        // All successful
+        toast.success(
+          `Deleted ${selectedRows.length} brand${selectedRows.length > 1 ? 's' : ''}`
+        )
+        table.resetRowSelection()
+        setValue('')
+        onOpenChange(false)
+      } else if (successes === 0) {
+        // All failed
+        const firstError = results.find((r) => r.status === 'rejected') as PromiseRejectedResult
+        const errorMessage = extractGraphQLErrorMessage(firstError.reason)
+
+        // Provide user-friendly message for common errors
+        if (errorMessage.includes('foreign key constraint')) {
+          toast.error(
+            'Cannot delete: One or more brands are being used by offers. Please remove the offers first.'
+          )
+        } else {
+          toast.error(`Failed to delete brands: ${errorMessage}`)
+        }
+
+        logger.error('Bulk delete brands failed', firstError.reason, {
+          count: selectedRows.length,
         })
-      )
+      } else {
+        // Partial success
+        toast.warning(
+          `Deleted ${successes} brand${successes > 1 ? 's' : ''}, but ${failures} failed. Some brands may be in use by offers.`
+        )
+        table.resetRowSelection()
+        setValue('')
+        onOpenChange(false)
 
-      await Promise.all(deletePromises)
-
-      toast.success(
-        `Deleted ${selectedRows.length} brand${selectedRows.length > 1 ? 's' : ''}`
-      )
-      table.resetRowSelection()
-      setValue('')
-      onOpenChange(false)
+        logger.warn('Partial bulk delete brands', {
+          successes,
+          failures,
+          total: selectedRows.length,
+        })
+      }
     } catch (error: unknown) {
-      logger.error('Bulk delete brands failed', error, { count: selectedRows.length })
-      const message = error instanceof Error ? error.message : 'Failed to delete brands'
-      toast.error(message)
+      // Unexpected error outside of Promise.allSettled
+      logger.error('Unexpected error during bulk delete', error, {
+        count: selectedRows.length,
+      })
+      toast.error('An unexpected error occurred during bulk delete')
     } finally {
       setDeleting(false)
     }
