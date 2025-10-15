@@ -27,7 +27,7 @@ export default function Home() {
       <ReviewsSection />
       <div>
         <ReliablePartner />
-        {/* <PromotionalOffersSectionWrapper>
+        <PromotionalOffersSectionWrapper>
           <Suspense fallback={<PromotionalOffersSectionLoading />}>
             <PromotionalOffersSection
               highlightedTitle="Stálá"
@@ -49,7 +49,7 @@ export default function Home() {
               title="nákup"
             />
           </Suspense>
-        </PromotionalOffersSectionWrapper> */}
+        </PromotionalOffersSectionWrapper>
       </div>
       <BrandsSectionWrapper>
         <Suspense fallback={<BrandsSectionLoading />}>
