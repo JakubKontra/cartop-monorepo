@@ -14,6 +14,7 @@ import { PromotionalOffersSectionLoading } from '@/components/sections/Homepage/
 import { PromotionalOffersSection } from '@/components/sections/Homepage/PromotionalOffers/PromotionalOffersSection';
 import { ReliablePartner } from '@/components/sections/Homepage/ReliablePartner/ReliablePartner';
 import ExploreSelection from '@/components/sections/Homepage/ExploreSelection/ExploreSelection';
+import { ReviewsSection } from '@/components/sections/Homepage/Reviews';
 
 export default function Home() {
   return (
@@ -23,9 +24,10 @@ export default function Home() {
       <Benefits />
       <JourneySection />
       <ExploreSelection />
+      <ReviewsSection />
       <div>
         <ReliablePartner />
-        <PromotionalOffersSectionWrapper>
+        {/* <PromotionalOffersSectionWrapper>
           <Suspense fallback={<PromotionalOffersSectionLoading />}>
             <PromotionalOffersSection
               highlightedTitle="Stálá"
@@ -47,7 +49,7 @@ export default function Home() {
               title="nákup"
             />
           </Suspense>
-        </PromotionalOffersSectionWrapper>
+        </PromotionalOffersSectionWrapper> */}
       </div>
       <BrandsSectionWrapper>
         <Suspense fallback={<BrandsSectionLoading />}>
