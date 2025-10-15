@@ -1,17 +1,29 @@
 {
-  "name": "@app/emails",
+  "name": "@cartop/email-templates",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
+  "main": "./dist/cjs/templates/index.cjs",
+  "module": "./dist/esm/templates/index.js",
+  "types": "./dist/esm/templates/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/templates/index.d.ts",
-      "import": "./dist/templates/index.js"
+      "types": "./dist/esm/templates/index.d.ts",
+      "import": "./dist/esm/templates/index.js",
+      "require": "./dist/cjs/templates/index.cjs"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "email dev --dir templates",
     "export": "email export --dir templates",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "yarn clean && yarn build:cjs && yarn build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json && find dist/cjs -type f -name '*.js' -exec sed -i '' -E 's/require\\(\"(\\.\\.?\\/[^\"]+)\"\\)/require(\"\\1.cjs\")/g' {} \\; && find dist/cjs -type f -name '*.js' -exec sh -c 'mv \"$1\" \"${1%.js}.cjs\"' _ {} \\;",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
   },
   "type": "module",
   "devDependencies": {
@@ -20,9 +32,10 @@
   "dependencies": {
     "@react-email/components": "0.0.33",
     "@react-email/tailwind": "0.0.18",
+    "@types/node": "^24.6.2",
     "react": "^18",
     "react-dom": "^18",
-    "react-email": "3.0.1"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "react-email": "3.0.1",
+    "typescript": "^5.8.4"
+  }
 }

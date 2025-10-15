@@ -12,27 +12,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - '${DB_PORT:-5432}:5432'
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-cartop_v3}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - cartop-network
-
-  # Redis for Bull queues and caching
-  redis:
-    image: redis:7-alpine
-    container_name: cartop-redis
-    restart: unless-stopped
-    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
-    volumes:
-      - redis_data:/data
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-cartop_v3}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -72,8 +54,8 @@ services:
         /opt/bitnami/scripts/minio/entrypoint.sh /opt/bitnami/scripts/minio/run.sh &
         sleep 10 &&
         /opt/bitnami/minio-client/bin/mc alias set local http://localhost:9000 cartop cartop1337 &&
-        /opt/bitnami/minio-client/bin/mc mb local/pangea || true &&
-        /opt/bitnami/minio-client/bin/mc anonymous set download local/pangea &&
+        /opt/bitnami/minio-client/bin/mc mb local/cartop || true &&
+        /opt/bitnami/minio-client/bin/mc anonymous set download local/cartop &&
         tail -f /dev/null
       "
     networks:
@@ -86,6 +68,19 @@ services:
       - 4566:4566
     volumes:
       - ./localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
+    networks:
+      - cartop-network
+
+  mailpit:
+    container_name: mailpit
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - '1025:1025'  # SMTP server
+      - '8025:8025'  # Web UI
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
     networks:
       - cartop-network
 
@@ -108,8 +103,6 @@ services:
 
 volumes:
   postgres_data:
-    driver: local
-  redis_data:
     driver: local
   pgadmin_data:
     driver: local

@@ -1,10 +1,11 @@
 import HowItWorksButton from '@/components/organisms/HowItWorksButton';
+
 import { ReliablePartnerCarousel } from './ReliablePartnerCarousel';
 
 export const ReliablePartner = () => {
   return (
     <div className="w-full py-20">
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 mb-4 px-4 max-w-[1360px] mx-auto">
+      <div className="mx-auto mb-4 flex max-w-[1360px] flex-col gap-4 px-4 lg:flex-row lg:gap-8">
         <h2 className="w-full text-4xl lg:text-5xl">
           Váš <span className="headline-highlight">spolehlivý</span>
           <br />
@@ -19,7 +20,7 @@ export const ReliablePartner = () => {
         </div>
       </div>
       <ReliablePartnerCarousel className="w-full" />
-      <HowItWorksButton className="mt-10 lg:mt-14 flex justify-center" />
+      <HowItWorksButton className="mt-10 flex justify-center lg:mt-14" />
     </div>
   );
 };

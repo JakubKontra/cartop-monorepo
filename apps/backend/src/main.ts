@@ -3,6 +3,18 @@
 import { config as dotenvConfig } from 'dotenv';
 dotenvConfig();
 
+// Register tsconfig paths to resolve path aliases at runtime
+import { register } from 'tsconfig-paths';
+import { resolve } from 'path';
+
+const baseUrl = resolve(__dirname); // Current compiled location: dist/apps/backend/src
+register({
+  baseUrl,
+  paths: {
+    '@/*': ['*'],
+  },
+});
+
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';

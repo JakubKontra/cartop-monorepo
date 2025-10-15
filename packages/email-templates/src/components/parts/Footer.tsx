@@ -1,4 +1,4 @@
-import { Column, Container, Img,  Link, Row, Section, Text } from "@react-email/components";
+import { Container, Link, Text } from "@react-email/components";
 
 export const Footer = () => {
   return (

@@ -477,6 +477,28 @@ export type LoginInput = {
   password: Scalars['String']['input'];
 };
 
+export type RequestPasswordResetInput = {
+  email: Scalars['String']['input'];
+};
+
+export type ResetPasswordInput = {
+  token: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+  confirmPassword: Scalars['String']['input'];
+};
+
+export type PasswordResetRequestResponse = {
+  __typename?: 'PasswordResetRequestResponse';
+  success: Scalars['Boolean']['output'];
+  message: Scalars['String']['output'];
+};
+
+export type PasswordResetResponse = {
+  __typename?: 'PasswordResetResponse';
+  success: Scalars['Boolean']['output'];
+  message: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** Add a feature to a calculation (admin only) */
@@ -524,6 +546,8 @@ export type Mutation = {
   impersonateUser: ImpersonateResponse;
   login: AuthResponse;
   refreshToken: AuthResponse;
+  requestPasswordReset: PasswordResetRequestResponse;
+  resetPassword: PasswordResetResponse;
   softDeleteUser: User;
   stopImpersonation: AuthResponse;
   updateCatalogBrand: CatalogBrand;
@@ -717,6 +741,16 @@ export type MutationLoginArgs = {
 
 export type MutationRefreshTokenArgs = {
   input: RefreshTokenInput;
+};
+
+
+export type MutationRequestPasswordResetArgs = {
+  input: RequestPasswordResetInput;
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: ResetPasswordInput;
 };
 
 

@@ -1,8 +1,7 @@
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InjectQueue } from '@nestjs/bull';
 import { Repository } from 'typeorm';
-import { Queue } from 'bull';
+import { IQueueService } from '../../common/queue/queue.interface';
 import { AuditLog } from './audit-log.entity';
 import { AuditLogData } from '../../common/interfaces/audit.interface';
 import { AuditQueryInput } from './dto/audit-query.input';
@@ -72,8 +71,8 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
   constructor(
     @InjectRepository(AuditLog, 'audit')
     private readonly auditRepository: Repository<AuditLog>,
-    @InjectQueue('audit')
-    private readonly auditQueue: Queue,
+    @Inject('QUEUE_AUDIT')
+    private readonly auditQueue: IQueueService,
   ) {}
 
   onModuleInit() {
@@ -124,8 +123,6 @@ export class AuditService implements OnModuleInit, OnModuleDestroy {
           type: 'exponential',
           delay: 2000,
         },
-        removeOnComplete: true,
-        removeOnFail: false,
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';

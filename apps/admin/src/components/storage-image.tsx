@@ -40,7 +40,8 @@ export function StorageImage({
     }
 
     // Get storage URL from environment (MinIO/S3)
-    const storageUrl = import.meta.env.VITE_STORAGE_URL || 'http://localhost:1483/pangea'
+    const storageUrl =
+      import.meta.env.VITE_STORAGE_URL || 'http://localhost:1483/cartop'
 
     // Remove leading slash from path if present (to avoid double slashes)
     const cleanPath = src.startsWith('/') ? src.slice(1) : src
@@ -56,7 +57,11 @@ export function StorageImage({
       onError={(e) => {
         // Prevent infinite loop - only set fallback once
         const currentSrc = e.currentTarget.src
-        if (fallback && currentSrc !== fallback && !e.currentTarget.dataset.fallbackAttempted) {
+        if (
+          fallback &&
+          currentSrc !== fallback &&
+          !e.currentTarget.dataset.fallbackAttempted
+        ) {
           e.currentTarget.dataset.fallbackAttempted = 'true'
           e.currentTarget.src = fallback
         }

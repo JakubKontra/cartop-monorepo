@@ -1,10 +1,9 @@
-import { Processor, Process } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
-import { Job } from 'bull';
+import { Injectable, Logger, Inject, OnModuleInit } from '@nestjs/common';
+import { IQueueService, QueueJob } from '../common/queue/queue.interface';
 import { WebhookService } from './webhook.service';
 import { WatchConfig, WebhookPayload } from '../common/interfaces/watch.interface';
 
-interface WebhookJob {
+interface WebhookJobData {
   config: WatchConfig;
   payload: WebhookPayload;
 }
@@ -13,14 +12,25 @@ interface WebhookJob {
  * Webhook Queue Processor
  * Handles async processing of webhook HTTP requests
  */
-@Processor('webhooks')
-export class WebhookProcessor {
+@Injectable()
+export class WebhookProcessor implements OnModuleInit {
   private readonly logger = new Logger(WebhookProcessor.name);
 
-  constructor(private readonly webhookService: WebhookService) {}
+  constructor(
+    @Inject('QUEUE_WEBHOOKS')
+    private readonly webhookQueue: IQueueService,
+    private readonly webhookService: WebhookService,
+  ) {}
 
-  @Process('send-webhook')
-  async handleSendWebhook(job: Job<WebhookJob>) {
+  onModuleInit() {
+    // Register processor for send-webhook jobs
+    this.webhookQueue.process<WebhookJobData>(
+      'send-webhook',
+      this.handleSendWebhook.bind(this),
+    );
+  }
+
+  async handleSendWebhook(job: QueueJob<WebhookJobData>) {
     const { config, payload } = job.data;
 
     try {

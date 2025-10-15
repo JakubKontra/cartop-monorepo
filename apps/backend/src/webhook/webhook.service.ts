@@ -1,6 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
+import { Injectable, Logger, Inject } from '@nestjs/common';
+import { IQueueService } from '../common/queue/queue.interface';
 import { WebhookPayload, WatchConfig } from '../common/interfaces/watch.interface';
 
 /**
@@ -16,8 +15,8 @@ export class WebhookService {
   private debounceTimers = new Map<string, NodeJS.Timeout>();
 
   constructor(
-    @InjectQueue('webhooks')
-    private readonly webhookQueue: Queue,
+    @Inject('QUEUE_WEBHOOKS')
+    private readonly webhookQueue: IQueueService,
   ) {}
 
   /**
@@ -124,8 +123,6 @@ export class WebhookService {
           type: retryConfig.backoff || 'exponential',
           delay: retryConfig.delay || 2000,
         },
-        removeOnComplete: 100, // Keep last 100 completed
-        removeOnFail: 1000,    // Keep last 1000 failed
       },
     );
 

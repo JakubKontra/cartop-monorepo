@@ -10,7 +10,6 @@ import {
 } from "@react-email/components";
 import { TableButton } from "./TableButton";
 import Button from "./Button";
-import { CustomerTestimonials } from "./CustomerTestimonials";
 
 interface PricingOption {
   mileage: string;

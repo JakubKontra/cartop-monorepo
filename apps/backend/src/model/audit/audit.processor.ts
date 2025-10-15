@@ -1,6 +1,5 @@
-import { Processor, Process } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
-import { Job } from 'bull';
+import { Injectable, Logger, Inject, OnModuleInit } from '@nestjs/common';
+import { IQueueService, QueueJob } from '../../common/queue/queue.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuditLog } from './audit-log.entity';
@@ -10,19 +9,32 @@ import { AuditLogData } from '../../common/interfaces/audit.interface';
  * Audit Queue Processor
  * Handles async processing of audit logs from the queue
  */
-@Processor('audit')
-export class AuditProcessor {
+@Injectable()
+export class AuditProcessor implements OnModuleInit {
   private readonly logger = new Logger(AuditProcessor.name);
 
   constructor(
+    @Inject('QUEUE_AUDIT')
+    private readonly auditQueue: IQueueService,
     @InjectRepository(AuditLog, 'audit')
     private readonly auditRepository: Repository<AuditLog>,
   ) {}
 
-  @Process('log-audit')
-  async handleAuditLog(job: Job<AuditLogData>) {
+  onModuleInit() {
+    // Register processors for audit jobs
+    this.auditQueue.process<AuditLogData>(
+      'log-audit',
+      this.handleAuditLog.bind(this),
+    );
+    this.auditQueue.process<AuditLogData[]>(
+      'batch-audit',
+      this.handleBatchAudit.bind(this),
+    );
+  }
+
+  async handleAuditLog(job: QueueJob<AuditLogData>) {
     try {
-      const { data } = job;
+      const data = job.data;
 
       const auditLog = this.auditRepository.create({
         ...data,
@@ -43,10 +55,9 @@ export class AuditProcessor {
     }
   }
 
-  @Process('batch-audit')
-  async handleBatchAudit(job: Job<AuditLogData[]>) {
+  async handleBatchAudit(job: QueueJob<AuditLogData[]>) {
     try {
-      const { data } = job;
+      const data = job.data;
 
       const auditLogs = data.map(item =>
         this.auditRepository.create({
