@@ -20,6 +20,7 @@ import {
   MessageSquarePlus,
   Send,
   ChevronDown,
+  Edit,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -41,8 +42,9 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { AddMessageModal } from './add-message-modal'
-import { MarkVipModal } from './mark-vip-modal'
+import { AssignAgentModal } from './assign-agent-modal'
 import { LogCallModal } from './log-call-modal'
+import { MarkVipModal } from './mark-vip-modal'
 import { SendOfferModal } from './send-offer-modal'
 
 interface CarRequestActivitySidebarProps {
@@ -58,6 +60,13 @@ interface CarRequestActivitySidebarProps {
     requestPhone?: string | null
     brand?: { name: string } | null
     model?: { name: string } | null
+    assignedAgent?: {
+      id: string
+      firstName?: string | null
+      lastName?: string | null
+      email?: string | null
+    } | null
+    assignedAgentId?: string | null
     logs?: Array<{
       id: string
       createdAt: string
@@ -124,6 +133,7 @@ export function CarRequestActivitySidebar({
   const [markVipModalOpen, setMarkVipModalOpen] = useState(false)
   const [logCallModalOpen, setLogCallModalOpen] = useState(false)
   const [sendOfferModalOpen, setSendOfferModalOpen] = useState(false)
+  const [assignAgentModalOpen, setAssignAgentModalOpen] = useState(false)
 
   const handleToggleOffer = (itemId: string) => {
     setExpandedOffers((prev) => {
@@ -176,7 +186,10 @@ export function CarRequestActivitySidebar({
   // Map action type to badge style
   const getLogBadge = (
     actionType: string
-  ): { variant: 'default' | 'secondary' | 'outline' | 'destructive'; text: string } => {
+  ): {
+    variant: 'default' | 'secondary' | 'outline' | 'destructive'
+    text: string
+  } => {
     switch (actionType) {
       case 'CALL_LOGGED':
         return { variant: 'default', text: 'Call' }
@@ -256,7 +269,8 @@ export function CarRequestActivitySidebar({
 
       // Format author name
       const authorName = log.author
-        ? `${log.author.firstName || ''} ${log.author.lastName || ''}`.trim() || 'Unknown User'
+        ? `${log.author.firstName || ''} ${log.author.lastName || ''}`.trim() ||
+          'Unknown User'
         : 'System'
 
       return {
@@ -294,6 +308,31 @@ export function CarRequestActivitySidebar({
 
   return (
     <div className='bg-muted/30 flex h-full w-96 flex-col border-l'>
+      <div className='p-6 pb-0'>
+        {carRequest?.assignedAgent ? (
+          <h3 className='mb-3 text-sm font-semibold'>
+            Přiřazeno:{' '}
+            <span className='font-medium'>
+              {carRequest.assignedAgent.firstName}{' '}
+              {carRequest.assignedAgent.lastName} (
+              {carRequest.assignedAgent.email})
+            </span>
+          </h3>
+        ) : (
+          <div className='text-muted-foreground text-sm'>
+            Žádný agent není přiřazen
+          </div>
+        )}
+        <Button
+          size='sm'
+          variant='outline'
+          onClick={() => setAssignAgentModalOpen(true)}
+        >
+          <Edit className='mr-2 h-4 w-4' />
+          {carRequest?.assignedAgent ? 'Změnit agenta' : 'Přiřadit agenta'}
+        </Button>
+      </div>
+
       <div className='bg-background border-b p-6'>
         <h2 className='text-lg font-semibold'>Activity & History</h2>
         <p className='text-muted-foreground mt-1 text-sm'>
@@ -303,15 +342,11 @@ export function CarRequestActivitySidebar({
 
       <ScrollArea className='flex-1'>
         <div className='space-y-6 p-6'>
-          {/* History Section */}
+          {/* Assigned Agent Section */}
+
+          <Separator />
 
           <div>
-            <h3 className='mb-4 flex items-center gap-2 text-sm font-semibold'>
-              <FileText className='h-4 w-4' />
-              Timeline
-            </h3>
-
-            {/* Action Menu */}
             <div className='mb-4'>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -323,11 +358,15 @@ export function CarRequestActivitySidebar({
                 <DropdownMenuContent align='start' className='w-56'>
                   <DropdownMenuLabel>Communication</DropdownMenuLabel>
                   <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => setAddMessageModalOpen(true)}>
+                    <DropdownMenuItem
+                      onClick={() => setAddMessageModalOpen(true)}
+                    >
                       <MessageSquarePlus className='mr-2 h-4 w-4' />
                       <span>Add Message</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSendOfferModalOpen(true)}>
+                    <DropdownMenuItem
+                      onClick={() => setSendOfferModalOpen(true)}
+                    >
                       <Send className='mr-2 h-4 w-4' />
                       <span>Send Offer</span>
                     </DropdownMenuItem>
@@ -351,6 +390,11 @@ export function CarRequestActivitySidebar({
               </DropdownMenu>
             </div>
 
+            <h3 className='mb-4 flex items-center gap-2 text-sm font-semibold'>
+              <FileText className='h-4 w-4' />
+              Timeline
+            </h3>
+
             <div className='space-y-4'>
               {historyItems.length === 0 ? (
                 <div className='text-muted-foreground flex flex-col items-center justify-center py-8 text-center'>
@@ -366,183 +410,181 @@ export function CarRequestActivitySidebar({
                   return (
                     <div key={item.id}>
                       <div className='flex gap-3'>
-                      <div className='flex flex-col items-center'>
-                        <div className='bg-primary/10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full'>
-                          <Icon className='text-primary h-4 w-4' />
-                        </div>
-                        {index < historyItems.length - 1 && (
-                          <div className='bg-border mt-2 h-full min-h-[40px] w-px' />
-                        )}
-                      </div>
-                      <div className='flex-1 pb-4'>
-                        <div className='mb-1 flex items-start justify-between gap-2'>
-                          <div className='text-sm font-medium'>
-                            {item.title}
+                        <div className='flex flex-col items-center'>
+                          <div className='bg-primary/10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full'>
+                            <Icon className='text-primary h-4 w-4' />
                           </div>
-                          {item.badgeText && (
-                            <Badge
-                              variant={item.badgeVariant}
-                              className='shrink-0'
-                            >
-                              {item.badgeText}
-                            </Badge>
+                          {index < historyItems.length - 1 && (
+                            <div className='bg-border mt-2 h-full min-h-[40px] w-px' />
                           )}
                         </div>
-                        <p className='text-muted-foreground mb-2 text-sm'>
-                          {item.description}
-                        </p>
-
-                        {/* Author information */}
-                        {item.author && (
-                          <div className='mb-2 flex items-center gap-1.5'>
-                            <User className='text-muted-foreground h-3 w-3' />
-                            <span className='text-muted-foreground text-xs'>
-                              {item.author.name}
-                              {item.author.role && (
-                                <span className='text-muted-foreground/70'>
-                                  {' '}
-                                  • {item.author.role}
-                                </span>
-                              )}
-                            </span>
+                        <div className='flex-1 pb-4'>
+                          <div className='mb-1 flex items-start justify-between gap-2'>
+                            <div className='text-sm font-medium'>
+                              {item.title}
+                            </div>
+                            {item.badgeText && (
+                              <Badge
+                                variant={item.badgeVariant}
+                                className='shrink-0'
+                              >
+                                {item.badgeText}
+                              </Badge>
+                            )}
                           </div>
-                        )}
+                          <p className='text-muted-foreground mb-2 text-sm'>
+                            {item.description}
+                          </p>
 
-                        {/* Inline Offer Display with Toggle */}
-                        {item.type === 'offer' &&
-                          item.metadata?.offerDetails && (
-                            <Collapsible
-                              open={expandedOffers.has(item.id)}
-                              onOpenChange={() => handleToggleOffer(item.id)}
-                              className='mt-2'
-                            >
-                              <CollapsibleTrigger asChild>
-                                <Button
-                                  variant='outline'
-                                  size='sm'
-                                  className='h-7 w-full justify-start text-xs'
-                                >
-                                  {expandedOffers.has(item.id) ? (
-                                    <EyeOff className='mr-1 h-3 w-3' />
-                                  ) : (
-                                    <Eye className='mr-1 h-3 w-3' />
-                                  )}
-                                  {expandedOffers.has(item.id)
-                                    ? 'Hide'
-                                    : 'Show'}{' '}
-                                  {item.metadata.offerDetails.length > 1
-                                    ? `${item.metadata.offerDetails.length} Offers`
-                                    : 'Offer Details'}
-                                </Button>
-                              </CollapsibleTrigger>
-                              <CollapsibleContent className='mt-3'>
-                                <div className='space-y-3'>
-                                  {item.metadata.offerDetails.map(
-                                    (offer, offerIndex) => (
-                                      <Card
-                                        key={`offer-${item.id}-${offerIndex}`}
-                                        className='border-2'
-                                      >
-                                        <CardContent className='space-y-3 p-4'>
-                                          <div>
-                                            <Badge
-                                              variant='outline'
-                                              className='mb-2'
-                                            >
-                                              Option {offerIndex + 1}
-                                            </Badge>
-                                            <h4 className='text-sm font-semibold'>
-                                              {offer.vehicleName ||
-                                                `${carRequest?.brand?.name} ${carRequest?.model?.name}`}
-                                            </h4>
-                                          </div>
+                          {/* Author information */}
+                          {item.author && (
+                            <div className='mb-2 flex items-center gap-1.5'>
+                              <User className='text-muted-foreground h-3 w-3' />
+                              <span className='text-muted-foreground text-xs'>
+                                {item.author.name}
+                                {item.author.role && (
+                                  <span className='text-muted-foreground/70'>
+                                    {' '}
+                                    • {item.author.role}
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                          )}
 
-                                          <Separator />
-
-                                          <div className='grid grid-cols-2 gap-2'>
-                                            <div>
-                                              <div className='text-muted-foreground mb-1 text-xs'>
-                                                Monthly Payment
-                                              </div>
-                                              <div className='text-lg font-bold'>
-                                                €{offer.monthlyPayment}
-                                              </div>
-                                            </div>
-                                            <div>
-                                              <div className='text-muted-foreground mb-1 text-xs'>
-                                                Term
-                                              </div>
-                                              <div className='text-lg font-bold'>
-                                                {offer.term} months
-                                              </div>
-                                            </div>
-                                          </div>
-
-                                          <Separator />
-
-                                          <div className='space-y-2'>
-                                            <div className='flex items-center justify-between text-xs'>
-                                              <span className='text-muted-foreground'>
-                                                Down Payment
-                                              </span>
-                                              <span className='font-semibold'>
-                                                €
-                                                {offer.downPayment.toLocaleString()}
-                                              </span>
-                                            </div>
-                                            <div className='flex items-center justify-between text-xs'>
-                                              <span className='text-muted-foreground'>
-                                                Interest Rate
-                                              </span>
-                                              <span className='font-semibold'>
-                                                {offer.interestRate}%
-                                              </span>
-                                            </div>
-                                            <Separator />
-                                            <div className='flex items-center justify-between'>
-                                              <span className='text-xs font-semibold'>
-                                                Total Price
-                                              </span>
-                                              <span className='text-primary text-base font-bold'>
-                                                €
-                                                {offer.totalPrice.toLocaleString()}
-                                              </span>
-                                            </div>
-                                          </div>
-                                        </CardContent>
-                                      </Card>
-                                    )
-                                  )}
-
-                                  <Button size='sm' className='mt-2 w-full'>
-                                    <Mail className='mr-2 h-3 w-3' />
-                                    Resend{' '}
+                          {item.type === 'offer' &&
+                            item.metadata?.offerDetails && (
+                              <Collapsible
+                                open={expandedOffers.has(item.id)}
+                                onOpenChange={() => handleToggleOffer(item.id)}
+                                className='mt-2'
+                              >
+                                <CollapsibleTrigger asChild>
+                                  <Button
+                                    variant='outline'
+                                    size='sm'
+                                    className='h-7 w-full justify-start text-xs'
+                                  >
+                                    {expandedOffers.has(item.id) ? (
+                                      <EyeOff className='mr-1 h-3 w-3' />
+                                    ) : (
+                                      <Eye className='mr-1 h-3 w-3' />
+                                    )}
+                                    {expandedOffers.has(item.id)
+                                      ? 'Hide'
+                                      : 'Show'}{' '}
                                     {item.metadata.offerDetails.length > 1
-                                      ? 'Offers'
-                                      : 'Offer'}
+                                      ? `${item.metadata.offerDetails.length} Offers`
+                                      : 'Offer Details'}
                                   </Button>
-                                </div>
-                              </CollapsibleContent>
-                            </Collapsible>
-                          )}
+                                </CollapsibleTrigger>
+                                <CollapsibleContent className='mt-3'>
+                                  <div className='space-y-3'>
+                                    {item.metadata.offerDetails.map(
+                                      (offer, offerIndex) => (
+                                        <Card
+                                          key={`offer-${item.id}-${offerIndex}`}
+                                          className='border-2'
+                                        >
+                                          <CardContent className='space-y-3 p-4'>
+                                            <div>
+                                              <Badge
+                                                variant='outline'
+                                                className='mb-2'
+                                              >
+                                                Option {offerIndex + 1}
+                                              </Badge>
+                                              <h4 className='text-sm font-semibold'>
+                                                {offer.vehicleName ||
+                                                  `${carRequest?.brand?.name} ${carRequest?.model?.name}`}
+                                              </h4>
+                                            </div>
 
-                        <div className='text-muted-foreground mt-2 text-xs'>
-                          {formatDistanceToNow(item.timestamp, {
-                            addSuffix: true,
-                          })}
+                                            <Separator />
+
+                                            <div className='grid grid-cols-2 gap-2'>
+                                              <div>
+                                                <div className='text-muted-foreground mb-1 text-xs'>
+                                                  Monthly Payment
+                                                </div>
+                                                <div className='text-lg font-bold'>
+                                                  €{offer.monthlyPayment}
+                                                </div>
+                                              </div>
+                                              <div>
+                                                <div className='text-muted-foreground mb-1 text-xs'>
+                                                  Term
+                                                </div>
+                                                <div className='text-lg font-bold'>
+                                                  {offer.term} months
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <Separator />
+
+                                            <div className='space-y-2'>
+                                              <div className='flex items-center justify-between text-xs'>
+                                                <span className='text-muted-foreground'>
+                                                  Down Payment
+                                                </span>
+                                                <span className='font-semibold'>
+                                                  €
+                                                  {offer.downPayment.toLocaleString()}
+                                                </span>
+                                              </div>
+                                              <div className='flex items-center justify-between text-xs'>
+                                                <span className='text-muted-foreground'>
+                                                  Interest Rate
+                                                </span>
+                                                <span className='font-semibold'>
+                                                  {offer.interestRate}%
+                                                </span>
+                                              </div>
+                                              <Separator />
+                                              <div className='flex items-center justify-between'>
+                                                <span className='text-xs font-semibold'>
+                                                  Total Price
+                                                </span>
+                                                <span className='text-primary text-base font-bold'>
+                                                  €
+                                                  {offer.totalPrice.toLocaleString()}
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </CardContent>
+                                        </Card>
+                                      )
+                                    )}
+
+                                    <Button size='sm' className='mt-2 w-full'>
+                                      <Mail className='mr-2 h-3 w-3' />
+                                      Resend{' '}
+                                      {item.metadata.offerDetails.length > 1
+                                        ? 'Offers'
+                                        : 'Offer'}
+                                    </Button>
+                                  </div>
+                                </CollapsibleContent>
+                              </Collapsible>
+                            )}
+
+                          <div className='text-muted-foreground mt-2 text-xs'>
+                            {formatDistanceToNow(item.timestamp, {
+                              addSuffix: true,
+                            })}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })
+                  )
+                })
               )}
             </div>
           </div>
 
           <Separator />
 
-          {/* Visitor Behavior Section */}
           <div>
             <h3 className='mb-4 flex items-center gap-2 text-sm font-semibold'>
               <Globe className='h-4 w-4' />
@@ -597,7 +639,6 @@ export function CarRequestActivitySidebar({
 
           <Separator />
 
-          {/* Pages Visited Section */}
           <div>
             <h3 className='mb-4 text-sm font-semibold'>Pages Visited</h3>
             <Card>
@@ -621,7 +662,6 @@ export function CarRequestActivitySidebar({
             </Card>
           </div>
 
-          {/* Customer Info Summary */}
           {carRequest && (
             <>
               <Separator />
@@ -674,7 +714,6 @@ export function CarRequestActivitySidebar({
         </div>
       </ScrollArea>
 
-      {/* Modals */}
       {carRequestId && (
         <>
           <AddMessageModal
@@ -709,6 +748,13 @@ export function CarRequestActivitySidebar({
                 ? `${carRequest.requestFirstName} ${carRequest.requestLastName}`
                 : undefined
             }
+            onSuccess={onRefresh}
+          />
+          <AssignAgentModal
+            open={assignAgentModalOpen}
+            onOpenChange={setAssignAgentModalOpen}
+            carRequestId={carRequestId}
+            currentAgentId={carRequest?.assignedAgentId}
             onSuccess={onRefresh}
           />
         </>

@@ -29,12 +29,13 @@ export class S3StorageAdapter implements StorageAdapter {
     bucket: string,
     key: string,
     contentType = 'application/octet-stream',
+    isPrivate = false,
   ): Promise<PresignedUrl> {
     const cmd = new PutObjectCommand({
       Bucket: bucket,
       Key: key,
       ContentType: contentType,
-      ACL: 'public-read',
+      ACL: isPrivate ? 'private' : 'public-read',
     });
 
     const url = await getSignedUrl(this.client, cmd, { expiresIn: 3600 });
@@ -46,13 +47,14 @@ export class S3StorageAdapter implements StorageAdapter {
     key: string,
     file: string,
     type = 'application/octet-stream',
+    isPrivate = false,
   ): Promise<PresignedUrl> {
     const cmd = new PutObjectCommand({
       Bucket: bucket,
       Key: key,
       Body: fs.readFileSync(file),
       ContentType: type,
-      ACL: 'public-read',
+      ACL: isPrivate ? 'private' : 'public-read',
     });
     await this.client.send(cmd);
     const url = await getSignedUrl(this.client, cmd, { expiresIn: 3600 });

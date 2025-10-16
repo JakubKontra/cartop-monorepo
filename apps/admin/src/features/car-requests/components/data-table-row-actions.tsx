@@ -35,6 +35,12 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-[160px]'>
+        <Link to={`/car-requests/$carRequestId`} params={{ carRequestId: carRequest.id }}>
+          <DropdownMenuItem>
+            <Edit className='mr-2 h-4 w-4' />
+            View Detail
+          </DropdownMenuItem>
+        </Link>
         <Link to={`/car-requests/$carRequestId/edit`} params={{ carRequestId: carRequest.id }}>
           <DropdownMenuItem>
             <Edit className='mr-2 h-4 w-4' />

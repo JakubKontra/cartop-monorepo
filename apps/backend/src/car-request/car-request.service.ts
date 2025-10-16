@@ -10,6 +10,7 @@ import { UpdateCarRequestInput } from './dto/update-car-request.input';
 import { CreateCarRequestLogInput } from './dto/create-car-request-log.input';
 import { CarRequestLogFilterInput } from './dto/car-request-log-filter.input';
 import { CarRequestLogAction } from './enums/car-request-log-action.enum';
+import { User } from '../model/user/user.entity';
 
 @Injectable()
 export class CarRequestService {
@@ -22,6 +23,8 @@ export class CarRequestService {
     private readonly carRequestStatusRepository: Repository<CarRequestStatus>,
     @InjectRepository(CarRequestLog)
     private readonly carRequestLogRepository: Repository<CarRequestLog>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   // === CREATE ===
@@ -277,11 +280,35 @@ export class CarRequestService {
   ): Promise<void> {
     if (oldAgentId === newAgentId) return;
 
+    // Load agent names for better log message
+    let message = 'Agent assignment changed';
+
+    if (newAgentId && !oldAgentId) {
+      // Agent assigned (was unassigned before)
+      const newAgent = await this.userRepository.findOne({ where: { id: newAgentId } });
+      if (newAgent) {
+        message = `Přiřazen agent: ${newAgent.firstName} ${newAgent.lastName}`;
+      }
+    } else if (!newAgentId && oldAgentId) {
+      // Agent unassigned (was assigned before)
+      const oldAgent = await this.userRepository.findOne({ where: { id: oldAgentId } });
+      if (oldAgent) {
+        message = `Odstraněn agent: ${oldAgent.firstName} ${oldAgent.lastName}`;
+      }
+    } else if (newAgentId && oldAgentId) {
+      // Agent changed (from one to another)
+      const [oldAgent, newAgent] = await Promise.all([
+        this.userRepository.findOne({ where: { id: oldAgentId } }),
+        this.userRepository.findOne({ where: { id: newAgentId } }),
+      ]);
+      if (oldAgent && newAgent) {
+        message = `Agent změněn z ${oldAgent.firstName} ${oldAgent.lastName} na ${newAgent.firstName} ${newAgent.lastName}`;
+      }
+    }
+
     await this.createLog({
       carRequestId,
-      message: newAgentId
-        ? 'Agent assigned'
-        : 'Agent unassigned',
+      message,
       actionType: CarRequestLogAction.ASSIGNED,
       metadata: {
         oldAgentId,

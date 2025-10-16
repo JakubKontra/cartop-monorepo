@@ -17,6 +17,8 @@ import { FileModule } from './file/file.module';
 import { LeasingCompanyModule } from './leasing-company/leasing-company.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
 import { CarRequestModule } from './car-request/car-request.module';
+import { OnboardingModule } from './onboarding/onboarding.module';
+import { CarRequestCalculationModule } from './car-request-calculation/car-request-calculation.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { SubscriberRegistryProvider } from './common/providers/subscriber-registry.provider';
@@ -113,6 +115,8 @@ import { UserContextInterceptor } from './common/interceptors/user-context.inter
     FileModule.forRoot(), // Configure with storage adapters
     LeasingCompanyModule,
     CarRequestModule,
+    CarRequestCalculationModule,
+    OnboardingModule,
     WebhookModule,
     NotificationModule,
     MarketingModule,

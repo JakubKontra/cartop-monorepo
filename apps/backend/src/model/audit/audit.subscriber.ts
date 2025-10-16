@@ -39,7 +39,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
     try {
       const userContext = this.getUserContext();
-      await this.auditService.log({
+      // Don't await - fire and forget to avoid blocking the transaction
+      this.auditService.log({
         entityName: event.metadata.tableName,
         entityId: this.getEntityId(entity),
         action: AuditAction.CREATE,
@@ -47,10 +48,15 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         changes: undefined,
         oldValue: undefined,
         ...userContext,
+      }).catch((error) => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorStack = error instanceof Error ? error.stack : undefined;
+        this.logger.error(`Audit logging failed for INSERT: ${errorMessage}`, errorStack);
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      this.logger.error(`Audit logging failed for INSERT: ${errorMessage}`);
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Audit logging failed for INSERT: ${errorMessage}`, errorStack);
     }
   }
 
@@ -72,7 +78,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       // Only log if there are actual changes
       if (Object.keys(changes).length > 0) {
         const userContext = this.getUserContext();
-        await this.auditService.log({
+        // Don't await - fire and forget to avoid blocking the transaction
+        this.auditService.log({
           entityName: event.metadata.tableName,
           entityId: this.getEntityId(entity),
           action: AuditAction.UPDATE,
@@ -80,11 +87,16 @@ export class AuditSubscriber implements EntitySubscriberInterface {
           newValue,
           changes,
           ...userContext,
+        }).catch((error) => {
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          const errorStack = error instanceof Error ? error.stack : undefined;
+          this.logger.error(`Audit logging failed for UPDATE: ${errorMessage}`, errorStack);
         });
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      this.logger.error(`Audit logging failed for UPDATE: ${errorMessage}`);
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Audit logging failed for UPDATE: ${errorMessage}`, errorStack);
     }
   }
 
@@ -100,7 +112,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
     try {
       const userContext = this.getUserContext();
-      await this.auditService.log({
+      // Don't await - fire and forget to avoid blocking the transaction
+      this.auditService.log({
         entityName: event.metadata.tableName,
         entityId: this.getEntityId(entity),
         action: AuditAction.DELETE,
@@ -108,10 +121,15 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         newValue: undefined,
         changes: undefined,
         ...userContext,
+      }).catch((error) => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorStack = error instanceof Error ? error.stack : undefined;
+        this.logger.error(`Audit logging failed for REMOVE: ${errorMessage}`, errorStack);
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      this.logger.error(`Audit logging failed for REMOVE: ${errorMessage}`);
+      const errorStack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Audit logging failed for REMOVE: ${errorMessage}`, errorStack);
     }
   }
 

@@ -242,7 +242,14 @@ export class CarRequest {
   @Field(() => [CarRequestLog], { nullable: true })
   @OneToMany(() => CarRequestLog, (log) => log.carRequest)
   logs?: CarRequestLog[];
+
+  // === Calculations ===
+
+  @Field(() => [CarRequestCalculation], { nullable: true })
+  @OneToMany(() => CarRequestCalculation, (calculation) => calculation.carRequest)
+  calculations?: CarRequestCalculation[];
 }
 
 // Import CarRequestLog at the end to avoid circular dependency issues
 import { CarRequestLog } from './car-request-log.entity';
+import { CarRequestCalculation } from '../../car-request-calculation/entities/car-request-calculation.entity';

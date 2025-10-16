@@ -10,6 +10,8 @@ import { CreateCarRequestLogInput } from './dto/create-car-request-log.input';
 import { CarRequestLogFilterInput } from './dto/car-request-log-filter.input';
 import { Roles } from '../common/decorators/auth/roles.decorator';
 import { UserRole } from '../common/enums/role.enum';
+import { CurrentUser } from '../common/decorators/auth/current-user.decorator';
+import { User } from '../model/user/user.entity';
 
 /**
  * Admin Car Request Resolver
@@ -95,8 +97,9 @@ export class CarRequestAdminResolver {
   async updateCarRequest(
     @Args('id') id: string,
     @Args('input') input: UpdateCarRequestInput,
+    @CurrentUser() user: User,
   ): Promise<CarRequest> {
-    return this.carRequestService.update(id, input);
+    return this.carRequestService.update(id, input, user.id);
   }
 
   /**

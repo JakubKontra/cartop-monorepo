@@ -54,6 +54,7 @@ const emailProviderFactory = {
   ],
   exports: [
     NotificationService,
+    EmailService,
     PreferenceService,
   ],
 })

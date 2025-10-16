@@ -212,15 +212,17 @@ export class FileService {
    * Generate a pre-signed URL for uploading a file directly to storage
    * @param filename - The filename to upload
    * @param contentType - The MIME type of the file
+   * @param isPrivate - Whether the file should be private (default: false)
    * @returns Pre-signed upload URL
    */
   async generateUploadUrl(
     filename: string,
     contentType: string,
+    isPrivate = false,
   ): Promise<string> {
     const bucket = process.env.S3_BUCKET!;
     const key = `uploads/${Date.now()}-${filename}`;
-    return this.storageAdapter.getPresignedUploadUrl(bucket, key, contentType);
+    return this.storageAdapter.getPresignedUploadUrl(bucket, key, contentType, isPrivate);
   }
 
   /**

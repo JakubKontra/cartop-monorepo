@@ -11,6 +11,7 @@ import {
   Clock10,
   X,
   ShoppingCart,
+  FileText,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { logger } from '@/lib/logger'
@@ -37,6 +38,7 @@ import {
   GET_CAR_REQUEST,
   GET_ALL_CAR_REQUESTS,
 } from '../car-requests.graphql'
+import { CreateOnboardingDialog } from '@/features/onboardings/components/create-onboarding-dialog'
 
 // Button colors
 const BUTTON_COLORS = {
@@ -76,6 +78,7 @@ export function CarRequestActionsPanel({
   carRequestId,
 }: CarRequestActionsPanelProps) {
   const [showCancelModal, setShowCancelModal] = useState(false)
+  const [showOnboardingDialog, setShowOnboardingDialog] = useState(false)
   const [cancellationReason, setCancellationReason] = useState('')
   const [cancellationNote, setCancellationNote] = useState('')
 
@@ -206,93 +209,104 @@ export function CarRequestActionsPanel({
   return (
     <div className='bg-background sticky top-0 z-10 mb-3 w-full border-b shadow-sm'>
       <div className='w-full p-4'>
-        <div className='flex w-full flex-wrap gap-3'>
+        <div className='flex w-full gap-2'>
           <Button
-            size='lg'
+            size='sm'
             style={{ background: BUTTON_COLORS.SUCCESS }}
             onClick={handleCallSuccess}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <Phone className='h-5 w-5' />
-            <span className='ml-2'>Call Reached</span>
+            <Phone className='h-4 w-4' />
+            <span className='ml-2'>Hovor úspěšný</span>
           </Button>
 
           <Button
-            size='lg'
+            size='sm'
             style={{ background: BUTTON_COLORS.WARNING }}
             onClick={handleCallNotReached}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <PhoneMissed className='h-5 w-5' />
-            <span className='ml-2'>Not Reached</span>
+            <PhoneMissed className='h-4 w-4' />
+            <span className='ml-2'>Nedostupný</span>
           </Button>
 
           <Button
-            size='lg'
+            size='sm'
             style={{ background: BUTTON_COLORS.WARNING }}
             onClick={handleRetryCallTomorrow}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <PhoneIncoming className='h-5 w-5' />
-            <span className='ml-2'>Try Tomorrow</span>
+            <PhoneIncoming className='h-4 w-4' />
+            <span className='ml-2'>Zkusit zítra</span>
           </Button>
 
           <Button
-            size='lg'
+            size='sm'
             style={{ background: BUTTON_COLORS.INFO }}
             onClick={handleSendEmailWithQuestion}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <MailQuestion className='h-5 w-5' />
-            <span className='ml-2'>Send Email</span>
+            <MailQuestion className='h-4 w-4' />
+            <span className='ml-2'>Poslat email</span>
           </Button>
 
           <Button
-            size='lg'
+            size='sm'
             style={{ background: BUTTON_COLORS.INFO }}
             onClick={handlePassedToDealer}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <Handshake className='h-5 w-5' />
-            <span className='ml-2'>Pass to Dealer</span>
+            <Handshake className='h-4 w-4' />
+            <span className='ml-2'>Předat prodejci</span>
           </Button>
 
           <Button
-            size='lg'
+            size='sm'
             style={{ background: BUTTON_COLORS.INFO }}
             onClick={handleWaitingForOffer}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <Clock10 className='h-5 w-5' />
-            <span className='ml-2'>Waiting for Offer</span>
+            <Clock10 className='h-4 w-4' />
+            <span className='ml-2'>Čeká na nabídku</span>
           </Button>
 
           <Button
-            size='lg'
+            size='sm'
             style={{ background: BUTTON_COLORS.SUCCESS }}
             onClick={handleMarkAsPurchased}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <ShoppingCart className='h-5 w-5' />
-            <span className='ml-2'>Mark as Purchased</span>
+            <ShoppingCart className='h-4 w-4' />
+            <span className='ml-2'>Označit jako prodáno</span>
           </Button>
 
           <Button
-            size='lg'
+            size='sm'
+            style={{ background: BUTTON_COLORS.INFO }}
+            onClick={() => setShowOnboardingDialog(true)}
+            disabled={loading}
+            className='flex-1'
+          >
+            <FileText className='h-4 w-4' />
+            <span className='ml-2'>Vytvořit onboarding</span>
+          </Button>
+
+          <Button
+            size='sm'
             style={{ background: BUTTON_COLORS.DANGER }}
             onClick={handleCancel}
             disabled={loading}
-            className='min-w-[180px] flex-1'
+            className='flex-1'
           >
-            <X className='h-5 w-5' />
-            <span className='ml-2'>Cancel Request</span>
+            <X className='h-4 w-4' />
+            <span className='ml-2'>Zrušit požadavek</span>
           </Button>
         </div>
       </div>
@@ -359,6 +373,13 @@ export function CarRequestActionsPanel({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Create Onboarding Dialog */}
+      <CreateOnboardingDialog
+        open={showOnboardingDialog}
+        onOpenChange={setShowOnboardingDialog}
+        carRequestId={carRequestId}
+      />
     </div>
   )
 }

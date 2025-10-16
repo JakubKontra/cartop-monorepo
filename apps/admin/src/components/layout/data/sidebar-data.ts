@@ -26,6 +26,8 @@ import {
   History,
   Building2,
   ClipboardList,
+  FileText,
+  Upload,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 import { Permission } from '@/lib/permissions'
@@ -112,6 +114,11 @@ export const sidebarData: SidebarData = {
           url: '/leasing-companies',
           icon: Building2,
         },
+        {
+          title: 'Document Templates',
+          url: '/document-templates',
+          icon: FileText,
+        },
       ],
     },
     {
@@ -121,6 +128,11 @@ export const sidebarData: SidebarData = {
           title: 'Car Requests',
           url: '/car-requests',
           icon: ClipboardList,
+        },
+        {
+          title: 'Onboardings',
+          url: '/onboardings',
+          icon: Upload,
         },
       ],
     },

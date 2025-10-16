@@ -422,6 +422,18 @@ export type CreateDirectPurchaseOfferInput = {
   warrantyYears?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type CreateDocumentTemplateInput = {
+  acceptedFormats: Array<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  fieldName: Scalars['String']['input'];
+  helpText?: InputMaybe<Scalars['String']['input']>;
+  isRequired: Scalars['Boolean']['input'];
+  leasingCompanyId: Scalars['String']['input'];
+  maxSizeBytes: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
+};
+
 export type CreateFileInput = {
   alt?: InputMaybe<Scalars['String']['input']>;
   checksum: Scalars['String']['input'];
@@ -526,6 +538,30 @@ export type DirectPurchaseOffer = {
   updatedAt: Scalars['DateTime']['output'];
   warrantyYears?: Maybe<Scalars['Int']['output']>;
 };
+
+export type DocumentTemplate = {
+  __typename?: 'DocumentTemplate';
+  acceptedFormats: Array<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  displayOrder: Scalars['Int']['output'];
+  fieldName: Scalars['String']['output'];
+  helpText?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isRequired: Scalars['Boolean']['output'];
+  leasingCompany: LeasingCompany;
+  leasingCompanyId: Scalars['String']['output'];
+  maxSizeBytes: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+/** Validation status of an uploaded document */
+export enum DocumentValidationStatus {
+  Approved = 'APPROVED',
+  Pending = 'PENDING',
+  Rejected = 'REJECTED'
+}
 
 export type File = {
   __typename?: 'File';
@@ -668,12 +704,15 @@ export type Mutation = {
   createColorVariant: OfferColorVariant;
   /** Create a new direct purchase offer (admin only) */
   createDirectPurchaseOffer: DirectPurchaseOffer;
+  createDocumentTemplate: DocumentTemplate;
   createFile: File;
+  createFilePublic: File;
   /** Create a new individual (custom) offer (admin only) */
   createIndividualOffer: IndividualOffer;
   createLeasingCompany: LeasingCompany;
   /** Create a new leasing variant (admin only) */
   createLeasingVariant: OfferLeasingVariant;
+  createOnboarding: Onboarding;
   /** Create a new operational leasing offer (admin only) */
   createOperationalLeasingOffer: OperationalLeasingOffer;
   /** Create optional equipment (admin only) */
@@ -688,6 +727,7 @@ export type Mutation = {
   deleteCatalogModelGeneration: Scalars['Boolean']['output'];
   /** Delete a color variant (admin only) */
   deleteColorVariant: Scalars['Boolean']['output'];
+  deleteDocumentTemplate: Scalars['Boolean']['output'];
   deleteFile: Scalars['Boolean']['output'];
   deleteFileCompletely: Scalars['Boolean']['output'];
   deleteLeasingCompany: Scalars['Boolean']['output'];
@@ -699,11 +739,14 @@ export type Mutation = {
   deleteOptionalEquipment: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
   generateUploadUrl: Scalars['String']['output'];
+  generateUploadUrlPublic: Scalars['String']['output'];
   impersonateUser: ImpersonateResponse;
   login: AuthResponse;
   refreshToken: AuthResponse;
+  reorderDocumentTemplates: Scalars['Boolean']['output'];
   requestPasswordReset: PasswordResetRequestResponse;
   resetPassword: PasswordResetResponse;
+  sendOnboardingReminder: Scalars['Boolean']['output'];
   softDeleteUser: User;
   stopImpersonation: AuthResponse;
   updateCarRequest: CarRequest;
@@ -711,13 +754,17 @@ export type Mutation = {
   updateCatalogColor: CatalogColor;
   updateCatalogModel: CatalogModel;
   updateCatalogModelGeneration: CatalogModelGeneration;
+  updateDocumentTemplate: DocumentTemplate;
   updateFile: File;
   /** Update status of an individual offer (admin only) */
   updateIndividualOfferStatus: IndividualOffer;
   updateLeasingCompany: LeasingCompany;
   /** Update an existing offer (admin only) */
   updateOffer: Offer;
+  updateOnboardingStatus: Scalars['Boolean']['output'];
   updateUser: User;
+  uploadOnboardingDocument: OnboardingDocument;
+  validateDocument: OnboardingDocument;
 };
 
 
@@ -780,7 +827,17 @@ export type MutationCreateDirectPurchaseOfferArgs = {
 };
 
 
+export type MutationCreateDocumentTemplateArgs = {
+  input: CreateDocumentTemplateInput;
+};
+
+
 export type MutationCreateFileArgs = {
+  input: CreateFileInput;
+};
+
+
+export type MutationCreateFilePublicArgs = {
   input: CreateFileInput;
 };
 
@@ -804,6 +861,12 @@ export type MutationCreateLeasingVariantArgs = {
   monthlyPayment: Scalars['Float']['input'];
   offerId: Scalars['String']['input'];
   totalPrice: Scalars['Float']['input'];
+};
+
+
+export type MutationCreateOnboardingArgs = {
+  carRequestId: Scalars['String']['input'];
+  expirationDays?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
@@ -860,6 +923,11 @@ export type MutationDeleteColorVariantArgs = {
 };
 
 
+export type MutationDeleteDocumentTemplateArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationDeleteFileArgs = {
   id: Scalars['String']['input'];
 };
@@ -901,6 +969,12 @@ export type MutationGenerateUploadUrlArgs = {
 };
 
 
+export type MutationGenerateUploadUrlPublicArgs = {
+  contentType: Scalars['String']['input'];
+  filename: Scalars['String']['input'];
+};
+
+
 export type MutationImpersonateUserArgs = {
   input: ImpersonateInput;
 };
@@ -916,6 +990,11 @@ export type MutationRefreshTokenArgs = {
 };
 
 
+export type MutationReorderDocumentTemplatesArgs = {
+  ids: Array<Scalars['String']['input']>;
+};
+
+
 export type MutationRequestPasswordResetArgs = {
   input: RequestPasswordResetInput;
 };
@@ -923,6 +1002,11 @@ export type MutationRequestPasswordResetArgs = {
 
 export type MutationResetPasswordArgs = {
   input: ResetPasswordInput;
+};
+
+
+export type MutationSendOnboardingReminderArgs = {
+  onboardingId: Scalars['String']['input'];
 };
 
 
@@ -961,6 +1045,12 @@ export type MutationUpdateCatalogModelGenerationArgs = {
 };
 
 
+export type MutationUpdateDocumentTemplateArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateDocumentTemplateInput;
+};
+
+
 export type MutationUpdateFileArgs = {
   id: Scalars['String']['input'];
   input: UpdateFileInput;
@@ -985,9 +1075,27 @@ export type MutationUpdateOfferArgs = {
 };
 
 
+export type MutationUpdateOnboardingStatusArgs = {
+  onboardingId: Scalars['String']['input'];
+  status: OnboardingStatus;
+};
+
+
 export type MutationUpdateUserArgs = {
   id: Scalars['String']['input'];
   input: UpdateUserInput;
+};
+
+
+export type MutationUploadOnboardingDocumentArgs = {
+  input: UploadDocumentInput;
+  token: Scalars['String']['input'];
+};
+
+
+export type MutationValidateDocumentArgs = {
+  documentId: Scalars['String']['input'];
+  input: ValidateDocumentInput;
 };
 
 export type Offer = {
@@ -1143,6 +1251,50 @@ export enum OfferType {
   OperationalLeasing = 'OPERATIONAL_LEASING'
 }
 
+export type Onboarding = {
+  __typename?: 'Onboarding';
+  carRequest: CarRequest;
+  carRequestId: Scalars['String']['output'];
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  documents?: Maybe<Array<OnboardingDocument>>;
+  expiresAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  lastReminderSentAt?: Maybe<Scalars['DateTime']['output']>;
+  leasingCompany: LeasingCompany;
+  leasingCompanyId: Scalars['String']['output'];
+  status: OnboardingStatus;
+  token: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type OnboardingDocument = {
+  __typename?: 'OnboardingDocument';
+  documentTemplate: DocumentTemplate;
+  documentTemplateId: Scalars['String']['output'];
+  file: File;
+  fileId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  onboarding: Onboarding;
+  onboardingId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  uploadedAt: Scalars['DateTime']['output'];
+  validatedAt?: Maybe<Scalars['DateTime']['output']>;
+  validatedBy?: Maybe<User>;
+  validatedById?: Maybe<Scalars['String']['output']>;
+  validationNote?: Maybe<Scalars['String']['output']>;
+  validationStatus: DocumentValidationStatus;
+};
+
+/** Status of the onboarding process */
+export enum OnboardingStatus {
+  Complete = 'COMPLETE',
+  Expired = 'EXPIRED',
+  Incomplete = 'INCOMPLETE',
+  InProgress = 'IN_PROGRESS',
+  Pending = 'PENDING'
+}
+
 export type OperationalLeasingOffer = {
   __typename?: 'OperationalLeasingOffer';
   annualMileageLimit?: Maybe<Scalars['Int']['output']>;
@@ -1205,8 +1357,10 @@ export type Query = {
   allCarRequests: Array<CarRequest>;
   allCatalogBrands: Array<CatalogBrand>;
   allCatalogModels: Array<CatalogModel>;
+  allDocumentTemplates: Array<DocumentTemplate>;
   /** Get all offers including individual offers (admin only) */
   allOffers: Array<Offer>;
+  allOnboardings: Array<Onboarding>;
   auditLogs: Array<AuditLog>;
   /** Get all calculations for an individual offer (admin only) */
   calculationsByOffer: Array<OfferCalculation>;
@@ -1235,6 +1389,8 @@ export type Query = {
   colorVariantsByOffer: Array<OfferColorVariant>;
   /** Get all direct purchase offers */
   directPurchaseOffers: Array<Offer>;
+  documentTemplate: DocumentTemplate;
+  documentTemplatesByLeasingCompany: Array<DocumentTemplate>;
   documents: Array<File>;
   entityHistory: Array<AuditLog>;
   file: File;
@@ -1258,6 +1414,8 @@ export type Query = {
   offerBySlug: Offer;
   /** Get all public offers for a specific model generation */
   offersByModelGeneration: Array<Offer>;
+  onboarding: Onboarding;
+  onboardingByToken: Onboarding;
   /** Get all operational leasing offers */
   operationalLeasingOffers: Array<Offer>;
   /** Get all optional equipment for an offer (admin only) */
@@ -1272,6 +1430,8 @@ export type Query = {
   publicOffers: Array<Offer>;
   recommendedCatalogBrands: Array<CatalogBrand>;
   recommendedCatalogModels: Array<CatalogModel>;
+  requiredDocumentsByToken: Array<DocumentTemplate>;
+  requiredDocumentsForOnboarding: Array<DocumentTemplate>;
   searchCatalogBrands: Array<CatalogBrand>;
   searchCatalogColors: Array<CatalogColor>;
   searchCatalogModelGenerations: Array<CatalogModelGeneration>;
@@ -1302,8 +1462,19 @@ export type QueryAllCatalogModelsArgs = {
 };
 
 
+export type QueryAllDocumentTemplatesArgs = {
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryAllOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
+};
+
+
+export type QueryAllOnboardingsArgs = {
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<OnboardingStatus>;
 };
 
 
@@ -1432,6 +1603,16 @@ export type QueryDirectPurchaseOffersArgs = {
 };
 
 
+export type QueryDocumentTemplateArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryDocumentTemplatesByLeasingCompanyArgs = {
+  leasingCompanyId: Scalars['String']['input'];
+};
+
+
 export type QueryEntityHistoryArgs = {
   entityId: Scalars['String']['input'];
   entityName: Scalars['String']['input'];
@@ -1498,6 +1679,16 @@ export type QueryOffersByModelGenerationArgs = {
 };
 
 
+export type QueryOnboardingArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryOnboardingByTokenArgs = {
+  token: Scalars['String']['input'];
+};
+
+
 export type QueryOperationalLeasingOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
 };
@@ -1530,6 +1721,16 @@ export type QueryPublicOfferBySlugArgs = {
 
 export type QueryPublicOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
+};
+
+
+export type QueryRequiredDocumentsByTokenArgs = {
+  token: Scalars['String']['input'];
+};
+
+
+export type QueryRequiredDocumentsForOnboardingArgs = {
+  onboardingId: Scalars['String']['input'];
 };
 
 
@@ -1680,6 +1881,16 @@ export type UpdateCatalogModelInput = {
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateDocumentTemplateInput = {
+  acceptedFormats?: InputMaybe<Array<Scalars['String']['input']>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  displayOrder?: InputMaybe<Scalars['Int']['input']>;
+  helpText?: InputMaybe<Scalars['String']['input']>;
+  isRequired?: InputMaybe<Scalars['Boolean']['input']>;
+  maxSizeBytes?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateFileInput = {
   alt?: InputMaybe<Scalars['String']['input']>;
   checksum?: InputMaybe<Scalars['String']['input']>;
@@ -1730,6 +1941,11 @@ export type UpdateUserInput = {
   phone?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UploadDocumentInput = {
+  documentTemplateId: Scalars['String']['input'];
+  fileId: Scalars['String']['input'];
+};
+
 export type User = {
   __typename?: 'User';
   avatar?: Maybe<File>;
@@ -1759,6 +1975,11 @@ export enum UserRole {
   Public = 'PUBLIC',
   SalesRepresentative = 'SALES_REPRESENTATIVE'
 }
+
+export type ValidateDocumentInput = {
+  note?: InputMaybe<Scalars['String']['input']>;
+  status: DocumentValidationStatus;
+};
 
 export type RequestPasswordResetMutationVariables = Exact<{
   input: RequestPasswordResetInput;
@@ -1796,9 +2017,75 @@ export type GetBrandBySlugQueryVariables = Exact<{
 
 export type GetBrandBySlugQuery = { __typename?: 'Query', catalogBrandBySlug: { __typename?: 'CatalogBrand', id: string, name: string, slug: string, description?: string | null, isActive: boolean, isHighlighted: boolean, isRecommended: boolean, createdAt: any, updatedAt?: any | null } };
 
+export type GetOnboardingByTokenQueryVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+
+export type GetOnboardingByTokenQuery = { __typename?: 'Query', onboardingByToken: { __typename?: 'Onboarding', id: string, token: string, status: OnboardingStatus, expiresAt: any, completedAt?: any | null, createdAt: any, carRequest: { __typename?: 'CarRequest', id: string, requestFirstName?: string | null, requestLastName?: string | null, requestEmail?: string | null, requestPhone?: string | null, financingType: FinancingType, brand?: { __typename?: 'CatalogBrand', id: string, name: string } | null, model?: { __typename?: 'CatalogModel', id: string, name: string } | null }, leasingCompany: { __typename?: 'LeasingCompany', id: string, name: string, link?: string | null, logo?: { __typename?: 'File', id: string, url: string } | null }, documents?: Array<{ __typename?: 'OnboardingDocument', id: string, uploadedAt: any, validationStatus: DocumentValidationStatus, validationNote?: string | null, file: { __typename?: 'File', id: string, name: string, url: string, size: number, sizeFormatted: string, mimeType: string, extension: string }, documentTemplate: { __typename?: 'DocumentTemplate', id: string, name: string, fieldName: string } }> | null } };
+
+export type GetRequiredDocumentsByTokenQueryVariables = Exact<{
+  token: Scalars['String']['input'];
+}>;
+
+
+export type GetRequiredDocumentsByTokenQuery = { __typename?: 'Query', requiredDocumentsByToken: Array<{ __typename?: 'DocumentTemplate', id: string, name: string, fieldName: string, description?: string | null, helpText?: string | null, isRequired: boolean, acceptedFormats: Array<string>, maxSizeBytes: number, displayOrder: number }> };
+
+export type UploadOnboardingDocumentMutationVariables = Exact<{
+  token: Scalars['String']['input'];
+  input: UploadDocumentInput;
+}>;
+
+
+export type UploadOnboardingDocumentMutation = { __typename?: 'Mutation', uploadOnboardingDocument: { __typename?: 'OnboardingDocument', id: string, uploadedAt: any, validationStatus: DocumentValidationStatus, file: { __typename?: 'File', id: string, name: string, url: string, size: number, sizeFormatted: string, mimeType: string, extension: string }, documentTemplate: { __typename?: 'DocumentTemplate', id: string, name: string, fieldName: string } } };
+
+export type GenerateUploadUrlPublicMutationVariables = Exact<{
+  filename: Scalars['String']['input'];
+  contentType: Scalars['String']['input'];
+}>;
+
+
+export type GenerateUploadUrlPublicMutation = { __typename?: 'Mutation', generateUploadUrlPublic: string };
+
+export type CreateFilePublicMutationVariables = Exact<{
+  input: CreateFileInput;
+}>;
+
+
+export type CreateFilePublicMutation = { __typename?: 'Mutation', createFilePublic: { __typename?: 'File', id: string, name: string, url: string, relativePath: string, size: number, sizeFormatted: string, mimeType: string, extension: string, checksum: string, width?: number | null, height?: number | null, createdAt: any } };
+
+export type GetPromotionalOffersQueryVariables = Exact<{
+  filters?: InputMaybe<OfferFiltersInput>;
+}>;
+
+
+export type GetPromotionalOffersQuery = { __typename?: 'Query', publicOffers: Array<{ __typename?: 'Offer', id: string, slug?: string | null, type: OfferType, description?: string | null, isActive: boolean, isPublic: boolean, totalPrice: number, monthlyPayment?: number | null, annualMileageLimit?: number | null, leasingDurationMonths?: number | null, discountAmount?: number | null, discountPercentage?: number | null, financingAvailable?: boolean | null, includesWarranty?: boolean | null, warrantyYears?: number | null, hasServiceIncluded?: boolean | null, hasWinterTyresIncluded?: boolean | null, hasAssistanceServiceIncluded?: boolean | null, hasGapIncluded?: boolean | null, createdAt: any, updatedAt: any, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string, logo?: { __typename?: 'File', id: string, url: string, alt?: string | null, width?: number | null, height?: number | null } | null } | null, model?: { __typename?: 'CatalogModel', id: string, name: string, slug: string } | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, bodyType?: CatalogBodyType | null, description?: string | null } }> };
+
+export type GetOperationalLeasingOffersQueryVariables = Exact<{
+  filters?: InputMaybe<OfferFiltersInput>;
+}>;
+
+
+export type GetOperationalLeasingOffersQuery = { __typename?: 'Query', operationalLeasingOffers: Array<{ __typename?: 'Offer', id: string, slug?: string | null, type: OfferType, description?: string | null, isActive: boolean, isPublic: boolean, totalPrice: number, monthlyPayment?: number | null, annualMileageLimit?: number | null, leasingDurationMonths?: number | null, hasServiceIncluded?: boolean | null, hasWinterTyresIncluded?: boolean | null, hasAssistanceServiceIncluded?: boolean | null, hasGapIncluded?: boolean | null, createdAt: any, updatedAt: any, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string, logo?: { __typename?: 'File', id: string, url: string, alt?: string | null, width?: number | null, height?: number | null } | null } | null, model?: { __typename?: 'CatalogModel', id: string, name: string, slug: string } | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, bodyType?: CatalogBodyType | null, description?: string | null } }> };
+
+export type GetDirectPurchaseOffersQueryVariables = Exact<{
+  filters?: InputMaybe<OfferFiltersInput>;
+}>;
+
+
+export type GetDirectPurchaseOffersQuery = { __typename?: 'Query', directPurchaseOffers: Array<{ __typename?: 'Offer', id: string, slug?: string | null, type: OfferType, description?: string | null, isActive: boolean, isPublic: boolean, totalPrice: number, discountAmount?: number | null, discountPercentage?: number | null, financingAvailable?: boolean | null, includesWarranty?: boolean | null, warrantyYears?: number | null, createdAt: any, updatedAt: any, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string, logo?: { __typename?: 'File', id: string, url: string, alt?: string | null, width?: number | null, height?: number | null } | null } | null, model?: { __typename?: 'CatalogModel', id: string, name: string, slug: string } | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, bodyType?: CatalogBodyType | null, description?: string | null } }> };
+
 
 export const RequestPasswordResetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestPasswordReset"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RequestPasswordResetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestPasswordReset"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>;
 export const ResetPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ResetPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ResetPasswordInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resetPassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const GetCatalogBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogBrands"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrands"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"activeOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogBrandsQuery, GetCatalogBrandsQueryVariables>;
 export const GetHighlightedBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHighlightedBrands"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"highlightedCatalogBrands"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}}]}}]}}]} as unknown as DocumentNode<GetHighlightedBrandsQuery, GetHighlightedBrandsQueryVariables>;
 export const GetBrandBySlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBrandBySlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrandBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetBrandBySlugQuery, GetBrandBySlugQueryVariables>;
+export const GetOnboardingByTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOnboardingByToken"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"token"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onboardingByToken"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"token"},"value":{"kind":"Variable","name":{"kind":"Name","value":"token"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"carRequest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"requestFirstName"}},{"kind":"Field","name":{"kind":"Name","value":"requestLastName"}},{"kind":"Field","name":{"kind":"Name","value":"requestEmail"}},{"kind":"Field","name":{"kind":"Name","value":"requestPhone"}},{"kind":"Field","name":{"kind":"Name","value":"financingType"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"documents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"uploadedAt"}},{"kind":"Field","name":{"kind":"Name","value":"validationStatus"}},{"kind":"Field","name":{"kind":"Name","value":"validationNote"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"sizeFormatted"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"extension"}}]}},{"kind":"Field","name":{"kind":"Name","value":"documentTemplate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetOnboardingByTokenQuery, GetOnboardingByTokenQueryVariables>;
+export const GetRequiredDocumentsByTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRequiredDocumentsByToken"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"token"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requiredDocumentsByToken"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"token"},"value":{"kind":"Variable","name":{"kind":"Name","value":"token"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"helpText"}},{"kind":"Field","name":{"kind":"Name","value":"isRequired"}},{"kind":"Field","name":{"kind":"Name","value":"acceptedFormats"}},{"kind":"Field","name":{"kind":"Name","value":"maxSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}}]}}]}}]} as unknown as DocumentNode<GetRequiredDocumentsByTokenQuery, GetRequiredDocumentsByTokenQueryVariables>;
+export const UploadOnboardingDocumentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UploadOnboardingDocument"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"token"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UploadDocumentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadOnboardingDocument"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"token"},"value":{"kind":"Variable","name":{"kind":"Name","value":"token"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"uploadedAt"}},{"kind":"Field","name":{"kind":"Name","value":"validationStatus"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"sizeFormatted"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"extension"}}]}},{"kind":"Field","name":{"kind":"Name","value":"documentTemplate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}}]}}]}}]}}]} as unknown as DocumentNode<UploadOnboardingDocumentMutation, UploadOnboardingDocumentMutationVariables>;
+export const GenerateUploadUrlPublicDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GenerateUploadUrlPublic"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filename"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"contentType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generateUploadUrlPublic"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filename"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filename"}}},{"kind":"Argument","name":{"kind":"Name","value":"contentType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"contentType"}}}]}]}}]} as unknown as DocumentNode<GenerateUploadUrlPublicMutation, GenerateUploadUrlPublicMutationVariables>;
+export const CreateFilePublicDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateFilePublic"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateFileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createFilePublic"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"relativePath"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"sizeFormatted"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"extension"}},{"kind":"Field","name":{"kind":"Name","value":"checksum"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<CreateFilePublicMutation, CreateFilePublicMutationVariables>;
+export const GetPromotionalOffersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPromotionalOffers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OfferFiltersInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicOffers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"annualMileageLimit"}},{"kind":"Field","name":{"kind":"Name","value":"leasingDurationMonths"}},{"kind":"Field","name":{"kind":"Name","value":"discountAmount"}},{"kind":"Field","name":{"kind":"Name","value":"discountPercentage"}},{"kind":"Field","name":{"kind":"Name","value":"financingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"includesWarranty"}},{"kind":"Field","name":{"kind":"Name","value":"warrantyYears"}},{"kind":"Field","name":{"kind":"Name","value":"hasServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasWinterTyresIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasAssistanceServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasGapIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetPromotionalOffersQuery, GetPromotionalOffersQueryVariables>;
+export const GetOperationalLeasingOffersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOperationalLeasingOffers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OfferFiltersInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"operationalLeasingOffers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"annualMileageLimit"}},{"kind":"Field","name":{"kind":"Name","value":"leasingDurationMonths"}},{"kind":"Field","name":{"kind":"Name","value":"hasServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasWinterTyresIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasAssistanceServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasGapIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetOperationalLeasingOffersQuery, GetOperationalLeasingOffersQueryVariables>;
+export const GetDirectPurchaseOffersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDirectPurchaseOffers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OfferFiltersInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"directPurchaseOffers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"discountAmount"}},{"kind":"Field","name":{"kind":"Name","value":"discountPercentage"}},{"kind":"Field","name":{"kind":"Name","value":"financingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"includesWarranty"}},{"kind":"Field","name":{"kind":"Name","value":"warrantyYears"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetDirectPurchaseOffersQuery, GetDirectPurchaseOffersQueryVariables>;

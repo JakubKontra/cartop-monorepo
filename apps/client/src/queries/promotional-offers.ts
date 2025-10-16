@@ -53,23 +53,7 @@ export const GET_PROMOTIONAL_OFFERS_QUERY = graphql(`
         name
         slug
         bodyType
-        fuelType
-        transmission
-        drivetrain
-        horsepower
-        engineDisplacement
-        year
-        gallery {
-          id
-          name
-          images {
-            id
-            url
-            alt
-            width
-            height
-          }
-        }
+        description
       }
       createdAt
       updatedAt
@@ -119,23 +103,7 @@ export const GET_OPERATIONAL_LEASING_OFFERS_QUERY = graphql(`
         name
         slug
         bodyType
-        fuelType
-        transmission
-        drivetrain
-        horsepower
-        engineDisplacement
-        year
-        gallery {
-          id
-          name
-          images {
-            id
-            url
-            alt
-            width
-            height
-          }
-        }
+        description
       }
       createdAt
       updatedAt
@@ -183,23 +151,7 @@ export const GET_DIRECT_PURCHASE_OFFERS_QUERY = graphql(`
         name
         slug
         bodyType
-        fuelType
-        transmission
-        drivetrain
-        horsepower
-        engineDisplacement
-        year
-        gallery {
-          id
-          name
-          images {
-            id
-            url
-            alt
-            width
-            height
-          }
-        }
+        description
       }
       createdAt
       updatedAt
