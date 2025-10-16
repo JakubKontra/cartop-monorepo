@@ -3,7 +3,7 @@
 import { Search } from 'lucide-react';
 import { useState } from 'react';
 
-import Button from '@/components/atoms/button/Button';
+import { ButtonIcon } from '@/components/atoms/button/ButtonIcon';
 
 export const SearchInput = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,18 +20,26 @@ export const SearchInput = () => {
   };
 
   return (
-    <div className="flex w-full gap-2">
+    <div className="relative w-full">
       <input
-        className="flex-1 rounded-2xl border border-gray-300 px-6 py-5 text-base text-gunmetal placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-        placeholder="Značka nebo model"
+        aria-label="Hledat značku nebo model"
+        className="h-14 w-full rounded-2xl border border-gray-300 px-6 text-base text-gunmetal placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+        id="search-input"
+        name="search-input"
+        placeholder="Hledat značku nebo model"
         type="text"
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         onKeyPress={handleKeyPress}
       />
-      <Button icon={<Search className="size-5" />} size="narrow" variant="primary" onClick={handleSearch}>
-        Hledat
-      </Button>
+      <div className="absolute top-1/2 right-0 -translate-y-1/2">
+        <ButtonIcon
+          className="!h-14 !w-14 !p-0"
+          icon={<Search className="size-6" />}
+          variant="primary-inverted"
+          onClick={handleSearch}
+        />
+      </div>
     </div>
   );
 };
