@@ -1,7 +1,7 @@
 'use client';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ButtonIcon } from '@/components/organisms/Button/ButtonIcon';
@@ -18,6 +18,7 @@ interface CarouselSlideProps {
   shouldBeWithBackgroundImage?: boolean;
   text: string;
   title: string;
+  video?: string;
 }
 
 const CarouselSlide = ({
@@ -29,13 +30,29 @@ const CarouselSlide = ({
   shouldBeWithBackgroundImage = false,
   text,
   title,
+  video,
 }: CarouselSlideProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isHovered) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    }
+  }, [isHovered]);
+
   return (
     <div
       className={cn(
         'flex h-[480px] w-56 shrink-0 flex-col justify-between rounded-4xl px-4 py-6 pt-12 transition-colors duration-1000 lg:w-80 lg:p-10 lg:pt-20',
         shouldBeIconVisible ? 'items-center' : 'items-start',
         isActive ? '' : '',
+        video ? 'relative overflow-hidden' : '',
       )}
       style={
         shouldBeWithBackgroundImage && backgroundImage
@@ -46,13 +63,31 @@ const CarouselSlide = ({
             }
           : undefined
       }
+      onMouseEnter={() => video && setIsHovered(true)}
+      onMouseLeave={() => video && setIsHovered(false)}
     >
+      {video && (
+        <>
+          <video
+            ref={videoRef}
+            loop
+            muted
+            playsInline
+            className={cn(
+              'absolute inset-0 size-full rounded-4xl object-cover transition-opacity duration-500',
+              isHovered ? 'opacity-100' : 'opacity-0',
+            )}
+            src={video}
+          />
+          <div className="absolute inset-0 rounded-4xl bg-gradient-to-t from-black to-transparent" />
+        </>
+      )}
       {shouldBeIconVisible && (
-        <div className="relative aspect-[169/200] w-24 overflow-hidden rounded-lg lg:w-44">
+        <div className="relative z-10 aspect-[169/200] w-24 overflow-hidden rounded-lg lg:w-44">
           <Image fill alt={alt || title} className="object-cover" src={image} />
         </div>
       )}
-      <div className={cn('flex flex-col gap-3', shouldBeIconVisible ? '' : 'mt-70')}>
+      <div className={cn('relative z-10 flex flex-col gap-3', shouldBeIconVisible ? '' : 'mt-70')}>
         <h3
           className={cn(
             'text-base font-semibold',
@@ -123,6 +158,7 @@ const slidesData = [
     shouldBeWithBackgroundImage: true,
     text: '80 %',
     title: 'Dostupnost',
+    video: '/images/homepage/reliable-partners/dostupnost.mp4',
   },
   {
     backgroundImage: '/images/homepage/reliable-partners/zakazniku-kterym-pomuzeme-s-vyberem.png',
@@ -185,6 +221,7 @@ export const ReliablePartnerCarousel = ({ className }: { className?: string }) =
                     shouldBeWithBackgroundImage={item.shouldBeWithBackgroundImage}
                     text={item.text}
                     title={item.title}
+                    video={item.video}
                   />
                 </SwiperSlide>
               );
