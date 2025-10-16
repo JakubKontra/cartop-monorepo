@@ -34,9 +34,24 @@ const REFRESH_TOKEN_MUTATION_INTERNAL = graphql(`
 
 /**
  * Auth link: Adds Authorization header with access token
+ * Syncs Zustand state with cookies to prevent using expired tokens
  */
 const authLink = setContext((_, { headers }) => {
-  const token = useAuthStore.getState().auth.accessToken;
+  const store = useAuthStore.getState();
+  let token = store.auth.accessToken;
+
+  // Check if access token cookie still exists (not expired)
+  // If cookie is missing but Zustand has a token, clear the stale token
+  const cookieToken = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('cartop_access_token='));
+
+  if (!cookieToken && token) {
+    // Cookie expired but state still has it - clear the stale token
+    logger.warn('Access token cookie expired, clearing stale token from state');
+    store.auth.resetAccessToken();
+    token = '';
+  }
 
   return {
     headers: {
@@ -105,19 +120,73 @@ const refreshToken = async (): Promise<{ accessToken: string; refreshToken: stri
 };
 
 /**
- * Error link: Handles token refresh on 401 errors
+ * Check if error is an authentication error that should trigger token refresh
+ */
+const isAuthError = (err: any): boolean => {
+  // Check for UNAUTHENTICATED code
+  if (err.extensions?.code === 'UNAUTHENTICATED') {
+    return true;
+  }
+
+  // Check for 401 HTTP status
+  if (err.extensions?.http?.status === 401 || err.extensions?.code === 401) {
+    return true;
+  }
+
+  // Check for auth error keys
+  const errorKey = err.extensions?.key;
+  if (
+    errorKey === 'AUTH_UNAUTHORIZED' ||
+    errorKey === 'AUTH_TOKEN_EXPIRED' ||
+    errorKey === 'AUTH_TOKEN_INVALID'
+  ) {
+    return true;
+  }
+
+  // Check message patterns
+  if (
+    err.message.includes('Unauthorized') ||
+    err.message.includes('unauthenticated') ||
+    err.message.includes('authentication token')
+  ) {
+    return true;
+  }
+
+  // Check nested error messages (for wrapped errors)
+  if (err.extensions?.errors && Array.isArray(err.extensions.errors)) {
+    for (const nestedErr of err.extensions.errors) {
+      if (
+        nestedErr.message?.includes('authentication token') ||
+        nestedErr.message?.includes('Unauthorized')
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
+/**
+ * Error link: Handles token refresh on authentication errors
  */
 const errorLink = onError((errorResponse: ErrorResponse) => {
   const { graphQLErrors, networkError, operation, forward } = errorResponse;
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       // Check for authentication errors
-      if (err.extensions?.code === 'UNAUTHENTICATED' || err.message.includes('Unauthorized')) {
+      if (isAuthError(err)) {
+        logger.info('Authentication error detected, attempting token refresh', {
+          errorKey: err.extensions?.key,
+          errorCode: err.extensions?.code,
+        });
+
         // Attempt to refresh token
         return new Observable((observer) => {
           refreshToken()
             .then((tokens) => {
               if (tokens) {
+                logger.info('Token refresh successful, retrying operation');
                 // Retry the failed operation with new token
                 const oldHeaders = operation.getContext().headers;
                 operation.setContext({
@@ -137,12 +206,14 @@ const errorLink = onError((errorResponse: ErrorResponse) => {
                 forward(operation).subscribe(subscriber);
               } else {
                 // Refresh failed, logout user
+                logger.warn('Token refresh failed, logging out user');
                 useAuthStore.getState().auth.reset();
                 observer.error(err);
               }
             })
             .catch((error) => {
               // Refresh failed, logout user
+              logger.error('Token refresh error', error);
               useAuthStore.getState().auth.reset();
               observer.error(error);
             });

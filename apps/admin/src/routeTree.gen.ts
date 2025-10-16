@@ -44,6 +44,7 @@ import { Route as AuthenticatedGenerationsNewRouteImport } from './routes/_authe
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedCarRequestsNewRouteImport } from './routes/_authenticated/car-requests/new'
 import { Route as AuthenticatedBrandsNewRouteImport } from './routes/_authenticated/brands/new'
+import { Route as AuthenticatedUsersUserIdIndexRouteImport } from './routes/_authenticated/users/$userId/index'
 import { Route as AuthenticatedGenerationsGenerationIdIndexRouteImport } from './routes/_authenticated/generations/$generationId/index'
 import { Route as AuthenticatedUsersUserIdEditRouteImport } from './routes/_authenticated/users/$userId/edit'
 import { Route as AuthenticatedModelsModelIdEditRouteImport } from './routes/_authenticated/models/$modelId/edit'
@@ -241,6 +242,12 @@ const AuthenticatedBrandsNewRoute = AuthenticatedBrandsNewRouteImport.update({
   path: '/brands/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedUsersUserIdIndexRoute =
+  AuthenticatedUsersUserIdIndexRouteImport.update({
+    id: '/users/$userId/',
+    path: '/users/$userId/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedGenerationsGenerationIdIndexRoute =
   AuthenticatedGenerationsGenerationIdIndexRouteImport.update({
     id: '/generations/$generationId/',
@@ -319,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
   '/generations/$generationId': typeof AuthenticatedGenerationsGenerationIdIndexRoute
+  '/users/$userId': typeof AuthenticatedUsersUserIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof authForgotPasswordRoute
@@ -360,6 +368,7 @@ export interface FileRoutesByTo {
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
   '/generations/$generationId': typeof AuthenticatedGenerationsGenerationIdIndexRoute
+  '/users/$userId': typeof AuthenticatedUsersUserIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -404,6 +413,7 @@ export interface FileRoutesById {
   '/_authenticated/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/_authenticated/users/$userId/edit': typeof AuthenticatedUsersUserIdEditRoute
   '/_authenticated/generations/$generationId/': typeof AuthenticatedGenerationsGenerationIdIndexRoute
+  '/_authenticated/users/$userId/': typeof AuthenticatedUsersUserIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -448,6 +458,7 @@ export interface FileRouteTypes {
     | '/models/$modelId/edit'
     | '/users/$userId/edit'
     | '/generations/$generationId'
+    | '/users/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -489,6 +500,7 @@ export interface FileRouteTypes {
     | '/models/$modelId/edit'
     | '/users/$userId/edit'
     | '/generations/$generationId'
+    | '/users/$userId'
   id:
     | '__root__'
     | '/_authenticated'
@@ -532,6 +544,7 @@ export interface FileRouteTypes {
     | '/_authenticated/models/$modelId/edit'
     | '/_authenticated/users/$userId/edit'
     | '/_authenticated/generations/$generationId/'
+    | '/_authenticated/users/$userId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -795,6 +808,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBrandsNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/users/$userId/': {
+      id: '/_authenticated/users/$userId/'
+      path: '/users/$userId'
+      fullPath: '/users/$userId'
+      preLoaderRoute: typeof AuthenticatedUsersUserIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/generations/$generationId/': {
       id: '/_authenticated/generations/$generationId/'
       path: '/generations/$generationId'
@@ -889,6 +909,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedModelsModelIdEditRoute: typeof AuthenticatedModelsModelIdEditRoute
   AuthenticatedUsersUserIdEditRoute: typeof AuthenticatedUsersUserIdEditRoute
   AuthenticatedGenerationsGenerationIdIndexRoute: typeof AuthenticatedGenerationsGenerationIdIndexRoute
+  AuthenticatedUsersUserIdIndexRoute: typeof AuthenticatedUsersUserIdIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -921,6 +942,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedUsersUserIdEditRoute: AuthenticatedUsersUserIdEditRoute,
   AuthenticatedGenerationsGenerationIdIndexRoute:
     AuthenticatedGenerationsGenerationIdIndexRoute,
+  AuthenticatedUsersUserIdIndexRoute: AuthenticatedUsersUserIdIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

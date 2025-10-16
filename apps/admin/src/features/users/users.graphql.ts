@@ -126,3 +126,27 @@ export const DELETE_USER = graphql(`
     deleteUser(id: $id)
   }
 `);
+
+/**
+ * Get User Audit Logs Query
+ * Fetches audit logs for a specific user
+ */
+export const GET_USER_AUDIT_LOGS = graphql(`
+  query GetUserAuditLogs($userId: String!, $limit: Float) {
+    userActivity(userId: $userId, limit: $limit) {
+      id
+      entityName
+      entityId
+      action
+      oldValue
+      newValue
+      changes
+      userId
+      userEmail
+      ipAddress
+      userAgent
+      metadata
+      createdAt
+    }
+  }
+`);

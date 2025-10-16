@@ -1,6 +1,6 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type Row } from '@tanstack/react-table'
-import { Trash2, UserPen, UserCog } from 'lucide-react'
+import { Trash2, UserPen, UserCog, Eye } from 'lucide-react'
 import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import {
@@ -47,6 +47,19 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='w-[180px]'>
+          <DropdownMenuItem
+            onClick={() => {
+              navigate({ to: '/users/$userId', params: { userId: row.original.id } })
+            }}
+          >
+            View Details
+            <DropdownMenuShortcut>
+              <Eye size={16} />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
           <DropdownMenuItem
             onClick={() => {
               navigate({ to: '/users/$userId/edit', params: { userId: row.original.id } })

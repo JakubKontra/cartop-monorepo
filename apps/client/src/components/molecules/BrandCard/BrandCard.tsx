@@ -42,9 +42,9 @@ export const BrandCard = ({
     <Link
       href={href}
       className={cn(
-        'group flex flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white p-4 transition-all duration-300',
-        'hover:scale-105 hover:border-primary',
-        'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:outline-none',
+        'group flex flex-col items-center gap-3 rounded-2xl bg-gunmetal-50 p-4 transition-all duration-300',
+        ' hover:bg-gunmetal-100',
+        'focus-visible:ring-2 focus-visible:ring-cadet-grey focus-visible:ring-offset-2 focus-visible:outline-none ',
         className,
       )}
     >

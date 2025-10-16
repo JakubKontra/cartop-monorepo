@@ -60,6 +60,7 @@ type Documents = {
     "\n  mutation UpdateUser($id: String!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n      email\n      firstName\n      lastName\n      roles\n      phone\n      bio\n      isActive\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.UpdateUserDocument,
     "\n  mutation SoftDeleteUser($id: String!) {\n    softDeleteUser(id: $id) {\n      id\n      email\n      firstName\n      lastName\n      isActive\n    }\n  }\n": typeof types.SoftDeleteUserDocument,
     "\n  mutation DeleteUser($id: String!) {\n    deleteUser(id: $id)\n  }\n": typeof types.DeleteUserDocument,
+    "\n  query GetUserAuditLogs($userId: String!, $limit: Float) {\n    userActivity(userId: $userId, limit: $limit) {\n      id\n      entityName\n      entityId\n      action\n      oldValue\n      newValue\n      changes\n      userId\n      userEmail\n      ipAddress\n      userAgent\n      metadata\n      createdAt\n    }\n  }\n": typeof types.GetUserAuditLogsDocument,
     "\n  mutation RefreshTokenInternal($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        firstName\n        lastName\n        roles\n      }\n    }\n  }\n": typeof types.RefreshTokenInternalDocument,
     "\n  mutation GenerateUploadUrl($filename: String!, $contentType: String!) {\n    generateUploadUrl(filename: $filename, contentType: $contentType)\n  }\n": typeof types.GenerateUploadUrlDocument,
     "\n  mutation CreateFile($input: CreateFileInput!) {\n    createFile(input: $input) {\n      id\n      relativePath\n      url\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      alt\n      title\n      thumbnailPath\n      isImage\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.CreateFileDocument,
@@ -114,6 +115,7 @@ const documents: Documents = {
     "\n  mutation UpdateUser($id: String!, $input: UpdateUserInput!) {\n    updateUser(id: $id, input: $input) {\n      id\n      email\n      firstName\n      lastName\n      roles\n      phone\n      bio\n      isActive\n      createdAt\n      updatedAt\n    }\n  }\n": types.UpdateUserDocument,
     "\n  mutation SoftDeleteUser($id: String!) {\n    softDeleteUser(id: $id) {\n      id\n      email\n      firstName\n      lastName\n      isActive\n    }\n  }\n": types.SoftDeleteUserDocument,
     "\n  mutation DeleteUser($id: String!) {\n    deleteUser(id: $id)\n  }\n": types.DeleteUserDocument,
+    "\n  query GetUserAuditLogs($userId: String!, $limit: Float) {\n    userActivity(userId: $userId, limit: $limit) {\n      id\n      entityName\n      entityId\n      action\n      oldValue\n      newValue\n      changes\n      userId\n      userEmail\n      ipAddress\n      userAgent\n      metadata\n      createdAt\n    }\n  }\n": types.GetUserAuditLogsDocument,
     "\n  mutation RefreshTokenInternal($input: RefreshTokenInput!) {\n    refreshToken(input: $input) {\n      accessToken\n      refreshToken\n      user {\n        id\n        email\n        firstName\n        lastName\n        roles\n      }\n    }\n  }\n": types.RefreshTokenInternalDocument,
     "\n  mutation GenerateUploadUrl($filename: String!, $contentType: String!) {\n    generateUploadUrl(filename: $filename, contentType: $contentType)\n  }\n": types.GenerateUploadUrlDocument,
     "\n  mutation CreateFile($input: CreateFileInput!) {\n    createFile(input: $input) {\n      id\n      relativePath\n      url\n      name\n      extension\n      size\n      mimeType\n      checksum\n      width\n      height\n      alt\n      title\n      thumbnailPath\n      isImage\n      createdAt\n      updatedAt\n    }\n  }\n": types.CreateFileDocument,
@@ -320,6 +322,10 @@ export function graphql(source: "\n  mutation SoftDeleteUser($id: String!) {\n  
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation DeleteUser($id: String!) {\n    deleteUser(id: $id)\n  }\n"): (typeof documents)["\n  mutation DeleteUser($id: String!) {\n    deleteUser(id: $id)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetUserAuditLogs($userId: String!, $limit: Float) {\n    userActivity(userId: $userId, limit: $limit) {\n      id\n      entityName\n      entityId\n      action\n      oldValue\n      newValue\n      changes\n      userId\n      userEmail\n      ipAddress\n      userAgent\n      metadata\n      createdAt\n    }\n  }\n"): (typeof documents)["\n  query GetUserAuditLogs($userId: String!, $limit: Float) {\n    userActivity(userId: $userId, limit: $limit) {\n      id\n      entityName\n      entityId\n      action\n      oldValue\n      newValue\n      changes\n      userId\n      userEmail\n      ipAddress\n      userAgent\n      metadata\n      createdAt\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

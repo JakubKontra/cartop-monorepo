@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ClsModule } from 'nestjs-cls';
 import { join } from 'path';
 import { AuditModule } from './model/audit/audit.module';
 import { UserModule } from './model/user/user.module';
@@ -19,9 +20,23 @@ import { CarRequestModule } from './car-request/car-request.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { SubscriberRegistryProvider } from './common/providers/subscriber-registry.provider';
+import { UserContextInterceptor } from './common/interceptors/user-context.interceptor';
 
 @Module({
   imports: [
+    // Continuation Local Storage for request context
+    ClsModule.forRoot({
+      global: true,
+      middleware: {
+        mount: true,
+        generateId: true,
+        setup: (cls, req) => {
+          // Store request object for user context extraction
+          cls.set('request', req);
+        },
+      },
+    }),
+
     // GraphQL Configuration - Unified Endpoint
     // Access control is handled by @Public() and @Roles() decorators
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -113,6 +128,11 @@ import { SubscriberRegistryProvider } from './common/providers/subscriber-regist
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    // Apply User Context Interceptor globally
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: UserContextInterceptor,
     },
     // Register TypeORM subscribers with proper DI
     SubscriberRegistryProvider,

@@ -1,8 +1,9 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from '../decorators/auth/public.decorator';
+import { AuthExceptions } from '../exceptions/factories/auth.exceptions';
 
 /**
  * JWT Authentication Guard for GraphQL
@@ -34,9 +35,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, user: any, _info: any) {
+  handleRequest(err: any, user: any, info: any) {
     if (err || !user) {
-      throw err || new UnauthorizedException('Invalid or missing authentication token');
+      // Check if token is expired or invalid based on info
+      if (info?.name === 'TokenExpiredError') {
+        throw AuthExceptions.tokenExpired();
+      }
+      if (info?.name === 'JsonWebTokenError') {
+        throw AuthExceptions.tokenInvalid();
+      }
+      // Default to unauthorized for other cases
+      throw err || AuthExceptions.unauthorized('Invalid or missing authentication token');
     }
     return user;
   }

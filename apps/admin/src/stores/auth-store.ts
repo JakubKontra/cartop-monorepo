@@ -33,7 +33,16 @@ interface AuthState {
   }
 }
 
-export const useAuthStore = create<AuthState>()((set) => {
+/**
+ * Helper to sync Zustand state with cookies
+ * Returns current token from cookie or empty string if expired
+ */
+const getTokenFromCookie = (key: string): string => {
+  const cookie = getCookie(key)
+  return cookie ? JSON.parse(cookie) : ''
+}
+
+export const useAuthStore = create<AuthState>()((set, get) => {
   const accessTokenCookie = getCookie(ACCESS_TOKEN_KEY)
   const refreshTokenCookie = getCookie(REFRESH_TOKEN_KEY)
   const userCookie = getCookie(USER_KEY)

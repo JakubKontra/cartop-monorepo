@@ -6,6 +6,7 @@ import {
   RemoveEvent,
 } from 'typeorm';
 import { Injectable, Logger } from '@nestjs/common';
+import { ClsService } from 'nestjs-cls';
 import { AuditService } from './audit.service';
 import { AuditAction } from '../../common/interfaces/audit.interface';
 import { isAuditable } from '../../common/decorators/auditable.decorator';
@@ -21,7 +22,10 @@ import { isAuditable } from '../../common/decorators/auditable.decorator';
 export class AuditSubscriber implements EntitySubscriberInterface {
   private readonly logger = new Logger(AuditSubscriber.name);
 
-  constructor(private readonly auditService: AuditService) {}
+  constructor(
+    private readonly auditService: AuditService,
+    private readonly cls: ClsService,
+  ) {}
 
   /**
    * After entity is inserted
@@ -34,6 +38,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     }
 
     try {
+      const userContext = this.getUserContext();
       await this.auditService.log({
         entityName: event.metadata.tableName,
         entityId: this.getEntityId(entity),
@@ -41,6 +46,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         newValue: entity,
         changes: undefined,
         oldValue: undefined,
+        ...userContext,
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -65,6 +71,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
       // Only log if there are actual changes
       if (Object.keys(changes).length > 0) {
+        const userContext = this.getUserContext();
         await this.auditService.log({
           entityName: event.metadata.tableName,
           entityId: this.getEntityId(entity),
@@ -72,6 +79,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
           oldValue,
           newValue,
           changes,
+          ...userContext,
         });
       }
     } catch (error) {
@@ -91,6 +99,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     }
 
     try {
+      const userContext = this.getUserContext();
       await this.auditService.log({
         entityName: event.metadata.tableName,
         entityId: this.getEntityId(entity),
@@ -98,10 +107,34 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         oldValue: entity,
         newValue: undefined,
         changes: undefined,
+        ...userContext,
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.logger.error(`Audit logging failed for REMOVE: ${errorMessage}`);
+    }
+  }
+
+  /**
+   * Extract user context from CLS
+   */
+  private getUserContext(): {
+    userId?: string;
+    userEmail?: string;
+    ipAddress?: string;
+    userAgent?: string;
+  } {
+    try {
+      return {
+        userId: this.cls.get('userId'),
+        userEmail: this.cls.get('userEmail'),
+        ipAddress: this.cls.get('ipAddress'),
+        userAgent: this.cls.get('userAgent'),
+      };
+    } catch (error) {
+      // CLS may not be available in some contexts (e.g., background jobs)
+      // Return empty context instead of throwing
+      return {};
     }
   }
 

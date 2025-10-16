@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     // Revalidate based on entity type
     switch (entityName) {
-      case 'CatalogBrand':
+      case 'catalog_brands':
         // Revalidate all brand-related pages
         revalidatePath('/brands');
         revalidateTag('brands');
