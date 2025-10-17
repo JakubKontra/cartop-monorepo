@@ -76,6 +76,18 @@ export const CATALOG_BODY_TYPE_FROM_NUMBER: Record<number, CatalogBodyType> = {
   54: CatalogBodyType.MOTORHOME,
 };
 
+/**
+ * Map MySQL body_type_id to CatalogBodyType enum
+ * Used for MySQL to PostgreSQL migration
+ *
+ * @param mysqlId Legacy MySQL body type ID
+ * @returns CatalogBodyType enum value or null if not found or invalid
+ */
+export function mapMySQLBodyType(mysqlId?: number | null): CatalogBodyType | null {
+  if (!mysqlId) return null;
+  return CATALOG_BODY_TYPE_FROM_NUMBER[mysqlId] || null;
+}
+
 // Register enum for GraphQL
 registerEnumType(CatalogBodyType, {
   name: 'CatalogBodyType',

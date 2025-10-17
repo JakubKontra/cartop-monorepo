@@ -45,12 +45,10 @@ export class OfferLeasingVariant {
 
   @Field(() => Int)
   @Column({ type: 'integer', default: 10000 })
-  @Index()
   annualMileageLimit: number; // 10000, 15000, 20000, etc.
 
   @Field(() => Int)
   @Column({ type: 'integer', default: 24 })
-  @Index()
   leasingDurationMonths: number; // 12, 24, 36, 48, 60 months
 
   // === Pricing ===
@@ -65,12 +63,10 @@ export class OfferLeasingVariant {
 
   @Field(() => Int, { nullable: true })
   @Column({ type: 'integer', nullable: true })
-  @Index()
   priceWithoutVat?: number; // Monthly price without VAT
 
   @Field(() => Int, { nullable: true })
   @Column({ type: 'integer', nullable: true })
-  @Index()
   priceWithVat?: number; // Monthly price with VAT
 
   @Field(() => PricePeriod)
@@ -147,7 +143,6 @@ export class OfferLeasingVariant {
 
   @Field()
   @Column({ type: 'boolean', default: true })
-  @Index()
   isActive: boolean;
 
   @Field()

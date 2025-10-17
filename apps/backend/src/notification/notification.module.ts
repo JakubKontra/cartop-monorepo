@@ -5,6 +5,7 @@ import { NotificationService } from './notification.service';
 import { NotificationProcessor } from './notification.processor';
 import { NotificationController } from './notification.controller';
 import { EmailPreviewController } from './email-preview.controller';
+import { EmailTestController } from './email-test.controller';
 import { EmailService } from './email/email.service';
 import { MailgunProvider } from './email/providers/mailgun.provider';
 import { SmtpProvider } from './email/providers/smtp.provider';
@@ -42,7 +43,7 @@ const emailProviderFactory = {
       NotificationEvent,
     ]),
   ],
-  controllers: [NotificationController, EmailPreviewController],
+  controllers: [NotificationController, EmailPreviewController, EmailTestController],
   providers: [
     NotificationService,
     NotificationProcessor,

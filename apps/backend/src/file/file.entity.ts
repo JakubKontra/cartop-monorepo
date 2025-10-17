@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   Index,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Auditable } from '../common/decorators/auditable.decorator';
 import { User } from '../model/user/user.entity';
+import { CatalogModelGenerationImage } from '../catalog/generation/catalog-model-generation-image.entity';
 
 /**
  * File Entity
@@ -100,6 +102,12 @@ export class File {
 
   @Column({ type: 'uuid', nullable: true })
   uploadedById?: string;
+
+  // === Relations ===
+
+  @Field(() => [CatalogModelGenerationImage], { nullable: true })
+  @OneToMany(() => CatalogModelGenerationImage, generationImage => generationImage.image)
+  generationImages?: CatalogModelGenerationImage[];
 
   // === Computed fields (GraphQL only) ===
 

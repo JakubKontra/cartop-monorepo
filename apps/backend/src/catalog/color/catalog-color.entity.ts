@@ -4,10 +4,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { Auditable } from '../../common/decorators/auditable.decorator';
 import { CatalogColorType } from '../../common/enums/catalog/catalog-color-type.enum';
+import { CatalogModelGenerationColor } from '../generation/catalog-model-generation-color.entity';
 
 // Register enum for GraphQL
 registerEnumType(CatalogColorType, {
@@ -55,7 +57,7 @@ export class CatalogColor {
   })
   type: CatalogColorType;
 
-  // Relations will be added when implementing CatalogModelGenerationColor
-  // @OneToMany(() => CatalogModelGenerationColor, color => color.catalogColor)
-  // modelGenerationColors: CatalogModelGenerationColor[];
+  @Field(() => [CatalogModelGenerationColor], { nullable: true })
+  @OneToMany(() => CatalogModelGenerationColor, generationColor => generationColor.color)
+  generationColors?: CatalogModelGenerationColor[];
 }

@@ -28,6 +28,18 @@ export const CATALOG_EQUIPMENT_BRAKE_TYPE_FROM_NUMBER: Record<number, CatalogEqu
   145: CatalogEquipmentBrakeType.DRUM,
 };
 
+/**
+ * Map MySQL brake_type_id to CatalogEquipmentBrakeType enum
+ * Used for MySQL to PostgreSQL migration
+ *
+ * @param mysqlId Legacy MySQL brake type ID (6 = empty value, ignored)
+ * @returns CatalogEquipmentBrakeType enum value or null if not found or invalid
+ */
+export function mapMySQLBrakeType(mysqlId?: number | null): CatalogEquipmentBrakeType | null {
+  if (!mysqlId || mysqlId === 6) return null; // 6 = empty value in legacy system
+  return CATALOG_EQUIPMENT_BRAKE_TYPE_FROM_NUMBER[mysqlId] || null;
+}
+
 // Register enum for GraphQL
 registerEnumType(CatalogEquipmentBrakeType, {
   name: 'CatalogEquipmentBrakeType',

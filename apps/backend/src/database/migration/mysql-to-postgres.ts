@@ -29,6 +29,9 @@ import {
 // Import mappers
 import { UserMapper } from './mappers/user.mapper';
 import { CarRequestMapper } from './mappers/car-request.mapper';
+import { CatalogBrandMapper } from './mappers/catalog-brand.mapper';
+import { CatalogModelMapper } from './mappers/catalog-model.mapper';
+import { CatalogModelGenerationMapper } from './mappers/catalog-model-generation.mapper';
 
 /**
  * MySQL to PostgreSQL Migration Script
@@ -94,9 +97,10 @@ class MySQLToPostgresMigration {
     // Entities without dependencies should be registered first
     this.mappers = [
       new UserMapper(),
+      new CatalogBrandMapper(),
+      new CatalogModelMapper(),
+      new CatalogModelGenerationMapper(),
       // Add other mappers here as you create them:
-      // new CatalogBrandMapper(),
-      // new CatalogModelMapper(),
       // new LeasingCompanyMapper(),
       // new CarRequestStatusMapper(),
       // new CarRequestStateMapper(),

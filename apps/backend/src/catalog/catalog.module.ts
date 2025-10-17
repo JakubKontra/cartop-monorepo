@@ -3,6 +3,7 @@ import { CatalogBrandModule } from './brand/catalog-brand.module';
 import { CatalogColorModule } from './color/catalog-color.module';
 import { CatalogModelModule } from './model/catalog-model.module';
 import { CatalogModelGenerationModule } from './generation/catalog-model-generation.module';
+import { CatalogEquipmentModule } from './equipment/catalog-equipment.module';
 
 /**
  * Catalog Module - Aggregates all catalog-related entities
@@ -27,12 +28,14 @@ import { CatalogModelGenerationModule } from './generation/catalog-model-generat
     CatalogModelModule,
     CatalogModelGenerationModule,
     CatalogColorModule,
+    CatalogEquipmentModule,
   ],
   exports: [
     CatalogBrandModule,
     CatalogModelModule,
     CatalogModelGenerationModule,
     CatalogColorModule,
+    CatalogEquipmentModule,
   ],
 })
 export class CatalogModule {}

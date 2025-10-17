@@ -286,13 +286,9 @@ export class OperationalLeasingOffer extends Offer {
 
   // === Related collections ===
   // These will be lazy loaded via field resolvers
-  @Field(() => [Object], { nullable: true })
-  variants?: any[]; // Type defined in field resolver to avoid circular dependency
-
-  @Field(() => [Object], { nullable: true })
+  // Do not add @Field decorators here - types are defined in field resolvers
+  variants?: any[];
   colorVariants?: any[];
-
-  @Field(() => [Object], { nullable: true })
   optionalEquipment?: any[];
 }
 
@@ -327,6 +323,6 @@ export class IndividualOffer extends Offer {
 
   // === Related collections ===
   // These will be lazy loaded via field resolvers
-  @Field(() => [Object], { nullable: true })
-  calculations?: any[]; // Type defined in field resolver to avoid circular dependency
+  // Do not add @Field decorator here - type is defined in field resolver
+  calculations?: any[];
 }

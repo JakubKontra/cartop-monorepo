@@ -15,6 +15,9 @@ import { CatalogBrand } from '../brand/catalog-brand.entity';
 import { CatalogBodyType } from '../../common/enums/catalog/catalog-body-type.enum';
 import { CatalogEquipmentBrakeType } from '../../common/enums/catalog/catalog-equipment-brake-type.enum';
 import { CatalogEngine } from '../engine/catalog-engine.entity';
+import { CatalogModelGenerationColor } from './catalog-model-generation-color.entity';
+import { CatalogModelGenerationConfiguration } from './catalog-model-generation-configuration.entity';
+import { CatalogModelGenerationImage } from './catalog-model-generation-image.entity';
 
 /**
  * CatalogModelGeneration Entity
@@ -149,4 +152,16 @@ export class CatalogModelGeneration {
   @Field(() => [CatalogEngine], { nullable: true })
   @OneToMany(() => CatalogEngine, engine => engine.generation)
   engines?: CatalogEngine[];
+
+  @Field(() => [CatalogModelGenerationColor], { nullable: true })
+  @OneToMany(() => CatalogModelGenerationColor, color => color.generation)
+  colors?: CatalogModelGenerationColor[];
+
+  @Field(() => [CatalogModelGenerationConfiguration], { nullable: true })
+  @OneToMany(() => CatalogModelGenerationConfiguration, configuration => configuration.generation)
+  configurations?: CatalogModelGenerationConfiguration[];
+
+  @Field(() => [CatalogModelGenerationImage], { nullable: true })
+  @OneToMany(() => CatalogModelGenerationImage, image => image.generation)
+  images?: CatalogModelGenerationImage[];
 }
