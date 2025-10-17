@@ -5,19 +5,20 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  Index,
+  // Index, // TODO: Re-enable after database cleanup
 } from 'typeorm';
-import { ObjectType, Field, ID, Float } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { OperationalLeasingOffer } from './offer.entity';
+import { OfferAdditionalEquipmentItem } from './offer-additional-equipment-item.entity';
+import { PricePeriod } from './enums/price-period.enum';
 
 /**
  * Offer Optional Equipment Entity
- * Represents additional equipment that can be added to an offer
- * (e.g., tow bar, independent heating, etc.)
+ * Pivot table connecting offers to equipment items with pricing per offer
  */
 @ObjectType()
 @Entity('offer_optional_equipment')
-@Index(['offerId', 'name'])
+// @Index(['offerId', 'equipmentItemId'], { unique: true }) // TODO: Re-enable after database cleanup
 export class OfferOptionalEquipment {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
@@ -30,20 +31,34 @@ export class OfferOptionalEquipment {
 
   @Field()
   @Column({ type: 'uuid' })
-  @Index()
+  // @Index() // TODO: Re-enable after database cleanup
   offerId: string;
 
-  @Field()
-  @Column({ type: 'varchar', length: 255 })
-  name: string; // e.g., "Tow Bar", "Independent Heating"
+  @Field(() => OfferAdditionalEquipmentItem, { nullable: true })
+  @ManyToOne(() => OfferAdditionalEquipmentItem, { nullable: true, onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'equipmentItemId' })
+  equipmentItem?: OfferAdditionalEquipmentItem;
 
   @Field({ nullable: true })
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column({ type: 'uuid', nullable: true })
+  // @Index() // TODO: Re-enable after database cleanup
+  equipmentItemId?: string;
 
-  @Field(() => Float)
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  additionalPrice: number; // Extra cost for this option
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  additionalPrice?: number; // Extra cost for this option on this offer
+
+  @Field()
+  @Column({ type: 'char', length: 3, default: 'CZK' })
+  currency: string;
+
+  @Field(() => PricePeriod)
+  @Column({ type: 'enum', enum: PricePeriod, default: PricePeriod.MONTHLY })
+  pricePeriod: PricePeriod;
+
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  isDefaultSelected: boolean; // Pre-selected by default
 
   @Field()
   @Column({ type: 'boolean', default: true })

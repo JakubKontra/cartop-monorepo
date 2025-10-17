@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
   OneToMany,
   ManyToOne,
   JoinColumn,
@@ -31,10 +30,15 @@ registerEnumType(OnboardingStatus, {
 
 /**
  * Onboarding Entity
- * Represents a document upload session for a car request
+ * Represents a document upload session for a car request and leasing company
+ *
+ * Design:
+ * - One car request can have multiple onboardings (one per leasing company)
+ * - Unique constraint on (carRequestId, leasingCompanyId)
  */
 @ObjectType()
 @Entity('onboardings')
+@Index(['carRequestId', 'leasingCompanyId'], { unique: true })
 @Auditable()
 export class Onboarding {
   @Field(() => ID)
@@ -64,7 +68,7 @@ export class Onboarding {
   // === Relations ===
 
   @Field(() => CarRequest)
-  @OneToOne(() => CarRequest, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => CarRequest, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'carRequestId' })
   carRequest: CarRequest;
 

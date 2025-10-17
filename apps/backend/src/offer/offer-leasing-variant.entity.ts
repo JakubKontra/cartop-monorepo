@@ -11,6 +11,7 @@ import {
 import { ObjectType, Field, ID, Int, Float } from '@nestjs/graphql';
 import { OperationalLeasingOffer } from './offer.entity';
 import { LeasingCompany } from '../leasing-company/leasing-company.entity';
+import { PricePeriod } from './enums/price-period.enum';
 
 /**
  * Leasing Offer Variant Entity
@@ -20,6 +21,11 @@ import { LeasingCompany } from '../leasing-company/leasing-company.entity';
 @ObjectType()
 @Entity('offer_leasing_variants')
 @Index(['offerId', 'isDefault'])
+@Index(['offerId', 'slug'], { unique: true })
+@Index(['annualMileageLimit'])
+@Index(['leasingDurationMonths'])
+@Index(['priceWithVat'])
+@Index(['leasingCompanyId'])
 export class OfferLeasingVariant {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
@@ -38,30 +44,68 @@ export class OfferLeasingVariant {
   // === Leasing parameters ===
 
   @Field(() => Int)
-  @Column({ type: 'integer' })
-  leasingDurationMonths: number; // 12, 24, 36, 48, 60
+  @Column({ type: 'integer', default: 10000 })
+  @Index()
+  annualMileageLimit: number; // 10000, 15000, 20000, etc.
 
   @Field(() => Int)
-  @Column({ type: 'integer' })
-  annualMileageLimit: number; // 10000, 15000, 20000, atd.
-
-  @Field(() => Float)
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  monthlyPayment: number;
-
-  @Field(() => Float, { nullable: true })
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  downPayment?: number;
+  @Column({ type: 'integer', default: 24 })
+  @Index()
+  leasingDurationMonths: number; // 12, 24, 36, 48, 60 months
 
   // === Pricing ===
 
-  @Field(() => Float)
-  @Column({ type: 'decimal', precision: 12, scale: 2 })
-  totalPrice: number; // Total cost over the lease period
+  @Field()
+  @Column({ type: 'char', length: 3, default: 'CZK' })
+  currency: string;
 
-  @Field(() => Float, { nullable: true })
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true })
-  originalPrice?: number;
+  @Field(() => Float)
+  @Column({ type: 'decimal', precision: 5, scale: 2, default: 21.0 })
+  vatRate: number; // VAT rate in percentage
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  @Index()
+  priceWithoutVat?: number; // Monthly price without VAT
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  @Index()
+  priceWithVat?: number; // Monthly price with VAT
+
+  @Field(() => PricePeriod)
+  @Column({ type: 'enum', enum: PricePeriod, default: PricePeriod.MONTHLY })
+  pricePeriod: PricePeriod;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  originalPriceWithoutVat?: number;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  originalPriceWithVat?: number;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  downPayment?: number;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  securityDeposit?: number;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true })
+  setupFee?: number;
+
+  // === Validity period ===
+
+  @Field({ nullable: true })
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  validFrom?: Date;
+
+  @Field({ nullable: true })
+  @Column({ type: 'timestamp with time zone', nullable: true })
+  validTo?: Date;
 
   // === Included services ===
 
@@ -91,28 +135,32 @@ export class OfferLeasingVariant {
 
   // === Other parameters ===
 
-  @Field({ nullable: true })
-  @Column({ type: 'boolean', default: false })
-  wearTolerance?: boolean;
-
   @Field(() => Int, { nullable: true })
   @Column({ type: 'integer', nullable: true })
-  freeMileageLimit?: number;
+  wearTolerancePercent?: number; // Tolerance in percentage
+
+  @Field(() => Int, { nullable: true })
+  @Column({ type: 'integer', nullable: true, default: 0 })
+  freeMileageLimit?: number; // Free mileage buffer in km
 
   // === Flags ===
 
   @Field()
-  @Column({ type: 'boolean', default: false })
-  isDefault: boolean; // Mark one variant as default
+  @Column({ type: 'boolean', default: true })
+  @Index()
+  isActive: boolean;
 
   @Field()
   @Column({ type: 'boolean', default: false })
-  isBestOffer: boolean; // Highlight as "top offer"
+  isDefault: boolean; // Mark one variant as default per offer
 
-  @Field({ nullable: true })
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  @Index()
-  slug?: string;
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  isBestOffer: boolean; // Highlight as "top offer" per offer
+
+  @Field()
+  @Column({ type: 'varchar', length: 255 })
+  slug: string;
 
   // === Leasing company ===
 

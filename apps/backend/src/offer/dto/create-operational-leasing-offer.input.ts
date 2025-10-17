@@ -9,6 +9,7 @@ import {
   Max,
   IsNumber,
   MinLength,
+  MaxLength,
 } from 'class-validator';
 
 @InputType()
@@ -42,6 +43,66 @@ export class CreateOperationalLeasingOfferInput {
   @IsOptional()
   @IsString()
   description?: string;
+
+  // === New required fields ===
+
+  @Field()
+  @IsUUID()
+  engineId: string;
+
+  // === New optional fields ===
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  legacySystemId?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  publicId?: string;
+
+  @Field({ nullable: true, defaultValue: false })
+  @IsOptional()
+  @IsBoolean()
+  isPrivate?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsUUID()
+  fileId?: string;
+
+  @Field({ nullable: true, defaultValue: false })
+  @IsOptional()
+  @IsBoolean()
+  isRecommendedForBrand?: boolean;
+
+  @Field({ nullable: true, defaultValue: false })
+  @IsOptional()
+  @IsBoolean()
+  isRecommendedForActionPage?: boolean;
+
+  @Field({ nullable: true, defaultValue: false })
+  @IsOptional()
+  @IsBoolean()
+  isRecommendedForModel?: boolean;
+
+  @Field({ nullable: true, defaultValue: false })
+  @IsOptional()
+  @IsBoolean()
+  isPromoted?: boolean;
+
+  @Field({ nullable: true, defaultValue: false })
+  @IsOptional()
+  @IsBoolean()
+  disableCustomGallery?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  note?: string;
 
   // === Operational Leasing specific fields ===
 

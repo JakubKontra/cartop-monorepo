@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Not, In, IsNull, MoreThanOrEqual, Between } from 'typeorm';
 import { CarRequest } from './entities/car-request.entity';
 import { CarRequestState } from './entities/car-request-state.entity';
 import { CarRequestStatus } from './entities/car-request-status.entity';
@@ -11,6 +11,9 @@ import { CreateCarRequestLogInput } from './dto/create-car-request-log.input';
 import { CarRequestLogFilterInput } from './dto/car-request-log-filter.input';
 import { CarRequestLogAction } from './enums/car-request-log-action.enum';
 import { User } from '../model/user/user.entity';
+import { DashboardStats } from './dto/dashboard-stats.type';
+import { CarRequestCalculation } from '../car-request-calculation/entities/car-request-calculation.entity';
+import { Onboarding } from '../onboarding/entities/onboarding.entity';
 
 @Injectable()
 export class CarRequestService {
@@ -25,6 +28,10 @@ export class CarRequestService {
     private readonly carRequestLogRepository: Repository<CarRequestLog>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(CarRequestCalculation)
+    private readonly calculationRepository: Repository<CarRequestCalculation>,
+    @InjectRepository(Onboarding)
+    private readonly onboardingRepository: Repository<Onboarding>,
   ) {}
 
   // === CREATE ===
@@ -316,5 +323,249 @@ export class CarRequestService {
       },
       authorId,
     });
+  }
+
+  // === DASHBOARD STATISTICS ===
+
+  /**
+   * Get dashboard statistics for car requests and calculations
+   * This provides aggregated data for the admin dashboard
+   */
+  async getDashboardStats(): Promise<DashboardStats> {
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+
+    // === OVERVIEW STATS ===
+    const activeCarRequests = await this.carRequestRepository.count({
+      where: {
+        state: {
+          code: Not(In(['PURCHASED', 'CANCELLED'])),
+        },
+      },
+    });
+
+    const activeCarRequestsLastMonth = await this.carRequestRepository.count({
+      where: {
+        createdAt: Between(startOfLastMonth, endOfLastMonth),
+        state: {
+          code: Not(In(['PURCHASED', 'CANCELLED'])),
+        },
+      },
+    });
+
+    const totalVehicles = await this.calculationRepository.count();
+    const totalVehiclesLastMonth = await this.calculationRepository.count({
+      where: {
+        createdAt: Between(startOfLastMonth, endOfLastMonth),
+      },
+    });
+
+    const awaitingAction = await this.carRequestRepository.count({
+      where: {
+        assignedAgentId: Not(IsNull()),
+        state: {
+          code: In(['CALLED', 'NOT_REACHED']),
+        },
+      },
+    });
+
+    const completedOnboardingsThisMonth = await this.onboardingRepository.count({
+      where: {
+        completedAt: MoreThanOrEqual(startOfMonth),
+      },
+    });
+
+    const activeCarRequestsChange =
+      activeCarRequestsLastMonth > 0
+        ? ((activeCarRequests - activeCarRequestsLastMonth) / activeCarRequestsLastMonth) * 100
+        : 0;
+
+    const totalVehiclesChange =
+      totalVehiclesLastMonth > 0
+        ? ((totalVehicles - totalVehiclesLastMonth) / totalVehiclesLastMonth) * 100
+        : 0;
+
+    // === TOP BRANDS ===
+    const brandStatsRaw = await this.calculationRepository
+      .createQueryBuilder('calc')
+      .leftJoinAndSelect('calc.brand', 'brand')
+      .select('brand.id', 'brandId')
+      .addSelect('brand.name', 'brandName')
+      .addSelect('COUNT(calc.id)', 'count')
+      .where('brand.id IS NOT NULL')
+      .groupBy('brand.id')
+      .addGroupBy('brand.name')
+      .orderBy('COUNT(calc.id)', 'DESC')
+      .limit(5)
+      .getRawMany();
+
+    const totalCalculations = await this.calculationRepository.count();
+    const topBrands = brandStatsRaw.map((row) => ({
+      brandId: row.brandId,
+      brandName: row.brandName,
+      calculationsCount: parseInt(row.count),
+      percentage: totalCalculations > 0 ? (parseInt(row.count) / totalCalculations) * 100 : 0,
+    }));
+
+    // === AGENT PERFORMANCE ===
+    const agentStatsRaw = await this.carRequestRepository
+      .createQueryBuilder('cr')
+      .leftJoinAndSelect('cr.assignedAgent', 'agent')
+      .leftJoin('cr.calculations', 'calc')
+      .select('agent.id', 'agentId')
+      .addSelect('agent.firstName', 'firstName')
+      .addSelect('agent.lastName', 'lastName')
+      .addSelect('COUNT(DISTINCT cr.id)', 'carRequestsCount')
+      .addSelect('COUNT(calc.id)', 'vehiclesCount')
+      .where('agent.id IS NOT NULL')
+      .groupBy('agent.id')
+      .addGroupBy('agent.firstName')
+      .addGroupBy('agent.lastName')
+      .getRawMany();
+
+    const agentPerformance = agentStatsRaw.map((row) => ({
+      agentId: row.agentId,
+      agentName: `${row.firstName} ${row.lastName}`,
+      carRequestsCount: parseInt(row.carRequestsCount),
+      vehiclesCount: parseInt(row.vehiclesCount),
+      conversionRate: null, // TODO: Calculate based on completed vs total
+      averageProcessingDays: null, // TODO: Calculate from created to completed
+    }));
+
+    // === LEASING COMPANIES ===
+    const leasingStatsRaw = await this.calculationRepository
+      .createQueryBuilder('calc')
+      .leftJoinAndSelect('calc.leasingCompany', 'lc')
+      .leftJoin(
+        'onboardings',
+        'onb',
+        'onb.leasingCompanyId = lc.id AND onb.completedAt IS NOT NULL',
+      )
+      .select('lc.id', 'leasingCompanyId')
+      .addSelect('lc.name', 'leasingCompanyName')
+      .addSelect('COUNT(DISTINCT calc.id)', 'calculationsCount')
+      .addSelect('COUNT(DISTINCT onb.id)', 'completedOnboardingsCount')
+      .where('lc.id IS NOT NULL')
+      .groupBy('lc.id')
+      .addGroupBy('lc.name')
+      .getRawMany();
+
+    const leasingCompanies = leasingStatsRaw.map((row) => ({
+      leasingCompanyId: row.leasingCompanyId,
+      leasingCompanyName: row.leasingCompanyName,
+      calculationsCount: parseInt(row.calculationsCount),
+      completedOnboardingsCount: parseInt(row.completedOnboardingsCount),
+      conversionRate:
+        parseInt(row.calculationsCount) > 0
+          ? (parseInt(row.completedOnboardingsCount) / parseInt(row.calculationsCount)) * 100
+          : null,
+    }));
+
+    // === TIMELINE (Last 30 days) ===
+    const timelineRaw = await this.carRequestRepository
+      .createQueryBuilder('cr')
+      .select('DATE(cr.createdAt)', 'date')
+      .addSelect('COUNT(cr.id)', 'count')
+      .where('cr.createdAt >= :thirtyDaysAgo', { thirtyDaysAgo })
+      .groupBy('DATE(cr.createdAt)')
+      .orderBy('DATE(cr.createdAt)', 'ASC')
+      .getRawMany();
+
+    const onboardingTimelineRaw = await this.onboardingRepository
+      .createQueryBuilder('onb')
+      .select('DATE(onb.completedAt)', 'date')
+      .addSelect('COUNT(onb.id)', 'count')
+      .where('onb.completedAt >= :thirtyDaysAgo', { thirtyDaysAgo })
+      .andWhere('onb.completedAt IS NOT NULL')
+      .groupBy('DATE(onb.completedAt)')
+      .orderBy('DATE(onb.completedAt)', 'ASC')
+      .getRawMany();
+
+    // Merge timeline data
+    const timelineMap = new Map<string, { newCarRequests: number; completedOnboardings: number }>();
+    for (let i = 0; i < 30; i++) {
+      const date = new Date(thirtyDaysAgo.getTime() + i * 24 * 60 * 60 * 1000);
+      const dateStr = date.toISOString().split('T')[0];
+      timelineMap.set(dateStr, { newCarRequests: 0, completedOnboardings: 0 });
+    }
+
+    timelineRaw.forEach((row) => {
+      const existing = timelineMap.get(row.date) || { newCarRequests: 0, completedOnboardings: 0 };
+      existing.newCarRequests = parseInt(row.count);
+      timelineMap.set(row.date, existing);
+    });
+
+    onboardingTimelineRaw.forEach((row) => {
+      const existing = timelineMap.get(row.date) || { newCarRequests: 0, completedOnboardings: 0 };
+      existing.completedOnboardings = parseInt(row.count);
+      timelineMap.set(row.date, existing);
+    });
+
+    const timeline = Array.from(timelineMap.entries())
+      .map(([date, data]) => ({
+        date,
+        newCarRequests: data.newCarRequests,
+        completedOnboardings: data.completedOnboardings,
+      }))
+      .sort((a, b) => {
+        // Ensure dates are strings before comparing
+        const dateA = String(a.date);
+        const dateB = String(b.date);
+        return dateA.localeCompare(dateB);
+      });
+
+    // === FUNNEL ===
+    const funnelCreated = await this.calculationRepository.count();
+
+    const funnelHasOffers = await this.calculationRepository
+      .createQueryBuilder('calc')
+      .leftJoin('calc.offers', 'offer')
+      .where('offer.id IS NOT NULL')
+      .getCount();
+
+    const funnelLeasingSelected = await this.calculationRepository.count({
+      where: {
+        leasingCompanyId: Not(IsNull()),
+      },
+    });
+
+    const funnelOnboardingComplete = await this.calculationRepository
+      .createQueryBuilder('calc')
+      .leftJoin('onboardings', 'onb', 'onb.leasingCompanyId = calc.leasingCompanyId AND onb.carRequestId = calc.carRequestId')
+      .where('onb.completedAt IS NOT NULL')
+      .getCount();
+
+    const funnelOrdered = await this.carRequestRepository.count({
+      where: {
+        state: {
+          code: 'PURCHASED',
+        },
+      },
+    });
+
+    return {
+      overview: {
+        activeCarRequests,
+        totalVehicles,
+        awaitingAction,
+        completedOnboardingsThisMonth,
+        activeCarRequestsChange,
+        totalVehiclesChange,
+      },
+      topBrands,
+      agentPerformance,
+      leasingCompanies,
+      timeline,
+      funnel: {
+        created: funnelCreated,
+        hasOffers: funnelHasOffers,
+        leasingCompanySelected: funnelLeasingSelected,
+        onboardingComplete: funnelOnboardingComplete,
+        ordered: funnelOrdered,
+      },
+    };
   }
 }

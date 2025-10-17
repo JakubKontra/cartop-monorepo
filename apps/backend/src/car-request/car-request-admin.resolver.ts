@@ -8,6 +8,7 @@ import { CreateCarRequestInput } from './dto/create-car-request.input';
 import { UpdateCarRequestInput } from './dto/update-car-request.input';
 import { CreateCarRequestLogInput } from './dto/create-car-request-log.input';
 import { CarRequestLogFilterInput } from './dto/car-request-log-filter.input';
+import { DashboardStats } from './dto/dashboard-stats.type';
 import { Roles } from '../common/decorators/auth/roles.decorator';
 import { UserRole } from '../common/enums/role.enum';
 import { CurrentUser } from '../common/decorators/auth/current-user.decorator';
@@ -138,5 +139,17 @@ export class CarRequestAdminResolver {
     @Args('input') input: CreateCarRequestLogInput,
   ): Promise<CarRequestLog> {
     return this.carRequestService.createLog(input);
+  }
+
+  // ==================== DASHBOARD ====================
+
+  /**
+   * Get dashboard statistics for car requests and calculations
+   * Requires ADMIN or SALES_REPRESENTATIVE role
+   */
+  @Query(() => DashboardStats)
+  @Roles(UserRole.ADMIN, UserRole.SALES_REPRESENTATIVE)
+  async carRequestsDashboardStats(): Promise<DashboardStats> {
+    return this.carRequestService.getDashboardStats();
   }
 }

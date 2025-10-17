@@ -10,6 +10,8 @@ import { User } from '../model/user/user.entity';
 import { CatalogBrand } from '../catalog/brand/catalog-brand.entity';
 import { CatalogModel } from '../catalog/model/catalog-model.entity';
 import { LeasingCompany } from '../leasing-company/leasing-company.entity';
+import { CarRequestCalculation } from '../car-request-calculation/entities/car-request-calculation.entity';
+import { Onboarding } from '../onboarding/entities/onboarding.entity';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { LeasingCompany } from '../leasing-company/leasing-company.entity';
       CatalogBrand,
       CatalogModel,
       LeasingCompany,
+      CarRequestCalculation,
+      Onboarding,
     ]),
   ],
   providers: [CarRequestService, CarRequestAdminResolver],

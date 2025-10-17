@@ -58,7 +58,9 @@ export const modelsColumns: ColumnDef<Model>[] = [
       <DataTableColumnHeader column={column} title='Brand' />
     ),
     cell: ({ row }) => (
-      <span className='font-medium'>{row.original.brand.name}</span>
+      <span className={row.original.brand?.name ? 'font-medium' : 'text-muted-foreground'}>
+        {row.original.brand?.name || 'No brand'}
+      </span>
     ),
     enableSorting: false,
   },

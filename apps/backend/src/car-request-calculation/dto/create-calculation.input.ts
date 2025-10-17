@@ -36,6 +36,18 @@ export class CreateCalculationInput {
   @Field()
   carRequestId: string;
 
+  @Field({ nullable: true })
+  brandId?: string;
+
+  @Field({ nullable: true })
+  modelId?: string;
+
+  @Field({ nullable: true })
+  modelGenerationId?: string;
+
+  @Field({ nullable: true })
+  leasingCompanyId?: string;
+
   @Field(() => Int)
   durationMonths: number;
 

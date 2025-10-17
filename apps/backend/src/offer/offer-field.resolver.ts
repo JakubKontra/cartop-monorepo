@@ -49,7 +49,7 @@ export class OperationalLeasingOfferFieldResolver {
   }
 
   /**
-   * Lazy load optional equipment
+   * Lazy load optional equipment with equipment items
    */
   @ResolveField('optionalEquipment', () => [OfferOptionalEquipment], { nullable: true })
   async getOptionalEquipment(
@@ -57,7 +57,8 @@ export class OperationalLeasingOfferFieldResolver {
   ): Promise<OfferOptionalEquipment[]> {
     return this.equipmentRepository.find({
       where: { offerId: offer.id, isAvailable: true },
-      order: { createdAt: 'ASC' },
+      relations: ['equipmentItem'],
+      order: { isDefaultSelected: 'DESC', createdAt: 'ASC' },
     });
   }
 }

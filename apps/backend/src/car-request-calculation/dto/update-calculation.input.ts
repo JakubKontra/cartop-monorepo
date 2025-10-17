@@ -4,6 +4,18 @@ import { CreateCalculationItemInput } from './create-calculation.input';
 
 @InputType()
 export class UpdateCalculationInput {
+  @Field({ nullable: true })
+  brandId?: string;
+
+  @Field({ nullable: true })
+  modelId?: string;
+
+  @Field({ nullable: true })
+  modelGenerationId?: string;
+
+  @Field({ nullable: true })
+  leasingCompanyId?: string;
+
   @Field(() => Int, { nullable: true })
   durationMonths?: number;
 

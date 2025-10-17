@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client/react'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { CrudPageLayout } from '@/components/crud-page-layout'
 import { GenerationForm } from '../components/generation-form'
+import { GenerationEnginesSection } from '../components/generation-engines-section'
 import { type GenerationFormValues } from '../data/schema'
 import {
   GET_CATALOG_MODEL_GENERATION,
@@ -97,34 +98,37 @@ export function GenerationEditPage() {
       backButtonLabel="Back to Generations"
     >
       {generation && (
-        <GenerationForm
-          defaultValues={{
-            name: generation.name,
-            slug: generation.slug || '',
-            legacySlug: generation.legacySlug,
-            modelId: generation.modelId,
-            brandId: generation.brandId || '',
-            description: generation.description || '',
-            productionStart: formatDateForInput(generation.productionStart),
-            productionStop: formatDateForInput(generation.productionStop),
-            wheelbase: generation.wheelbase || undefined,
-            frontTrack: generation.frontTrack || undefined,
-            rearTrack: generation.rearTrack || undefined,
-            length: generation.length || undefined,
-            width: generation.width || undefined,
-            height: generation.height || undefined,
-            trunkSpaceMin: generation.trunkSpaceMin || undefined,
-            trunkSpaceMax: generation.trunkSpaceMax || undefined,
-            bodyType: generation.bodyType || null,
-            frontBrakesType: generation.frontBrakesType || null,
-            rearBrakesType: generation.rearBrakesType || null,
-            isActive: generation.isActive,
-          }}
-          isEdit={true}
-          loading={updating}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-        />
+        <div className='space-y-6'>
+          <GenerationForm
+            defaultValues={{
+              name: generation.name,
+              slug: generation.slug || '',
+              legacySlug: generation.legacySlug,
+              modelId: generation.modelId,
+              brandId: generation.brandId || '',
+              description: generation.description || '',
+              productionStart: formatDateForInput(generation.productionStart),
+              productionStop: formatDateForInput(generation.productionStop),
+              wheelbase: generation.wheelbase || undefined,
+              frontTrack: generation.frontTrack || undefined,
+              rearTrack: generation.rearTrack || undefined,
+              length: generation.length || undefined,
+              width: generation.width || undefined,
+              height: generation.height || undefined,
+              trunkSpaceMin: generation.trunkSpaceMin || undefined,
+              trunkSpaceMax: generation.trunkSpaceMax || undefined,
+              bodyType: generation.bodyType || null,
+              frontBrakesType: generation.frontBrakesType || null,
+              rearBrakesType: generation.rearBrakesType || null,
+              isActive: generation.isActive,
+            }}
+            isEdit={true}
+            loading={updating}
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+          />
+          <GenerationEnginesSection generationId={params.generationId} />
+        </div>
       )}
     </CrudPageLayout>
   )

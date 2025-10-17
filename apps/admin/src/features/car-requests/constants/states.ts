@@ -18,7 +18,7 @@ export type CarRequestStateCode =
   | 'PURCHASED'
   | 'CANCELLED'
 
-export type CarRequestSection = 'NEW' | 'OPEN' | 'WAITING_FOR_OFFER'
+export type CarRequestSection = 'NEW' | 'OPEN' | 'WAITING_FOR_OFFER' | 'FOLLOW_UP_NEEDED'
 
 export interface CarRequestState {
   code: CarRequestStateCode
@@ -111,6 +111,11 @@ export const CAR_REQUEST_SECTIONS: CarRequestSectionConfig[] = [
     key: 'WAITING_FOR_OFFER',
     label: 'Čekající na nabídku',
     description: 'Poptávky čekající na nabídku od dealera',
+  },
+  {
+    key: 'FOLLOW_UP_NEEDED',
+    label: 'Vyžaduje follow-up',
+    description: 'Zákazníci s nabídkami zaslanými včera a více',
   },
 ]
 

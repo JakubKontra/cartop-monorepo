@@ -5,6 +5,7 @@ import { useNavigate, useParams } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { CrudPageLayout } from '@/components/crud-page-layout'
 import { BrandForm } from '../components/brand-form'
+import { BrandEquipmentSection } from '../components/brand-equipment-section'
 import { type BrandFormValues } from '../data/schema'
 import { toFormValues, toUpdateInput } from '../data/transformers'
 import { GET_CATALOG_BRAND, UPDATE_CATALOG_BRAND, GET_ALL_CATALOG_BRANDS } from '../brands.graphql'
@@ -60,14 +61,17 @@ export function BrandEditPage() {
       backButtonLabel="Back to Brands"
     >
       {brand && (
-        <BrandForm
-          isEdit={true}
-          loading={updating}
-          logoUrl={brand.logo?.url}
-          defaultValues={toFormValues(brand)}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-        />
+        <div className='space-y-6'>
+          <BrandForm
+            isEdit={true}
+            loading={updating}
+            logoUrl={brand.logo?.url}
+            defaultValues={toFormValues(brand)}
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+          />
+          <BrandEquipmentSection brandId={brandId} />
+        </div>
       )}
     </CrudPageLayout>
   )

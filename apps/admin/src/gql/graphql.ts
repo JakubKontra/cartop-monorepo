@@ -38,6 +38,16 @@ export type AddOfferQuoteInput = {
   validUntil?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type AgentPerformance = {
+  __typename?: 'AgentPerformance';
+  agentId: Scalars['String']['output'];
+  agentName: Scalars['String']['output'];
+  averageProcessingDays?: Maybe<Scalars['Float']['output']>;
+  carRequestsCount: Scalars['Int']['output'];
+  conversionRate?: Maybe<Scalars['Float']['output']>;
+  vehiclesCount: Scalars['Int']['output'];
+};
+
 /** The type of action performed on the entity */
 export enum AuditAction {
   Create = 'CREATE',
@@ -78,6 +88,14 @@ export type AuthResponse = {
   accessToken: Scalars['String']['output'];
   refreshToken: Scalars['String']['output'];
   user: User;
+};
+
+export type BrandStats = {
+  __typename?: 'BrandStats';
+  brandId: Scalars['String']['output'];
+  brandName: Scalars['String']['output'];
+  calculationsCount: Scalars['Int']['output'];
+  percentage: Scalars['Float']['output'];
 };
 
 /** Reason why a car request was cancelled */
@@ -156,6 +174,8 @@ export type CarRequestCalculation = {
   annualMileageKm: Scalars['Int']['output'];
   assignedTo?: Maybe<User>;
   assignedToId?: Maybe<Scalars['String']['output']>;
+  brand?: Maybe<CatalogBrand>;
+  brandId?: Maybe<Scalars['String']['output']>;
   carRequest: CarRequest;
   carRequestId: Scalars['String']['output'];
   completedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -165,7 +185,13 @@ export type CarRequestCalculation = {
   id: Scalars['ID']['output'];
   internalNotes?: Maybe<Scalars['String']['output']>;
   items: Array<CarRequestCalculationItem>;
+  leasingCompany?: Maybe<LeasingCompany>;
+  leasingCompanyId?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Scalars['JSON']['output']>;
+  model?: Maybe<CatalogModel>;
+  modelGeneration?: Maybe<CatalogModelGeneration>;
+  modelGenerationId?: Maybe<Scalars['String']['output']>;
+  modelId?: Maybe<Scalars['String']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   offers: Array<CarRequestCalculationOffer>;
   requestedBy: User;
@@ -359,6 +385,7 @@ export type CatalogBrand = {
   __typename?: 'CatalogBrand';
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  equipments?: Maybe<Array<CatalogBrandEquipment>>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   isHighlighted: Scalars['Boolean']['output'];
@@ -369,6 +396,29 @@ export type CatalogBrand = {
   logoId?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   slug: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type CatalogBrandEquipment = {
+  __typename?: 'CatalogBrandEquipment';
+  assignedItems?: Maybe<Array<CatalogBrandEquipmentItem>>;
+  brand: CatalogBrand;
+  brandId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type CatalogBrandEquipmentItem = {
+  __typename?: 'CatalogBrandEquipmentItem';
+  createdAt: Scalars['DateTime']['output'];
+  equipments?: Maybe<Array<CatalogBrandEquipment>>;
+  id: Scalars['ID']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -388,6 +438,79 @@ export type CatalogColor = {
 export enum CatalogColorType {
   Exterior = 'EXTERIOR',
   Interior = 'INTERIOR'
+}
+
+export type CatalogEngine = {
+  __typename?: 'CatalogEngine';
+  /** Acceleration 0-100 km/h in seconds */
+  acceleration?: Maybe<Scalars['Float']['output']>;
+  active: Scalars['Boolean']['output'];
+  /** City fuel consumption (l/100km) */
+  consumptionCity?: Maybe<Scalars['Float']['output']>;
+  /** Combined fuel consumption (l/100km) */
+  consumptionCombined?: Maybe<Scalars['Float']['output']>;
+  /** Highway fuel consumption (l/100km) */
+  consumptionOutOfCity?: Maybe<Scalars['Float']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  /** Number of cylinders */
+  cylinderCount?: Maybe<Scalars['Int']['output']>;
+  driveType?: Maybe<CatalogEngineDriveType>;
+  /** CO2 emissions in g/km */
+  emission?: Maybe<Scalars['Int']['output']>;
+  /** Fuel tank volume in liters */
+  fuelTankVolume?: Maybe<Scalars['Int']['output']>;
+  fuelType?: Maybe<CatalogEngineFuelType>;
+  /** Number of gears */
+  gearsCount?: Maybe<Scalars['Int']['output']>;
+  generation: CatalogModelGeneration;
+  generationId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  /** Maximum speed in km/h */
+  maxSpeed?: Maybe<Scalars['Int']['output']>;
+  name: Scalars['String']['output'];
+  /** Power in kW */
+  performance?: Maybe<Scalars['Int']['output']>;
+  productionStart?: Maybe<Scalars['DateTime']['output']>;
+  productionStop?: Maybe<Scalars['DateTime']['output']>;
+  /** Range in km (for electric vehicles) */
+  rangeKm?: Maybe<Scalars['Int']['output']>;
+  recommended: Scalars['Boolean']['output'];
+  /** Torque in Nm */
+  torque?: Maybe<Scalars['Int']['output']>;
+  transmissionType?: Maybe<CatalogEngineTransmissionType>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** Engine volume in cm³ */
+  volume?: Maybe<Scalars['Int']['output']>;
+  /** Weight in kg */
+  weight?: Maybe<Scalars['Int']['output']>;
+};
+
+/** Type of drive system used by vehicle */
+export enum CatalogEngineDriveType {
+  Awd = 'AWD',
+  FourWd = 'FOUR_WD',
+  Fwd = 'FWD',
+  Rwd = 'RWD'
+}
+
+/** Type of fuel used by vehicle engine */
+export enum CatalogEngineFuelType {
+  Diesel = 'DIESEL',
+  Electric = 'ELECTRIC',
+  EthanolE85 = 'ETHANOL_E85',
+  Gasoline = 'GASOLINE',
+  Hybrid = 'HYBRID',
+  Hydrogen = 'HYDROGEN',
+  TwoStroke = 'TWO_STROKE'
+}
+
+/** Type of transmission used by vehicle engine */
+export enum CatalogEngineTransmissionType {
+  Automatic = 'AUTOMATIC',
+  Cvt = 'CVT',
+  Manual = 'MANUAL',
+  SemiAutomatic = 'SEMI_AUTOMATIC'
 }
 
 /** Type of braking system used in vehicles */
@@ -422,6 +545,7 @@ export type CatalogModelGeneration = {
   brandId?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
+  engines?: Maybe<Array<CatalogEngine>>;
   frontBrakesType?: Maybe<CatalogEquipmentBrakeType>;
   /** Front track in mm */
   frontTrack?: Maybe<Scalars['Int']['output']>;
@@ -454,12 +578,16 @@ export type CatalogModelGeneration = {
 
 export type CreateCalculationInput = {
   annualMileageKm: Scalars['Int']['input'];
+  brandId?: InputMaybe<Scalars['String']['input']>;
   carRequestId: Scalars['String']['input'];
   deliveryExpectedAt?: InputMaybe<Scalars['DateTime']['input']>;
   durationMonths: Scalars['Int']['input'];
   internalNotes?: InputMaybe<Scalars['String']['input']>;
   items?: InputMaybe<Array<CreateCalculationItemInput>>;
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
+  modelGenerationId?: InputMaybe<Scalars['String']['input']>;
+  modelId?: InputMaybe<Scalars['String']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -508,6 +636,18 @@ export type CreateCarRequestLogInput = {
   metadata?: InputMaybe<Scalars['JSON']['input']>;
 };
 
+export type CreateCatalogBrandEquipmentInput = {
+  brandId: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type CreateCatalogBrandEquipmentItemInput = {
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
 export type CreateCatalogBrandInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
@@ -526,6 +666,33 @@ export type CreateCatalogColorInput = {
   name: Scalars['String']['input'];
   slug: Scalars['String']['input'];
   type: CatalogColorType;
+};
+
+export type CreateCatalogEngineInput = {
+  acceleration?: InputMaybe<Scalars['Float']['input']>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  consumptionCity?: InputMaybe<Scalars['Float']['input']>;
+  consumptionCombined?: InputMaybe<Scalars['Float']['input']>;
+  consumptionOutOfCity?: InputMaybe<Scalars['Float']['input']>;
+  cylinderCount?: InputMaybe<Scalars['Int']['input']>;
+  driveType?: InputMaybe<CatalogEngineDriveType>;
+  emission?: InputMaybe<Scalars['Int']['input']>;
+  fuelTankVolume?: InputMaybe<Scalars['Int']['input']>;
+  fuelType?: InputMaybe<CatalogEngineFuelType>;
+  gearsCount?: InputMaybe<Scalars['Int']['input']>;
+  generationId: Scalars['String']['input'];
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  maxSpeed?: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
+  performance?: InputMaybe<Scalars['Int']['input']>;
+  productionStart?: InputMaybe<Scalars['DateTime']['input']>;
+  productionStop?: InputMaybe<Scalars['DateTime']['input']>;
+  rangeKm?: InputMaybe<Scalars['Int']['input']>;
+  recommended?: InputMaybe<Scalars['Boolean']['input']>;
+  torque?: InputMaybe<Scalars['Int']['input']>;
+  transmissionType?: InputMaybe<CatalogEngineTransmissionType>;
+  volume?: InputMaybe<Scalars['Int']['input']>;
+  weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreateCatalogModelGenerationInput = {
@@ -654,6 +821,26 @@ export type CreateUserInput = {
   password: Scalars['String']['input'];
   phone?: InputMaybe<Scalars['String']['input']>;
   roles?: InputMaybe<Array<UserRole>>;
+};
+
+export type DashboardOverviewStats = {
+  __typename?: 'DashboardOverviewStats';
+  activeCarRequests: Scalars['Int']['output'];
+  activeCarRequestsChange: Scalars['Float']['output'];
+  awaitingAction: Scalars['Int']['output'];
+  completedOnboardingsThisMonth: Scalars['Int']['output'];
+  totalVehicles: Scalars['Int']['output'];
+  totalVehiclesChange: Scalars['Float']['output'];
+};
+
+export type DashboardStats = {
+  __typename?: 'DashboardStats';
+  agentPerformance: Array<AgentPerformance>;
+  funnel: VehicleFunnelStats;
+  leasingCompanies: Array<LeasingCompanyStats>;
+  overview: DashboardOverviewStats;
+  timeline: Array<TimelineDataPoint>;
+  topBrands: Array<BrandStats>;
 };
 
 export type DirectPurchaseOffer = {
@@ -841,6 +1028,15 @@ export type LeasingCompany = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type LeasingCompanyStats = {
+  __typename?: 'LeasingCompanyStats';
+  calculationsCount: Scalars['Int']['output'];
+  completedOnboardingsCount: Scalars['Int']['output'];
+  conversionRate?: Maybe<Scalars['Float']['output']>;
+  leasingCompanyId: Scalars['String']['output'];
+  leasingCompanyName: Scalars['String']['output'];
+};
+
 export type LoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -852,6 +1048,7 @@ export type Mutation = {
   addFeatureToCalculation: OfferCalculationFeature;
   addOfferQuote: CarRequestCalculationOffer;
   completeCalculation: CarRequestCalculation;
+  createBrandEquipment: CatalogBrandEquipment;
   createCalculation: CarRequestCalculation;
   createCarRequest: CarRequest;
   createCarRequestLog: CarRequestLog;
@@ -864,6 +1061,8 @@ export type Mutation = {
   /** Create a new direct purchase offer (admin only) */
   createDirectPurchaseOffer: DirectPurchaseOffer;
   createDocumentTemplate: DocumentTemplate;
+  createEngine: CatalogEngine;
+  createEquipmentItem: CatalogBrandEquipmentItem;
   createFile: File;
   createFilePublic: File;
   /** Create a new individual (custom) offer (admin only) */
@@ -877,6 +1076,7 @@ export type Mutation = {
   /** Create optional equipment (admin only) */
   createOptionalEquipment: OfferOptionalEquipment;
   createUser: User;
+  deleteBrandEquipment: Scalars['Boolean']['output'];
   deleteCalculation: Scalars['Boolean']['output'];
   deleteCarRequest: Scalars['Boolean']['output'];
   deleteCatalogBrand: Scalars['Boolean']['output'];
@@ -886,6 +1086,8 @@ export type Mutation = {
   /** Delete a color variant (admin only) */
   deleteColorVariant: Scalars['Boolean']['output'];
   deleteDocumentTemplate: Scalars['Boolean']['output'];
+  deleteEngine: Scalars['Boolean']['output'];
+  deleteEquipmentItem: Scalars['Boolean']['output'];
   deleteFile: Scalars['Boolean']['output'];
   deleteFileCompletely: Scalars['Boolean']['output'];
   deleteLeasingCompany: Scalars['Boolean']['output'];
@@ -909,6 +1111,7 @@ export type Mutation = {
   startProcessingCalculation: CarRequestCalculation;
   stopImpersonation: AuthResponse;
   submitCalculation: CarRequestCalculation;
+  updateBrandEquipment: CatalogBrandEquipment;
   updateCalculation: CarRequestCalculation;
   updateCarRequest: CarRequest;
   updateCatalogBrand: CatalogBrand;
@@ -916,6 +1119,8 @@ export type Mutation = {
   updateCatalogModel: CatalogModel;
   updateCatalogModelGeneration: CatalogModelGeneration;
   updateDocumentTemplate: DocumentTemplate;
+  updateEngine: CatalogEngine;
+  updateEquipmentItem: CatalogBrandEquipmentItem;
   updateFile: File;
   /** Update status of an individual offer (admin only) */
   updateIndividualOfferStatus: IndividualOffer;
@@ -944,6 +1149,11 @@ export type MutationAddOfferQuoteArgs = {
 
 export type MutationCompleteCalculationArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateBrandEquipmentArgs = {
+  input: CreateCatalogBrandEquipmentInput;
 };
 
 
@@ -998,6 +1208,16 @@ export type MutationCreateDirectPurchaseOfferArgs = {
 
 export type MutationCreateDocumentTemplateArgs = {
   input: CreateDocumentTemplateInput;
+};
+
+
+export type MutationCreateEngineArgs = {
+  input: CreateCatalogEngineInput;
+};
+
+
+export type MutationCreateEquipmentItemArgs = {
+  input: CreateCatalogBrandEquipmentItemInput;
 };
 
 
@@ -1057,6 +1277,11 @@ export type MutationCreateUserArgs = {
 };
 
 
+export type MutationDeleteBrandEquipmentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationDeleteCalculationArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1093,6 +1318,16 @@ export type MutationDeleteColorVariantArgs = {
 
 
 export type MutationDeleteDocumentTemplateArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteEngineArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteEquipmentItemArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -1194,6 +1429,12 @@ export type MutationSubmitCalculationArgs = {
 };
 
 
+export type MutationUpdateBrandEquipmentArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogBrandEquipmentInput;
+};
+
+
 export type MutationUpdateCalculationArgs = {
   id: Scalars['ID']['input'];
   input: UpdateCalculationInput;
@@ -1233,6 +1474,18 @@ export type MutationUpdateCatalogModelGenerationArgs = {
 export type MutationUpdateDocumentTemplateArgs = {
   id: Scalars['String']['input'];
   input: UpdateDocumentTemplateInput;
+};
+
+
+export type MutationUpdateEngineArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEngineInput;
+};
+
+
+export type MutationUpdateEquipmentItemArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogBrandEquipmentItemInput;
 };
 
 
@@ -1543,16 +1796,22 @@ export type PasswordResetResponse = {
 
 export type Query = {
   __typename?: 'Query';
+  activeEngines: Array<CatalogEngine>;
+  allBrandEquipments: Array<CatalogBrandEquipment>;
   allCarRequestStates: Array<CarRequestState>;
   allCarRequestStatuses: Array<CarRequestStatus>;
   allCarRequests: Array<CarRequest>;
   allCatalogBrands: Array<CatalogBrand>;
   allCatalogModels: Array<CatalogModel>;
   allDocumentTemplates: Array<DocumentTemplate>;
+  allEngines: Array<CatalogEngine>;
+  allEquipmentItems: Array<CatalogBrandEquipmentItem>;
   /** Get all offers including individual offers (admin only) */
   allOffers: Array<Offer>;
   allOnboardings: Array<Onboarding>;
   auditLogs: Array<AuditLog>;
+  brandEquipment: CatalogBrandEquipment;
+  brandEquipmentsCount: Scalars['Int']['output'];
   calculation?: Maybe<CarRequestCalculation>;
   calculationsByCarRequest: Array<CarRequestCalculation>;
   /** Get all calculations for an individual offer (admin only) */
@@ -1560,6 +1819,7 @@ export type Query = {
   carRequest: CarRequest;
   carRequestLogs: Array<CarRequestLog>;
   carRequestsCount: Scalars['Int']['output'];
+  carRequestsDashboardStats: DashboardStats;
   catalogBrand: CatalogBrand;
   catalogBrandBySlug: CatalogBrand;
   catalogBrands: Array<CatalogBrand>;
@@ -1585,7 +1845,11 @@ export type Query = {
   documentTemplate: DocumentTemplate;
   documentTemplatesByLeasingCompany: Array<DocumentTemplate>;
   documents: Array<File>;
+  engine: CatalogEngine;
+  enginesCount: Scalars['Int']['output'];
   entityHistory: Array<AuditLog>;
+  equipmentItem: CatalogBrandEquipmentItem;
+  equipmentItemsCount: Scalars['Int']['output'];
   file: File;
   fileByChecksum?: Maybe<File>;
   files: Array<File>;
@@ -1614,6 +1878,7 @@ export type Query = {
   /** Get all optional equipment for an offer (admin only) */
   optionalEquipmentByOffer: Array<OfferOptionalEquipment>;
   pendingCalculations: Array<CarRequestCalculation>;
+  publicEngine: CatalogEngine;
   publicFile: File;
   publicFileByLegacyId?: Maybe<File>;
   /** Get a single public offer by ID */
@@ -1624,17 +1889,38 @@ export type Query = {
   publicOffers: Array<Offer>;
   recommendedCatalogBrands: Array<CatalogBrand>;
   recommendedCatalogModels: Array<CatalogModel>;
+  recommendedEngines: Array<CatalogEngine>;
   requiredDocumentsByToken: Array<DocumentTemplate>;
   requiredDocumentsForOnboarding: Array<DocumentTemplate>;
+  searchBrandEquipments: Array<CatalogBrandEquipment>;
   searchCatalogBrands: Array<CatalogBrand>;
   searchCatalogColors: Array<CatalogColor>;
   searchCatalogModelGenerations: Array<CatalogModelGeneration>;
   searchCatalogModels: Array<CatalogModel>;
+  searchEngines: Array<CatalogEngine>;
+  searchEquipmentItems: Array<CatalogBrandEquipmentItem>;
   searchUsers: Array<User>;
   storageStats: StorageStats;
   user: User;
   userActivity: Array<AuditLog>;
   users: Array<User>;
+};
+
+
+export type QueryActiveEnginesArgs = {
+  driveType?: InputMaybe<CatalogEngineDriveType>;
+  fuelType?: InputMaybe<CatalogEngineFuelType>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  transmissionType?: InputMaybe<CatalogEngineTransmissionType>;
+};
+
+
+export type QueryAllBrandEquipmentsArgs = {
+  brandId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
@@ -1661,6 +1947,24 @@ export type QueryAllDocumentTemplatesArgs = {
 };
 
 
+export type QueryAllEnginesArgs = {
+  activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  driveType?: InputMaybe<CatalogEngineDriveType>;
+  fuelType?: InputMaybe<CatalogEngineFuelType>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  recommendedOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  transmissionType?: InputMaybe<CatalogEngineTransmissionType>;
+};
+
+
+export type QueryAllEquipmentItemsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
 export type QueryAllOffersArgs = {
   filters?: InputMaybe<OfferFiltersInput>;
 };
@@ -1674,6 +1978,16 @@ export type QueryAllOnboardingsArgs = {
 
 export type QueryAuditLogsArgs = {
   query: AuditQueryInput;
+};
+
+
+export type QueryBrandEquipmentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryBrandEquipmentsCountArgs = {
+  brandId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1817,9 +2131,25 @@ export type QueryDocumentTemplatesByLeasingCompanyArgs = {
 };
 
 
+export type QueryEngineArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryEnginesCountArgs = {
+  fuelType?: InputMaybe<CatalogEngineFuelType>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryEntityHistoryArgs = {
   entityId: Scalars['String']['input'];
   entityName: Scalars['String']['input'];
+};
+
+
+export type QueryEquipmentItemArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -1903,6 +2233,11 @@ export type QueryOptionalEquipmentByOfferArgs = {
 };
 
 
+export type QueryPublicEngineArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryPublicFileArgs = {
   id: Scalars['String']['input'];
 };
@@ -1928,6 +2263,11 @@ export type QueryPublicOffersArgs = {
 };
 
 
+export type QueryRecommendedEnginesArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
 export type QueryRequiredDocumentsByTokenArgs = {
   token: Scalars['String']['input'];
 };
@@ -1935,6 +2275,12 @@ export type QueryRequiredDocumentsByTokenArgs = {
 
 export type QueryRequiredDocumentsForOnboardingArgs = {
   onboardingId: Scalars['String']['input'];
+};
+
+
+export type QuerySearchBrandEquipmentsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
 };
 
 
@@ -1957,6 +2303,18 @@ export type QuerySearchCatalogModelGenerationsArgs = {
 
 
 export type QuerySearchCatalogModelsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchEnginesArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchEquipmentItemsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
 };
@@ -2008,14 +2366,25 @@ export type StorageStats = {
   totalSize: Scalars['Int']['output'];
 };
 
+export type TimelineDataPoint = {
+  __typename?: 'TimelineDataPoint';
+  completedOnboardings: Scalars['Int']['output'];
+  date: Scalars['String']['output'];
+  newCarRequests: Scalars['Int']['output'];
+};
+
 export type UpdateCalculationInput = {
   annualMileageKm?: InputMaybe<Scalars['Int']['input']>;
   assignedToId?: InputMaybe<Scalars['String']['input']>;
+  brandId?: InputMaybe<Scalars['String']['input']>;
   deliveryExpectedAt?: InputMaybe<Scalars['DateTime']['input']>;
   durationMonths?: InputMaybe<Scalars['Int']['input']>;
   internalNotes?: InputMaybe<Scalars['String']['input']>;
   items?: InputMaybe<Array<CreateCalculationItemInput>>;
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
   metadata?: InputMaybe<Scalars['JSON']['input']>;
+  modelGenerationId?: InputMaybe<Scalars['String']['input']>;
+  modelId?: InputMaybe<Scalars['String']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -2044,6 +2413,16 @@ export type UpdateCarRequestInput = {
   waitingForOffer?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type UpdateCatalogBrandEquipmentInput = {
+  brandId?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCatalogBrandEquipmentItemInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateCatalogBrandInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2060,6 +2439,32 @@ export type UpdateCatalogColorInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<CatalogColorType>;
+};
+
+export type UpdateCatalogEngineInput = {
+  acceleration?: InputMaybe<Scalars['Float']['input']>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  consumptionCity?: InputMaybe<Scalars['Float']['input']>;
+  consumptionCombined?: InputMaybe<Scalars['Float']['input']>;
+  consumptionOutOfCity?: InputMaybe<Scalars['Float']['input']>;
+  cylinderCount?: InputMaybe<Scalars['Int']['input']>;
+  driveType?: InputMaybe<CatalogEngineDriveType>;
+  emission?: InputMaybe<Scalars['Int']['input']>;
+  fuelTankVolume?: InputMaybe<Scalars['Int']['input']>;
+  fuelType?: InputMaybe<CatalogEngineFuelType>;
+  gearsCount?: InputMaybe<Scalars['Int']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  maxSpeed?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  performance?: InputMaybe<Scalars['Int']['input']>;
+  productionStart?: InputMaybe<Scalars['DateTime']['input']>;
+  productionStop?: InputMaybe<Scalars['DateTime']['input']>;
+  rangeKm?: InputMaybe<Scalars['Int']['input']>;
+  recommended?: InputMaybe<Scalars['Boolean']['input']>;
+  torque?: InputMaybe<Scalars['Int']['input']>;
+  transmissionType?: InputMaybe<CatalogEngineTransmissionType>;
+  volume?: InputMaybe<Scalars['Int']['input']>;
+  weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateCatalogModelGenerationInput = {
@@ -2212,6 +2617,15 @@ export type ValidateDocumentInput = {
   status: DocumentValidationStatus;
 };
 
+export type VehicleFunnelStats = {
+  __typename?: 'VehicleFunnelStats';
+  created: Scalars['Int']['output'];
+  hasOffers: Scalars['Int']['output'];
+  leasingCompanySelected: Scalars['Int']['output'];
+  onboardingComplete: Scalars['Int']['output'];
+  ordered: Scalars['Int']['output'];
+};
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
@@ -2237,6 +2651,59 @@ export type StopImpersonationMutationVariables = Exact<{ [key: string]: never; }
 
 
 export type StopImpersonationMutation = { __typename?: 'Mutation', stopImpersonation: { __typename?: 'AuthResponse', accessToken: string, refreshToken: string, user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, roles: Array<UserRole>, isActive: boolean } } };
+
+export type GetAllBrandEquipmentsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  brandId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetAllBrandEquipmentsQuery = { __typename?: 'Query', allBrandEquipments: Array<{ __typename?: 'CatalogBrandEquipment', id: string, name: string, description?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string }, assignedItems?: Array<{ __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null }> | null }> };
+
+export type GetBrandEquipmentQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetBrandEquipmentQuery = { __typename?: 'Query', brandEquipment: { __typename?: 'CatalogBrandEquipment', id: string, name: string, description?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string }, assignedItems?: Array<{ __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null }> | null } };
+
+export type SearchBrandEquipmentsQueryVariables = Exact<{
+  query: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type SearchBrandEquipmentsQuery = { __typename?: 'Query', searchBrandEquipments: Array<{ __typename?: 'CatalogBrandEquipment', id: string, name: string, description?: string | null, brandId: string, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } }> };
+
+export type GetBrandEquipmentsCountQueryVariables = Exact<{
+  brandId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetBrandEquipmentsCountQuery = { __typename?: 'Query', brandEquipmentsCount: number };
+
+export type CreateBrandEquipmentMutationVariables = Exact<{
+  input: CreateCatalogBrandEquipmentInput;
+}>;
+
+
+export type CreateBrandEquipmentMutation = { __typename?: 'Mutation', createBrandEquipment: { __typename?: 'CatalogBrandEquipment', id: string, name: string, description?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string }, assignedItems?: Array<{ __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null }> | null } };
+
+export type UpdateBrandEquipmentMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateCatalogBrandEquipmentInput;
+}>;
+
+
+export type UpdateBrandEquipmentMutation = { __typename?: 'Mutation', updateBrandEquipment: { __typename?: 'CatalogBrandEquipment', id: string, name: string, description?: string | null, brandId: string, createdAt: any, updatedAt?: any | null, brand: { __typename?: 'CatalogBrand', id: string, name: string, slug: string }, assignedItems?: Array<{ __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null }> | null } };
+
+export type DeleteBrandEquipmentMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteBrandEquipmentMutation = { __typename?: 'Mutation', deleteBrandEquipment: boolean };
 
 export type GetAllCatalogBrandsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -2370,6 +2837,11 @@ export type DeleteCalculationMutationVariables = Exact<{
 
 export type DeleteCalculationMutation = { __typename?: 'Mutation', deleteCalculation: boolean };
 
+export type CarRequestsDashboardStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CarRequestsDashboardStatsQuery = { __typename?: 'Query', carRequestsDashboardStats: { __typename?: 'DashboardStats', overview: { __typename?: 'DashboardOverviewStats', activeCarRequests: number, totalVehicles: number, awaitingAction: number, completedOnboardingsThisMonth: number, activeCarRequestsChange: number, totalVehiclesChange: number }, topBrands: Array<{ __typename?: 'BrandStats', brandId: string, brandName: string, calculationsCount: number, percentage: number }>, agentPerformance: Array<{ __typename?: 'AgentPerformance', agentId: string, agentName: string, carRequestsCount: number, vehiclesCount: number, conversionRate?: number | null, averageProcessingDays?: number | null }>, leasingCompanies: Array<{ __typename?: 'LeasingCompanyStats', leasingCompanyId: string, leasingCompanyName: string, calculationsCount: number, completedOnboardingsCount: number, conversionRate?: number | null }>, timeline: Array<{ __typename?: 'TimelineDataPoint', date: string, newCarRequests: number, completedOnboardings: number }>, funnel: { __typename?: 'VehicleFunnelStats', created: number, hasOffers: number, leasingCompanySelected: number, onboardingComplete: number, ordered: number } } };
+
 export type GetAllCarRequestsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
@@ -2441,6 +2913,95 @@ export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, firstName: string, lastName: string, email: string, roles: Array<UserRole> }> };
 
+export type GetAllCatalogColorsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  type?: InputMaybe<CatalogColorType>;
+}>;
+
+
+export type GetAllCatalogColorsQuery = { __typename?: 'Query', catalogColors: Array<{ __typename?: 'CatalogColor', id: string, name: string, slug: string, color?: string | null, type: CatalogColorType, legacySystemId?: string | null, createdAt: any }> };
+
+export type GetCatalogColorQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetCatalogColorQuery = { __typename?: 'Query', catalogColor: { __typename?: 'CatalogColor', id: string, name: string, slug: string, color?: string | null, type: CatalogColorType, legacySystemId?: string | null, createdAt: any } };
+
+export type CreateCatalogColorMutationVariables = Exact<{
+  input: CreateCatalogColorInput;
+}>;
+
+
+export type CreateCatalogColorMutation = { __typename?: 'Mutation', createCatalogColor: { __typename?: 'CatalogColor', id: string, name: string, slug: string, color?: string | null, type: CatalogColorType, legacySystemId?: string | null, createdAt: any } };
+
+export type UpdateCatalogColorMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateCatalogColorInput;
+}>;
+
+
+export type UpdateCatalogColorMutation = { __typename?: 'Mutation', updateCatalogColor: { __typename?: 'CatalogColor', id: string, name: string, slug: string, color?: string | null, type: CatalogColorType, legacySystemId?: string | null, createdAt: any } };
+
+export type DeleteCatalogColorMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteCatalogColorMutation = { __typename?: 'Mutation', deleteCatalogColor: boolean };
+
+export type GetCustomerDetailQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetCustomerDetailQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null, bio?: string | null, roles: Array<UserRole>, isActive: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'File', id: string, url: string } | null } };
+
+export type GetOnboardingsWithDocumentsQueryVariables = Exact<{
+  status?: InputMaybe<OnboardingStatus>;
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetOnboardingsWithDocumentsQuery = { __typename?: 'Query', allOnboardings: Array<{ __typename?: 'Onboarding', id: string, token: string, status: OnboardingStatus, expiresAt: any, completedAt?: any | null, createdAt: any, updatedAt: any, carRequest: { __typename?: 'CarRequest', id: string, requestFirstName?: string | null, requestLastName?: string | null, requestEmail?: string | null, customer?: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string } | null }, leasingCompany: { __typename?: 'LeasingCompany', id: string, name: string, logo?: { __typename?: 'File', id: string, url: string } | null }, documents?: Array<{ __typename?: 'OnboardingDocument', id: string, uploadedAt: any, updatedAt: any, validationStatus: DocumentValidationStatus, validationNote?: string | null, validatedAt?: any | null, file: { __typename?: 'File', id: string, name: string, url: string, size: number, mimeType: string }, documentTemplate: { __typename?: 'DocumentTemplate', id: string, name: string, fieldName: string }, validatedBy?: { __typename?: 'User', id: string, firstName: string, lastName: string } | null }> | null }> };
+
+export type GetUserActivityQueryVariables = Exact<{
+  userId: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type GetUserActivityQuery = { __typename?: 'Query', userActivity: Array<{ __typename?: 'AuditLog', id: string, action: AuditAction, entityName: string, entityId: string, changes?: any | null, userId?: string | null, userEmail?: string | null, ipAddress?: string | null, userAgent?: string | null, createdAt: any }> };
+
+export type GetCarRequestsCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCarRequestsCountQuery = { __typename?: 'Query', carRequestsCount: number };
+
+export type GetAllCustomersQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type GetAllCustomersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null, roles: Array<UserRole>, isActive: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'File', id: string, url: string } | null }> };
+
+export type GetCustomerQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetCustomerQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null, bio?: string | null, roles: Array<UserRole>, isActive: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'File', id: string, url: string } | null } };
+
+export type SearchCustomersQueryVariables = Exact<{
+  query: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type SearchCustomersQuery = { __typename?: 'Query', searchUsers: Array<{ __typename?: 'User', id: string, email: string, firstName: string, lastName: string, phone?: string | null, roles: Array<UserRole>, isActive: boolean, createdAt: any, updatedAt: any, avatar?: { __typename?: 'File', id: string, url: string } | null }> };
+
 export type GetAllDocumentTemplatesQueryVariables = Exact<{
   leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -2490,6 +3051,122 @@ export type ReorderDocumentTemplatesMutationVariables = Exact<{
 
 
 export type ReorderDocumentTemplatesMutation = { __typename?: 'Mutation', reorderDocumentTemplates: boolean };
+
+export type GetAllEnginesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  fuelType?: InputMaybe<CatalogEngineFuelType>;
+  transmissionType?: InputMaybe<CatalogEngineTransmissionType>;
+  driveType?: InputMaybe<CatalogEngineDriveType>;
+  activeOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  recommendedOnly?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type GetAllEnginesQuery = { __typename?: 'Query', allEngines: Array<{ __typename?: 'CatalogEngine', id: string, name: string, generationId: string, fuelType?: CatalogEngineFuelType | null, transmissionType?: CatalogEngineTransmissionType | null, driveType?: CatalogEngineDriveType | null, consumptionCombined?: number | null, consumptionCity?: number | null, consumptionOutOfCity?: number | null, performance?: number | null, torque?: number | null, volume?: number | null, emission?: number | null, rangeKm?: number | null, acceleration?: number | null, fuelTankVolume?: number | null, cylinderCount?: number | null, maxSpeed?: number | null, weight?: number | null, gearsCount?: number | null, productionStart?: any | null, productionStop?: any | null, active: boolean, recommended: boolean, generation: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, model: { __typename?: 'CatalogModel', id: string, name: string, slug: string, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } } }> };
+
+export type GetEngineQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetEngineQuery = { __typename?: 'Query', engine: { __typename?: 'CatalogEngine', id: string, name: string, generationId: string, fuelType?: CatalogEngineFuelType | null, transmissionType?: CatalogEngineTransmissionType | null, driveType?: CatalogEngineDriveType | null, consumptionCombined?: number | null, consumptionCity?: number | null, consumptionOutOfCity?: number | null, performance?: number | null, torque?: number | null, volume?: number | null, emission?: number | null, rangeKm?: number | null, acceleration?: number | null, fuelTankVolume?: number | null, cylinderCount?: number | null, maxSpeed?: number | null, weight?: number | null, gearsCount?: number | null, productionStart?: any | null, productionStop?: any | null, active: boolean, recommended: boolean, generation: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null, model: { __typename?: 'CatalogModel', id: string, name: string, slug: string, brand?: { __typename?: 'CatalogBrand', id: string, name: string, slug: string } | null } } } };
+
+export type GetEnginesByGenerationQueryVariables = Exact<{
+  generationId: Scalars['String']['input'];
+}>;
+
+
+export type GetEnginesByGenerationQuery = { __typename?: 'Query', allEngines: Array<{ __typename?: 'CatalogEngine', id: string, name: string, fuelType?: CatalogEngineFuelType | null, transmissionType?: CatalogEngineTransmissionType | null, driveType?: CatalogEngineDriveType | null, performance?: number | null, torque?: number | null, acceleration?: number | null, active: boolean, recommended: boolean }> };
+
+export type GetEnginesCountQueryVariables = Exact<{
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  fuelType?: InputMaybe<CatalogEngineFuelType>;
+}>;
+
+
+export type GetEnginesCountQuery = { __typename?: 'Query', enginesCount: number };
+
+export type SearchEnginesQueryVariables = Exact<{
+  query: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type SearchEnginesQuery = { __typename?: 'Query', searchEngines: Array<{ __typename?: 'CatalogEngine', id: string, name: string, fuelType?: CatalogEngineFuelType | null, transmissionType?: CatalogEngineTransmissionType | null, driveType?: CatalogEngineDriveType | null, generation: { __typename?: 'CatalogModelGeneration', id: string, name: string, model: { __typename?: 'CatalogModel', id: string, name: string, brand?: { __typename?: 'CatalogBrand', id: string, name: string } | null } } }> };
+
+export type CreateEngineMutationVariables = Exact<{
+  input: CreateCatalogEngineInput;
+}>;
+
+
+export type CreateEngineMutation = { __typename?: 'Mutation', createEngine: { __typename?: 'CatalogEngine', id: string, name: string, generationId: string, fuelType?: CatalogEngineFuelType | null, transmissionType?: CatalogEngineTransmissionType | null, driveType?: CatalogEngineDriveType | null, consumptionCombined?: number | null, consumptionCity?: number | null, consumptionOutOfCity?: number | null, performance?: number | null, torque?: number | null, volume?: number | null, emission?: number | null, rangeKm?: number | null, acceleration?: number | null, fuelTankVolume?: number | null, cylinderCount?: number | null, maxSpeed?: number | null, weight?: number | null, gearsCount?: number | null, productionStart?: any | null, productionStop?: any | null, active: boolean, recommended: boolean, generation: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null } } };
+
+export type UpdateEngineMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEngineInput;
+}>;
+
+
+export type UpdateEngineMutation = { __typename?: 'Mutation', updateEngine: { __typename?: 'CatalogEngine', id: string, name: string, generationId: string, fuelType?: CatalogEngineFuelType | null, transmissionType?: CatalogEngineTransmissionType | null, driveType?: CatalogEngineDriveType | null, consumptionCombined?: number | null, consumptionCity?: number | null, consumptionOutOfCity?: number | null, performance?: number | null, torque?: number | null, volume?: number | null, emission?: number | null, rangeKm?: number | null, acceleration?: number | null, fuelTankVolume?: number | null, cylinderCount?: number | null, maxSpeed?: number | null, weight?: number | null, gearsCount?: number | null, productionStart?: any | null, productionStop?: any | null, active: boolean, recommended: boolean, generation: { __typename?: 'CatalogModelGeneration', id: string, name: string, slug?: string | null } } };
+
+export type DeleteEngineMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteEngineMutation = { __typename?: 'Mutation', deleteEngine: boolean };
+
+export type GetAllEquipmentItemsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type GetAllEquipmentItemsQuery = { __typename?: 'Query', allEquipmentItems: Array<{ __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null, createdAt: any, updatedAt?: any | null }> };
+
+export type GetEquipmentItemQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetEquipmentItemQuery = { __typename?: 'Query', equipmentItem: { __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null, createdAt: any, updatedAt?: any | null } };
+
+export type SearchEquipmentItemsQueryVariables = Exact<{
+  query: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type SearchEquipmentItemsQuery = { __typename?: 'Query', searchEquipmentItems: Array<{ __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null }> };
+
+export type GetEquipmentItemsCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEquipmentItemsCountQuery = { __typename?: 'Query', equipmentItemsCount: number };
+
+export type CreateEquipmentItemMutationVariables = Exact<{
+  input: CreateCatalogBrandEquipmentItemInput;
+}>;
+
+
+export type CreateEquipmentItemMutation = { __typename?: 'Mutation', createEquipmentItem: { __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null, createdAt: any, updatedAt?: any | null } };
+
+export type UpdateEquipmentItemMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateCatalogBrandEquipmentItemInput;
+}>;
+
+
+export type UpdateEquipmentItemMutation = { __typename?: 'Mutation', updateEquipmentItem: { __typename?: 'CatalogBrandEquipmentItem', id: string, name: string, legacySystemId?: string | null, createdAt: any, updatedAt?: any | null } };
+
+export type DeleteEquipmentItemMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteEquipmentItemMutation = { __typename?: 'Mutation', deleteEquipmentItem: boolean };
 
 export type GetAllCatalogModelGenerationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -2628,6 +3305,71 @@ export type CheckModelSlugQueryVariables = Exact<{
 
 
 export type CheckModelSlugQuery = { __typename?: 'Query', catalogModelBySlug: { __typename?: 'CatalogModel', id: string, slug: string } };
+
+export type GetAllVehicleOffersQueryVariables = Exact<{
+  filters?: InputMaybe<OfferFiltersInput>;
+}>;
+
+
+export type GetAllVehicleOffersQuery = { __typename?: 'Query', allOffers: Array<{ __typename: 'Offer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, leasingDurationMonths?: number | null, monthlyPayment?: number | null, annualMileageLimit?: number | null, downPaymentLeasing?: number | null, hasServiceIncluded?: boolean | null, hasWinterTyresIncluded?: boolean | null, hasAssistanceServiceIncluded?: boolean | null, hasGapIncluded?: boolean | null, discountAmount?: number | null, discountPercentage?: number | null, includesWarranty?: boolean | null, warrantyYears?: number | null, financingAvailable?: boolean | null, customerId?: string | null, status?: IndividualOfferStatus | null, customRequirements?: string | null, internalNotes?: string | null, assignedToId?: string | null, responseDeadline?: any | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } }> };
+
+export type GetOfferQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetOfferQuery = { __typename?: 'Query', offer: { __typename: 'Offer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, leasingDurationMonths?: number | null, monthlyPayment?: number | null, annualMileageLimit?: number | null, downPaymentLeasing?: number | null, hasServiceIncluded?: boolean | null, hasWinterTyresIncluded?: boolean | null, hasAssistanceServiceIncluded?: boolean | null, hasGapIncluded?: boolean | null, discountAmount?: number | null, discountPercentage?: number | null, includesWarranty?: boolean | null, warrantyYears?: number | null, financingAvailable?: boolean | null, customerId?: string | null, status?: IndividualOfferStatus | null, customRequirements?: string | null, internalNotes?: string | null, assignedToId?: string | null, responseDeadline?: any | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } } };
+
+export type GetIndividualOffersQueryVariables = Exact<{
+  filters?: InputMaybe<OfferFiltersInput>;
+}>;
+
+
+export type GetIndividualOffersQuery = { __typename?: 'Query', individualOffers: Array<{ __typename: 'IndividualOffer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, customerId?: string | null, status?: IndividualOfferStatus | null, customRequirements?: string | null, internalNotes?: string | null, assignedToId?: string | null, responseDeadline?: any | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } }> };
+
+export type CreateOperationalLeasingOfferMutationVariables = Exact<{
+  input: CreateOperationalLeasingOfferInput;
+}>;
+
+
+export type CreateOperationalLeasingOfferMutation = { __typename?: 'Mutation', createOperationalLeasingOffer: { __typename: 'OperationalLeasingOffer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, leasingDurationMonths?: number | null, monthlyPayment?: number | null, annualMileageLimit?: number | null, downPaymentLeasing?: number | null, hasServiceIncluded?: boolean | null, hasWinterTyresIncluded?: boolean | null, hasAssistanceServiceIncluded?: boolean | null, hasGapIncluded?: boolean | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } } };
+
+export type CreateDirectPurchaseOfferMutationVariables = Exact<{
+  input: CreateDirectPurchaseOfferInput;
+}>;
+
+
+export type CreateDirectPurchaseOfferMutation = { __typename?: 'Mutation', createDirectPurchaseOffer: { __typename: 'DirectPurchaseOffer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, discountAmount?: number | null, discountPercentage?: number | null, includesWarranty?: boolean | null, warrantyYears?: number | null, financingAvailable?: boolean | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } } };
+
+export type CreateIndividualOfferMutationVariables = Exact<{
+  input: CreateIndividualOfferInput;
+}>;
+
+
+export type CreateIndividualOfferMutation = { __typename?: 'Mutation', createIndividualOffer: { __typename: 'IndividualOffer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, customerId?: string | null, status?: IndividualOfferStatus | null, customRequirements?: string | null, internalNotes?: string | null, assignedToId?: string | null, responseDeadline?: any | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } } };
+
+export type UpdateOfferMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateOfferInput;
+}>;
+
+
+export type UpdateOfferMutation = { __typename?: 'Mutation', updateOffer: { __typename: 'Offer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, leasingDurationMonths?: number | null, monthlyPayment?: number | null, annualMileageLimit?: number | null, downPaymentLeasing?: number | null, hasServiceIncluded?: boolean | null, hasWinterTyresIncluded?: boolean | null, hasAssistanceServiceIncluded?: boolean | null, hasGapIncluded?: boolean | null, discountAmount?: number | null, discountPercentage?: number | null, includesWarranty?: boolean | null, warrantyYears?: number | null, financingAvailable?: boolean | null, customerId?: string | null, status?: IndividualOfferStatus | null, customRequirements?: string | null, internalNotes?: string | null, assignedToId?: string | null, responseDeadline?: any | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } } };
+
+export type UpdateIndividualOfferStatusMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  status: IndividualOfferStatus;
+}>;
+
+
+export type UpdateIndividualOfferStatusMutation = { __typename?: 'Mutation', updateIndividualOfferStatus: { __typename: 'IndividualOffer', id: string, type: OfferType, isPublic: boolean, isActive: boolean, totalPrice: number, description?: string | null, slug?: string | null, modelGenerationId: string, brandId?: string | null, modelId?: string | null, createdAt: any, updatedAt: any, customerId?: string | null, status?: IndividualOfferStatus | null, customRequirements?: string | null, internalNotes?: string | null, assignedToId?: string | null, responseDeadline?: any | null, modelGeneration: { __typename?: 'CatalogModelGeneration', id: string, name: string } } };
+
+export type DeleteOfferMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteOfferMutation = { __typename?: 'Mutation', deleteOffer: boolean };
 
 export type GetAllOnboardingsQueryVariables = Exact<{
   status?: InputMaybe<OnboardingStatus>;
@@ -2792,6 +3534,13 @@ export const LoginDocument = {"kind":"Document","definitions":[{"kind":"Operatio
 export const RefreshTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RefreshToken"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RefreshTokenInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"refreshToken"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}}]}}]}}]}}]} as unknown as DocumentNode<RefreshTokenMutation, RefreshTokenMutationVariables>;
 export const ImpersonateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ImpersonateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ImpersonateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"impersonateUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"impersonatedUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}}]}},{"kind":"Field","name":{"kind":"Name","value":"originalUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}}]}}]}}]}}]} as unknown as DocumentNode<ImpersonateUserMutation, ImpersonateUserMutationVariables>;
 export const StopImpersonationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"StopImpersonation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stopImpersonation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}}]}}]}}]}}]} as unknown as DocumentNode<StopImpersonationMutation, StopImpersonationMutationVariables>;
+export const GetAllBrandEquipmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllBrandEquipments"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"brandId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allBrandEquipments"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"brandId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"brandId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignedItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetAllBrandEquipmentsQuery, GetAllBrandEquipmentsQueryVariables>;
+export const GetBrandEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBrandEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"brandEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignedItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetBrandEquipmentQuery, GetBrandEquipmentQueryVariables>;
+export const SearchBrandEquipmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchBrandEquipments"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchBrandEquipments"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]}}]} as unknown as DocumentNode<SearchBrandEquipmentsQuery, SearchBrandEquipmentsQueryVariables>;
+export const GetBrandEquipmentsCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBrandEquipmentsCount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"brandId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"brandEquipmentsCount"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"brandId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"brandId"}}}]}]}}]} as unknown as DocumentNode<GetBrandEquipmentsCountQuery, GetBrandEquipmentsCountQueryVariables>;
+export const CreateBrandEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBrandEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogBrandEquipmentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBrandEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignedItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CreateBrandEquipmentMutation, CreateBrandEquipmentMutationVariables>;
+export const UpdateBrandEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateBrandEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogBrandEquipmentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBrandEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignedItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateBrandEquipmentMutation, UpdateBrandEquipmentMutationVariables>;
+export const DeleteBrandEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteBrandEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteBrandEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteBrandEquipmentMutation, DeleteBrandEquipmentMutationVariables>;
 export const GetAllCatalogBrandsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCatalogBrands"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allCatalogBrands"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"logoId"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetAllCatalogBrandsQuery, GetAllCatalogBrandsQueryVariables>;
 export const GetCatalogBrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogBrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogBrand"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"logoId"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogBrandQuery, GetCatalogBrandQueryVariables>;
 export const CreateCatalogBrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogBrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogBrandInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogBrand"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"isHighlighted"}},{"kind":"Field","name":{"kind":"Name","value":"isRecommended"}},{"kind":"Field","name":{"kind":"Name","value":"logoId"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CreateCatalogBrandMutation, CreateCatalogBrandMutationVariables>;
@@ -2810,6 +3559,7 @@ export const CompleteCalculationDocument = {"kind":"Document","definitions":[{"k
 export const AddOfferQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddOfferQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AddOfferQuoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addOfferQuote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CalculationOffer"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CalculationOffer"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CarRequestCalculationOffer"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"downPayment"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"interestRate"}},{"kind":"Field","name":{"kind":"Name","value":"adminFee"}},{"kind":"Field","name":{"kind":"Name","value":"includesService"}},{"kind":"Field","name":{"kind":"Name","value":"includesWinterTires"}},{"kind":"Field","name":{"kind":"Name","value":"includesGap"}},{"kind":"Field","name":{"kind":"Name","value":"includesAssistance"}},{"kind":"Field","name":{"kind":"Name","value":"termsAndConditions"}},{"kind":"Field","name":{"kind":"Name","value":"validUntil"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"quotedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quotedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<AddOfferQuoteMutation, AddOfferQuoteMutationVariables>;
 export const UpdateOfferQuoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateOfferQuote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateOfferQuoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateOfferQuote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"offerId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offerId"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CalculationOffer"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CalculationOffer"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CarRequestCalculationOffer"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"downPayment"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"interestRate"}},{"kind":"Field","name":{"kind":"Name","value":"adminFee"}},{"kind":"Field","name":{"kind":"Name","value":"includesService"}},{"kind":"Field","name":{"kind":"Name","value":"includesWinterTires"}},{"kind":"Field","name":{"kind":"Name","value":"includesGap"}},{"kind":"Field","name":{"kind":"Name","value":"includesAssistance"}},{"kind":"Field","name":{"kind":"Name","value":"termsAndConditions"}},{"kind":"Field","name":{"kind":"Name","value":"validUntil"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"quotedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"quotedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UpdateOfferQuoteMutation, UpdateOfferQuoteMutationVariables>;
 export const DeleteCalculationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCalculation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCalculation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteCalculationMutation, DeleteCalculationMutationVariables>;
+export const CarRequestsDashboardStatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CarRequestsDashboardStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"carRequestsDashboardStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"overview"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"activeCarRequests"}},{"kind":"Field","name":{"kind":"Name","value":"totalVehicles"}},{"kind":"Field","name":{"kind":"Name","value":"awaitingAction"}},{"kind":"Field","name":{"kind":"Name","value":"completedOnboardingsThisMonth"}},{"kind":"Field","name":{"kind":"Name","value":"activeCarRequestsChange"}},{"kind":"Field","name":{"kind":"Name","value":"totalVehiclesChange"}}]}},{"kind":"Field","name":{"kind":"Name","value":"topBrands"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brandName"}},{"kind":"Field","name":{"kind":"Name","value":"calculationsCount"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"agentPerformance"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"agentId"}},{"kind":"Field","name":{"kind":"Name","value":"agentName"}},{"kind":"Field","name":{"kind":"Name","value":"carRequestsCount"}},{"kind":"Field","name":{"kind":"Name","value":"vehiclesCount"}},{"kind":"Field","name":{"kind":"Name","value":"conversionRate"}},{"kind":"Field","name":{"kind":"Name","value":"averageProcessingDays"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompanies"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"leasingCompanyId"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompanyName"}},{"kind":"Field","name":{"kind":"Name","value":"calculationsCount"}},{"kind":"Field","name":{"kind":"Name","value":"completedOnboardingsCount"}},{"kind":"Field","name":{"kind":"Name","value":"conversionRate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"timeline"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"newCarRequests"}},{"kind":"Field","name":{"kind":"Name","value":"completedOnboardings"}}]}},{"kind":"Field","name":{"kind":"Name","value":"funnel"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"created"}},{"kind":"Field","name":{"kind":"Name","value":"hasOffers"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompanySelected"}},{"kind":"Field","name":{"kind":"Name","value":"onboardingComplete"}},{"kind":"Field","name":{"kind":"Name","value":"ordered"}}]}}]}}]}}]} as unknown as DocumentNode<CarRequestsDashboardStatsQuery, CarRequestsDashboardStatsQueryVariables>;
 export const GetAllCarRequestsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCarRequests"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allCarRequests"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isFromLegacySystem"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedAt"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"financingType"}},{"kind":"Field","name":{"kind":"Name","value":"requestEmail"}},{"kind":"Field","name":{"kind":"Name","value":"requestPhone"}},{"kind":"Field","name":{"kind":"Name","value":"requestFirstName"}},{"kind":"Field","name":{"kind":"Name","value":"requestLastName"}},{"kind":"Field","name":{"kind":"Name","value":"requestNewsletter"}},{"kind":"Field","name":{"kind":"Name","value":"requestPostalCode"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"assignedAgent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignedAgentId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompanyId"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"gclid"}},{"kind":"Field","name":{"kind":"Name","value":"noteInternal"}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"}},{"kind":"Field","name":{"kind":"Name","value":"nextCallAt"}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"relayedAt"}},{"kind":"Field","name":{"kind":"Name","value":"feedbackAt"}},{"kind":"Field","name":{"kind":"Name","value":"closedAt"}},{"kind":"Field","name":{"kind":"Name","value":"waitingForOffer"}},{"kind":"Field","name":{"kind":"Name","value":"offersSentAt"}},{"kind":"Field","name":{"kind":"Name","value":"deliveryExpectedAt"}},{"kind":"Field","name":{"kind":"Name","value":"carDelivered"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}},{"kind":"Field","name":{"kind":"Name","value":"cancellationReason"}},{"kind":"Field","name":{"kind":"Name","value":"cancellationNote"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"colorHex"}},{"kind":"Field","name":{"kind":"Name","value":"isFinal"}}]}},{"kind":"Field","name":{"kind":"Name","value":"statusId"}},{"kind":"Field","name":{"kind":"Name","value":"state"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"colorHex"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stateId"}}]}}]}}]} as unknown as DocumentNode<GetAllCarRequestsQuery, GetAllCarRequestsQueryVariables>;
 export const GetCarRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCarRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"carRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isFromLegacySystem"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedAt"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"financingType"}},{"kind":"Field","name":{"kind":"Name","value":"requestEmail"}},{"kind":"Field","name":{"kind":"Name","value":"requestPhone"}},{"kind":"Field","name":{"kind":"Name","value":"requestFirstName"}},{"kind":"Field","name":{"kind":"Name","value":"requestLastName"}},{"kind":"Field","name":{"kind":"Name","value":"requestNewsletter"}},{"kind":"Field","name":{"kind":"Name","value":"requestPostalCode"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"assignedAgent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignedAgentId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompanyId"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"gclid"}},{"kind":"Field","name":{"kind":"Name","value":"noteInternal"}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"}},{"kind":"Field","name":{"kind":"Name","value":"nextCallAt"}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"relayedAt"}},{"kind":"Field","name":{"kind":"Name","value":"feedbackAt"}},{"kind":"Field","name":{"kind":"Name","value":"closedAt"}},{"kind":"Field","name":{"kind":"Name","value":"waitingForOffer"}},{"kind":"Field","name":{"kind":"Name","value":"offersSentAt"}},{"kind":"Field","name":{"kind":"Name","value":"deliveryExpectedAt"}},{"kind":"Field","name":{"kind":"Name","value":"carDelivered"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}},{"kind":"Field","name":{"kind":"Name","value":"cancellationReason"}},{"kind":"Field","name":{"kind":"Name","value":"cancellationNote"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"colorHex"}},{"kind":"Field","name":{"kind":"Name","value":"isFinal"}}]}},{"kind":"Field","name":{"kind":"Name","value":"statusId"}},{"kind":"Field","name":{"kind":"Name","value":"state"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"colorHex"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stateId"}},{"kind":"Field","name":{"kind":"Name","value":"logs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"actionType"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"carRequestId"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}}]}}]}}]}}]} as unknown as DocumentNode<GetCarRequestQuery, GetCarRequestQueryVariables>;
 export const CreateCarRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCarRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCarRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCarRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modifiedAt"}}]}}]}}]} as unknown as DocumentNode<CreateCarRequestMutation, CreateCarRequestMutationVariables>;
@@ -2821,6 +3571,18 @@ export const GetCarRequestLogsDocument = {"kind":"Document","definitions":[{"kin
 export const CreateCarRequestLogDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCarRequestLog"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCarRequestLogInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCarRequestLog"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"actionType"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"}},{"kind":"Field","name":{"kind":"Name","value":"carRequestId"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}}]}}]}}]} as unknown as DocumentNode<CreateCarRequestLogMutation, CreateCarRequestLogMutationVariables>;
 export const GetAllOffersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllOffers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allOffers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingDurationMonths"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"annualMileageLimit"}},{"kind":"Field","name":{"kind":"Name","value":"downPaymentLeasing"}},{"kind":"Field","name":{"kind":"Name","value":"hasServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasWinterTyresIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasAssistanceServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasGapIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"discountAmount"}},{"kind":"Field","name":{"kind":"Name","value":"discountPercentage"}},{"kind":"Field","name":{"kind":"Name","value":"includesWarranty"}},{"kind":"Field","name":{"kind":"Name","value":"warrantyYears"}},{"kind":"Field","name":{"kind":"Name","value":"financingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetAllOffersQuery, GetAllOffersQueryVariables>;
 export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"IntValue","value":"100"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
+export const GetAllCatalogColorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCatalogColors"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogColorType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogColors"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetAllCatalogColorsQuery, GetAllCatalogColorsQueryVariables>;
+export const GetCatalogColorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogColor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogColor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogColorQuery, GetCatalogColorQueryVariables>;
+export const CreateCatalogColorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogColor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogColorInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogColor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<CreateCatalogColorMutation, CreateCatalogColorMutationVariables>;
+export const UpdateCatalogColorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCatalogColor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogColorInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogColor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<UpdateCatalogColorMutation, UpdateCatalogColorMutationVariables>;
+export const DeleteCatalogColorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCatalogColor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCatalogColor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteCatalogColorMutation, DeleteCatalogColorMutationVariables>;
+export const GetCustomerDetailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCustomerDetail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetCustomerDetailQuery, GetCustomerDetailQueryVariables>;
+export const GetOnboardingsWithDocumentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOnboardingsWithDocuments"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OnboardingStatus"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allOnboardings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}},{"kind":"Argument","name":{"kind":"Name","value":"leasingCompanyId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"carRequest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"requestFirstName"}},{"kind":"Field","name":{"kind":"Name","value":"requestLastName"}},{"kind":"Field","name":{"kind":"Name","value":"requestEmail"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"documents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"uploadedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"validationStatus"}},{"kind":"Field","name":{"kind":"Name","value":"validationNote"}},{"kind":"Field","name":{"kind":"Name","value":"validatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"documentTemplate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"validatedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetOnboardingsWithDocumentsQuery, GetOnboardingsWithDocumentsQueryVariables>;
+export const GetUserActivityDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserActivity"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userActivity"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"action"}},{"kind":"Field","name":{"kind":"Name","value":"entityName"}},{"kind":"Field","name":{"kind":"Name","value":"entityId"}},{"kind":"Field","name":{"kind":"Name","value":"changes"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"userEmail"}},{"kind":"Field","name":{"kind":"Name","value":"ipAddress"}},{"kind":"Field","name":{"kind":"Name","value":"userAgent"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetUserActivityQuery, GetUserActivityQueryVariables>;
+export const GetCarRequestsCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCarRequestsCount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"carRequestsCount"}}]}}]} as unknown as DocumentNode<GetCarRequestsCountQuery, GetCarRequestsCountQueryVariables>;
+export const GetAllCustomersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCustomers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetAllCustomersQuery, GetAllCustomersQueryVariables>;
+export const GetCustomerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCustomer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetCustomerQuery, GetCustomerQueryVariables>;
+export const SearchCustomersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchCustomers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<SearchCustomersQuery, SearchCustomersQueryVariables>;
 export const GetAllDocumentTemplatesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllDocumentTemplates"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allDocumentTemplates"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"leasingCompanyId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"helpText"}},{"kind":"Field","name":{"kind":"Name","value":"isRequired"}},{"kind":"Field","name":{"kind":"Name","value":"acceptedFormats"}},{"kind":"Field","name":{"kind":"Name","value":"maxSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}},{"kind":"Field","name":{"kind":"Name","value":"isGlobal"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllDocumentTemplatesQuery, GetAllDocumentTemplatesQueryVariables>;
 export const GetDocumentTemplatesByLeasingCompanyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDocumentTemplatesByLeasingCompany"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"documentTemplatesByLeasingCompany"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"leasingCompanyId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"helpText"}},{"kind":"Field","name":{"kind":"Name","value":"isRequired"}},{"kind":"Field","name":{"kind":"Name","value":"acceptedFormats"}},{"kind":"Field","name":{"kind":"Name","value":"maxSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetDocumentTemplatesByLeasingCompanyQuery, GetDocumentTemplatesByLeasingCompanyQueryVariables>;
 export const GetDocumentTemplateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDocumentTemplate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"documentTemplate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"helpText"}},{"kind":"Field","name":{"kind":"Name","value":"isRequired"}},{"kind":"Field","name":{"kind":"Name","value":"acceptedFormats"}},{"kind":"Field","name":{"kind":"Name","value":"maxSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}},{"kind":"Field","name":{"kind":"Name","value":"isGlobal"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetDocumentTemplateQuery, GetDocumentTemplateQueryVariables>;
@@ -2828,6 +3590,21 @@ export const CreateDocumentTemplateDocument = {"kind":"Document","definitions":[
 export const UpdateDocumentTemplateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateDocumentTemplate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateDocumentTemplateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateDocumentTemplate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"helpText"}},{"kind":"Field","name":{"kind":"Name","value":"isRequired"}},{"kind":"Field","name":{"kind":"Name","value":"acceptedFormats"}},{"kind":"Field","name":{"kind":"Name","value":"maxSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateDocumentTemplateMutation, UpdateDocumentTemplateMutationVariables>;
 export const DeleteDocumentTemplateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteDocumentTemplate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteDocumentTemplate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteDocumentTemplateMutation, DeleteDocumentTemplateMutationVariables>;
 export const ReorderDocumentTemplatesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ReorderDocumentTemplates"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reorderDocumentTemplates"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}]}]}}]} as unknown as DocumentNode<ReorderDocumentTemplatesMutation, ReorderDocumentTemplatesMutationVariables>;
+export const GetAllEnginesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllEngines"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"generationId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fuelType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogEngineFuelType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"transmissionType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogEngineTransmissionType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"driveType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogEngineDriveType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"recommendedOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allEngines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"generationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"generationId"}}},{"kind":"Argument","name":{"kind":"Name","value":"fuelType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fuelType"}}},{"kind":"Argument","name":{"kind":"Name","value":"transmissionType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"transmissionType"}}},{"kind":"Argument","name":{"kind":"Name","value":"driveType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"driveType"}}},{"kind":"Argument","name":{"kind":"Name","value":"activeOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"activeOnly"}}},{"kind":"Argument","name":{"kind":"Name","value":"recommendedOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"recommendedOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"generationId"}},{"kind":"Field","name":{"kind":"Name","value":"generation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"transmissionType"}},{"kind":"Field","name":{"kind":"Name","value":"driveType"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCombined"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCity"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionOutOfCity"}},{"kind":"Field","name":{"kind":"Name","value":"performance"}},{"kind":"Field","name":{"kind":"Name","value":"torque"}},{"kind":"Field","name":{"kind":"Name","value":"volume"}},{"kind":"Field","name":{"kind":"Name","value":"emission"}},{"kind":"Field","name":{"kind":"Name","value":"rangeKm"}},{"kind":"Field","name":{"kind":"Name","value":"acceleration"}},{"kind":"Field","name":{"kind":"Name","value":"fuelTankVolume"}},{"kind":"Field","name":{"kind":"Name","value":"cylinderCount"}},{"kind":"Field","name":{"kind":"Name","value":"maxSpeed"}},{"kind":"Field","name":{"kind":"Name","value":"weight"}},{"kind":"Field","name":{"kind":"Name","value":"gearsCount"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"recommended"}}]}}]}}]} as unknown as DocumentNode<GetAllEnginesQuery, GetAllEnginesQueryVariables>;
+export const GetEngineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEngine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"engine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"generationId"}},{"kind":"Field","name":{"kind":"Name","value":"generation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"transmissionType"}},{"kind":"Field","name":{"kind":"Name","value":"driveType"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCombined"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCity"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionOutOfCity"}},{"kind":"Field","name":{"kind":"Name","value":"performance"}},{"kind":"Field","name":{"kind":"Name","value":"torque"}},{"kind":"Field","name":{"kind":"Name","value":"volume"}},{"kind":"Field","name":{"kind":"Name","value":"emission"}},{"kind":"Field","name":{"kind":"Name","value":"rangeKm"}},{"kind":"Field","name":{"kind":"Name","value":"acceleration"}},{"kind":"Field","name":{"kind":"Name","value":"fuelTankVolume"}},{"kind":"Field","name":{"kind":"Name","value":"cylinderCount"}},{"kind":"Field","name":{"kind":"Name","value":"maxSpeed"}},{"kind":"Field","name":{"kind":"Name","value":"weight"}},{"kind":"Field","name":{"kind":"Name","value":"gearsCount"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"recommended"}}]}}]}}]} as unknown as DocumentNode<GetEngineQuery, GetEngineQueryVariables>;
+export const GetEnginesByGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEnginesByGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"generationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allEngines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"generationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"generationId"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"IntValue","value":"1000"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"transmissionType"}},{"kind":"Field","name":{"kind":"Name","value":"driveType"}},{"kind":"Field","name":{"kind":"Name","value":"performance"}},{"kind":"Field","name":{"kind":"Name","value":"torque"}},{"kind":"Field","name":{"kind":"Name","value":"acceleration"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"recommended"}}]}}]}}]} as unknown as DocumentNode<GetEnginesByGenerationQuery, GetEnginesByGenerationQueryVariables>;
+export const GetEnginesCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEnginesCount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"generationId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fuelType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogEngineFuelType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"enginesCount"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"generationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"generationId"}}},{"kind":"Argument","name":{"kind":"Name","value":"fuelType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fuelType"}}}]}]}}]} as unknown as DocumentNode<GetEnginesCountQuery, GetEnginesCountQueryVariables>;
+export const SearchEnginesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchEngines"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchEngines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"generation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"transmissionType"}},{"kind":"Field","name":{"kind":"Name","value":"driveType"}}]}}]}}]} as unknown as DocumentNode<SearchEnginesQuery, SearchEnginesQueryVariables>;
+export const CreateEngineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateEngine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogEngineInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEngine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"generationId"}},{"kind":"Field","name":{"kind":"Name","value":"generation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"transmissionType"}},{"kind":"Field","name":{"kind":"Name","value":"driveType"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCombined"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCity"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionOutOfCity"}},{"kind":"Field","name":{"kind":"Name","value":"performance"}},{"kind":"Field","name":{"kind":"Name","value":"torque"}},{"kind":"Field","name":{"kind":"Name","value":"volume"}},{"kind":"Field","name":{"kind":"Name","value":"emission"}},{"kind":"Field","name":{"kind":"Name","value":"rangeKm"}},{"kind":"Field","name":{"kind":"Name","value":"acceleration"}},{"kind":"Field","name":{"kind":"Name","value":"fuelTankVolume"}},{"kind":"Field","name":{"kind":"Name","value":"cylinderCount"}},{"kind":"Field","name":{"kind":"Name","value":"maxSpeed"}},{"kind":"Field","name":{"kind":"Name","value":"weight"}},{"kind":"Field","name":{"kind":"Name","value":"gearsCount"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"recommended"}}]}}]}}]} as unknown as DocumentNode<CreateEngineMutation, CreateEngineMutationVariables>;
+export const UpdateEngineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateEngine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogEngineInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateEngine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"generationId"}},{"kind":"Field","name":{"kind":"Name","value":"generation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"transmissionType"}},{"kind":"Field","name":{"kind":"Name","value":"driveType"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCombined"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionCity"}},{"kind":"Field","name":{"kind":"Name","value":"consumptionOutOfCity"}},{"kind":"Field","name":{"kind":"Name","value":"performance"}},{"kind":"Field","name":{"kind":"Name","value":"torque"}},{"kind":"Field","name":{"kind":"Name","value":"volume"}},{"kind":"Field","name":{"kind":"Name","value":"emission"}},{"kind":"Field","name":{"kind":"Name","value":"rangeKm"}},{"kind":"Field","name":{"kind":"Name","value":"acceleration"}},{"kind":"Field","name":{"kind":"Name","value":"fuelTankVolume"}},{"kind":"Field","name":{"kind":"Name","value":"cylinderCount"}},{"kind":"Field","name":{"kind":"Name","value":"maxSpeed"}},{"kind":"Field","name":{"kind":"Name","value":"weight"}},{"kind":"Field","name":{"kind":"Name","value":"gearsCount"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"recommended"}}]}}]}}]} as unknown as DocumentNode<UpdateEngineMutation, UpdateEngineMutationVariables>;
+export const DeleteEngineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteEngine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteEngine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteEngineMutation, DeleteEngineMutationVariables>;
+export const GetAllEquipmentItemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllEquipmentItems"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allEquipmentItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetAllEquipmentItemsQuery, GetAllEquipmentItemsQueryVariables>;
+export const GetEquipmentItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEquipmentItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"equipmentItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetEquipmentItemQuery, GetEquipmentItemQueryVariables>;
+export const SearchEquipmentItemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchEquipmentItems"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchEquipmentItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}}]}}]}}]} as unknown as DocumentNode<SearchEquipmentItemsQuery, SearchEquipmentItemsQueryVariables>;
+export const GetEquipmentItemsCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEquipmentItemsCount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"equipmentItemsCount"}}]}}]} as unknown as DocumentNode<GetEquipmentItemsCountQuery, GetEquipmentItemsCountQueryVariables>;
+export const CreateEquipmentItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateEquipmentItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogBrandEquipmentItemInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEquipmentItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CreateEquipmentItemMutation, CreateEquipmentItemMutationVariables>;
+export const UpdateEquipmentItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateEquipmentItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogBrandEquipmentItemInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateEquipmentItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateEquipmentItemMutation, UpdateEquipmentItemMutationVariables>;
+export const DeleteEquipmentItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteEquipmentItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteEquipmentItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteEquipmentItemMutation, DeleteEquipmentItemMutationVariables>;
 export const GetAllCatalogModelGenerationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCatalogModelGenerations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"modelId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isActive"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelGenerations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"modelId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"modelId"}}},{"kind":"Argument","name":{"kind":"Name","value":"isActive"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isActive"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetAllCatalogModelGenerationsQuery, GetAllCatalogModelGenerationsQueryVariables>;
 export const GetCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogModelGenerationQuery, GetCatalogModelGenerationQueryVariables>;
 export const CreateCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogModelGenerationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<CreateCatalogModelGenerationMutation, CreateCatalogModelGenerationMutationVariables>;
@@ -2847,6 +3624,15 @@ export const UpdateCatalogModelDocument = {"kind":"Document","definitions":[{"ki
 export const DeleteCatalogModelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCatalogModel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCatalogModel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteCatalogModelMutation, DeleteCatalogModelMutationVariables>;
 export const GetCatalogModelsByBrandDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogModelsByBrand"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"brandId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allCatalogModels"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]}}]} as unknown as DocumentNode<GetCatalogModelsByBrandQuery, GetCatalogModelsByBrandQueryVariables>;
 export const CheckModelSlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CheckModelSlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<CheckModelSlugQuery, CheckModelSlugQueryVariables>;
+export const GetAllVehicleOffersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllVehicleOffers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OfferFiltersInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allOffers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingDurationMonths"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"annualMileageLimit"}},{"kind":"Field","name":{"kind":"Name","value":"downPaymentLeasing"}},{"kind":"Field","name":{"kind":"Name","value":"hasServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasWinterTyresIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasAssistanceServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasGapIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"discountAmount"}},{"kind":"Field","name":{"kind":"Name","value":"discountPercentage"}},{"kind":"Field","name":{"kind":"Name","value":"includesWarranty"}},{"kind":"Field","name":{"kind":"Name","value":"warrantyYears"}},{"kind":"Field","name":{"kind":"Name","value":"financingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"internalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"assignedToId"}},{"kind":"Field","name":{"kind":"Name","value":"responseDeadline"}}]}}]}}]} as unknown as DocumentNode<GetAllVehicleOffersQuery, GetAllVehicleOffersQueryVariables>;
+export const GetOfferDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOffer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingDurationMonths"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"annualMileageLimit"}},{"kind":"Field","name":{"kind":"Name","value":"downPaymentLeasing"}},{"kind":"Field","name":{"kind":"Name","value":"hasServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasWinterTyresIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasAssistanceServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasGapIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"discountAmount"}},{"kind":"Field","name":{"kind":"Name","value":"discountPercentage"}},{"kind":"Field","name":{"kind":"Name","value":"includesWarranty"}},{"kind":"Field","name":{"kind":"Name","value":"warrantyYears"}},{"kind":"Field","name":{"kind":"Name","value":"financingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"internalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"assignedToId"}},{"kind":"Field","name":{"kind":"Name","value":"responseDeadline"}}]}}]}}]} as unknown as DocumentNode<GetOfferQuery, GetOfferQueryVariables>;
+export const GetIndividualOffersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetIndividualOffers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OfferFiltersInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"individualOffers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"internalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"assignedToId"}},{"kind":"Field","name":{"kind":"Name","value":"responseDeadline"}}]}}]}}]} as unknown as DocumentNode<GetIndividualOffersQuery, GetIndividualOffersQueryVariables>;
+export const CreateOperationalLeasingOfferDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOperationalLeasingOffer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOperationalLeasingOfferInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOperationalLeasingOffer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingDurationMonths"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"annualMileageLimit"}},{"kind":"Field","name":{"kind":"Name","value":"downPaymentLeasing"}},{"kind":"Field","name":{"kind":"Name","value":"hasServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasWinterTyresIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasAssistanceServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasGapIncluded"}}]}}]}}]} as unknown as DocumentNode<CreateOperationalLeasingOfferMutation, CreateOperationalLeasingOfferMutationVariables>;
+export const CreateDirectPurchaseOfferDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateDirectPurchaseOffer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateDirectPurchaseOfferInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createDirectPurchaseOffer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"discountAmount"}},{"kind":"Field","name":{"kind":"Name","value":"discountPercentage"}},{"kind":"Field","name":{"kind":"Name","value":"includesWarranty"}},{"kind":"Field","name":{"kind":"Name","value":"warrantyYears"}},{"kind":"Field","name":{"kind":"Name","value":"financingAvailable"}}]}}]}}]} as unknown as DocumentNode<CreateDirectPurchaseOfferMutation, CreateDirectPurchaseOfferMutationVariables>;
+export const CreateIndividualOfferDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateIndividualOffer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateIndividualOfferInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createIndividualOffer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"internalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"assignedToId"}},{"kind":"Field","name":{"kind":"Name","value":"responseDeadline"}}]}}]}}]} as unknown as DocumentNode<CreateIndividualOfferMutation, CreateIndividualOfferMutationVariables>;
+export const UpdateOfferDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateOffer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateOfferInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateOffer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingDurationMonths"}},{"kind":"Field","name":{"kind":"Name","value":"monthlyPayment"}},{"kind":"Field","name":{"kind":"Name","value":"annualMileageLimit"}},{"kind":"Field","name":{"kind":"Name","value":"downPaymentLeasing"}},{"kind":"Field","name":{"kind":"Name","value":"hasServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasWinterTyresIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasAssistanceServiceIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"hasGapIncluded"}},{"kind":"Field","name":{"kind":"Name","value":"discountAmount"}},{"kind":"Field","name":{"kind":"Name","value":"discountPercentage"}},{"kind":"Field","name":{"kind":"Name","value":"includesWarranty"}},{"kind":"Field","name":{"kind":"Name","value":"warrantyYears"}},{"kind":"Field","name":{"kind":"Name","value":"financingAvailable"}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"internalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"assignedToId"}},{"kind":"Field","name":{"kind":"Name","value":"responseDeadline"}}]}}]}}]} as unknown as DocumentNode<UpdateOfferMutation, UpdateOfferMutationVariables>;
+export const UpdateIndividualOfferStatusDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateIndividualOfferStatus"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"IndividualOfferStatus"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateIndividualOfferStatus"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGeneration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"customerId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"customRequirements"}},{"kind":"Field","name":{"kind":"Name","value":"internalNotes"}},{"kind":"Field","name":{"kind":"Name","value":"assignedToId"}},{"kind":"Field","name":{"kind":"Name","value":"responseDeadline"}}]}}]}}]} as unknown as DocumentNode<UpdateIndividualOfferStatusMutation, UpdateIndividualOfferStatusMutationVariables>;
+export const DeleteOfferDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteOffer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteOffer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteOfferMutation, DeleteOfferMutationVariables>;
 export const GetAllOnboardingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllOnboardings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"status"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"OnboardingStatus"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allOnboardings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"status"},"value":{"kind":"Variable","name":{"kind":"Name","value":"status"}}},{"kind":"Argument","name":{"kind":"Name","value":"leasingCompanyId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"leasingCompanyId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"carRequest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"requestFirstName"}},{"kind":"Field","name":{"kind":"Name","value":"requestLastName"}},{"kind":"Field","name":{"kind":"Name","value":"requestEmail"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"documents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"validationStatus"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllOnboardingsQuery, GetAllOnboardingsQueryVariables>;
 export const GetOnboardingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOnboarding"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onboarding"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}},{"kind":"Field","name":{"kind":"Name","value":"completedAt"}},{"kind":"Field","name":{"kind":"Name","value":"lastReminderSentAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"carRequest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"requestFirstName"}},{"kind":"Field","name":{"kind":"Name","value":"requestLastName"}},{"kind":"Field","name":{"kind":"Name","value":"requestEmail"}},{"kind":"Field","name":{"kind":"Name","value":"requestPhone"}},{"kind":"Field","name":{"kind":"Name","value":"financingType"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"leasingCompany"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"documents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"uploadedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"validationStatus"}},{"kind":"Field","name":{"kind":"Name","value":"validationNote"}},{"kind":"Field","name":{"kind":"Name","value":"validatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"relativePath"}},{"kind":"Field","name":{"kind":"Name","value":"size"}},{"kind":"Field","name":{"kind":"Name","value":"sizeFormatted"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"extension"}}]}},{"kind":"Field","name":{"kind":"Name","value":"documentTemplate"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"helpText"}},{"kind":"Field","name":{"kind":"Name","value":"isRequired"}},{"kind":"Field","name":{"kind":"Name","value":"acceptedFormats"}},{"kind":"Field","name":{"kind":"Name","value":"maxSizeBytes"}}]}},{"kind":"Field","name":{"kind":"Name","value":"validatedBy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetOnboardingQuery, GetOnboardingQueryVariables>;
 export const GetRequiredDocumentsForOnboardingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRequiredDocumentsForOnboarding"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"onboardingId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requiredDocumentsForOnboarding"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"onboardingId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"onboardingId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"fieldName"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"helpText"}},{"kind":"Field","name":{"kind":"Name","value":"isRequired"}},{"kind":"Field","name":{"kind":"Name","value":"acceptedFormats"}},{"kind":"Field","name":{"kind":"Name","value":"maxSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"displayOrder"}}]}}]}}]} as unknown as DocumentNode<GetRequiredDocumentsForOnboardingQuery, GetRequiredDocumentsForOnboardingQueryVariables>;

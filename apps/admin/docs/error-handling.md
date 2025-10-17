@@ -70,11 +70,7 @@ function BrandCreateForm() {
     navigate('/brands')
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* ... */}
-    </form>
-  )
+  return <form onSubmit={handleSubmit}>{/* ... */}</form>
 }
 ```
 
@@ -84,7 +80,8 @@ function BrandCreateForm() {
 const [createBrand, { loading }] = useMutationWithErrorHandling(
   CREATE_CATALOG_BRAND,
   {
-    successMessage: (data) => `Brand "${data.createCatalogBrand.name}" created successfully`,
+    successMessage: (data) =>
+      `Brand "${data.createCatalogBrand.name}" created successfully`,
     refetchQueries: [{ query: GET_ALL_CATALOG_BRANDS }],
   }
 )
@@ -122,7 +119,7 @@ const [updateBrand, { loading }] = useMutationWithErrorHandling(
   UPDATE_CATALOG_BRAND,
   {
     showSuccessToast: false, // Don't show success toast
-    showErrorToast: false,   // Don't show error toast
+    showErrorToast: false, // Don't show error toast
     onSuccessCallback: (data) => {
       // Handle success programmatically
       console.log('Updated:', data)
@@ -156,7 +153,10 @@ const [createBrand, { loading }] = useMutationWithErrorHandling(
 For cases where you need to handle errors manually (like bulk operations), use the error extraction utilities:
 
 ```tsx
-import { extractGraphQLErrorMessage, extractAllGraphQLErrorMessages } from '@/lib/extract-graphql-error'
+import {
+  extractGraphQLErrorMessage,
+  extractAllGraphQLErrorMessages,
+} from '@/lib/extract-graphql-error'
 
 // Single error message
 try {
@@ -197,13 +197,13 @@ const handleBulkDelete = async (brandIds: string[]) => {
   if (failures === 0) {
     toast.success(`Deleted ${successes} brands`)
   } else if (successes === 0) {
-    const firstError = results.find((r) => r.status === 'rejected') as PromiseRejectedResult
+    const firstError = results.find(
+      (r) => r.status === 'rejected'
+    ) as PromiseRejectedResult
     const errorMessage = extractGraphQLErrorMessage(firstError.reason)
     toast.error(`Failed to delete brands: ${errorMessage}`)
   } else {
-    toast.warning(
-      `Deleted ${successes} brands, but ${failures} failed`
-    )
+    toast.warning(`Deleted ${successes} brands, but ${failures} failed`)
   }
 }
 ```
@@ -272,6 +272,7 @@ const [createBrand] = useMutationWithErrorHandling(CREATE_CATALOG_BRAND, {
 ### 1. Always Use the Hook for Mutations
 
 ✅ **Good:**
+
 ```tsx
 const [createBrand] = useMutationWithErrorHandling(CREATE_CATALOG_BRAND, {
   successMessage: 'Brand created',
@@ -279,6 +280,7 @@ const [createBrand] = useMutationWithErrorHandling(CREATE_CATALOG_BRAND, {
 ```
 
 ❌ **Bad:**
+
 ```tsx
 const [createBrand] = useMutation(CREATE_CATALOG_BRAND)
 
@@ -292,6 +294,7 @@ try {
 ### 2. Provide User-Friendly Error Messages
 
 ✅ **Good:**
+
 ```tsx
 errorMessage: (error) => {
   const msg = extractGraphQLErrorMessage(error)
@@ -303,6 +306,7 @@ errorMessage: (error) => {
 ```
 
 ❌ **Bad:**
+
 ```tsx
 errorMessage: 'Something went wrong' // Too generic
 ```
@@ -310,6 +314,7 @@ errorMessage: 'Something went wrong' // Too generic
 ### 3. Log Errors with Context
 
 ✅ **Good:**
+
 ```tsx
 const [createBrand] = useMutationWithErrorHandling(CREATE_CATALOG_BRAND, {
   errorContext: {
@@ -323,6 +328,7 @@ const [createBrand] = useMutationWithErrorHandling(CREATE_CATALOG_BRAND, {
 ### 4. Handle Bulk Operations Properly
 
 ✅ **Good:**
+
 ```tsx
 // Use Promise.allSettled to collect all results
 const results = await Promise.allSettled(deletePromises)
@@ -337,6 +343,7 @@ if (failures > 0 && successes > 0) {
 ```
 
 ❌ **Bad:**
+
 ```tsx
 // Using Promise.all fails on first error
 await Promise.all(deletePromises) // Stops at first failure!
@@ -345,6 +352,7 @@ await Promise.all(deletePromises) // Stops at first failure!
 ### 5. Don't Swallow Errors
 
 ✅ **Good:**
+
 ```tsx
 try {
   await deleteBrand({ variables: { id } })
@@ -357,6 +365,7 @@ try {
 ```
 
 ❌ **Bad:**
+
 ```tsx
 try {
   await deleteBrand({ variables: { id } })
@@ -370,16 +379,18 @@ try {
 You can test error handling by simulating errors:
 
 ```tsx
-import { ApolloError } from '@apollo/client'
+import { ApolloError } from '@apollo/client/react'
 
 // In your test
 const mockError = new ApolloError({
-  graphQLErrors: [{
-    message: 'Internal server error',
-    extensions: {
-      errors: [{ message: 'Test error message' }]
-    }
-  }]
+  graphQLErrors: [
+    {
+      message: 'Internal server error',
+      extensions: {
+        errors: [{ message: 'Test error message' }],
+      },
+    },
+  ],
 })
 
 const extracted = extractGraphQLErrorMessage(mockError)
@@ -391,6 +402,7 @@ expect(extracted).toBe('Test error message')
 To migrate existing mutations to use the new error handling:
 
 **Before:**
+
 ```tsx
 const [createBrand] = useMutation(CREATE_CATALOG_BRAND, {
   refetchQueries: [{ query: GET_ALL_CATALOG_BRANDS }],
@@ -408,6 +420,7 @@ const handleSubmit = async (values) => {
 ```
 
 **After:**
+
 ```tsx
 const [createBrand] = useMutationWithErrorHandling(CREATE_CATALOG_BRAND, {
   successMessage: 'Brand created',

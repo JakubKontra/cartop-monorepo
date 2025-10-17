@@ -9,6 +9,8 @@ import {
   Max,
   IsEnum,
   IsDateString,
+  IsUUID,
+  MaxLength,
 } from 'class-validator';
 import { IndividualOfferStatus } from '../enums/individual-offer-status.enum';
 
@@ -39,6 +41,65 @@ export class UpdateOfferInput {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  // === New fields ===
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsUUID()
+  engineId?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  legacySystemId?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  publicId?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  isPrivate?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsUUID()
+  fileId?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  isRecommendedForBrand?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  isRecommendedForActionPage?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  isRecommendedForModel?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  isPromoted?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  disableCustomGallery?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  note?: string;
 
   // === Operational Leasing fields ===
 

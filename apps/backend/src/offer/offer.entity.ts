@@ -15,6 +15,8 @@ import { Auditable } from '../common/decorators/auditable.decorator';
 import { CatalogModelGeneration } from '../catalog/generation/catalog-model-generation.entity';
 import { CatalogBrand } from '../catalog/brand/catalog-brand.entity';
 import { CatalogModel } from '../catalog/model/catalog-model.entity';
+import { CatalogEngine } from '../catalog/engine/catalog-engine.entity';
+import { File } from '../file/file.entity';
 import { User } from '../model/user/user.entity';
 import { OfferType } from './enums/offer-type.enum';
 import { IndividualOfferStatus } from './enums/individual-offer-status.enum';
@@ -28,6 +30,9 @@ import { IndividualOfferStatus } from './enums/individual-offer-status.enum';
 @TableInheritance({ column: { type: 'enum', name: 'type', enum: OfferType } })
 @Index(['type', 'isPublic', 'isActive'])
 @Index(['modelGenerationId', 'isActive'])
+@Index(['brandId', 'isActive'])
+@Index(['engineId', 'isActive'])
+@Index(['isPromoted', 'isActive'])
 @Auditable()
 export abstract class Offer {
   @Field(() => ID)
@@ -38,6 +43,21 @@ export abstract class Offer {
   @Column({ type: 'enum', enum: OfferType })
   @Index()
   type: OfferType;
+
+  @Field({ nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true, unique: true })
+  @Index()
+  legacySystemId?: string;
+
+  @Field({ nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true, unique: true })
+  @Index()
+  publicId?: string;
+
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  @Index()
+  isPrivate: boolean;
 
   // === Common fields for all offer types ===
 
@@ -94,6 +114,55 @@ export abstract class Offer {
   @Field({ nullable: true })
   @Column({ type: 'uuid', nullable: true })
   modelId?: string;
+
+  @Field(() => CatalogEngine, { nullable: true })
+  @ManyToOne(() => CatalogEngine, { nullable: true })
+  @JoinColumn({ name: 'engineId' })
+  engine?: CatalogEngine;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  @Index()
+  engineId?: string;
+
+  @Field(() => File, { nullable: true })
+  @ManyToOne(() => File, { nullable: true })
+  @JoinColumn({ name: 'fileId' })
+  file?: File;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  fileId?: string;
+
+  // === Flags ===
+
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  @Index()
+  isRecommendedForBrand: boolean;
+
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  @Index()
+  isRecommendedForActionPage: boolean;
+
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  @Index()
+  isRecommendedForModel: boolean;
+
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  @Index()
+  isPromoted: boolean;
+
+  @Field({ nullable: true })
+  @Column({ type: 'boolean', nullable: true, default: false })
+  disableCustomGallery?: boolean;
+
+  @Field({ nullable: true })
+  @Column({ type: 'text', nullable: true })
+  note?: string;
 
   // === Operational Leasing specific fields (nullable) ===
 
@@ -217,8 +286,13 @@ export class OperationalLeasingOffer extends Offer {
 
   // === Related collections ===
   // These will be lazy loaded via field resolvers
+  @Field(() => [Object], { nullable: true })
   variants?: any[]; // Type defined in field resolver to avoid circular dependency
+
+  @Field(() => [Object], { nullable: true })
   colorVariants?: any[];
+
+  @Field(() => [Object], { nullable: true })
   optionalEquipment?: any[];
 }
 
@@ -253,5 +327,6 @@ export class IndividualOffer extends Offer {
 
   // === Related collections ===
   // These will be lazy loaded via field resolvers
+  @Field(() => [Object], { nullable: true })
   calculations?: any[]; // Type defined in field resolver to avoid circular dependency
 }

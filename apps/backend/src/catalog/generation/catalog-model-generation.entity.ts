@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Index,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
@@ -13,6 +14,7 @@ import { CatalogModel } from '../model/catalog-model.entity';
 import { CatalogBrand } from '../brand/catalog-brand.entity';
 import { CatalogBodyType } from '../../common/enums/catalog/catalog-body-type.enum';
 import { CatalogEquipmentBrakeType } from '../../common/enums/catalog/catalog-equipment-brake-type.enum';
+import { CatalogEngine } from '../engine/catalog-engine.entity';
 
 /**
  * CatalogModelGeneration Entity
@@ -143,4 +145,8 @@ export class CatalogModelGeneration {
     nullable: true,
   })
   rearBrakesType?: CatalogEquipmentBrakeType;
+
+  @Field(() => [CatalogEngine], { nullable: true })
+  @OneToMany(() => CatalogEngine, engine => engine.generation)
+  engines?: CatalogEngine[];
 }

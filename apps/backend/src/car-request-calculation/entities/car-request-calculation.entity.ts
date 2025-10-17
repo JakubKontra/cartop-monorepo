@@ -14,6 +14,10 @@ import GraphQLJSON from 'graphql-type-json';
 import { Auditable } from '../../common/decorators/auditable.decorator';
 import { CarRequest } from '../../car-request/entities/car-request.entity';
 import { User } from '../../model/user/user.entity';
+import { CatalogBrand } from '../../catalog/brand/catalog-brand.entity';
+import { CatalogModel } from '../../catalog/model/catalog-model.entity';
+import { CatalogModelGeneration } from '../../catalog/generation/catalog-model-generation.entity';
+import { LeasingCompany } from '../../leasing-company/leasing-company.entity';
 import { CarRequestCalculationStatus } from '../enums/car-request-calculation-status.enum';
 import { CarRequestCalculationOffer } from './car-request-calculation-offer.entity';
 import { CarRequestCalculationItem } from './car-request-calculation-item.entity';
@@ -23,7 +27,9 @@ import { CarRequestCalculationItem } from './car-request-calculation-item.entity
  * Represents a calculation request for vehicle pricing and configuration
  *
  * Design Features:
- * - Supports multiple calculations per car request
+ * - Supports multiple calculations per car request (multiple vehicles)
+ * - Each calculation specifies the exact vehicle (brand, model, generation)
+ * - Each calculation can have a different leasing company
  * - Version tracking for iterative calculations
  * - Flexible metadata storage for extensibility
  * - Full audit trail
@@ -71,6 +77,50 @@ export class CarRequestCalculation {
   @Column({ type: 'uuid', nullable: true })
   @Index()
   assignedToId?: string;
+
+  // === Vehicle Information ===
+
+  @Field(() => CatalogBrand, { nullable: true })
+  @ManyToOne(() => CatalogBrand, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'brandId' })
+  brand?: CatalogBrand;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  @Index()
+  brandId?: string;
+
+  @Field(() => CatalogModel, { nullable: true })
+  @ManyToOne(() => CatalogModel, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'modelId' })
+  model?: CatalogModel;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  @Index()
+  modelId?: string;
+
+  @Field(() => CatalogModelGeneration, { nullable: true })
+  @ManyToOne(() => CatalogModelGeneration, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'modelGenerationId' })
+  modelGeneration?: CatalogModelGeneration;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  @Index()
+  modelGenerationId?: string;
+
+  // === Leasing Company ===
+
+  @Field(() => LeasingCompany, { nullable: true })
+  @ManyToOne(() => LeasingCompany, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'leasingCompanyId' })
+  leasingCompany?: LeasingCompany;
+
+  @Field({ nullable: true })
+  @Column({ type: 'uuid', nullable: true })
+  @Index()
+  leasingCompanyId?: string;
 
   // === Version and Status ===
 

@@ -40,8 +40,9 @@ export class OfferVariantAdminResolver {
     @Args('offerId', { type: () => String }) offerId: string,
     @Args('leasingDurationMonths', { type: () => Number }) leasingDurationMonths: number,
     @Args('annualMileageLimit', { type: () => Number }) annualMileageLimit: number,
-    @Args('monthlyPayment', { type: () => Number }) monthlyPayment: number,
-    @Args('totalPrice', { type: () => Number }) totalPrice: number,
+    @Args('priceWithoutVat', { type: () => Number }) priceWithoutVat: number,
+    @Args('priceWithVat', { type: () => Number }) priceWithVat: number,
+    @Args('slug', { type: () => String }) slug: string,
     @Args('downPayment', { type: () => Number, nullable: true }) downPayment?: number,
     @Args('isDefault', { type: () => Boolean, nullable: true }) isDefault?: boolean,
     @Args('isBestOffer', { type: () => Boolean, nullable: true }) isBestOffer?: boolean,
@@ -50,8 +51,9 @@ export class OfferVariantAdminResolver {
       offerId,
       leasingDurationMonths,
       annualMileageLimit,
-      monthlyPayment,
-      totalPrice,
+      priceWithoutVat,
+      priceWithVat,
+      slug,
       downPayment,
       isDefault,
       isBestOffer,
@@ -126,15 +128,13 @@ export class OfferVariantAdminResolver {
   })
   async createOptionalEquipment(
     @Args('offerId', { type: () => String }) offerId: string,
-    @Args('name', { type: () => String }) name: string,
-    @Args('additionalPrice', { type: () => Number }) additionalPrice: number,
-    @Args('description', { type: () => String, nullable: true }) description?: string,
+    @Args('equipmentItemId', { type: () => String }) equipmentItemId: string,
+    @Args('additionalPrice', { type: () => Number, nullable: true }) additionalPrice?: number,
   ): Promise<OfferOptionalEquipment> {
     return this.variantService.createOptionalEquipment({
       offerId,
-      name,
+      equipmentItemId,
       additionalPrice,
-      description,
     });
   }
 

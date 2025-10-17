@@ -161,8 +161,13 @@ export class OnboardingService {
     const query = this.onboardingRepo
       .createQueryBuilder('onboarding')
       .leftJoinAndSelect('onboarding.leasingCompany', 'leasingCompany')
+      .leftJoinAndSelect('leasingCompany.logo', 'leasingCompanyLogo')
       .leftJoinAndSelect('onboarding.carRequest', 'carRequest')
       .leftJoinAndSelect('carRequest.customer', 'customer')
+      .leftJoinAndSelect('onboarding.documents', 'documents')
+      .leftJoinAndSelect('documents.documentTemplate', 'documentTemplate')
+      .leftJoinAndSelect('documents.file', 'file')
+      .leftJoinAndSelect('documents.validatedBy', 'validatedBy')
       .orderBy('onboarding.createdAt', 'DESC');
 
     if (filters?.status) {

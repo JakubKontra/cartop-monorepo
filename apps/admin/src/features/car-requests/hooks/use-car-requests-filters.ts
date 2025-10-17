@@ -3,6 +3,7 @@ import type { GetAllCarRequestsQuery } from '@/gql/graphql'
 import {
   type CarRequestSection,
   type CarRequestStateCode,
+  needsFollowUpAfterOffer,
 } from '../constants/states'
 
 type CarRequest = GetAllCarRequestsQuery['allCarRequests'][0]
@@ -36,6 +37,12 @@ export function useCarRequestsFilters({ requests }: UseCarRequestsFiltersOptions
         // Waiting for offer requests have the waitingForOffer flag set
         return requests.filter((req) => req.waitingForOffer === true)
 
+      case 'FOLLOW_UP_NEEDED':
+        // Follow-up needed: offers sent more than 1 day ago
+        return requests.filter((req) =>
+          needsFollowUpAfterOffer(req.state?.code, req.offersSentAt)
+        )
+
       default:
         return requests
     }
@@ -56,6 +63,7 @@ export function useCarRequestsFilters({ requests }: UseCarRequestsFiltersOptions
       NEW: 0,
       OPEN: 0,
       WAITING_FOR_OFFER: 0,
+      FOLLOW_UP_NEEDED: 0,
     }
 
     requests.forEach((req) => {
@@ -63,6 +71,8 @@ export function useCarRequestsFilters({ requests }: UseCarRequestsFiltersOptions
         counts.NEW++
       } else if (req.waitingForOffer === true) {
         counts.WAITING_FOR_OFFER++
+      } else if (needsFollowUpAfterOffer(req.state?.code, req.offersSentAt)) {
+        counts.FOLLOW_UP_NEEDED++
       } else if (
         req.state?.code !== 'PURCHASED' &&
         req.state?.code !== 'CANCELLED'

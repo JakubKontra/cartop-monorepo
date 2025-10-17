@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 /**
  * Catalog Engine Fuel Type Enum
  * Represents different types of fuel used by vehicle engines
@@ -63,3 +65,9 @@ export const CATALOG_ENGINE_FUEL_TYPE_LABELS_EN: Record<CatalogEngineFuelType, s
   [CatalogEngineFuelType.TWO_STROKE]: 'Two-Stroke Engine',
   [CatalogEngineFuelType.ETHANOL_E85]: 'Ethanol - E85',
 };
+
+// Register enum for GraphQL
+registerEnumType(CatalogEngineFuelType, {
+  name: 'CatalogEngineFuelType',
+  description: 'Type of fuel used by vehicle engine',
+});

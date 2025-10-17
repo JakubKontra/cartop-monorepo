@@ -6,6 +6,20 @@ export function sleep(ms: number = 1000) {
 }
 
 /**
+ * Formats a number as Czech currency
+ * @param value - The number to format
+ * @returns Formatted currency string
+ */
+export function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('cs-CZ', {
+    style: 'currency',
+    currency: 'CZK',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
+/**
  * Generates page numbers for pagination with ellipsis
  * @param currentPage - Current page number (1-based)
  * @param totalPages - Total number of pages
