@@ -39,7 +39,7 @@ export const BrandsSectionError = ({ error, reset }: BrandsSectionErrorProps) =>
 
   return (
     <section className="bg-gunmetal px-4 py-16 lg:py-24">
-      <div className="mx-auto max-w-[1360px]">
+      <div className="section-container">
         <SectionHeader
           highlightedWord="Všechny"
           remainingTitle="naše značky"

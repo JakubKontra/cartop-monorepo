@@ -6,8 +6,8 @@ import { Logo } from '@/components/branding/Logo';
 
 const Navbar = () => {
   return (
-    <header className="w-full bg-white">
-      <nav className="mx-auto flex h-[60px] max-w-7xl items-center justify-between gap-6 px-6 md:h-20">
+    <header className="section-container bg-white py-4">
+      <nav className="flex h-16 items-center justify-between gap-6 px-8">
         <Link aria-label="Cartop — home" className="shrink-0 select-none" href="/">
           <Logo className="text-primary" />
         </Link>

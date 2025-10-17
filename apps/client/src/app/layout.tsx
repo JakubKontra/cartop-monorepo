@@ -5,6 +5,8 @@ import { Sora } from 'next/font/google';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 
 import './globals.css';
+import Navbar from '@/components/organisms/Navbar/Navbar';
+import Footer from '@/components/organisms/Footer';
 
 const sora = Sora({
   display: 'auto',
@@ -22,7 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html className={sora.variable} lang="en">
       <body className={sora.className}>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );

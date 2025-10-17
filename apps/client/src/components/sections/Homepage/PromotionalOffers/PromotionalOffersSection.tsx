@@ -73,8 +73,8 @@ export const PromotionalOffersSection = async ({
       className={cn(backgroundColor && 'mr-4 ml-4 rounded-3xl p-4 lg:p-6', className)}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
-      <div className="mx-auto max-w-[1360px] px-2 py-8 lg:py-12">
-        <div className="flex w-[1360px] flex-col gap-10">
+      <div className="section-container py-8 lg:py-12">
+        <div className="flex w-full flex-col gap-10">
           <PromotionalOffersSectionHeader
             highlightedTitle={highlightedTitle}
             subtitle={subtitle}

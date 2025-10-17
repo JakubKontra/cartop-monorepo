@@ -7,6 +7,7 @@ import type { ReviewCardProps } from '@/components/molecules/review/ReviewCard';
 import { GoogleVerifiedBadge } from '@/components/atoms/GoogleVerifiedBadge';
 import Button from '@/components/atoms/button/Button';
 import { ReviewsCarousel } from '@/components/organisms/Reviews';
+import { SectionHeader } from '../SectionHeader';
 
 const reviewsData: ReviewCardProps[] = [
   {
@@ -53,23 +54,24 @@ const reviewsData: ReviewCardProps[] = [
 
 export default function ReviewsSection() {
   return (
-    <div className="w-full py-12 md:py-16 lg:py-20">
-      <div className="mx-auto mb-6 flex max-w-[1360px] flex-col gap-4 px-4 md:mb-8 md:gap-6 lg:flex-row lg:gap-8">
-        <h2 className="w-full text-center text-4xl lg:text-left lg:text-5xl">
-          <span className="headline-highlight">Proč si lidé</span>
-          <br />
-          vybírají Cartop?
-        </h2>
-        <div className="flex items-end max-lg:hidden">
-          <GoogleVerifiedBadge />
-        </div>
-      </div>
+    <section className="flex flex-col items-center py-20">
+      <SectionHeader
+        highlightedWord="Proč si lidé"
+        remainingTitle="vybírají Cartop?"
+        subtitle="Proč si lidé vybírají Cartop?"
+        rightSideContent={
+          <div className="flex items-end">
+            <GoogleVerifiedBadge />
+          </div>
+        }
+        className="section-container"
+      />
       <ReviewsCarousel className="w-full" reviews={reviewsData} />
       <div className="mt-6 flex w-full justify-center md:mt-8 lg:mt-10">
         <Button icon={<MessageCircleQuestionMark className="size-5" />} variant="primary">
           Chci být spokojený zákazník
         </Button>
       </div>
-    </div>
+    </section>
   );
 }
