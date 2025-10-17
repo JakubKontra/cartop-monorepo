@@ -23,9 +23,15 @@
   /* define this since you use it on body */
   --color-text: var(--color-black);
   --color-primary: var(--color-crimson-red);
+
+  --spacing-container: 1440px;
 }
 
 @layer components {
+  .section-container {
+    @apply mx-auto w-full max-w-container px-4;
+  }
+
   .headline-highlight {
     @apply text-primary font-semibold;
   }

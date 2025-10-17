@@ -80,8 +80,8 @@ export const ExploreCard = ({
           {/* Expandable Content */}
           <div
             className={cn(
-              'transition-[max-height, opacity, padding] overflow-hidden duration-600',
-              isOpen ? 'max-h-96 opacity-100 pt-2' : 'max-h-0 opacity-0 pt-0',
+              'transition-[max-height, opacity, padding] overflow-hidden duration-600 pr-16',
+              isOpen ? 'max-h-96 opacity-100 py-2' : 'max-h-0 opacity-0 py-0',
             )}
           >
             <p className="text-sm leading-relaxed text-white">{content}</p>

@@ -16,7 +16,7 @@ interface FaqProps {
 
 export const Faq = ({ defaultOpenIndex, items }: FaqProps) => {
   return (
-    <Accordion ariaLabel="Často kladené otázky">
+    <Accordion ariaLabel="Často kladené otázky" className="w-full">
       {items.map((item, index) => {
         const isDefaultOpen = defaultOpenIndex !== undefined && index === defaultOpenIndex;
         // Use question as key since it's unique within FAQ context

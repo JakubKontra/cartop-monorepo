@@ -62,13 +62,11 @@ export const FaqSection = () => {
       {/* eslint-disable-next-line react/no-danger */}
       <script dangerouslySetInnerHTML={{ __html: faqStructuredData }} type="application/ld+json" />
 
-      <section className="bg-white px-4 py-16">
-        <div className="mx-auto max-w-[1360px]">
-          <SectionHeader highlightedWord="Často" remainingTitle="kladené otázky" />
-          <Faq items={faqData} />
-          <div className="mt-14 flex w-full justify-center">
-            <HowItWorksButton />
-          </div>
+      <section className="section-container flex flex-col items-center py-20">
+        <SectionHeader highlightedWord="Často" remainingTitle="kladené otázky" />
+        <Faq items={faqData} />
+        <div className="mt-14 flex w-full justify-center">
+          <HowItWorksButton />
         </div>
       </section>
     </>

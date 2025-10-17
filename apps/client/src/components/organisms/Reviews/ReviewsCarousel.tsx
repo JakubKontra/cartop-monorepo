@@ -35,7 +35,7 @@ export const ReviewsCarousel = ({ className, reviews }: ReviewsCarouselProps) =>
   }, [isActive, isItFirstInteraction, onNext]);
 
   return (
-    <div className={cn('overflow-hidden py-6 md:py-8 lg:py-10', className)}>
+    <div className={cn('overflow-hidden pb-6 md:pb-8 lg:pb-10', className)}>
       <div className="relative" id="reviews-carousel-wrapper">
         <div className="relative w-full">
           <Swiper

@@ -5,6 +5,7 @@ import { Filter } from 'lucide-react';
 import Button from '@/components/atoms/button/Button';
 
 import { ExploreCard } from './ExploreCard';
+import { SectionHeader } from '@/components/sections/Homepage/SectionHeader';
 
 const exploreData = [
   {
@@ -46,21 +47,20 @@ const exploreData = [
 
 export default function ExploreSelection() {
   return (
-    <div className="w-full py-20">
-      <div className="mx-auto mb-14 flex max-w-[1360px] flex-col justify-between gap-4 px-4 lg:flex-row lg:gap-8">
-        <div>
-          <h2 className="mb-4 w-full text-4xl lg:text-5xl">
-            Prozkoumejte <span className="headline-highlight">náš výběr</span> vozů
-          </h2>
-          <p className="w-full">Připravili jsme pro vás přehled těch nejzajímavějších kategorií.</p>
-        </div>
-        <div className="flex items-end">
-          <Button icon={<Filter className="size-5" />} variant="primary">
-            Filtrovat vozy
-          </Button>
-        </div>
-      </div>
-      <div className="mx-auto grid max-w-[1360px] grid-cols-1 gap-3 px-4 lg:grid-cols-2">
+    <section className="section-container flex flex-col items-center py-20">
+      <SectionHeader
+        highlightedWord="Prozkoumejte"
+        remainingTitle="náš výběr vozů"
+        subtitle="Připravili jsme pro vás přehled těch nejzajímavějších kategorií."
+        rightSideContent={
+          <div className="flex items-end">
+            <Button icon={<Filter className="size-5" />} variant="primary">
+              Filtrovat vozy
+            </Button>
+          </div>
+        }
+      />
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {/* Large Featured Card - Takes half width */}
         <ExploreCard
           setOpenInViewPort
@@ -83,6 +83,6 @@ export default function ExploreSelection() {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

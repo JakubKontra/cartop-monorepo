@@ -206,7 +206,7 @@ export const OfferCard = ({
       </div>
       <div className="padding-[24px] -mb-p pointer-events-none relative z-10 mt-auto">
         <div className="flex w-full max-w-3xl flex-col items-center rounded-t-3xl rounded-b-3xl bg-gray-50 p-6 transition-colors duration-300 group-hover:bg-[#262D37]">
-          <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex flex-wrap items-start justify-between gap-4 w-full">
             {annualMileage && <OfferCardAnnualMileage mileage={annualMileage} />}
             {monthlyPrice && (
               <OfferCardPricing
