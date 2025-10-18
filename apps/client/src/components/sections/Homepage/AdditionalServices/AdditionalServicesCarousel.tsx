@@ -95,8 +95,8 @@ const ProgressBarControls = ({
   return (
     <div
       className={cn(
-        'group/mobile-progress-bar absolute z-20 flex px-3 xxs:px-8 md:px-16',
-        'bottom-4 justify-start md:bottom-16',
+        'group/mobile-progress-bar absolute w-full z-20 flex px-3 xxs:px-8 md:px-10 xl:px-16',
+        'bottom-4 justify-center xl:justify-start xl:bottom-16',
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -179,7 +179,7 @@ export const AdditionalServicesCarousel = ({
           {...swiperConfig}
         >
           {items.map((item, index) => (
-            <SwiperSlide key={index} className={cn('h-full overflow-hidden', cardClassName)}>
+            <SwiperSlide key={index} className={cn('!h-auto overflow-hidden', cardClassName)}>
               {item.innerItem}
             </SwiperSlide>
           ))}
