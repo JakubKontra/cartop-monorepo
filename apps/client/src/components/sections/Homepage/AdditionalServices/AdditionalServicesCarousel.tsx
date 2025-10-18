@@ -1,5 +1,6 @@
 'use client';
 import Button from '@/components/atoms/button/Button';
+import { ButtonIcon } from '@/components/atoms/button/ButtonIcon';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useSwiper } from '@/hooks/useSwiper';
 import { cn } from '@/utils/cv';
@@ -24,24 +25,55 @@ export const ProgressBarButton = ({
   const progressPercentage = Math.min(Math.max(progress, 0), 1) * 100;
 
   return (
-    <Button
-      variant="secondary-inverted"
-      iconPosition="right"
-      size="narrow"
-      icon={<MoveUpRight className="size-5 relative" />}
-      onClick={onClick}
-      className="relative overflow-hidden"
-      iconClassName="hidden xl:flex"
-    >
-      <p className="relative z-10">{children}</p>
-      <span
-        className={`absolute -left-full top-0 z-0 h-full w-full bg-gunmetal-600 transition-transform ease-out ${progress === 0 ? 'opacity-0' : 'opacity-100'}`}
-        style={{
-          transform: `translateX(${progressPercentage}%)`,
-          transitionDuration: progress === 0 ? '300ms' : '10ms',
-        }}
-      />
-    </Button>
+    <>
+      <Button
+        variant="secondary-inverted"
+        iconPosition="right"
+        size="narrow"
+        icon={<MoveUpRight className="size-5 relative" />}
+        onClick={onClick}
+        className="relative overflow-hidden hidden xl:flex"
+      >
+        <p className="relative z-10">{children}</p>
+        <span
+          className={`absolute -left-full top-0 z-0 h-full w-full bg-gunmetal-600 transition-transform ease-out ${progress === 0 ? 'opacity-0' : 'opacity-100'}`}
+          style={{
+            transform: `translateX(${progressPercentage}%)`,
+            transitionDuration: progress === 0 ? '300ms' : '10ms',
+          }}
+        />
+      </Button>
+      <div className="relative xl:hidden p-2 group">
+        <ButtonIcon
+          icon={children}
+          variant="progress-button"
+          className="rounded-full size-10 lg:size-10"
+          onClick={onClick}
+        />
+        {/* White circle with progress percentage */}
+        <div className="absolute inset-0 rounded-full pointer-events-none">
+          <svg
+            className="w-full h-full transform -rotate-90"
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Progress ring */}
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              fill="none"
+              stroke="#8ca1b2"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeDasharray={`${2 * Math.PI * 45}`}
+              strokeDashoffset={`${2 * Math.PI * 45 * (1 - progressPercentage / 100)}`}
+              className="transition-[stroke-dashoffset] duration-0 group-hover/mobile-progress-bar:duration-300"
+            />
+          </svg>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -125,7 +157,7 @@ export const AdditionalServicesCarousel = ({
 
         <div
           className={cn(
-            'absolute z-20 flex px-3 xxs:px-8 md:px-14',
+            'group/mobile-progress-bar absolute z-20 flex px-3 xxs:px-8 md:px-14',
             'bottom-4 justify-start md:bottom-14',
           )}
           onMouseEnter={() => {
@@ -137,7 +169,7 @@ export const AdditionalServicesCarousel = ({
           }}
         >
           <div className={cn('rounded-full p-4')}>
-            <div className={cn('flex md:gap-4 flex-row gap-2')}>
+            <div className={cn('flex xl:gap-4 flex-row gap-1')}>
               {items.map((item, index) => {
                 const isActive = activeSlide === index;
                 return (
@@ -148,7 +180,7 @@ export const AdditionalServicesCarousel = ({
                     theme={theme}
                     onClick={() => onSetActiveSlide(index)}
                   >
-                    <div className="flex w-full items-center gap-3">
+                    <div className="flex w-full items-center gap-3 justify-center">
                       <div className="flex xl:hidden text-white">{String(index + 1)}</div>
                       <p className="text-md relative whitespace-nowrap xxs:font-semibold hidden xl:block">
                         {item.buttonText}

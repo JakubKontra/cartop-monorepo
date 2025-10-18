@@ -14,6 +14,7 @@ const iconVariants = tv({
       'primary-inverted': 'text-white bg-primary hover:bg-primary/80',
       secondary: 'text-gunmetal bg-white',
       'secondary-inverted': 'text-white bg-gunmetal',
+      'progress-button': 'text-white bg-gunmetal-800 hover:bg-gunmetal-600',
     },
   },
 });
