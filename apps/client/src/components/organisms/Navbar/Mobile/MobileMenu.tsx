@@ -1,6 +1,6 @@
 'use client';
 
-import { LogIn, UserIcon, UserPlus } from 'lucide-react';
+import { LogIn, UserPlus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 import { SearchForm } from '@/components/organisms/Navbar/Actions';

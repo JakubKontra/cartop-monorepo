@@ -6,7 +6,7 @@ import { SubmenuColumn } from './SubmenuColumn';
 import { recommendedLinks, selectionLinks, brandLinks, categoryLinks } from '../constants';
 import type { SubmenuProps } from '../types';
 
-export const Submenu: React.FC<SubmenuProps> = ({ isVisible, onMouseLeave }) => {
+export const Submenu: React.FC<SubmenuProps> = ({ isVisible, onMouseLeave, position }) => {
   const [shouldRender, setShouldRender] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -28,12 +28,14 @@ export const Submenu: React.FC<SubmenuProps> = ({ isVisible, onMouseLeave }) => 
 
   return (
     <div
-      className={`absolute top-28 left-1/2 -translate-x-1/2 w-full z-40 max-w-4xl mx-auto ${
-        isAnimating ? 'animate-fade-in' : 'animate-fade-out'
-      }`}
+      className={`absolute z-40 max-w-4xl transition-all duration-0 ${isAnimating ? 'animate-fade-in' : 'animate-fade-out'}`}
+      style={{
+        top: position?.top || 0,
+        left: position?.left || 0,
+      }}
       onMouseLeave={onMouseLeave}
     >
-      <div className="grid grid-cols-4 gap-8 bg-white rounded-lg shadow-lg border border-slate-200 p-6">
+      <div className="grid grid-cols-4 gap-8 glass-background rounded-2xl shadow-lg p-6">
         <SubmenuColumn title="Doporučené" links={recommendedLinks} />
         <SubmenuColumn title="Náš výběr" links={selectionLinks} />
         <SubmenuColumn title="Značky" links={brandLinks} />

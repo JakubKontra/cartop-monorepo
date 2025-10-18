@@ -39,6 +39,7 @@ export interface SubmenuColumnProps {
 export interface SubmenuProps {
   isVisible: boolean;
   onMouseLeave: () => void;
+  position?: { top: number; left: number };
 }
 
 export interface MobileAccordionProps {

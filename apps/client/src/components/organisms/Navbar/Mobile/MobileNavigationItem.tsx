@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { MobileAccordion } from './MobileAccordion';
 import { recommendedLinks, selectionLinks, brandLinks, categoryLinks } from '../constants';
 import type { NavigationItemProps } from '../types';
+import { ChevronDown } from 'lucide-react';
 
 export const MobileNavigationItem: React.FC<NavigationItemProps> = ({
   href,
@@ -37,22 +38,20 @@ export const MobileNavigationItem: React.FC<NavigationItemProps> = ({
   if (hasDropdown) {
     return (
       <li>
-        <div className="border-b border-slate-200">
+        <div className="border-b border-gunmetal-100">
           <button
             className="flex w-full items-center justify-between py-4 text-left text-xl font-medium text-gunmetal transition hover:text-slate-900"
             onClick={() => setIsAccordionOpen(!isAccordionOpen)}
             type="button"
           >
             <span>{label}</span>
-            <span
-              className={`text-slate-400 transition-transform ${isAccordionOpen ? 'rotate-180' : ''}`}
-            >
-              ▾
-            </span>
+            <ChevronDown
+              className={`text-primary transition-transform ${isAccordionOpen ? 'rotate-180' : ''}`}
+            />
           </button>
           {isAccordionOpen && (
-            <div className="pb-4">
-              <div className="space-y-4">
+            <div className="pb-4 border-t border-gunmetal-100">
+              <div className="space-y-2">
                 <MobileAccordion
                   title="Doporučené"
                   links={recommendedLinks}
@@ -90,7 +89,7 @@ export const MobileNavigationItem: React.FC<NavigationItemProps> = ({
   }
 
   return (
-    <li>
+    <li className="border-b border-gunmetal-100">
       <Link
         className="block py-4 text-xl font-medium text-gunmetal transition hover:text-slate-900"
         href={href}

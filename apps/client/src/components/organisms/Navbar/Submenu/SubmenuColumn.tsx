@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import type { SubmenuColumnProps } from '../types';
+import { cn } from '@/utils/cv';
 
 export const SubmenuColumn: React.FC<SubmenuColumnProps> = ({ title, links }) => (
   <div className="flex flex-col">
@@ -12,9 +13,10 @@ export const SubmenuColumn: React.FC<SubmenuColumnProps> = ({ title, links }) =>
           <li key={link.href} className={isViewAll ? 'pt-2' : ''}>
             <Link
               href={link.href}
-              className={`text-sm transition-colors hover:text-primary ${
-                isViewAll ? 'text-slate-500 font-medium' : 'text-gunmetal-600'
-              }`}
+              className={cn(
+                'text-gunmetal text-sm transition-colors hover:underline',
+                isViewAll && 'underline',
+              )}
             >
               {link.label}
             </Link>
