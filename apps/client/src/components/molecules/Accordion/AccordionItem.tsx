@@ -53,13 +53,18 @@ export const AccordionItem = ({
           <button
             aria-controls={contentId}
             aria-expanded={isOpen}
-            className="flex w-full cursor-pointer justify-between gap-4 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:p-6"
+            className="flex w-full cursor-pointer items-center justify-between gap-4 p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:p-6"
             id={headingId}
             type="button"
             onClick={toggle}
             onKeyDown={handleKeyDown}
           >
-            <span className={cn('flex-1 pr-4 text-lg font-semibold lg:text-xl', titleClassName)}>
+            <span
+              className={cn(
+                'flex items-center pr-4 text-lg font-semibold lg:text-xl',
+                titleClassName,
+              )}
+            >
               {title}
             </span>
             {icon && (
