@@ -84,6 +84,7 @@ interface NavigationItemProps {
   href: string;
   label: string;
   hasDropdown: boolean;
+  onClose?: () => void;
 }
 
 interface ActionButtonProps {
@@ -256,50 +257,225 @@ const ActionButton: React.FC<ActionButtonProps> = ({ icon: Icon, label, classNam
   </button>
 );
 
-const MobileNavigationItem: React.FC<NavigationItemProps> = ({ href, label, hasDropdown }) => (
-  <li>
-    <Link
-      className="block py-4 text-xl font-medium text-gunmetal transition hover:text-slate-900"
-      href={href}
+interface MobileAccordionProps {
+  title: string;
+  links: readonly SubmenuLink[];
+  isOpen: boolean;
+  onToggle: () => void;
+  onLinkClick?: () => void;
+}
+
+const MobileAccordion: React.FC<MobileAccordionProps> = ({
+  title,
+  links,
+  isOpen,
+  onToggle,
+  onLinkClick,
+}) => (
+  <div className="border-b border-slate-200">
+    <button
+      className="flex w-full items-center justify-between py-4 text-left text-lg font-medium text-gunmetal transition hover:text-slate-900"
+      onClick={onToggle}
+      type="button"
     >
-      {label}
-      {hasDropdown && <span className="ml-2 text-slate-400">▾</span>}
-    </Link>
-  </li>
+      <span>{title}</span>
+      <span className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}>▾</span>
+    </button>
+    {isOpen && (
+      <div className="pb-4">
+        <ul className="space-y-2">
+          {links.map(link => (
+            <li key={link.href}>
+              <Link
+                className="block py-2 text-sm text-gunmetal-600 transition hover:text-primary"
+                href={link.href}
+                onClick={onLinkClick}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
 );
 
+const MobileNavigationItem: React.FC<NavigationItemProps> = ({
+  href,
+  label,
+  hasDropdown,
+  onClose,
+}) => {
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
+
+  const handleAccordionToggle = (title: string) => {
+    setOpenAccordions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(title)) {
+        newSet.delete(title);
+      } else {
+        newSet.add(title);
+      }
+      return newSet;
+    });
+  };
+
+  const handleLinkClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  if (hasDropdown) {
+    return (
+      <li>
+        <div className="border-b border-slate-200">
+          <button
+            className="flex w-full items-center justify-between py-4 text-left text-xl font-medium text-gunmetal transition hover:text-slate-900"
+            onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+            type="button"
+          >
+            <span>{label}</span>
+            <span
+              className={`text-slate-400 transition-transform ${isAccordionOpen ? 'rotate-180' : ''}`}
+            >
+              ▾
+            </span>
+          </button>
+          {isAccordionOpen && (
+            <div className="pb-4">
+              <div className="space-y-4">
+                <MobileAccordion
+                  title="Doporučené"
+                  links={recommendedLinks}
+                  isOpen={openAccordions.has('Doporučené')}
+                  onToggle={() => handleAccordionToggle('Doporučené')}
+                  onLinkClick={handleLinkClick}
+                />
+                <MobileAccordion
+                  title="Náš výběr"
+                  links={selectionLinks}
+                  isOpen={openAccordions.has('Náš výběr')}
+                  onToggle={() => handleAccordionToggle('Náš výběr')}
+                  onLinkClick={handleLinkClick}
+                />
+                <MobileAccordion
+                  title="Značky"
+                  links={brandLinks}
+                  isOpen={openAccordions.has('Značky')}
+                  onToggle={() => handleAccordionToggle('Značky')}
+                  onLinkClick={handleLinkClick}
+                />
+                <MobileAccordion
+                  title="Kategorie"
+                  links={categoryLinks}
+                  isOpen={openAccordions.has('Kategorie')}
+                  onToggle={() => handleAccordionToggle('Kategorie')}
+                  onLinkClick={handleLinkClick}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      <Link
+        className="block py-4 text-xl font-medium text-gunmetal transition hover:text-slate-900"
+        href={href}
+        onClick={handleLinkClick}
+      >
+        {label}
+      </Link>
+    </li>
+  );
+};
+
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      setIsAnimating(true);
+      return;
+    }
+
+    setIsAnimating(false);
+    const timer = setTimeout(() => {
+      setShouldRender(false);
+    }, 150); // Match fade-out animation duration
+    return () => clearTimeout(timer);
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
 
   return (
     <div className="fixed inset-0 z-40 xl:hidden">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in"
+        className={`absolute inset-0 bg-black/50 backdrop-blur-sm ${
+          isAnimating ? 'animate-fade-in' : 'animate-fade-out'
+        }`}
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Menu Panel */}
-      <div className="relative flex h-full w-full pt-16 flex-col bg-white animate-fade-in">
+      <div
+        className={`relative flex h-full w-full pt-16 flex-col bg-gunmetal-50 ${
+          isAnimating ? 'animate-fade-in' : 'animate-fade-out'
+        }`}
+      >
+        {/* Search Bar */}
+        <div className="px-6 py-4 bg-white rounded-b-3xl">
+          <form className="flex h-[45px] items-center rounded-[18px] border border-slate-400/60 bg-slate-100/70 px-5 transition focus-within:border-slate-500">
+            <input
+              aria-label="Hledat"
+              className="flex-1 bg-transparent text-[14px] outline-none placeholder:text-slate-400"
+              placeholder="Hledat..."
+              type="text"
+            />
+            <button
+              aria-label="Hledat"
+              className="h-5 w-5 shrink-0 cursor-pointer text-slate-400 transition hover:text-slate-600"
+              type="submit"
+            >
+              <SearchIcon className="h-5 w-5 text-slate-400" />
+            </button>
+          </form>
+        </div>
+
         {/* Navigation */}
-        <nav className="flex-1 px-6 py-8">
+        <nav className="flex-1 px-6 py-8 overflow-y-auto">
           <ul className="space-y-2">
             {NAVIGATION_ITEMS.map(item => (
-              <MobileNavigationItem key={item.href} {...item} />
+              <MobileNavigationItem key={item.href} {...item} onClose={onClose} />
             ))}
           </ul>
         </nav>
 
         {/* Action Buttons */}
         <div className="border-t border-slate-200 p-6">
-          <div className="flex items-center gap-3">
+          <div className="flex gap-3">
             <button
-              className="flex h-[45px] flex-1 items-center justify-center rounded-[16px] bg-cadet-grey font-medium text-white transition-opacity hover:opacity-80"
+              className="flex h-[45px] w-full items-center justify-center rounded-[16px] bg-cadet-grey font-medium text-white transition-opacity hover:opacity-80"
               type="button"
             >
               <UserIcon className="mr-2 h-5 w-5" />
-              Přihlásit se
+              Přihlášení
+            </button>
+            <button
+              className="flex h-[45px] w-full items-center justify-center rounded-[16px] border border-cadet-grey font-medium text-cadet-grey transition-colors hover:bg-cadet-grey hover:text-white"
+              type="button"
+            >
+              Registrace
             </button>
           </div>
         </div>
@@ -406,8 +582,8 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className="section-container bg-white py-4 sticky top-0 z-50">
-        <nav className="flex h-16 items-center justify-between gap-6 px-8">
+      <header className="section-container bg-white py-2 lg:py-4 sticky top-0 z-50">
+        <nav className="flex h-16 items-center justify-between gap-6 px-4 lg:px-8">
           <Link aria-label="Cartop — home" className="shrink-0 select-none" href="/">
             <Logo className="text-primary" />
           </Link>
