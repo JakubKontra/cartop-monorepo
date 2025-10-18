@@ -1,55 +1,18 @@
 'use client';
-import Button from '@/components/atoms/button/Button';
+
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useSwiper } from '@/hooks/useSwiper';
 import { cn } from '@/utils/cv';
-import { MoveUpRight } from 'lucide-react';
+import { ProgressBarButton } from './ProgressBarButton';
+import type { CarouselItem, CarouselTheme } from './types';
 import type React from 'react';
-import { type HTMLAttributes, useEffect, useState } from 'react';
+import { type HTMLAttributes, useEffect, useState, useCallback, useMemo } from 'react';
 import { Autoplay, EffectFade } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper/types';
 
-export type CarouselTheme = 'light' | 'dark';
-
-export const ProgressBarButton = ({
-  progress,
-  children,
-  onClick,
-}: {
-  progress: number;
-  isActive: boolean;
-  theme?: CarouselTheme;
-} & HTMLAttributes<HTMLButtonElement>) => {
-  const progressPercentage = Math.min(Math.max(progress, 0), 1) * 100;
-
-  return (
-    <Button
-      variant="secondary-inverted"
-      iconPosition="right"
-      size="narrow"
-      icon={<MoveUpRight className="size-5 relative" />}
-      onClick={onClick}
-      className="relative overflow-hidden"
-      iconClassName="hidden xl:flex"
-    >
-      <p className="relative z-10">{children}</p>
-      <span
-        className={`absolute -left-full top-0 z-0 h-full w-full bg-gunmetal-600 transition-transform ease-out ${progress === 0 ? 'opacity-0' : 'opacity-100'}`}
-        style={{
-          transform: `translateX(${progressPercentage}%)`,
-          transitionDuration: progress === 0 ? '300ms' : '10ms',
-        }}
-      />
-    </Button>
-  );
-};
-
-interface AdditionalServicesCarouselProps {
-  items: Array<{
-    innerItem: React.ReactNode;
-    buttonText: string;
-  }>;
+interface AdditionalServicesCarouselProps extends HTMLAttributes<HTMLDivElement> {
+  items: CarouselItem[];
   interval?: number;
   cardClassName?: string;
   theme?: CarouselTheme;
@@ -57,6 +20,111 @@ interface AdditionalServicesCarouselProps {
   mobileClassName?: string;
 }
 
+// Custom hook for carousel logic
+const useCarouselLogic = (id: string) => {
+  const { activeSlide, swiperRef, onSetActiveSlide, setActiveSlide } = useSwiper();
+  const [progress, setProgress] = useState(0);
+  const isActive = useIntersectionObserver({ elementId: id + '-wrapper' });
+
+  const handleAutoplayTimeLeft = useCallback(
+    (_swiper: SwiperType, _timeLeft: number, percentage: number) => {
+      setProgress(1 - percentage);
+    },
+    [],
+  );
+
+  const handleSwiperInit = useCallback(
+    (swiper: SwiperType) => {
+      swiperRef.current = swiper;
+    },
+    [swiperRef],
+  );
+
+  const handleSlideChange = useCallback(
+    (swiper: SwiperType) => {
+      setActiveSlide(swiper.activeIndex);
+    },
+    [setActiveSlide],
+  );
+
+  const handleMouseEnter = useCallback(() => {
+    swiperRef.current?.autoplay.stop();
+    setProgress(0);
+  }, [swiperRef]);
+
+  const handleMouseLeave = useCallback(() => {
+    swiperRef.current?.autoplay.start();
+  }, [swiperRef]);
+
+  useEffect(() => {
+    if (isActive) {
+      swiperRef.current?.autoplay.start();
+    } else {
+      swiperRef.current?.autoplay.stop();
+    }
+  }, [isActive, swiperRef]);
+
+  return {
+    activeSlide,
+    progress,
+    handleAutoplayTimeLeft,
+    handleSwiperInit,
+    handleSlideChange,
+    handleMouseEnter,
+    handleMouseLeave,
+    onSetActiveSlide,
+  };
+};
+
+// Progress Bar Controls Component
+const ProgressBarControls = ({
+  items,
+  activeSlide,
+  progress,
+  onSetActiveSlide,
+  onMouseEnter,
+  onMouseLeave,
+}: {
+  items: CarouselItem[];
+  activeSlide: number;
+  progress: number;
+  onSetActiveSlide: (index: number) => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}) => {
+  return (
+    <div
+      className={cn(
+        'group/mobile-progress-bar absolute w-full z-20 flex px-3 xxs:px-8 md:px-10 xl:px-16',
+        'bottom-4 justify-center xl:justify-start xl:bottom-16',
+      )}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div className={cn('flex xl:gap-4 flex-row gap-1')}>
+        {items.map((item, index) => {
+          const isActiveItem = activeSlide === index;
+          return (
+            <ProgressBarButton
+              progress={isActiveItem ? progress : 0}
+              key={index}
+              onClick={() => onSetActiveSlide(index)}
+            >
+              <div className="flex w-full items-center gap-3 justify-center">
+                <div className="flex xl:hidden text-white">{String(index + 1)}</div>
+                <p className="text-md relative whitespace-nowrap xxs:font-semibold hidden xl:block">
+                  {item.buttonText}
+                </p>
+              </div>
+            </ProgressBarButton>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// Main Carousel Component
 export const AdditionalServicesCarousel = ({
   items,
   interval = 5000,
@@ -67,100 +135,65 @@ export const AdditionalServicesCarousel = ({
   desktopClassName,
   mobileClassName,
   ...rest
-}: AdditionalServicesCarouselProps & HTMLAttributes<HTMLDivElement>) => {
-  const { activeSlide, swiperRef, onSetActiveSlide, setActiveSlide } = useSwiper();
+}: AdditionalServicesCarouselProps) => {
+  const {
+    activeSlide,
+    progress,
+    handleAutoplayTimeLeft,
+    handleSwiperInit,
+    handleSlideChange,
+    handleMouseEnter,
+    handleMouseLeave,
+    onSetActiveSlide,
+  } = useCarouselLogic(id!);
 
-  const [progress, setProgress] = useState(0);
-  const onAutoplayTimeLeft = (_swiper: SwiperType, _timeLeft: number, percentage: number) => {
-    setProgress(1 - percentage);
-  };
+  const wrapperClassName = useMemo(
+    () => cn('relative h-full w-full', className, desktopClassName),
+    [className, desktopClassName],
+  );
 
-  const isActive = useIntersectionObserver({ elementId: id + '-wrapper' });
-
-  useEffect(() => {
-    if (isActive) {
-      swiperRef.current?.autoplay.start();
-    } else {
-      swiperRef.current?.autoplay.stop();
-    }
-  }, [isActive]);
+  const swiperConfig = useMemo(
+    () => ({
+      centeredSlides: true,
+      autoplay: {
+        delay: interval,
+        disableOnInteraction: true,
+      },
+      modules: [EffectFade, Autoplay],
+      className: 'mySwiper h-full',
+      effect: 'fade' as const,
+      fadeEffect: {
+        crossFade: true,
+      },
+    }),
+    [interval],
+  );
 
   return (
-    <>
-      <div
-        className={`relative h-full w-full ${className} ${desktopClassName}`}
-        {...rest}
-        id={id + '-wrapper'}
-      >
-        <div className="relative z-10 h-full w-full">
-          <Swiper
-            onSwiper={swiper => {
-              swiperRef.current = swiper;
-            }}
-            onSlideChange={swiper => {
-              setActiveSlide(swiper.activeIndex);
-            }}
-            centeredSlides={true}
-            autoplay={{
-              delay: interval,
-              disableOnInteraction: true,
-            }}
-            modules={[EffectFade, Autoplay]}
-            className="mySwiper h-full"
-            onAutoplayTimeLeft={onAutoplayTimeLeft}
-            effect="fade"
-            fadeEffect={{
-              crossFade: true,
-            }}
-          >
-            {items.map((item, index) => {
-              return (
-                <SwiperSlide key={index} className={cn('h-full overflow-hidden', cardClassName)}>
-                  {item.innerItem}
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-        </div>
-
-        <div
-          className={cn(
-            'absolute z-20 flex px-3 xxs:px-8 md:px-14',
-            'bottom-4 justify-start md:bottom-14',
-          )}
-          onMouseEnter={() => {
-            swiperRef.current?.autoplay.stop();
-            setProgress(0);
-          }}
-          onMouseLeave={() => {
-            swiperRef.current?.autoplay.start();
-          }}
+    <div className={wrapperClassName} {...rest} id={id + '-wrapper'}>
+      <div className="relative z-10 h-full w-full">
+        <Swiper
+          onSwiper={handleSwiperInit}
+          onSlideChange={handleSlideChange}
+          onAutoplayTimeLeft={handleAutoplayTimeLeft}
+          {...swiperConfig}
         >
-          <div className={cn('rounded-full p-4')}>
-            <div className={cn('flex md:gap-4 flex-row gap-2')}>
-              {items.map((item, index) => {
-                const isActive = activeSlide === index;
-                return (
-                  <ProgressBarButton
-                    progress={isActive ? progress : 0}
-                    key={index}
-                    isActive={isActive}
-                    theme={theme}
-                    onClick={() => onSetActiveSlide(index)}
-                  >
-                    <div className="flex w-full items-center gap-3">
-                      <div className="flex xl:hidden text-white">{String(index + 1)}</div>
-                      <p className="text-md relative whitespace-nowrap xxs:font-semibold hidden xl:block">
-                        {item.buttonText}
-                      </p>
-                    </div>
-                  </ProgressBarButton>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+          {items.map((item, index) => (
+            <SwiperSlide key={index} className={cn('!h-auto overflow-hidden', cardClassName)}>
+              {item.innerItem}
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
-    </>
+
+      <ProgressBarControls
+        items={items}
+        activeSlide={activeSlide}
+        progress={progress}
+        onSetActiveSlide={onSetActiveSlide}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      />
+    </div>
   );
 };

@@ -93,7 +93,7 @@ export const AdditionalServices = () => {
       />
       <AdditionalServicesCarousel
         items={items}
-        interval={3000}
+        interval={5000}
         id="additional-services-carousel"
         cardClassName="rounded-3xl"
       />
