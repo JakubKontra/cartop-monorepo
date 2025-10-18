@@ -1,13 +1,15 @@
 import React from 'react';
 
 import type { ActionButtonProps } from '../types';
+import { ButtonIcon } from '@/components/atoms/button/ButtonIcon';
 
 export const ActionButton: React.FC<ActionButtonProps> = ({ icon: Icon, label, className }) => (
-  <button
+  <ButtonIcon
     aria-label={label}
-    className={`flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-[16px] transition-opacity hover:opacity-80 active:opacity-60 ${className}`}
+    className={className}
+    size="small"
     type="button"
-  >
-    <Icon className="h-5 w-5 text-white" />
-  </button>
+    icon={<Icon className="h-5 w-5" />}
+    variant="cadet-grey"
+  />
 );

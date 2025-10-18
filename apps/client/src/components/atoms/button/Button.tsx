@@ -36,7 +36,7 @@ const buttonVariants = tv({
       'outline-white': 'border border-white text-white bg-transparent hover:bg-white/10',
       primary: 'border border-primary text-white bg-primary hover:bg-primary/80',
       'primary-inverted': 'bg-white text-gunmetal',
-      secondary: 'bg-white text-gunmetal hover:bg-[#FEFEFE4D]',
+      secondary: 'bg-gunmetal text-white hover:bg-gunmetal-800',
       'secondary-inverted':
         'border border-gunmetal-600 text-white bg-gunmetal hover:bg-gunmetal-700',
     },

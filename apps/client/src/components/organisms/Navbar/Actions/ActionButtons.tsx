@@ -11,7 +11,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   isMobileMenuOpen,
 }) => (
   <div className="flex items-center gap-2" role="toolbar" aria-label="Akční tlačítka">
-    <SearchForm />
+    <SearchForm className="hidden xl:flex max-w-3xs" />
 
     {/* Scale Button - Always visible */}
     <ActionButton {...ACTION_BUTTONS[0]} />
