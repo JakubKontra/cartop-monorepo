@@ -2520,6 +2520,7 @@ __metadata:
     "@types/node": "npm:^24.6.2"
     "@types/react": "npm:19.2.2"
     "@types/react-dom": "npm:19.2.1"
+    body-scroll-lock-upgrade: "npm:^1.1.0"
     concurrently: "npm:^9.2.1"
     depcheck: "npm:^1.4.7"
     dotenv: "npm:^17.2.3"
@@ -13145,6 +13146,13 @@ __metadata:
     raw-body: "npm:^3.0.0"
     type-is: "npm:^2.0.0"
   checksum: 10c0/a9ded39e71ac9668e2211afa72e82ff86cc5ef94de1250b7d1ba9cc299e4150408aaa5f1e8b03dd4578472a3ce6d1caa2a23b27a6c18e526e48b4595174c116c
+  languageName: node
+  linkType: hard
+
+"body-scroll-lock-upgrade@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "body-scroll-lock-upgrade@npm:1.1.0"
+  checksum: 10c0/caa16109e601ee9975ac684ecdf91468610b4c5d505ed06745612617e84f0b5fd4dbeaad9a32c5c6090be980b07b7bedaec105cb43880703667cda8178921d3e
   languageName: node
   linkType: hard
 
