@@ -11,6 +11,10 @@
   --color-white: #fefefe;
   --color-cadet-grey: #8ca1b2;
   --color-crimson-red: #c90932;
+  --color-slate-100: #f1f5f9;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
 
   --color-gunmetal: #262d37;
   --color-gunmetal-50: #f3f5f7;
@@ -58,19 +62,40 @@
     leading-trim: both;
     text-edge: cap;
   }
+
+  .glass-background {
+    @apply border border-white/30 bg-white/40 backdrop-blur-md;
+  }
 }
 
 @layer utilities {
   @keyframes fade-in {
     from {
       opacity: 0;
+      transform: translateY(-8px);
     }
     to {
       opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-8px);
     }
   }
 
   .animate-fade-in {
-    animation: fade-in 0.3s ease-in-out;
+    animation: fade-in 0.2s ease-out;
+  }
+
+  .animate-fade-out {
+    animation: fade-out 0.15s ease-in;
   }
 }

@@ -1,79 +1,66 @@
-import { ScaleIcon, SearchIcon, UserIcon } from 'lucide-react';
+'use client';
+
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock-upgrade';
 
 import { Logo } from '@/components/branding/Logo';
 
-const Navbar = () => {
+import { ActionButtons, MobileMenu, NavigationMenu } from './';
+import { cn } from '@cartop/ui-utils';
+
+const Navbar: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen && mobileMenuRef.current) {
+      disableBodyScroll(mobileMenuRef.current);
+    } else if (mobileMenuRef.current) {
+      enableBodyScroll(mobileMenuRef.current);
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (mobileMenuRef.current) {
+        enableBodyScroll(mobileMenuRef.current);
+      }
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(prev => !prev);
+  };
+
+  const handleMobileMenuClose = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <header className="section-container bg-white py-4">
-      <nav className="flex h-16 items-center justify-between gap-6 px-8">
-        <Link aria-label="Cartop — home" className="shrink-0 select-none" href="/">
-          <Logo className="text-primary" />
-        </Link>
+    <>
+      <header
+        className={cn(
+          'section-container bg-whit py-2 lg:py-4 sticky top-0 z-50 px-4',
+          isMobileMenuOpen && 'max-lg:bg-white',
+        )}
+      >
+        <nav className="flex h-16 items-center justify-between gap-6 pl-4 pr-2 lg:px-4 lg:mx-4 glass-background rounded-2xl">
+          <Link aria-label="Cartop — home" className="shrink-0 select-none" href="/">
+            <Logo className="text-primary" />
+          </Link>
 
-        <ul className="font-sora hidden flex-grow items-center justify-center gap-10 text-base leading-[160%] font-normal tracking-[0.01em] text-gunmetal lg:flex">
-          <li>
-            <Link
-              className="inline-flex items-center gap-1 transition hover:text-slate-900"
-              href="#offers"
-            >
-              <span>Všechny nabídky</span>
-              <span className="text-slate-400">▾</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="transition hover:text-slate-900" href="#how">
-              Jak to funguje?
-            </Link>
-          </li>
-          <li>
-            <Link className="transition hover:text-slate-900" href="/contacts">
-              Kontakt
-            </Link>
-          </li>
-        </ul>
-
-        <div className="flex items-center gap-2">
-          <form
-            className="hidden h-[45px] items-center rounded-[18px] border border-slate-400/60 bg-slate-100/70 px-5 transition focus-within:border-slate-500 md:flex"
-            role="search"
-            style={{ width: '282px' }}
-          >
-            <input
-              aria-label="Hledat"
-              className="flex-1 bg-transparent text-[14px] outline-none placeholder:text-slate-400"
-              placeholder="Hledat..."
-              type="text"
-            />
-            <button
-              aria-label="Hledat"
-              className="h-5 w-5 shrink-0 cursor-pointer text-slate-400 transition hover:text-slate-600"
-              type="submit"
-            >
-              <SearchIcon className="h-5 w-5 text-slate-400" />
-            </button>
-          </form>
-
-          <button
-            aria-label="Akce 1"
-            className="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-[16px] transition-opacity hover:opacity-80 active:opacity-60"
-            style={{ backgroundColor: '#8CA1B2' }}
-            type="button"
-          >
-            <ScaleIcon className="h-5 w-5 text-white" />
-          </button>
-          <button
-            aria-label="Akce 1"
-            className="flex h-[45px] w-[45px] cursor-pointer items-center justify-center rounded-[16px] transition-opacity hover:opacity-80 active:opacity-60"
-            style={{ backgroundColor: '#8CA1B2' }}
-            type="button"
-          >
-            <UserIcon className="h-5 w-5 text-white" />
-          </button>
-        </div>
-      </nav>
-    </header>
+          <NavigationMenu />
+          <ActionButtons
+            onMobileMenuToggle={handleMobileMenuToggle}
+            isMobileMenuOpen={isMobileMenuOpen}
+          />
+        </nav>
+      </header>
+      <div ref={mobileMenuRef}>
+        <MobileMenu isOpen={isMobileMenuOpen} onClose={handleMobileMenuClose} />
+      </div>
+    </>
   );
 };
 
