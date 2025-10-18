@@ -25,6 +25,47 @@ const NAVIGATION_ITEMS = [
   },
 ] as const;
 
+// Submenu data (reused from footer)
+const recommendedLinks = [
+  { href: '/koupit', label: 'Koupit' },
+  { href: '/pronajmout', label: 'Pronajmout' },
+  { href: '/akcni-vozy', label: 'Akční vozy' },
+  { href: '/nas-vyber', label: 'Náš výběr' },
+  { href: '/nejnovejsi-nabidky', label: 'Nejnovější nabídky' },
+  { href: '/katalog', label: 'Katalog' },
+] as const;
+
+const selectionLinks = [
+  { href: '/premiove', label: 'Prémiové' },
+  { href: '/mainstream', label: 'Mainstream' },
+  { href: '/sportovni', label: 'Sportovní' },
+  { href: '/elektromobily', label: 'Elektromobily' },
+  { href: '/uzitkove', label: 'Užitkové' },
+  { href: '/hybridni', label: 'Hybridní' },
+  { href: '/skladove', label: 'Skladové' },
+  { href: '/nas-vyber', label: 'Zobrazit vše' },
+] as const;
+
+const brandLinks = [
+  { href: '/znacky/audi', label: 'Audi' },
+  { href: '/znacky/bmw', label: 'BMW' },
+  { href: '/znacky/skoda', label: 'Škoda' },
+  { href: '/znacky/hyundai', label: 'Hyundai' },
+  { href: '/znacky/mazda', label: 'Mazda' },
+  { href: '/znacky/mercedes', label: 'Mercedes' },
+  { href: '/znacky', label: 'Zobrazit vše' },
+] as const;
+
+const categoryLinks = [
+  { href: '/kategorie/suv', label: 'SUV' },
+  { href: '/kategorie/kombi-mpv', label: 'Kombi / MPV' },
+  { href: '/kategorie/hatchback', label: 'Hatchback' },
+  { href: '/kategorie/sedan', label: 'Sedan' },
+  { href: '/kategorie/kupe', label: 'Kupé' },
+  { href: '/kategorie/kabriolet', label: 'Kabriolet' },
+  { href: '/kategorie', label: 'Zobrazit vše' },
+] as const;
+
 const ACTION_BUTTONS = [
   {
     icon: ScaleIcon,
@@ -56,15 +97,125 @@ interface MobileMenuProps {
   onClose: () => void;
 }
 
+interface SubmenuLink {
+  href: string;
+  label: string;
+}
+
+interface SubmenuColumnProps {
+  title: string;
+  links: readonly SubmenuLink[];
+}
+
+interface SubmenuProps {
+  isVisible: boolean;
+  onMouseLeave: () => void;
+}
+
 // Components
-const NavigationItem: React.FC<NavigationItemProps> = ({ href, label, hasDropdown }) => (
-  <li>
-    <Link className="inline-flex items-center gap-1 transition hover:text-slate-900" href={href}>
-      <span>{label}</span>
-      {hasDropdown && <span className="text-slate-400">▾</span>}
-    </Link>
-  </li>
+const SubmenuColumn: React.FC<SubmenuColumnProps> = ({ title, links }) => (
+  <div className="flex flex-col">
+    <h3 className="mb-4 text-sm font-semibold text-gunmetal">{title}</h3>
+    <ul className="flex flex-col gap-2">
+      {links.map(link => {
+        const isViewAll = link.label === 'Zobrazit vše';
+        return (
+          <li key={link.href} className={isViewAll ? 'pt-2' : ''}>
+            <Link
+              href={link.href}
+              className={`text-sm transition-colors hover:text-primary ${
+                isViewAll ? 'text-slate-500 font-medium' : 'text-gunmetal-600'
+              }`}
+            >
+              {link.label}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
 );
+
+const Submenu: React.FC<SubmenuProps> = ({ isVisible, onMouseLeave }) => {
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      setShouldRender(true);
+      setIsAnimating(true);
+      return;
+    }
+
+    setIsAnimating(false);
+    const timer = setTimeout(() => {
+      setShouldRender(false);
+    }, 150); // Match fade-out animation duration
+    return () => clearTimeout(timer);
+  }, [isVisible]);
+
+  if (!shouldRender) return null;
+
+  return (
+    <div
+      className={`absolute top-28 left-0 w-full z-40 ${
+        isAnimating ? 'animate-fade-in' : 'animate-fade-out'
+      }`}
+      onMouseLeave={onMouseLeave}
+    >
+      <div className="grid grid-cols-4 gap-8 max-w-4xl mx-auto bg-white rounded-lg shadow-lg border border-slate-200 p-6">
+        <SubmenuColumn title="Doporučené" links={recommendedLinks} />
+        <SubmenuColumn title="Náš výběr" links={selectionLinks} />
+        <SubmenuColumn title="Značky" links={brandLinks} />
+        <SubmenuColumn title="Kategorie" links={categoryLinks} />
+      </div>
+    </div>
+  );
+};
+
+const NavigationItem: React.FC<NavigationItemProps> = ({ href, label, hasDropdown }) => {
+  const [isSubmenuVisible, setIsSubmenuVisible] = useState(false);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (hasDropdown) {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      hoverTimeoutRef.current = setTimeout(() => {
+        setIsSubmenuVisible(true);
+      }, 100); // Small delay to prevent flickering
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (hasDropdown) {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      setIsSubmenuVisible(false);
+    }
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <li className="" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <Link className="inline-flex items-center gap-1 transition hover:text-slate-900" href={href}>
+        <span>{label}</span>
+        {hasDropdown && <span className="text-slate-400">▾</span>}
+      </Link>
+      {hasDropdown && <Submenu isVisible={isSubmenuVisible} onMouseLeave={handleMouseLeave} />}
+    </li>
+  );
+};
 
 const ActionButton: React.FC<ActionButtonProps> = ({ icon: Icon, label, className }) => (
   <button
