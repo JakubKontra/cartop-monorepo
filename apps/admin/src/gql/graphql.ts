@@ -427,6 +427,7 @@ export type CatalogColor = {
   /** Hex color code (e.g., #FFFFFF) */
   color?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  generationColors?: Maybe<Array<CatalogModelGenerationColor>>;
   id: Scalars['ID']['output'];
   legacySystemId?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
@@ -513,11 +514,92 @@ export enum CatalogEngineTransmissionType {
   SemiAutomatic = 'SEMI_AUTOMATIC'
 }
 
+export type CatalogEquipment = {
+  __typename?: 'CatalogEquipment';
+  active?: Maybe<Scalars['Boolean']['output']>;
+  availablePackets?: Maybe<Array<CatalogEquipmentPacket>>;
+  category?: Maybe<CatalogEquipmentItemCategory>;
+  categoryId?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  customText?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  includedPackets?: Maybe<Array<CatalogEquipmentPacket>>;
+  items?: Maybe<Array<CatalogEquipmentItem>>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  modelGeneration?: Maybe<CatalogModelGeneration>;
+  modelGenerationId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  packets?: Maybe<Array<CatalogEquipmentPacket>>;
+  paidItems?: Maybe<Array<CatalogEquipmentPaidItem>>;
+  standard: Scalars['Boolean']['output'];
+};
+
 /** Type of braking system used in vehicles */
 export enum CatalogEquipmentBrakeType {
   Disc = 'DISC',
   Drum = 'DRUM',
   VentilatedDisc = 'VENTILATED_DISC'
+}
+
+export type CatalogEquipmentItem = {
+  __typename?: 'CatalogEquipmentItem';
+  category?: Maybe<CatalogEquipmentItemCategory>;
+  categoryId?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  equipments?: Maybe<Array<CatalogEquipment>>;
+  id: Scalars['ID']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  packets?: Maybe<Array<CatalogEquipmentPacket>>;
+  paidItemPrices?: Maybe<Array<CatalogEquipmentPaidItem>>;
+};
+
+export type CatalogEquipmentItemCategory = {
+  __typename?: 'CatalogEquipmentItemCategory';
+  createdAt: Scalars['DateTime']['output'];
+  equipmentItems?: Maybe<Array<CatalogEquipment>>;
+  id: Scalars['ID']['output'];
+  items?: Maybe<Array<CatalogEquipmentItem>>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+};
+
+export type CatalogEquipmentPacket = {
+  __typename?: 'CatalogEquipmentPacket';
+  availableInEquipments?: Maybe<Array<CatalogEquipment>>;
+  createdAt: Scalars['DateTime']['output'];
+  equipment?: Maybe<CatalogEquipment>;
+  equipmentId?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  includedInEquipments?: Maybe<Array<CatalogEquipment>>;
+  items?: Maybe<Array<CatalogEquipmentItem>>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  /** Price in cents */
+  price: Scalars['Int']['output'];
+};
+
+export type CatalogEquipmentPaidItem = {
+  __typename?: 'CatalogEquipmentPaidItem';
+  createdAt: Scalars['DateTime']['output'];
+  equipment?: Maybe<CatalogEquipment>;
+  equipmentId?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  item?: Maybe<CatalogEquipmentItem>;
+  itemId?: Maybe<Scalars['String']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  /** Price in cents */
+  price: Scalars['Int']['output'];
+};
+
+/** Type/purpose of a catalog image */
+export enum CatalogImageType {
+  Detail = 'DETAIL',
+  Exterior = 'EXTERIOR',
+  Gallery_360 = 'GALLERY_360',
+  Hero = 'HERO',
+  Interior = 'INTERIOR',
+  Thumbnail = 'THUMBNAIL'
 }
 
 export type CatalogModel = {
@@ -543,6 +625,8 @@ export type CatalogModelGeneration = {
   bodyType?: Maybe<CatalogBodyType>;
   brand?: Maybe<CatalogBrand>;
   brandId?: Maybe<Scalars['String']['output']>;
+  colors?: Maybe<Array<CatalogModelGenerationColor>>;
+  configurations?: Maybe<Array<CatalogModelGenerationConfiguration>>;
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
   engines?: Maybe<Array<CatalogEngine>>;
@@ -552,6 +636,7 @@ export type CatalogModelGeneration = {
   /** Height in mm */
   height?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
+  images?: Maybe<Array<CatalogModelGenerationImage>>;
   isActive: Scalars['Boolean']['output'];
   legacySlug?: Maybe<Scalars['String']['output']>;
   legacySystemId?: Maybe<Scalars['String']['output']>;
@@ -574,6 +659,60 @@ export type CatalogModelGeneration = {
   wheelbase?: Maybe<Scalars['Int']['output']>;
   /** Width in mm */
   width?: Maybe<Scalars['Int']['output']>;
+};
+
+export type CatalogModelGenerationColor = {
+  __typename?: 'CatalogModelGenerationColor';
+  color: CatalogColor;
+  colorId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  generation: CatalogModelGeneration;
+  generationId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  /** Price in cents */
+  price: Scalars['Int']['output'];
+};
+
+export type CatalogModelGenerationConfiguration = {
+  __typename?: 'CatalogModelGenerationConfiguration';
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  engine?: Maybe<CatalogEngine>;
+  engineId?: Maybe<Scalars['String']['output']>;
+  equipment?: Maybe<CatalogEquipment>;
+  equipmentId?: Maybe<Scalars['String']['output']>;
+  generation: CatalogModelGeneration;
+  generationId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  /** Price from (base price) */
+  priceFrom: Scalars['Float']['output'];
+};
+
+export type CatalogModelGenerationImage = {
+  __typename?: 'CatalogModelGenerationImage';
+  active: Scalars['Boolean']['output'];
+  /** Description/alt text for SEO */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Exterior color for this image */
+  exteriorColor?: Maybe<CatalogColor>;
+  exteriorColorId?: Maybe<Scalars['String']['output']>;
+  /** 360 gallery frame position (0-35 for 36 frames) */
+  galleryPosition?: Maybe<Scalars['Int']['output']>;
+  generation: CatalogModelGeneration;
+  generationId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  image: File;
+  imageId: Scalars['String']['output'];
+  /** Type/purpose of this image */
+  imageType: CatalogImageType;
+  /** Interior color for this image */
+  interiorColor?: Maybe<CatalogColor>;
+  interiorColorId?: Maybe<Scalars['String']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
+  /** Display order */
+  order: Scalars['Int']['output'];
 };
 
 export type CreateCalculationInput = {
@@ -695,6 +834,80 @@ export type CreateCatalogEngineInput = {
   weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type CreateCatalogEquipmentInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  customText?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  modelGenerationId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  standard?: Scalars['Boolean']['input'];
+};
+
+export type CreateCatalogEquipmentItemCategoryInput = {
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type CreateCatalogEquipmentItemInput = {
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type CreateCatalogEquipmentPacketInput = {
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  /** Price in cents */
+  price: Scalars['Int']['input'];
+};
+
+export type CreateCatalogEquipmentPaidItemInput = {
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  itemId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Price in cents */
+  price: Scalars['Int']['input'];
+};
+
+export type CreateCatalogModelGenerationColorInput = {
+  colorId: Scalars['String']['input'];
+  generationId: Scalars['String']['input'];
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Price in cents */
+  price: Scalars['Int']['input'];
+};
+
+export type CreateCatalogModelGenerationConfigurationInput = {
+  active: Scalars['Boolean']['input'];
+  engineId?: InputMaybe<Scalars['String']['input']>;
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  generationId: Scalars['String']['input'];
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Price from (base price) */
+  priceFrom: Scalars['Float']['input'];
+};
+
+export type CreateCatalogModelGenerationImageInput = {
+  active?: Scalars['Boolean']['input'];
+  /** Description/alt text for SEO */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** Exterior color ID for this image */
+  exteriorColorId?: InputMaybe<Scalars['String']['input']>;
+  /** 360 gallery frame position (0-35) */
+  galleryPosition?: InputMaybe<Scalars['Int']['input']>;
+  generationId: Scalars['String']['input'];
+  imageId: Scalars['String']['input'];
+  /** Type/purpose of this image */
+  imageType?: CatalogImageType;
+  /** Interior color ID for this image */
+  interiorColorId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Display order */
+  order?: Scalars['Int']['input'];
+};
+
 export type CreateCatalogModelGenerationInput = {
   bodyType?: InputMaybe<CatalogBodyType>;
   brandId?: InputMaybe<Scalars['String']['input']>;
@@ -795,20 +1008,87 @@ export type CreateLeasingCompanyInput = {
   name: Scalars['String']['input'];
 };
 
+export type CreateOfferAdditionalEquipmentItemInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type CreateOfferColorVariantInput = {
+  colorName?: InputMaybe<Scalars['String']['input']>;
+  exteriorColorId: Scalars['String']['input'];
+  galleryId?: InputMaybe<Scalars['String']['input']>;
+  interiorColorId?: InputMaybe<Scalars['String']['input']>;
+  isDefault?: Scalars['Boolean']['input'];
+  offerId: Scalars['String']['input'];
+};
+
+export type CreateOfferLeasingVariantInput = {
+  annualMileageLimit: Scalars['Int']['input'];
+  currency?: Scalars['String']['input'];
+  downPayment?: InputMaybe<Scalars['Int']['input']>;
+  freeMileageLimit?: InputMaybe<Scalars['Int']['input']>;
+  hasAssistanceServiceIncluded?: Scalars['Boolean']['input'];
+  hasGapIncluded?: Scalars['Boolean']['input'];
+  hasGlassInsuranceIncluded?: Scalars['Boolean']['input'];
+  hasHighwayIncluded?: Scalars['Boolean']['input'];
+  hasServiceIncluded?: Scalars['Boolean']['input'];
+  hasWinterTyresIncluded?: Scalars['Boolean']['input'];
+  isActive?: Scalars['Boolean']['input'];
+  isBestOffer?: Scalars['Boolean']['input'];
+  isDefault?: Scalars['Boolean']['input'];
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
+  leasingDurationMonths: Scalars['Int']['input'];
+  offerId: Scalars['String']['input'];
+  originalPriceWithVat?: InputMaybe<Scalars['Int']['input']>;
+  originalPriceWithoutVat?: InputMaybe<Scalars['Int']['input']>;
+  pricePeriod?: PricePeriod;
+  priceWithVat: Scalars['Int']['input'];
+  priceWithoutVat: Scalars['Int']['input'];
+  securityDeposit?: InputMaybe<Scalars['Int']['input']>;
+  setupFee?: InputMaybe<Scalars['Int']['input']>;
+  slug: Scalars['String']['input'];
+  validFrom?: InputMaybe<Scalars['String']['input']>;
+  validTo?: InputMaybe<Scalars['String']['input']>;
+  vatRate?: Scalars['Float']['input'];
+  wearTolerancePercent?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CreateOfferOptionalEquipmentInput = {
+  additionalPrice?: InputMaybe<Scalars['Int']['input']>;
+  currency?: Scalars['String']['input'];
+  equipmentItemId: Scalars['String']['input'];
+  isAvailable?: Scalars['Boolean']['input'];
+  isDefaultSelected?: Scalars['Boolean']['input'];
+  offerId: Scalars['String']['input'];
+  pricePeriod?: PricePeriod;
+};
+
 export type CreateOperationalLeasingOfferInput = {
   annualMileageLimit: Scalars['Int']['input'];
   brandId?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  disableCustomGallery?: InputMaybe<Scalars['Boolean']['input']>;
   downPaymentLeasing?: InputMaybe<Scalars['Float']['input']>;
+  engineId: Scalars['String']['input'];
+  fileId?: InputMaybe<Scalars['String']['input']>;
   hasAssistanceServiceIncluded?: InputMaybe<Scalars['Boolean']['input']>;
   hasGapIncluded?: InputMaybe<Scalars['Boolean']['input']>;
   hasServiceIncluded?: InputMaybe<Scalars['Boolean']['input']>;
   hasWinterTyresIncluded?: InputMaybe<Scalars['Boolean']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
+  isPromoted?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommendedForActionPage?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommendedForBrand?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommendedForModel?: InputMaybe<Scalars['Boolean']['input']>;
   leasingDurationMonths: Scalars['Int']['input'];
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
   modelGenerationId: Scalars['String']['input'];
   modelId?: InputMaybe<Scalars['String']['input']>;
   monthlyPayment: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  publicId?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   totalPrice: Scalars['Float']['input'];
 };
@@ -855,9 +1135,14 @@ export type DirectPurchaseOffer = {
   customer?: Maybe<User>;
   customerId?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  disableCustomGallery?: Maybe<Scalars['Boolean']['output']>;
   discountAmount?: Maybe<Scalars['Float']['output']>;
   discountPercentage?: Maybe<Scalars['Float']['output']>;
   downPaymentLeasing?: Maybe<Scalars['Float']['output']>;
+  engine?: Maybe<CatalogEngine>;
+  engineId?: Maybe<Scalars['String']['output']>;
+  file?: Maybe<File>;
+  fileId?: Maybe<Scalars['String']['output']>;
   financingAvailable?: Maybe<Scalars['Boolean']['output']>;
   hasAssistanceServiceIncluded?: Maybe<Scalars['Boolean']['output']>;
   hasGapIncluded?: Maybe<Scalars['Boolean']['output']>;
@@ -867,13 +1152,21 @@ export type DirectPurchaseOffer = {
   includesWarranty?: Maybe<Scalars['Boolean']['output']>;
   internalNotes?: Maybe<Scalars['String']['output']>;
   isActive: Scalars['Boolean']['output'];
+  isPrivate: Scalars['Boolean']['output'];
+  isPromoted: Scalars['Boolean']['output'];
   isPublic: Scalars['Boolean']['output'];
+  isRecommendedForActionPage: Scalars['Boolean']['output'];
+  isRecommendedForBrand: Scalars['Boolean']['output'];
+  isRecommendedForModel: Scalars['Boolean']['output'];
   leasingDurationMonths?: Maybe<Scalars['Int']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
   model?: Maybe<CatalogModel>;
   modelGeneration: CatalogModelGeneration;
   modelGenerationId: Scalars['String']['output'];
   modelId?: Maybe<Scalars['String']['output']>;
   monthlyPayment?: Maybe<Scalars['Float']['output']>;
+  note?: Maybe<Scalars['String']['output']>;
+  publicId?: Maybe<Scalars['String']['output']>;
   responseDeadline?: Maybe<Scalars['DateTime']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   status?: Maybe<IndividualOfferStatus>;
@@ -914,6 +1207,7 @@ export type File = {
   checksum: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   extension: Scalars['String']['output'];
+  generationImages?: Maybe<Array<CatalogModelGenerationImage>>;
   height?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
   isImage: Scalars['Boolean']['output'];
@@ -977,9 +1271,14 @@ export type IndividualOffer = {
   customer?: Maybe<User>;
   customerId?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  disableCustomGallery?: Maybe<Scalars['Boolean']['output']>;
   discountAmount?: Maybe<Scalars['Float']['output']>;
   discountPercentage?: Maybe<Scalars['Float']['output']>;
   downPaymentLeasing?: Maybe<Scalars['Float']['output']>;
+  engine?: Maybe<CatalogEngine>;
+  engineId?: Maybe<Scalars['String']['output']>;
+  file?: Maybe<File>;
+  fileId?: Maybe<Scalars['String']['output']>;
   financingAvailable?: Maybe<Scalars['Boolean']['output']>;
   hasAssistanceServiceIncluded?: Maybe<Scalars['Boolean']['output']>;
   hasGapIncluded?: Maybe<Scalars['Boolean']['output']>;
@@ -989,13 +1288,21 @@ export type IndividualOffer = {
   includesWarranty?: Maybe<Scalars['Boolean']['output']>;
   internalNotes?: Maybe<Scalars['String']['output']>;
   isActive: Scalars['Boolean']['output'];
+  isPrivate: Scalars['Boolean']['output'];
+  isPromoted: Scalars['Boolean']['output'];
   isPublic: Scalars['Boolean']['output'];
+  isRecommendedForActionPage: Scalars['Boolean']['output'];
+  isRecommendedForBrand: Scalars['Boolean']['output'];
+  isRecommendedForModel: Scalars['Boolean']['output'];
   leasingDurationMonths?: Maybe<Scalars['Int']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
   model?: Maybe<CatalogModel>;
   modelGeneration: CatalogModelGeneration;
   modelGenerationId: Scalars['String']['output'];
   modelId?: Maybe<Scalars['String']['output']>;
   monthlyPayment?: Maybe<Scalars['Float']['output']>;
+  note?: Maybe<Scalars['String']['output']>;
+  publicId?: Maybe<Scalars['String']['output']>;
   responseDeadline?: Maybe<Scalars['DateTime']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   status?: Maybe<IndividualOfferStatus>;
@@ -1054,8 +1361,20 @@ export type Mutation = {
   createCarRequestLog: CarRequestLog;
   createCatalogBrand: CatalogBrand;
   createCatalogColor: CatalogColor;
+  createCatalogEquipment: CatalogEquipment;
+  createCatalogEquipmentItem: CatalogEquipmentItem;
+  createCatalogEquipmentItemCategory: CatalogEquipmentItemCategory;
+  createCatalogEquipmentPacket: CatalogEquipmentPacket;
+  /** Create a new equipment paid item (Admin only) */
+  createCatalogEquipmentPaidItem: CatalogEquipmentPaidItem;
   createCatalogModel: CatalogModel;
   createCatalogModelGeneration: CatalogModelGeneration;
+  /** Create a new generation color (Admin only) */
+  createCatalogModelGenerationColor: CatalogModelGenerationColor;
+  /** Create a new generation configuration (Admin only) */
+  createCatalogModelGenerationConfiguration: CatalogModelGenerationConfiguration;
+  /** Create a new generation image (Admin only) */
+  createCatalogModelGenerationImage: CatalogModelGenerationImage;
   /** Create a new color variant (admin only) */
   createColorVariant: OfferColorVariant;
   /** Create a new direct purchase offer (admin only) */
@@ -1070,6 +1389,10 @@ export type Mutation = {
   createLeasingCompany: LeasingCompany;
   /** Create a new leasing variant (admin only) */
   createLeasingVariant: OfferLeasingVariant;
+  createOfferAdditionalEquipmentItem: OfferAdditionalEquipmentItem;
+  createOfferColorVariant: OfferColorVariant;
+  createOfferLeasingVariant: OfferLeasingVariant;
+  createOfferOptionalEquipment: OfferOptionalEquipment;
   createOnboarding: Onboarding;
   /** Create a new operational leasing offer (admin only) */
   createOperationalLeasingOffer: OperationalLeasingOffer;
@@ -1081,8 +1404,20 @@ export type Mutation = {
   deleteCarRequest: Scalars['Boolean']['output'];
   deleteCatalogBrand: Scalars['Boolean']['output'];
   deleteCatalogColor: Scalars['Boolean']['output'];
+  deleteCatalogEquipment: Scalars['Boolean']['output'];
+  deleteCatalogEquipmentItem: Scalars['Boolean']['output'];
+  deleteCatalogEquipmentItemCategory: Scalars['Boolean']['output'];
+  deleteCatalogEquipmentPacket: Scalars['Boolean']['output'];
+  /** Delete an equipment paid item (Admin only) */
+  deleteCatalogEquipmentPaidItem: Scalars['Boolean']['output'];
   deleteCatalogModel: Scalars['Boolean']['output'];
   deleteCatalogModelGeneration: Scalars['Boolean']['output'];
+  /** Delete a generation color (Admin only) */
+  deleteCatalogModelGenerationColor: Scalars['Boolean']['output'];
+  /** Delete a generation configuration (Admin only) */
+  deleteCatalogModelGenerationConfiguration: Scalars['Boolean']['output'];
+  /** Delete a generation image (Admin only) */
+  deleteCatalogModelGenerationImage: Scalars['Boolean']['output'];
   /** Delete a color variant (admin only) */
   deleteColorVariant: Scalars['Boolean']['output'];
   deleteDocumentTemplate: Scalars['Boolean']['output'];
@@ -1095,6 +1430,10 @@ export type Mutation = {
   deleteLeasingVariant: Scalars['Boolean']['output'];
   /** Delete an offer (admin only) */
   deleteOffer: Scalars['Boolean']['output'];
+  deleteOfferAdditionalEquipmentItem: Scalars['Boolean']['output'];
+  deleteOfferColorVariant: Scalars['Boolean']['output'];
+  deleteOfferLeasingVariant: Scalars['Boolean']['output'];
+  deleteOfferOptionalEquipment: Scalars['Boolean']['output'];
   /** Delete optional equipment (admin only) */
   deleteOptionalEquipment: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
@@ -1116,8 +1455,20 @@ export type Mutation = {
   updateCarRequest: CarRequest;
   updateCatalogBrand: CatalogBrand;
   updateCatalogColor: CatalogColor;
+  updateCatalogEquipment: CatalogEquipment;
+  updateCatalogEquipmentItem: CatalogEquipmentItem;
+  updateCatalogEquipmentItemCategory: CatalogEquipmentItemCategory;
+  updateCatalogEquipmentPacket: CatalogEquipmentPacket;
+  /** Update an equipment paid item (Admin only) */
+  updateCatalogEquipmentPaidItem: CatalogEquipmentPaidItem;
   updateCatalogModel: CatalogModel;
   updateCatalogModelGeneration: CatalogModelGeneration;
+  /** Update a generation color (Admin only) */
+  updateCatalogModelGenerationColor: CatalogModelGenerationColor;
+  /** Update a generation configuration (Admin only) */
+  updateCatalogModelGenerationConfiguration: CatalogModelGenerationConfiguration;
+  /** Update a generation image (Admin only) */
+  updateCatalogModelGenerationImage: CatalogModelGenerationImage;
   updateDocumentTemplate: DocumentTemplate;
   updateEngine: CatalogEngine;
   updateEquipmentItem: CatalogBrandEquipmentItem;
@@ -1127,6 +1478,10 @@ export type Mutation = {
   updateLeasingCompany: LeasingCompany;
   /** Update an existing offer (admin only) */
   updateOffer: Offer;
+  updateOfferAdditionalEquipmentItem: OfferAdditionalEquipmentItem;
+  updateOfferColorVariant: OfferColorVariant;
+  updateOfferLeasingVariant: OfferLeasingVariant;
+  updateOfferOptionalEquipment: OfferOptionalEquipment;
   updateOfferQuote: CarRequestCalculationOffer;
   updateOnboardingStatus: Scalars['Boolean']['output'];
   updateUser: User;
@@ -1182,6 +1537,31 @@ export type MutationCreateCatalogColorArgs = {
 };
 
 
+export type MutationCreateCatalogEquipmentArgs = {
+  input: CreateCatalogEquipmentInput;
+};
+
+
+export type MutationCreateCatalogEquipmentItemArgs = {
+  input: CreateCatalogEquipmentItemInput;
+};
+
+
+export type MutationCreateCatalogEquipmentItemCategoryArgs = {
+  input: CreateCatalogEquipmentItemCategoryInput;
+};
+
+
+export type MutationCreateCatalogEquipmentPacketArgs = {
+  input: CreateCatalogEquipmentPacketInput;
+};
+
+
+export type MutationCreateCatalogEquipmentPaidItemArgs = {
+  input: CreateCatalogEquipmentPaidItemInput;
+};
+
+
 export type MutationCreateCatalogModelArgs = {
   input: CreateCatalogModelInput;
 };
@@ -1189,6 +1569,21 @@ export type MutationCreateCatalogModelArgs = {
 
 export type MutationCreateCatalogModelGenerationArgs = {
   input: CreateCatalogModelGenerationInput;
+};
+
+
+export type MutationCreateCatalogModelGenerationColorArgs = {
+  input: CreateCatalogModelGenerationColorInput;
+};
+
+
+export type MutationCreateCatalogModelGenerationConfigurationArgs = {
+  input: CreateCatalogModelGenerationConfigurationInput;
+};
+
+
+export type MutationCreateCatalogModelGenerationImageArgs = {
+  input: CreateCatalogModelGenerationImageInput;
 };
 
 
@@ -1247,9 +1642,30 @@ export type MutationCreateLeasingVariantArgs = {
   isBestOffer?: InputMaybe<Scalars['Boolean']['input']>;
   isDefault?: InputMaybe<Scalars['Boolean']['input']>;
   leasingDurationMonths: Scalars['Float']['input'];
-  monthlyPayment: Scalars['Float']['input'];
   offerId: Scalars['String']['input'];
-  totalPrice: Scalars['Float']['input'];
+  priceWithVat: Scalars['Float']['input'];
+  priceWithoutVat: Scalars['Float']['input'];
+  slug: Scalars['String']['input'];
+};
+
+
+export type MutationCreateOfferAdditionalEquipmentItemArgs = {
+  input: CreateOfferAdditionalEquipmentItemInput;
+};
+
+
+export type MutationCreateOfferColorVariantArgs = {
+  input: CreateOfferColorVariantInput;
+};
+
+
+export type MutationCreateOfferLeasingVariantArgs = {
+  input: CreateOfferLeasingVariantInput;
+};
+
+
+export type MutationCreateOfferOptionalEquipmentArgs = {
+  input: CreateOfferOptionalEquipmentInput;
 };
 
 
@@ -1265,9 +1681,8 @@ export type MutationCreateOperationalLeasingOfferArgs = {
 
 
 export type MutationCreateOptionalEquipmentArgs = {
-  additionalPrice: Scalars['Float']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
+  additionalPrice?: InputMaybe<Scalars['Float']['input']>;
+  equipmentItemId: Scalars['String']['input'];
   offerId: Scalars['String']['input'];
 };
 
@@ -1302,12 +1717,52 @@ export type MutationDeleteCatalogColorArgs = {
 };
 
 
+export type MutationDeleteCatalogEquipmentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogEquipmentItemArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogEquipmentItemCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogEquipmentPacketArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogEquipmentPaidItemArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationDeleteCatalogModelArgs = {
   id: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteCatalogModelGenerationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogModelGenerationColorArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogModelGenerationConfigurationArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCatalogModelGenerationImageArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -1354,6 +1809,26 @@ export type MutationDeleteLeasingVariantArgs = {
 
 export type MutationDeleteOfferArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteOfferAdditionalEquipmentItemArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteOfferColorVariantArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteOfferLeasingVariantArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteOfferOptionalEquipmentArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1459,6 +1934,36 @@ export type MutationUpdateCatalogColorArgs = {
 };
 
 
+export type MutationUpdateCatalogEquipmentArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEquipmentInput;
+};
+
+
+export type MutationUpdateCatalogEquipmentItemArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEquipmentItemInput;
+};
+
+
+export type MutationUpdateCatalogEquipmentItemCategoryArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEquipmentItemCategoryInput;
+};
+
+
+export type MutationUpdateCatalogEquipmentPacketArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEquipmentPacketInput;
+};
+
+
+export type MutationUpdateCatalogEquipmentPaidItemArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEquipmentPaidItemInput;
+};
+
+
 export type MutationUpdateCatalogModelArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogModelInput;
@@ -1468,6 +1973,24 @@ export type MutationUpdateCatalogModelArgs = {
 export type MutationUpdateCatalogModelGenerationArgs = {
   id: Scalars['String']['input'];
   input: UpdateCatalogModelGenerationInput;
+};
+
+
+export type MutationUpdateCatalogModelGenerationColorArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogModelGenerationColorInput;
+};
+
+
+export type MutationUpdateCatalogModelGenerationConfigurationArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogModelGenerationConfigurationInput;
+};
+
+
+export type MutationUpdateCatalogModelGenerationImageArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateCatalogModelGenerationImageInput;
 };
 
 
@@ -1513,6 +2036,30 @@ export type MutationUpdateOfferArgs = {
 };
 
 
+export type MutationUpdateOfferAdditionalEquipmentItemArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateOfferAdditionalEquipmentItemInput;
+};
+
+
+export type MutationUpdateOfferColorVariantArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateOfferColorVariantInput;
+};
+
+
+export type MutationUpdateOfferLeasingVariantArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateOfferLeasingVariantInput;
+};
+
+
+export type MutationUpdateOfferOptionalEquipmentArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateOfferOptionalEquipmentInput;
+};
+
+
 export type MutationUpdateOfferQuoteArgs = {
   input: UpdateOfferQuoteInput;
   offerId: Scalars['ID']['input'];
@@ -1554,9 +2101,14 @@ export type Offer = {
   customer?: Maybe<User>;
   customerId?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  disableCustomGallery?: Maybe<Scalars['Boolean']['output']>;
   discountAmount?: Maybe<Scalars['Float']['output']>;
   discountPercentage?: Maybe<Scalars['Float']['output']>;
   downPaymentLeasing?: Maybe<Scalars['Float']['output']>;
+  engine?: Maybe<CatalogEngine>;
+  engineId?: Maybe<Scalars['String']['output']>;
+  file?: Maybe<File>;
+  fileId?: Maybe<Scalars['String']['output']>;
   financingAvailable?: Maybe<Scalars['Boolean']['output']>;
   hasAssistanceServiceIncluded?: Maybe<Scalars['Boolean']['output']>;
   hasGapIncluded?: Maybe<Scalars['Boolean']['output']>;
@@ -1566,13 +2118,21 @@ export type Offer = {
   includesWarranty?: Maybe<Scalars['Boolean']['output']>;
   internalNotes?: Maybe<Scalars['String']['output']>;
   isActive: Scalars['Boolean']['output'];
+  isPrivate: Scalars['Boolean']['output'];
+  isPromoted: Scalars['Boolean']['output'];
   isPublic: Scalars['Boolean']['output'];
+  isRecommendedForActionPage: Scalars['Boolean']['output'];
+  isRecommendedForBrand: Scalars['Boolean']['output'];
+  isRecommendedForModel: Scalars['Boolean']['output'];
   leasingDurationMonths?: Maybe<Scalars['Int']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
   model?: Maybe<CatalogModel>;
   modelGeneration: CatalogModelGeneration;
   modelGenerationId: Scalars['String']['output'];
   modelId?: Maybe<Scalars['String']['output']>;
   monthlyPayment?: Maybe<Scalars['Float']['output']>;
+  note?: Maybe<Scalars['String']['output']>;
+  publicId?: Maybe<Scalars['String']['output']>;
   responseDeadline?: Maybe<Scalars['DateTime']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   status?: Maybe<IndividualOfferStatus>;
@@ -1580,6 +2140,16 @@ export type Offer = {
   type: OfferType;
   updatedAt: Scalars['DateTime']['output'];
   warrantyYears?: Maybe<Scalars['Int']['output']>;
+};
+
+export type OfferAdditionalEquipmentItem = {
+  __typename?: 'OfferAdditionalEquipmentItem';
+  category?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type OfferCalculation = {
@@ -1621,8 +2191,8 @@ export type OfferColorVariant = {
   exteriorColorId: Scalars['String']['output'];
   galleryId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  interiorColor: CatalogColor;
-  interiorColorId: Scalars['String']['output'];
+  interiorColor?: Maybe<CatalogColor>;
+  interiorColorId?: Maybe<Scalars['String']['output']>;
   isDefault: Scalars['Boolean']['output'];
   offer: OperationalLeasingOffer;
   offerId: Scalars['String']['output'];
@@ -1649,7 +2219,8 @@ export type OfferLeasingVariant = {
   __typename?: 'OfferLeasingVariant';
   annualMileageLimit: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
-  downPayment?: Maybe<Scalars['Float']['output']>;
+  currency: Scalars['String']['output'];
+  downPayment?: Maybe<Scalars['Int']['output']>;
   freeMileageLimit?: Maybe<Scalars['Int']['output']>;
   hasAssistanceServiceIncluded: Scalars['Boolean']['output'];
   hasGapIncluded: Scalars['Boolean']['output'];
@@ -1658,31 +2229,42 @@ export type OfferLeasingVariant = {
   hasServiceIncluded: Scalars['Boolean']['output'];
   hasWinterTyresIncluded: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
   isBestOffer: Scalars['Boolean']['output'];
   isDefault: Scalars['Boolean']['output'];
   leasingCompany?: Maybe<LeasingCompany>;
   leasingCompanyId?: Maybe<Scalars['String']['output']>;
   leasingDurationMonths: Scalars['Int']['output'];
-  monthlyPayment: Scalars['Float']['output'];
   offer: OperationalLeasingOffer;
   offerId: Scalars['String']['output'];
-  originalPrice?: Maybe<Scalars['Float']['output']>;
-  slug?: Maybe<Scalars['String']['output']>;
-  totalPrice: Scalars['Float']['output'];
+  originalPriceWithVat?: Maybe<Scalars['Int']['output']>;
+  originalPriceWithoutVat?: Maybe<Scalars['Int']['output']>;
+  pricePeriod: PricePeriod;
+  priceWithVat?: Maybe<Scalars['Int']['output']>;
+  priceWithoutVat?: Maybe<Scalars['Int']['output']>;
+  securityDeposit?: Maybe<Scalars['Int']['output']>;
+  setupFee?: Maybe<Scalars['Int']['output']>;
+  slug: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
-  wearTolerance?: Maybe<Scalars['Boolean']['output']>;
+  validFrom?: Maybe<Scalars['DateTime']['output']>;
+  validTo?: Maybe<Scalars['DateTime']['output']>;
+  vatRate: Scalars['Float']['output'];
+  wearTolerancePercent?: Maybe<Scalars['Int']['output']>;
 };
 
 export type OfferOptionalEquipment = {
   __typename?: 'OfferOptionalEquipment';
-  additionalPrice: Scalars['Float']['output'];
+  additionalPrice?: Maybe<Scalars['Int']['output']>;
   createdAt: Scalars['DateTime']['output'];
-  description?: Maybe<Scalars['String']['output']>;
+  currency: Scalars['String']['output'];
+  equipmentItem?: Maybe<OfferAdditionalEquipmentItem>;
+  equipmentItemId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isAvailable: Scalars['Boolean']['output'];
-  name: Scalars['String']['output'];
+  isDefaultSelected: Scalars['Boolean']['output'];
   offer: OperationalLeasingOffer;
   offerId: Scalars['String']['output'];
+  pricePeriod: PricePeriod;
 };
 
 /** Type of offer */
@@ -1752,9 +2334,14 @@ export type OperationalLeasingOffer = {
   customer?: Maybe<User>;
   customerId?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  disableCustomGallery?: Maybe<Scalars['Boolean']['output']>;
   discountAmount?: Maybe<Scalars['Float']['output']>;
   discountPercentage?: Maybe<Scalars['Float']['output']>;
   downPaymentLeasing?: Maybe<Scalars['Float']['output']>;
+  engine?: Maybe<CatalogEngine>;
+  engineId?: Maybe<Scalars['String']['output']>;
+  file?: Maybe<File>;
+  fileId?: Maybe<Scalars['String']['output']>;
   financingAvailable?: Maybe<Scalars['Boolean']['output']>;
   hasAssistanceServiceIncluded?: Maybe<Scalars['Boolean']['output']>;
   hasGapIncluded?: Maybe<Scalars['Boolean']['output']>;
@@ -1764,14 +2351,22 @@ export type OperationalLeasingOffer = {
   includesWarranty?: Maybe<Scalars['Boolean']['output']>;
   internalNotes?: Maybe<Scalars['String']['output']>;
   isActive: Scalars['Boolean']['output'];
+  isPrivate: Scalars['Boolean']['output'];
+  isPromoted: Scalars['Boolean']['output'];
   isPublic: Scalars['Boolean']['output'];
+  isRecommendedForActionPage: Scalars['Boolean']['output'];
+  isRecommendedForBrand: Scalars['Boolean']['output'];
+  isRecommendedForModel: Scalars['Boolean']['output'];
   leasingDurationMonths?: Maybe<Scalars['Int']['output']>;
+  legacySystemId?: Maybe<Scalars['String']['output']>;
   model?: Maybe<CatalogModel>;
   modelGeneration: CatalogModelGeneration;
   modelGenerationId: Scalars['String']['output'];
   modelId?: Maybe<Scalars['String']['output']>;
   monthlyPayment?: Maybe<Scalars['Float']['output']>;
+  note?: Maybe<Scalars['String']['output']>;
   optionalEquipment?: Maybe<Array<OfferOptionalEquipment>>;
+  publicId?: Maybe<Scalars['String']['output']>;
   responseDeadline?: Maybe<Scalars['DateTime']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
   status?: Maybe<IndividualOfferStatus>;
@@ -1793,6 +2388,12 @@ export type PasswordResetResponse = {
   message: Scalars['String']['output'];
   success: Scalars['Boolean']['output'];
 };
+
+/** Period for which the price is valid */
+export enum PricePeriod {
+  Monthly = 'MONTHLY',
+  OneTime = 'ONE_TIME'
+}
 
 export type Query = {
   __typename?: 'Query';
@@ -1827,11 +2428,60 @@ export type Query = {
   catalogColorBySlug: CatalogColor;
   catalogColors: Array<CatalogColor>;
   catalogColorsByType: Array<CatalogColor>;
+  catalogEquipment: Array<CatalogEquipment>;
+  catalogEquipmentById: CatalogEquipment;
+  catalogEquipmentByModelGenerationId: Array<CatalogEquipment>;
+  catalogEquipmentItemById: CatalogEquipmentItem;
+  catalogEquipmentItemCategories: Array<CatalogEquipmentItemCategory>;
+  catalogEquipmentItemCategoryById: CatalogEquipmentItemCategory;
+  catalogEquipmentItems: Array<CatalogEquipmentItem>;
+  catalogEquipmentItemsByCategoryId: Array<CatalogEquipmentItem>;
+  catalogEquipmentPacketById: CatalogEquipmentPacket;
+  catalogEquipmentPackets: Array<CatalogEquipmentPacket>;
+  catalogEquipmentPacketsByEquipmentId: Array<CatalogEquipmentPacket>;
+  /** Get a single equipment paid item by ID */
+  catalogEquipmentPaidItemById: CatalogEquipmentPaidItem;
+  /** Get all equipment paid items with optional filters */
+  catalogEquipmentPaidItems: Array<CatalogEquipmentPaidItem>;
+  /** Get all paid items for a specific equipment */
+  catalogEquipmentPaidItemsByEquipmentId: Array<CatalogEquipmentPaidItem>;
+  /** Get all paid item prices for a specific equipment item */
+  catalogEquipmentPaidItemsByItemId: Array<CatalogEquipmentPaidItem>;
   catalogModel: CatalogModel;
   catalogModelBySlug: CatalogModel;
   catalogModelGeneration: CatalogModelGeneration;
+  /** Get 360° gallery images for a specific generation and optional exterior color */
+  catalogModelGeneration360Gallery: Array<CatalogModelGenerationImage>;
   catalogModelGenerationByLegacySlug: CatalogModelGeneration;
   catalogModelGenerationBySlug: CatalogModelGeneration;
+  /** Get a single generation color by ID */
+  catalogModelGenerationColorById: CatalogModelGenerationColor;
+  /** Get all generation colors with optional filters */
+  catalogModelGenerationColors: Array<CatalogModelGenerationColor>;
+  /** Get all generations that have a specific color */
+  catalogModelGenerationColorsByColorId: Array<CatalogModelGenerationColor>;
+  /** Get all colors for a specific generation */
+  catalogModelGenerationColorsByGenerationId: Array<CatalogModelGenerationColor>;
+  /** Get a single configuration by ID */
+  catalogModelGenerationConfigurationById: CatalogModelGenerationConfiguration;
+  /** Get all generation configurations with optional filters */
+  catalogModelGenerationConfigurations: Array<CatalogModelGenerationConfiguration>;
+  /** Get all configurations with specific engine */
+  catalogModelGenerationConfigurationsByEngineId: Array<CatalogModelGenerationConfiguration>;
+  /** Get all configurations with specific equipment */
+  catalogModelGenerationConfigurationsByEquipmentId: Array<CatalogModelGenerationConfiguration>;
+  /** Get all configurations for a specific generation */
+  catalogModelGenerationConfigurationsByGenerationId: Array<CatalogModelGenerationConfiguration>;
+  /** Get a single generation image by ID */
+  catalogModelGenerationImageById: CatalogModelGenerationImage;
+  /** Get all generation images with optional filters */
+  catalogModelGenerationImages: Array<CatalogModelGenerationImage>;
+  /** Get images for a specific generation and color combination */
+  catalogModelGenerationImagesByColorCombination: Array<CatalogModelGenerationImage>;
+  /** Get all images for a specific generation */
+  catalogModelGenerationImagesByGenerationId: Array<CatalogModelGenerationImage>;
+  /** Get all generations using a specific image */
+  catalogModelGenerationImagesByImageId: Array<CatalogModelGenerationImage>;
   catalogModelGenerations: Array<CatalogModelGeneration>;
   catalogModelGenerationsByModelId: Array<CatalogModelGeneration>;
   catalogModels: Array<CatalogModel>;
@@ -1867,8 +2517,22 @@ export type Query = {
   leasingVariantsByOffer: Array<OfferLeasingVariant>;
   /** Get a single offer by ID (admin only) */
   offer: Offer;
+  offerAdditionalEquipmentItemAdmin: OfferAdditionalEquipmentItem;
+  offerAdditionalEquipmentItemsAdmin: Array<OfferAdditionalEquipmentItem>;
+  offerAdditionalEquipmentItemsByCategoryAdmin: Array<OfferAdditionalEquipmentItem>;
   /** Get a single offer by slug (admin only) */
   offerBySlug: Offer;
+  offerColorVariantAdmin: OfferColorVariant;
+  offerColorVariantsAdmin: Array<OfferColorVariant>;
+  offerColorVariantsByOfferAdmin: Array<OfferColorVariant>;
+  offerLeasingVariantAdmin: OfferLeasingVariant;
+  offerLeasingVariantBySlugAdmin?: Maybe<OfferLeasingVariant>;
+  offerLeasingVariantsAdmin: Array<OfferLeasingVariant>;
+  offerLeasingVariantsByOfferAdmin: Array<OfferLeasingVariant>;
+  offerOptionalEquipmentAdmin: OfferOptionalEquipment;
+  offerOptionalEquipmentAvailableByOfferAdmin: Array<OfferOptionalEquipment>;
+  offerOptionalEquipmentByOfferAdmin: Array<OfferOptionalEquipment>;
+  offerOptionalEquipmentListAdmin: Array<OfferOptionalEquipment>;
   /** Get all public offers for a specific model generation */
   offersByModelGeneration: Array<Offer>;
   onboarding: Onboarding;
@@ -1895,10 +2559,15 @@ export type Query = {
   searchBrandEquipments: Array<CatalogBrandEquipment>;
   searchCatalogBrands: Array<CatalogBrand>;
   searchCatalogColors: Array<CatalogColor>;
+  searchCatalogEquipment: Array<CatalogEquipment>;
+  searchCatalogEquipmentItemCategories: Array<CatalogEquipmentItemCategory>;
+  searchCatalogEquipmentItems: Array<CatalogEquipmentItem>;
+  searchCatalogEquipmentPackets: Array<CatalogEquipmentPacket>;
   searchCatalogModelGenerations: Array<CatalogModelGeneration>;
   searchCatalogModels: Array<CatalogModel>;
   searchEngines: Array<CatalogEngine>;
   searchEquipmentItems: Array<CatalogBrandEquipmentItem>;
+  searchOfferAdditionalEquipmentItemsAdmin: Array<OfferAdditionalEquipmentItem>;
   searchUsers: Array<User>;
   storageStats: StorageStats;
   user: User;
@@ -2055,6 +2724,93 @@ export type QueryCatalogColorsByTypeArgs = {
 };
 
 
+export type QueryCatalogEquipmentArgs = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  modelGenerationId?: InputMaybe<Scalars['String']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  standard?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryCatalogEquipmentByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentByModelGenerationIdArgs = {
+  modelGenerationId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentItemByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentItemCategoriesArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryCatalogEquipmentItemCategoryByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentItemsArgs = {
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryCatalogEquipmentItemsByCategoryIdArgs = {
+  categoryId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentPacketByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentPacketsArgs = {
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryCatalogEquipmentPacketsByEquipmentIdArgs = {
+  equipmentId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentPaidItemByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentPaidItemsArgs = {
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  itemId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryCatalogEquipmentPaidItemsByEquipmentIdArgs = {
+  equipmentId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogEquipmentPaidItemsByItemIdArgs = {
+  itemId: Scalars['String']['input'];
+};
+
+
 export type QueryCatalogModelArgs = {
   id: Scalars['String']['input'];
 };
@@ -2070,6 +2826,12 @@ export type QueryCatalogModelGenerationArgs = {
 };
 
 
+export type QueryCatalogModelGeneration360GalleryArgs = {
+  exteriorColorId?: InputMaybe<Scalars['String']['input']>;
+  generationId: Scalars['String']['input'];
+};
+
+
 export type QueryCatalogModelGenerationByLegacySlugArgs = {
   legacySlug: Scalars['String']['input'];
 };
@@ -2077,6 +2839,94 @@ export type QueryCatalogModelGenerationByLegacySlugArgs = {
 
 export type QueryCatalogModelGenerationBySlugArgs = {
   slug: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationColorByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationColorsArgs = {
+  colorId?: InputMaybe<Scalars['String']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryCatalogModelGenerationColorsByColorIdArgs = {
+  colorId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationColorsByGenerationIdArgs = {
+  generationId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationConfigurationByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationConfigurationsArgs = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  engineId?: InputMaybe<Scalars['String']['input']>;
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryCatalogModelGenerationConfigurationsByEngineIdArgs = {
+  engineId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationConfigurationsByEquipmentIdArgs = {
+  equipmentId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationConfigurationsByGenerationIdArgs = {
+  generationId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationImageByIdArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationImagesArgs = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  exteriorColorId?: InputMaybe<Scalars['String']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  imageId?: InputMaybe<Scalars['String']['input']>;
+  imageType?: InputMaybe<CatalogImageType>;
+  interiorColorId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryCatalogModelGenerationImagesByColorCombinationArgs = {
+  exteriorColorId?: InputMaybe<Scalars['String']['input']>;
+  generationId: Scalars['String']['input'];
+  imageType?: InputMaybe<CatalogImageType>;
+  interiorColorId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryCatalogModelGenerationImagesByGenerationIdArgs = {
+  generationId: Scalars['String']['input'];
+};
+
+
+export type QueryCatalogModelGenerationImagesByImageIdArgs = {
+  imageId: Scalars['String']['input'];
 };
 
 
@@ -2203,8 +3053,59 @@ export type QueryOfferArgs = {
 };
 
 
+export type QueryOfferAdditionalEquipmentItemAdminArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryOfferAdditionalEquipmentItemsByCategoryAdminArgs = {
+  category: Scalars['String']['input'];
+};
+
+
 export type QueryOfferBySlugArgs = {
   slug: Scalars['String']['input'];
+};
+
+
+export type QueryOfferColorVariantAdminArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryOfferColorVariantsByOfferAdminArgs = {
+  offerId: Scalars['ID']['input'];
+};
+
+
+export type QueryOfferLeasingVariantAdminArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryOfferLeasingVariantBySlugAdminArgs = {
+  offerId: Scalars['ID']['input'];
+  slug: Scalars['String']['input'];
+};
+
+
+export type QueryOfferLeasingVariantsByOfferAdminArgs = {
+  offerId: Scalars['ID']['input'];
+};
+
+
+export type QueryOfferOptionalEquipmentAdminArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryOfferOptionalEquipmentAvailableByOfferAdminArgs = {
+  offerId: Scalars['ID']['input'];
+};
+
+
+export type QueryOfferOptionalEquipmentByOfferAdminArgs = {
+  offerId: Scalars['ID']['input'];
 };
 
 
@@ -2296,6 +3197,30 @@ export type QuerySearchCatalogColorsArgs = {
 };
 
 
+export type QuerySearchCatalogEquipmentArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchCatalogEquipmentItemCategoriesArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchCatalogEquipmentItemsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchCatalogEquipmentPacketsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
 export type QuerySearchCatalogModelGenerationsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
@@ -2317,6 +3242,11 @@ export type QuerySearchEnginesArgs = {
 export type QuerySearchEquipmentItemsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   query: Scalars['String']['input'];
+};
+
+
+export type QuerySearchOfferAdditionalEquipmentItemsAdminArgs = {
+  searchTerm: Scalars['String']['input'];
 };
 
 
@@ -2467,6 +3397,80 @@ export type UpdateCatalogEngineInput = {
   weight?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type UpdateCatalogEquipmentInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  customText?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  modelGenerationId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  standard?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type UpdateCatalogEquipmentItemCategoryInput = {
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCatalogEquipmentItemInput = {
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCatalogEquipmentPacketInput = {
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  /** Price in cents */
+  price?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateCatalogEquipmentPaidItemInput = {
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  itemId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Price in cents */
+  price?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateCatalogModelGenerationColorInput = {
+  colorId?: InputMaybe<Scalars['String']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Price in cents */
+  price?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateCatalogModelGenerationConfigurationInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  engineId?: InputMaybe<Scalars['String']['input']>;
+  equipmentId?: InputMaybe<Scalars['String']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Price from (base price) */
+  priceFrom?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateCatalogModelGenerationImageInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Description/alt text for SEO */
+  description?: InputMaybe<Scalars['String']['input']>;
+  /** Exterior color ID for this image */
+  exteriorColorId?: InputMaybe<Scalars['String']['input']>;
+  /** 360 gallery frame position (0-35) */
+  galleryPosition?: InputMaybe<Scalars['Int']['input']>;
+  generationId?: InputMaybe<Scalars['String']['input']>;
+  imageId?: InputMaybe<Scalars['String']['input']>;
+  /** Type/purpose of this image */
+  imageType?: InputMaybe<CatalogImageType>;
+  /** Interior color ID for this image */
+  interiorColorId?: InputMaybe<Scalars['String']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
+  /** Display order */
+  order?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type UpdateCatalogModelGenerationInput = {
   bodyType?: InputMaybe<CatalogBodyType>;
   brandId?: InputMaybe<Scalars['String']['input']>;
@@ -2532,24 +3536,87 @@ export type UpdateLeasingCompanyInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateOfferAdditionalEquipmentItemInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateOfferColorVariantInput = {
+  colorName?: InputMaybe<Scalars['String']['input']>;
+  exteriorColorId?: InputMaybe<Scalars['String']['input']>;
+  galleryId?: InputMaybe<Scalars['String']['input']>;
+  interiorColorId?: InputMaybe<Scalars['String']['input']>;
+  isDefault?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type UpdateOfferInput = {
   annualMileageLimit?: InputMaybe<Scalars['Int']['input']>;
   customRequirements?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  disableCustomGallery?: InputMaybe<Scalars['Boolean']['input']>;
   discountAmount?: InputMaybe<Scalars['Float']['input']>;
   discountPercentage?: InputMaybe<Scalars['Float']['input']>;
+  engineId?: InputMaybe<Scalars['String']['input']>;
+  fileId?: InputMaybe<Scalars['String']['input']>;
   hasServiceIncluded?: InputMaybe<Scalars['Boolean']['input']>;
   hasWinterTyresIncluded?: InputMaybe<Scalars['Boolean']['input']>;
   includesWarranty?: InputMaybe<Scalars['Boolean']['input']>;
   internalNotes?: InputMaybe<Scalars['String']['input']>;
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  isPrivate?: InputMaybe<Scalars['Boolean']['input']>;
+  isPromoted?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommendedForActionPage?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommendedForBrand?: InputMaybe<Scalars['Boolean']['input']>;
+  isRecommendedForModel?: InputMaybe<Scalars['Boolean']['input']>;
   leasingDurationMonths?: InputMaybe<Scalars['Int']['input']>;
+  legacySystemId?: InputMaybe<Scalars['String']['input']>;
   monthlyPayment?: InputMaybe<Scalars['Float']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  publicId?: InputMaybe<Scalars['String']['input']>;
   responseDeadline?: InputMaybe<Scalars['String']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<IndividualOfferStatus>;
   totalPrice?: InputMaybe<Scalars['Float']['input']>;
   warrantyYears?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateOfferLeasingVariantInput = {
+  annualMileageLimit?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  downPayment?: InputMaybe<Scalars['Int']['input']>;
+  freeMileageLimit?: InputMaybe<Scalars['Int']['input']>;
+  hasAssistanceServiceIncluded?: InputMaybe<Scalars['Boolean']['input']>;
+  hasGapIncluded?: InputMaybe<Scalars['Boolean']['input']>;
+  hasGlassInsuranceIncluded?: InputMaybe<Scalars['Boolean']['input']>;
+  hasHighwayIncluded?: InputMaybe<Scalars['Boolean']['input']>;
+  hasServiceIncluded?: InputMaybe<Scalars['Boolean']['input']>;
+  hasWinterTyresIncluded?: InputMaybe<Scalars['Boolean']['input']>;
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  isBestOffer?: InputMaybe<Scalars['Boolean']['input']>;
+  isDefault?: InputMaybe<Scalars['Boolean']['input']>;
+  leasingCompanyId?: InputMaybe<Scalars['String']['input']>;
+  leasingDurationMonths?: InputMaybe<Scalars['Int']['input']>;
+  originalPriceWithVat?: InputMaybe<Scalars['Int']['input']>;
+  originalPriceWithoutVat?: InputMaybe<Scalars['Int']['input']>;
+  pricePeriod?: InputMaybe<PricePeriod>;
+  priceWithVat?: InputMaybe<Scalars['Int']['input']>;
+  priceWithoutVat?: InputMaybe<Scalars['Int']['input']>;
+  securityDeposit?: InputMaybe<Scalars['Int']['input']>;
+  setupFee?: InputMaybe<Scalars['Int']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  validFrom?: InputMaybe<Scalars['String']['input']>;
+  validTo?: InputMaybe<Scalars['String']['input']>;
+  vatRate?: InputMaybe<Scalars['Float']['input']>;
+  wearTolerancePercent?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateOfferOptionalEquipmentInput = {
+  additionalPrice?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  isAvailable?: InputMaybe<Scalars['Boolean']['input']>;
+  isDefaultSelected?: InputMaybe<Scalars['Boolean']['input']>;
+  pricePeriod?: InputMaybe<PricePeriod>;
 };
 
 export type UpdateOfferQuoteInput = {
@@ -3168,6 +4235,69 @@ export type DeleteEquipmentItemMutationVariables = Exact<{
 
 export type DeleteEquipmentItemMutation = { __typename?: 'Mutation', deleteEquipmentItem: boolean };
 
+export type GetCatalogEquipmentByGenerationQueryVariables = Exact<{
+  modelGenerationId: Scalars['String']['input'];
+}>;
+
+
+export type GetCatalogEquipmentByGenerationQuery = { __typename?: 'Query', catalogEquipmentByModelGenerationId: Array<{ __typename?: 'CatalogEquipment', id: string, name: string, active?: boolean | null, standard: boolean, customText?: string | null, createdAt: any, modelGenerationId?: string | null, categoryId?: string | null, category?: { __typename?: 'CatalogEquipmentItemCategory', id: string, name: string } | null, items?: Array<{ __typename?: 'CatalogEquipmentItem', id: string, name: string }> | null }> };
+
+export type GetAllCatalogEquipmentQueryVariables = Exact<{
+  limit: Scalars['Float']['input'];
+  offset: Scalars['Float']['input'];
+  modelGenerationId?: InputMaybe<Scalars['String']['input']>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  standard?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type GetAllCatalogEquipmentQuery = { __typename?: 'Query', catalogEquipment: Array<{ __typename?: 'CatalogEquipment', id: string, name: string, active?: boolean | null, standard: boolean, customText?: string | null, createdAt: any, modelGenerationId?: string | null, categoryId?: string | null, category?: { __typename?: 'CatalogEquipmentItemCategory', id: string, name: string } | null, items?: Array<{ __typename?: 'CatalogEquipmentItem', id: string, name: string }> | null }> };
+
+export type GetCatalogEquipmentByIdQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetCatalogEquipmentByIdQuery = { __typename?: 'Query', catalogEquipmentById: { __typename?: 'CatalogEquipment', id: string, name: string, active?: boolean | null, standard: boolean, customText?: string | null, createdAt: any, modelGenerationId?: string | null, categoryId?: string | null, category?: { __typename?: 'CatalogEquipmentItemCategory', id: string, name: string } | null, items?: Array<{ __typename?: 'CatalogEquipmentItem', id: string, name: string }> | null } };
+
+export type SearchCatalogEquipmentQueryVariables = Exact<{
+  query: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Float']['input']>;
+}>;
+
+
+export type SearchCatalogEquipmentQuery = { __typename?: 'Query', searchCatalogEquipment: Array<{ __typename?: 'CatalogEquipment', id: string, name: string, active?: boolean | null, standard: boolean, customText?: string | null, createdAt: any, modelGenerationId?: string | null, categoryId?: string | null, category?: { __typename?: 'CatalogEquipmentItemCategory', id: string, name: string } | null }> };
+
+export type CreateCatalogEquipmentMutationVariables = Exact<{
+  input: CreateCatalogEquipmentInput;
+}>;
+
+
+export type CreateCatalogEquipmentMutation = { __typename?: 'Mutation', createCatalogEquipment: { __typename?: 'CatalogEquipment', id: string, name: string, active?: boolean | null, standard: boolean, customText?: string | null, createdAt: any, modelGenerationId?: string | null, categoryId?: string | null, category?: { __typename?: 'CatalogEquipmentItemCategory', id: string, name: string } | null, items?: Array<{ __typename?: 'CatalogEquipmentItem', id: string, name: string }> | null } };
+
+export type UpdateCatalogEquipmentMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateCatalogEquipmentInput;
+}>;
+
+
+export type UpdateCatalogEquipmentMutation = { __typename?: 'Mutation', updateCatalogEquipment: { __typename?: 'CatalogEquipment', id: string, name: string, active?: boolean | null, standard: boolean, customText?: string | null, createdAt: any, modelGenerationId?: string | null, categoryId?: string | null, category?: { __typename?: 'CatalogEquipmentItemCategory', id: string, name: string } | null, items?: Array<{ __typename?: 'CatalogEquipmentItem', id: string, name: string }> | null } };
+
+export type DeleteCatalogEquipmentMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteCatalogEquipmentMutation = { __typename?: 'Mutation', deleteCatalogEquipment: boolean };
+
+export type GetEquipmentItemCategoriesQueryVariables = Exact<{
+  limit: Scalars['Float']['input'];
+  offset: Scalars['Float']['input'];
+}>;
+
+
+export type GetEquipmentItemCategoriesQuery = { __typename?: 'Query', catalogEquipmentItemCategories: Array<{ __typename?: 'CatalogEquipmentItemCategory', id: string, name: string }> };
+
 export type GetAllCatalogModelGenerationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
@@ -3605,6 +4735,14 @@ export const GetEquipmentItemsCountDocument = {"kind":"Document","definitions":[
 export const CreateEquipmentItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateEquipmentItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogBrandEquipmentItemInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEquipmentItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<CreateEquipmentItemMutation, CreateEquipmentItemMutationVariables>;
 export const UpdateEquipmentItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateEquipmentItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogBrandEquipmentItemInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateEquipmentItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateEquipmentItemMutation, UpdateEquipmentItemMutationVariables>;
 export const DeleteEquipmentItemDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteEquipmentItem"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteEquipmentItem"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteEquipmentItemMutation, DeleteEquipmentItemMutationVariables>;
+export const GetCatalogEquipmentByGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogEquipmentByGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"modelGenerationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogEquipmentByModelGenerationId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"modelGenerationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"modelGenerationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"standard"}},{"kind":"Field","name":{"kind":"Name","value":"customText"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"categoryId"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetCatalogEquipmentByGenerationQuery, GetCatalogEquipmentByGenerationQueryVariables>;
+export const GetAllCatalogEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCatalogEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"modelGenerationId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"active"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"standard"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"modelGenerationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"modelGenerationId"}}},{"kind":"Argument","name":{"kind":"Name","value":"active"},"value":{"kind":"Variable","name":{"kind":"Name","value":"active"}}},{"kind":"Argument","name":{"kind":"Name","value":"standard"},"value":{"kind":"Variable","name":{"kind":"Name","value":"standard"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"standard"}},{"kind":"Field","name":{"kind":"Name","value":"customText"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"categoryId"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetAllCatalogEquipmentQuery, GetAllCatalogEquipmentQueryVariables>;
+export const GetCatalogEquipmentByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogEquipmentById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogEquipmentById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"standard"}},{"kind":"Field","name":{"kind":"Name","value":"customText"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"categoryId"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetCatalogEquipmentByIdQuery, GetCatalogEquipmentByIdQueryVariables>;
+export const SearchCatalogEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchCatalogEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchCatalogEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"standard"}},{"kind":"Field","name":{"kind":"Name","value":"customText"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"categoryId"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<SearchCatalogEquipmentQuery, SearchCatalogEquipmentQueryVariables>;
+export const CreateCatalogEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogEquipmentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"standard"}},{"kind":"Field","name":{"kind":"Name","value":"customText"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"categoryId"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<CreateCatalogEquipmentMutation, CreateCatalogEquipmentMutationVariables>;
+export const UpdateCatalogEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateCatalogEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateCatalogEquipmentInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"standard"}},{"kind":"Field","name":{"kind":"Name","value":"customText"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"modelGenerationId"}},{"kind":"Field","name":{"kind":"Name","value":"categoryId"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateCatalogEquipmentMutation, UpdateCatalogEquipmentMutationVariables>;
+export const DeleteCatalogEquipmentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteCatalogEquipment"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteCatalogEquipment"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteCatalogEquipmentMutation, DeleteCatalogEquipmentMutationVariables>;
+export const GetEquipmentItemCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEquipmentItemCategories"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogEquipmentItemCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetEquipmentItemCategoriesQuery, GetEquipmentItemCategoriesQueryVariables>;
 export const GetAllCatalogModelGenerationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllCatalogModelGenerations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"modelId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isActive"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelGenerations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"modelId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"modelId"}}},{"kind":"Argument","name":{"kind":"Name","value":"isActive"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isActive"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetAllCatalogModelGenerationsQuery, GetAllCatalogModelGenerationsQueryVariables>;
 export const GetCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"legacySystemId"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetCatalogModelGenerationQuery, GetCatalogModelGenerationQueryVariables>;
 export const CreateCatalogModelGenerationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCatalogModelGeneration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateCatalogModelGenerationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCatalogModelGeneration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"legacySlug"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"productionStart"}},{"kind":"Field","name":{"kind":"Name","value":"productionStop"}},{"kind":"Field","name":{"kind":"Name","value":"wheelbase"}},{"kind":"Field","name":{"kind":"Name","value":"frontTrack"}},{"kind":"Field","name":{"kind":"Name","value":"rearTrack"}},{"kind":"Field","name":{"kind":"Name","value":"length"}},{"kind":"Field","name":{"kind":"Name","value":"width"}},{"kind":"Field","name":{"kind":"Name","value":"height"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMin"}},{"kind":"Field","name":{"kind":"Name","value":"trunkSpaceMax"}},{"kind":"Field","name":{"kind":"Name","value":"bodyType"}},{"kind":"Field","name":{"kind":"Name","value":"frontBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"rearBrakesType"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"modelId"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<CreateCatalogModelGenerationMutation, CreateCatalogModelGenerationMutationVariables>;

@@ -1,7 +1,7 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type Row } from '@tanstack/react-table'
 import { useNavigate } from '@tanstack/react-router'
-import { Trash2, Edit } from 'lucide-react'
+import { Trash2, Edit, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -34,7 +34,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
             <span className='sr-only'>Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='w-[160px]'>
+        <DropdownMenuContent align='end' className='w-[180px]'>
           <DropdownMenuItem
             onClick={() => {
               navigate({ to: '/generations/$generationId', params: { generationId: row.original.id } })
@@ -43,6 +43,16 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
             Edit
             <DropdownMenuShortcut>
               <Edit size={16} />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              navigate({ to: '/generations/$generationId/equipment', params: { generationId: row.original.id } })
+            }}
+          >
+            Manage Equipment
+            <DropdownMenuShortcut>
+              <Settings size={16} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSeparator />

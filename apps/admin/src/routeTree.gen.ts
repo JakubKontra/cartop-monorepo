@@ -69,6 +69,7 @@ import { Route as AuthenticatedOffersNewDirectPurchaseRouteImport } from './rout
 import { Route as AuthenticatedOffersOfferIdEditRouteImport } from './routes/_authenticated/offers/$offerId.edit'
 import { Route as AuthenticatedModelsModelIdEditRouteImport } from './routes/_authenticated/models/$modelId/edit'
 import { Route as AuthenticatedLeasingCompaniesCompanyIdEditRouteImport } from './routes/_authenticated/leasing-companies/$companyId.edit'
+import { Route as AuthenticatedGenerationsGenerationIdEquipmentRouteImport } from './routes/_authenticated/generations/$generationId/equipment'
 import { Route as AuthenticatedGenerationsGenerationIdEditRouteImport } from './routes/_authenticated/generations/$generationId/edit'
 import { Route as AuthenticatedEquipmentItemsItemIdEditRouteImport } from './routes/_authenticated/equipment-items/$itemId/edit'
 import { Route as AuthenticatedEnginesEngineIdEditRouteImport } from './routes/_authenticated/engines/$engineId/edit'
@@ -415,6 +416,12 @@ const AuthenticatedLeasingCompaniesCompanyIdEditRoute =
     path: '/leasing-companies/$companyId/edit',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedGenerationsGenerationIdEquipmentRoute =
+  AuthenticatedGenerationsGenerationIdEquipmentRouteImport.update({
+    id: '/generations/$generationId/equipment',
+    path: '/generations/$generationId/equipment',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedGenerationsGenerationIdEditRoute =
   AuthenticatedGenerationsGenerationIdEditRouteImport.update({
     id: '/generations/$generationId/edit',
@@ -512,6 +519,7 @@ export interface FileRoutesByFullPath {
   '/engines/$engineId/edit': typeof AuthenticatedEnginesEngineIdEditRoute
   '/equipment-items/$itemId/edit': typeof AuthenticatedEquipmentItemsItemIdEditRoute
   '/generations/$generationId/edit': typeof AuthenticatedGenerationsGenerationIdEditRoute
+  '/generations/$generationId/equipment': typeof AuthenticatedGenerationsGenerationIdEquipmentRoute
   '/leasing-companies/$companyId/edit': typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/offers/$offerId/edit': typeof AuthenticatedOffersOfferIdEditRoute
@@ -579,6 +587,7 @@ export interface FileRoutesByTo {
   '/engines/$engineId/edit': typeof AuthenticatedEnginesEngineIdEditRoute
   '/equipment-items/$itemId/edit': typeof AuthenticatedEquipmentItemsItemIdEditRoute
   '/generations/$generationId/edit': typeof AuthenticatedGenerationsGenerationIdEditRoute
+  '/generations/$generationId/equipment': typeof AuthenticatedGenerationsGenerationIdEquipmentRoute
   '/leasing-companies/$companyId/edit': typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   '/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/offers/$offerId/edit': typeof AuthenticatedOffersOfferIdEditRoute
@@ -649,6 +658,7 @@ export interface FileRoutesById {
   '/_authenticated/engines/$engineId/edit': typeof AuthenticatedEnginesEngineIdEditRoute
   '/_authenticated/equipment-items/$itemId/edit': typeof AuthenticatedEquipmentItemsItemIdEditRoute
   '/_authenticated/generations/$generationId/edit': typeof AuthenticatedGenerationsGenerationIdEditRoute
+  '/_authenticated/generations/$generationId/equipment': typeof AuthenticatedGenerationsGenerationIdEquipmentRoute
   '/_authenticated/leasing-companies/$companyId/edit': typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   '/_authenticated/models/$modelId/edit': typeof AuthenticatedModelsModelIdEditRoute
   '/_authenticated/offers/$offerId/edit': typeof AuthenticatedOffersOfferIdEditRoute
@@ -719,6 +729,7 @@ export interface FileRouteTypes {
     | '/engines/$engineId/edit'
     | '/equipment-items/$itemId/edit'
     | '/generations/$generationId/edit'
+    | '/generations/$generationId/equipment'
     | '/leasing-companies/$companyId/edit'
     | '/models/$modelId/edit'
     | '/offers/$offerId/edit'
@@ -786,6 +797,7 @@ export interface FileRouteTypes {
     | '/engines/$engineId/edit'
     | '/equipment-items/$itemId/edit'
     | '/generations/$generationId/edit'
+    | '/generations/$generationId/equipment'
     | '/leasing-companies/$companyId/edit'
     | '/models/$modelId/edit'
     | '/offers/$offerId/edit'
@@ -855,6 +867,7 @@ export interface FileRouteTypes {
     | '/_authenticated/engines/$engineId/edit'
     | '/_authenticated/equipment-items/$itemId/edit'
     | '/_authenticated/generations/$generationId/edit'
+    | '/_authenticated/generations/$generationId/equipment'
     | '/_authenticated/leasing-companies/$companyId/edit'
     | '/_authenticated/models/$modelId/edit'
     | '/_authenticated/offers/$offerId/edit'
@@ -1306,6 +1319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLeasingCompaniesCompanyIdEditRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/generations/$generationId/equipment': {
+      id: '/_authenticated/generations/$generationId/equipment'
+      path: '/generations/$generationId/equipment'
+      fullPath: '/generations/$generationId/equipment'
+      preLoaderRoute: typeof AuthenticatedGenerationsGenerationIdEquipmentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/generations/$generationId/edit': {
       id: '/_authenticated/generations/$generationId/edit'
       path: '/generations/$generationId/edit'
@@ -1420,6 +1440,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEnginesEngineIdEditRoute: typeof AuthenticatedEnginesEngineIdEditRoute
   AuthenticatedEquipmentItemsItemIdEditRoute: typeof AuthenticatedEquipmentItemsItemIdEditRoute
   AuthenticatedGenerationsGenerationIdEditRoute: typeof AuthenticatedGenerationsGenerationIdEditRoute
+  AuthenticatedGenerationsGenerationIdEquipmentRoute: typeof AuthenticatedGenerationsGenerationIdEquipmentRoute
   AuthenticatedLeasingCompaniesCompanyIdEditRoute: typeof AuthenticatedLeasingCompaniesCompanyIdEditRoute
   AuthenticatedModelsModelIdEditRoute: typeof AuthenticatedModelsModelIdEditRoute
   AuthenticatedOffersOfferIdEditRoute: typeof AuthenticatedOffersOfferIdEditRoute
@@ -1481,6 +1502,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedEquipmentItemsItemIdEditRoute,
   AuthenticatedGenerationsGenerationIdEditRoute:
     AuthenticatedGenerationsGenerationIdEditRoute,
+  AuthenticatedGenerationsGenerationIdEquipmentRoute:
+    AuthenticatedGenerationsGenerationIdEquipmentRoute,
   AuthenticatedLeasingCompaniesCompanyIdEditRoute:
     AuthenticatedLeasingCompaniesCompanyIdEditRoute,
   AuthenticatedModelsModelIdEditRoute: AuthenticatedModelsModelIdEditRoute,
