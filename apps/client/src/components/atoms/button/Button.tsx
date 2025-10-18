@@ -39,6 +39,8 @@ const buttonVariants = tv({
       secondary: 'bg-white text-gunmetal hover:bg-[#FEFEFE4D]',
       'secondary-inverted':
         'border border-gunmetal-600 text-white bg-gunmetal hover:bg-gunmetal-700',
+      'progress-button':
+        'text-white bg-gunmetal-800 hover:bg-gunmetal-600 border border-gunmetal-600',
     },
     width: {
       auto: 'w-auto',
@@ -56,6 +58,7 @@ const iconVariants = tv({
       'primary-inverted': 'text-white bg-primary',
       secondary: 'text-gunmetal bg-white',
       'secondary-inverted': 'text-primary bg-white',
+      'progress-button': 'text-primary bg-white',
     },
   },
 });
