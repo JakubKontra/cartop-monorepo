@@ -15,6 +15,7 @@ const buttonVariants = tv({
     width: 'auto',
   },
   variants: {
+    base: 'relative',
     iconPosition: {
       left: 'flex-row',
       right: 'flex-row-reverse',
@@ -27,6 +28,8 @@ const buttonVariants = tv({
     sizeWithIcon: {
       base: 'pl-1.5 lg:pl-2 pr-10 lg:pr-12 py-1.5 lg:py-2',
       narrow: 'pl-1.5 lg:pl-2 pr-4 lg:pr-8 py-1.5 lg:py-2',
+      'base-reverse': 'pl-10 lg:pl-12 pr-1.5 lg:pr-2 py-1.5 lg:py-2',
+      'narrow-reverse': 'pl-4 lg:pl-4 pr-1.5 lg:pr-2 py-1.5 lg:py-2',
       none: '',
     },
     variant: {
@@ -34,7 +37,8 @@ const buttonVariants = tv({
       primary: 'border border-primary text-white bg-primary hover:bg-primary/80',
       'primary-inverted': 'bg-white text-gunmetal',
       secondary: 'bg-white text-gunmetal hover:bg-[#FEFEFE4D]',
-      'secondary-inverted': 'border border-white text-white bg-gunmetal hover:bg-[#FEFEFE4D]',
+      'secondary-inverted':
+        'border border-gunmetal-600 text-white bg-gunmetal hover:bg-gunmetal-700',
     },
     width: {
       auto: 'w-auto',
@@ -44,14 +48,14 @@ const buttonVariants = tv({
 });
 
 const iconVariants = tv({
-  base: 'shrink-0 size-12 rounded-2xl flex items-center justify-center',
+  base: 'shrink-0 size-12 rounded-2xl flex items-center justify-center relative z-10',
   variants: {
     variant: {
       'outline-white': 'text-white bg-transparent',
       primary: 'text-primary bg-white',
       'primary-inverted': 'text-white bg-primary',
       secondary: 'text-gunmetal bg-white',
-      'secondary-inverted': 'text-white bg-gunmetal',
+      'secondary-inverted': 'text-primary bg-white',
     },
   },
 });
@@ -61,6 +65,7 @@ type ButtonVariants = Omit<VariantProps<typeof buttonVariants>, 'sizeWithIcon'>;
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariants {
   children: ReactNode;
   icon?: ReactNode;
+  iconClassName?: string;
 }
 
 const Button = ({
@@ -71,12 +76,17 @@ const Button = ({
   size = 'base',
   variant,
   width,
+  iconClassName,
   ...props
 }: ButtonProps) => {
   const hasIcon = Boolean(icon);
 
   const realSize = hasIcon ? 'none' : size;
-  const sizeWithIcon = hasIcon ? size : undefined;
+  const sizeWithIcon = hasIcon
+    ? iconPosition === 'left'
+      ? size
+      : (`${size}-reverse` as VariantProps<typeof buttonVariants>['sizeWithIcon'])
+    : undefined;
 
   return (
     <button
@@ -87,7 +97,9 @@ const Button = ({
       )}
       {...props}
     >
-      {hasIcon ? <span className={iconVariants({ variant })}>{icon}</span> : null}
+      {hasIcon ? (
+        <span className={cn(iconVariants({ variant }), iconClassName)}>{icon}</span>
+      ) : null}
       {children ? <span className="flex-1">{children}</span> : null}
     </button>
   );
