@@ -3,10 +3,9 @@ import Button from '@/components/atoms/button/Button';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useSwiper } from '@/hooks/useSwiper';
 import { cn } from '@/utils/cv';
-import gsap from 'gsap';
 import { MoveUpRight } from 'lucide-react';
 import type React from 'react';
-import { type HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { type HTMLAttributes, useEffect, useState } from 'react';
 import { Autoplay, EffectFade } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper/types';
@@ -17,47 +16,31 @@ export const ProgressBarButton = ({
   progress,
   children,
   onClick,
-  isActive,
-  theme = 'dark',
 }: {
   progress: number;
   isActive: boolean;
   theme?: CarouselTheme;
 } & HTMLAttributes<HTMLButtonElement>) => {
-  const barRef = useRef<HTMLDivElement>(null);
-
-  //   useGSAP(() => {
-  //     let timeout: NodeJS.Timeout;
-  //     if (progress === 0) {
-  //       timeout = setTimeout(() => {
-  //         gsap.killTweensOf(barRef.current);
-  //         gsap.set(barRef.current, {
-  //           width: '0%',
-  //         });
-  //       }, 300);
-  //     } else {
-  //       gsap.to(barRef.current, {
-  //         width: `${Math.min(Math.max(progress, 0), 1) * 100}%`,
-  //         duration: 0.2,
-  //         ease: 'power2.out',
-  //       });
-  //     }
-  //     return () => clearTimeout(timeout);
-  //   }, [progress]);
+  const progressPercentage = Math.min(Math.max(progress, 0), 1) * 100;
 
   return (
     <Button
       variant="secondary-inverted"
       iconPosition="right"
-      icon={<MoveUpRight className="size-5" />}
+      size="narrow"
+      icon={<MoveUpRight className="size-5 relative" />}
       onClick={onClick}
+      className="relative overflow-hidden"
+      iconClassName="hidden xl:flex"
     >
+      <p className="relative z-10">{children}</p>
       <span
-        ref={barRef}
-        className={`absolute left-0 top-0 z-0 h-full bg-primary-blue-hover transition-opacity duration-300 ${progress === 0 ? 'opacity-0' : 'opacity-100'}`}
-        style={{ width: '0%' }}
+        className={`absolute -left-full top-0 z-0 h-full w-full bg-gunmetal-600 transition-transform ease-out ${progress === 0 ? 'opacity-0' : 'opacity-100'}`}
+        style={{
+          transform: `translateX(${progressPercentage}%)`,
+          transitionDuration: progress === 0 ? '300ms' : '10ms',
+        }}
       />
-      {children}
     </Button>
   );
 };
@@ -87,9 +70,8 @@ export const AdditionalServicesCarousel = ({
 }: AdditionalServicesCarouselProps & HTMLAttributes<HTMLDivElement>) => {
   const { activeSlide, swiperRef, onSetActiveSlide, setActiveSlide } = useSwiper();
 
-  // const progress = useRef<number>(0);
   const [progress, setProgress] = useState(0);
-  const onAutoplayTimeLeft = (swiper: SwiperType, timeLeft: number, percentage: number) => {
+  const onAutoplayTimeLeft = (_swiper: SwiperType, _timeLeft: number, percentage: number) => {
     setProgress(1 - percentage);
   };
 
@@ -167,8 +149,8 @@ export const AdditionalServicesCarousel = ({
                     onClick={() => onSetActiveSlide(index)}
                   >
                     <div className="flex w-full items-center gap-3">
-                      <div className="flex lg:hidden text-white">{String(index + 1)}</div>
-                      <p className="text-md relative whitespace-nowrap xxs:font-semibold hidden lg:block">
+                      <div className="flex xl:hidden text-white">{String(index + 1)}</div>
+                      <p className="text-md relative whitespace-nowrap xxs:font-semibold hidden xl:block">
                         {item.buttonText}
                       </p>
                     </div>
