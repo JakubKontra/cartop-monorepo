@@ -71,3 +71,7 @@ ui-debug.log
 # allow .gitkeep
 !.gitkeep
 .env*.local
+
+# certificates
+apps/client/certificates/localhost-key.pem
+apps/client/certificates/localhost.pem
